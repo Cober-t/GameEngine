@@ -4,11 +4,10 @@
 
 extern GameEngine::Application* GameEngine::CreateApplication();
 
-
 int main(int argc, char** argv)
 {
 	printf("Game Engine \n");
-	auto app = GameEngine::CreateApplication();
+	auto app = GameEngine::CreateApplication(); // return new Sandbox()
 	app->Run();
 	delete app;
 }
