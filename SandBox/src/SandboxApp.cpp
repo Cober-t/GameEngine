@@ -10,13 +10,14 @@ public:
 };
 
 /* Movemos este EntryPoint a un archivo aparte en el GameEngine que se incluira
-*  Asi modulamos la parte GameEngine y la parte aplicacion
-void main() 
-{
-	Sandbox* sandbox = new Sandbox();
-	sandbox->Run();
-	delete sandbox;
-}
+ * Asi modulamos la parte GameEngine y la parte aplicacion
+ ------------------------- Entry Point
+	void main() 
+	{
+		Sandbox* sandbox = new Sandbox();
+		sandbox->Run();
+		delete sandbox;
+	}
 */
 
 GameEngine::Application* GameEngine::CreateApplication() {
