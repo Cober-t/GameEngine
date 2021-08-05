@@ -13,7 +13,7 @@ namespace GameEngine {
 		void Run();
 	};
 
-	// To be defined in CLIENT
+	// To be defined in CLIENT (SandBox)
 	Application* CreateApplication();
 
 }
