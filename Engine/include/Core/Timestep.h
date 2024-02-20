@@ -1,0 +1,58 @@
+#ifndef TIMESTEP_H
+#define TIMESTEP_H
+
+#include <iostream>
+
+#include <GLFW/glfw3.h>
+
+namespace Cober {
+
+	class Timestep {
+		
+	public:
+		Timestep(float time = 0.0f)
+			: m_FpsLimit(60), frames(0), m_Updates(0), m_AuxTime(0), m_LimitedFrames(false), deltaTime(0) 
+		{
+			m_LastFrameTime = glfwGetTime();
+			m_Timer = m_LastFrameTime;
+		}
+
+		inline void Start(uint32_t framesLimit = 0) 
+		{
+			if (framesLimit == 0)
+				framesLimit = m_FpsLimit;
+
+			m_AuxTime = glfwGetTime();
+			deltaTime += (m_AuxTime - m_LastFrameTime) / framesLimit;
+			m_LastFrameTime = m_AuxTime;
+		}
+
+		inline void Reset(uint32_t framesLimit = 0) 
+		{
+			frames++;
+
+			if (glfwGetTime() - m_Timer > 1.0) {
+				m_Timer++;
+				m_Updates = 0, frames = 0;
+			}
+		}
+
+		inline void CountUpdate() { m_Updates++; }
+		// inline void DecreaseDeltaTime() { deltaTime--; }
+
+		inline int GetFrames() { return frames; }
+		inline double GetUpdates() { return m_Updates; }
+		inline double DeltaTime() { return deltaTime; }
+
+	private:
+		int m_AuxTime, m_Updates;
+		double m_Timer, m_FpsLimit, m_LastFrameTime;
+		bool m_LimitedFrames;
+
+	public:
+		int frames;
+		double deltaTime;
+	};
+}
+
+#endif
