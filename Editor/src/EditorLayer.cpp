@@ -4,7 +4,7 @@
 namespace Cober {
 
 	//extern const std::filesystem::path _AssetPath;
-	EditorLayer::EditorLayer() : Layer("Editor")
+	Editor::Editor() : Layer("Editor")
 	{
 		//_editorCamera = CreateUnique<EditorCamera>(45.0f, 1.778f, 0.01f, 1000.0f);
 
@@ -16,22 +16,22 @@ namespace Cober {
 		*/
 	}
 
-	void EditorLayer::OnAttach() 
+	void Editor::OnAttach() 
 	{
 
 	}
 
-	void EditorLayer::OnDetach() 
-	{
-		
-	}
-
-	void EditorLayer::OnUpdate(Timestep ts) 
+	void Editor::OnDetach() 
 	{
 		
 	}
 
-	void EditorLayer::OnImGuiRender() 
+	void Editor::OnUpdate(Timestep ts) 
+	{
+		
+	}
+
+	void Editor::OnImGuiRender() 
 	{
 		InitDockspace();
 
@@ -49,7 +49,7 @@ namespace Cober {
 		EndDockspace();
 	}
 
-	void EditorLayer::InitDockspace() 
+	void Editor::InitDockspace() 
 	{
 		// [[----- Init variables & dockspace -----]] (from Cherno)
 		static bool dockspaceOpen = true;
@@ -105,7 +105,7 @@ namespace Cober {
 		//style.WindowMinSize.y = minWinSizeY;
 	}
 
-	void EditorLayer::EndDockspace() 
+	void Editor::EndDockspace() 
 	{
 		ImGui::End();
 	}

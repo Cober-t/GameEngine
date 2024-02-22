@@ -6,7 +6,7 @@
 #include "Core/Core.h"
 #include "Render/GraphicsContext.h"
 
-// #include "Events/Event.h"
+#include "Events/Event.h"
 
 // #include <sstream>
 	
@@ -29,7 +29,7 @@ namespace Cober {
 	class Window {
 
 	public:
-		// using EventCallbackFn = std::function<void(Event&)>;
+		using EventCallbackFn = std::function<void(Event&)>;
 
 		Window(const WindowProps& props);
 		virtual ~Window();
@@ -40,19 +40,15 @@ namespace Cober {
 		uint32_t GetWidth() const { return m_Data.Width; }
 		uint32_t GetHeight() const { return m_Data.Height; }
 
-		// inline void SetEventCallback(const EventCallbackFn& callback) { m_Data.EventCallback = callback; }
+		inline void SetEventCallback(const EventCallbackFn& callback) { m_Data.EventCallback = callback; }
 		void SetVSync(bool enabled);
 		bool IsVSync() const;
 
 		virtual void* GetNativeWindow() const { return m_Window; }
 
-
-	public:	
-		// using EventCallbackFn = std::function<void(Event&)>;
-
-
 	private:
 		virtual void Init(const WindowProps& props);
+		virtual void SetWindowCallbacks();
 		virtual void Shutdown();
 
 	private:
@@ -65,7 +61,7 @@ namespace Cober {
 			unsigned int Width, Height;
 			bool VSync;
 
-			// EventCallbackFn EventCallback;
+			EventCallbackFn EventCallback;
 		};
 
 		WindowData m_Data;

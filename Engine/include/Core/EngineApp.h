@@ -9,6 +9,9 @@
 #include "Layer.h"
 #include "ImGui/ImGuiLayer.h"
 
+#include "Events/ApplicationEvents.h"
+#include "Events/Event.h"
+
 #include <sol/sol.hpp>
 
 int main(int argc, char** argv);
@@ -33,7 +36,7 @@ namespace Cober {
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 
-		void OnEvent();
+		void OnEvent(Event& event);
 
 		void Close();
 
@@ -50,8 +53,8 @@ namespace Cober {
 	private:
 		void Run(Timestep ts);
 		
-		// bool OnWindowClose(WindowCloseEvent& e);
-		// bool OnWindowResize(WindowResizeEvent& e);
+		bool OnWindowClose(WindowCloseEvent& e);
+		bool OnWindowResize(WindowResizeEvent& e);
 
 		// void ExecuteMainThreadQueue();
 	private:

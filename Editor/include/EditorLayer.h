@@ -18,10 +18,10 @@
 
 namespace Cober {
 
-	class EditorLayer : public Layer {
+	class Editor : public Layer {
 	public:
-		EditorLayer();
-		virtual ~EditorLayer() = default;
+		Editor();
+		virtual ~Editor() = default;
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;

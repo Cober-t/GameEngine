@@ -13,13 +13,13 @@ namespace Cober {
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
-		//virtual void OnEvent(SDL_Event& event) override;
+		virtual void OnEvent(Event& event) override;
 
 		void Begin();
 		void End();
 
 	private:
-		GLFWwindow* _window;
+		bool m_BlockEvents = true;
 		const char* glsl_version;
 	};
 }

@@ -8,7 +8,7 @@
 #include "Core.h"
 #include "Timestep.h"
 
-// #include "Events/EventHandler.h"
+#include "Events/Event.h"
 
 namespace Cober {
 
@@ -21,7 +21,7 @@ namespace Cober {
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
 		virtual void OnUpdate(Timestep ts) {}
-		// virtual void OnEvent(Event& event) {}
+		virtual void OnEvent(Event& event) {}
 		virtual void OnImGuiRender() {}
 
 		void PushLayer(Layer* layer);

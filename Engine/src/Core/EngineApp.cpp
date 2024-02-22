@@ -14,23 +14,21 @@ namespace Cober {
 
         LOG_CORE_ASSERT(!s_Instance, "Application already exists!");
         s_Instance = this;
-        
-		// Renderer::Init();
-		// ScriptEngine::Init();
 
         m_Window = CreateUnique<Window>(WindowProps(name, width, height, vsync));
-        // m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+        m_Window->SetEventCallback(BIND_EVENT_FN(EngineApp::OnEvent));
 
         // m_AssetManager = CreateUnique<AssetManager>();
 
         m_GameState = GameState::PLAY;
     }
 
+
     EngineApp::~EngineApp() {
 
-        // ScriptEngine::Shutdown();
-		// Renderer::Shutdown();
+        LOG_CORE_INFO("EngineApp Destructor!");
     }
+
 
     void EngineApp::PushLayer(Layer* layer) {
 
@@ -68,17 +66,6 @@ namespace Cober {
 
         ts.Start();
     
-        // Reset Event Subscriptions
-        //EventHandler::Get()->Reset();
-        
-        // Test
-        //EventHandler::Get()->SubscribeToEvent<KeyDownEvent>(InputEvent::Get(), &InputEvent::OnKeyDown);
-
-        // if(!_minimized) { UISystem::StartProcessInputs(); }
-        OnEvent();
-        // if(!_minimized) { UISystem::EndProcessInputs(); }
-
-
         if(!m_Minimized) 
         {
             for (Layer* layer : m_LayerStack)
@@ -107,41 +94,44 @@ namespace Cober {
     }
 
 
-    void EngineApp::OnEvent() {
+    void EngineApp::OnEvent(Event& event) {
 
-		// EventDispatcher dispatcher(e);
-		// dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(EngineApp::OnWindowClose));
-		// dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(EngineApp::OnWindowResize));
+        // In the future each layer/object could save the event on a buffer
+        // and handle it one per frame on Update instead of delay all the Application
 
-		// for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
-		// {
-		// 	if (e.Handled) 
-		// 		break;
-		// 	(*it)->OnEvent(e);
-		// }
+        EventDispatcher dispatcher(event);
+		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(EngineApp::OnWindowClose));
+        dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(EngineApp::OnWindowResize));
+
+		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
+		{
+			if (event.Handled) 
+				break;
+			(*it)->OnEvent(event);
+		}
     }
   
 
-    // bool EngineApp::OnWindowClose(WindowCloseEvent& e)
-	// {
-	// 	m_GameState = GameState::EXIT;
-	// 	return true;
-	// }
+    bool EngineApp::OnWindowClose(WindowCloseEvent& e)
+	{
+		m_GameState = GameState::EXIT;
+		return true;
+	}
 
 
-	// bool EngineApp::OnWindowResize(WindowResizeEvent& e)
-	// {
-	// 	if (e.GetWidth() == 0 || e.GetHeight() == 0)
-	// 	{
-	// 		m_Minimized = true;
-	// 		return false;
-	// 	}
+	bool EngineApp::OnWindowResize(WindowResizeEvent& e)
+	{
+		if (e.GetWidth() == 0 || e.GetHeight() == 0)
+		{
+			m_Minimized = true;
+			return false;
+		}
 
-	// 	m_Minimized = false;
-	// 	Render::OnWindowResize(e.GetWidth(), e.GetHeight());
+		m_Minimized = false;
+		// Render::OnWindowResize(e.GetWidth(), e.GetHeight());
 
-	// 	return false;
-	// }
+		return false;
+	}
 
 
     // void Application::SubmitToMainThread(const std::function<void()>& function)

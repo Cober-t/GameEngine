@@ -67,12 +67,18 @@ namespace Cober {
 		ImGui::DestroyContext();
 	}
 
-	//void ImGuiLayer::OnEvent(SDL_Event& event) {
+	void ImGuiLayer::OnEvent(Event& event) {
 
-	//	auto gameState = Engine::Get().GetGameState();
-	//	if (gameState == GameState::EDITOR || gameState == GameState::RUNTIME_EDITOR)
-	//		ImGui_ImplSDL2_ProcessEvent(&event);
-	//}
+		auto gameState = EngineApp::Get().GetGameState();
+
+		// if (m_BlockEvents)
+		if (gameState == GameState::EDITOR || gameState == GameState::RUNTIME_EDITOR)
+		{
+			ImGuiIO& io = ImGui::GetIO();
+			event.Handled |= event.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;
+			event.Handled |= event.IsInCategory(EventCategoryKeyboard) & io.WantCaptureKeyboard;
+		}
+	}
 
 	void ImGuiLayer::Begin() {
 

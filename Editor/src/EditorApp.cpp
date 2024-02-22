@@ -5,21 +5,25 @@
 
 namespace Cober {
 
-	class Editor : public EngineApp {
+	class EditorApp : public EngineApp {
+
 	public:
-		Editor() : EngineApp("Engine Editor")
+	
+		EditorApp() : EngineApp("Engine Editor")
 		{
-			PushLayer(new EditorLayer());
+			PushLayer(new Editor());
 			EngineApp::Get().SetGameState(GameState::EDITOR);
 		}
 
-		~Editor() {
-			//LOG_INFO("Editor Destructor Called!");
+		~EditorApp() {
+
+			LOG_INFO("Editor Destructor!");
 		}
 	};
 
 	EngineApp* CreateApplication()
 	{
-		return new Editor();
+		LOG_INFO("Editor Constructor!");
+		return new EditorApp();
 	}
 }
