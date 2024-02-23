@@ -68,11 +68,23 @@ namespace Cober {
     
         if(!m_Minimized) 
         {
+            // Only update at "fpsLimit" frames
+            // while (ts.deltaTime >= 1.0) {
+            //     for (Layer* layer : m_LayerStack) {
+            //         layer->OnUpdate(ts);
+            //         ts.IncreaseUpdate();
+			// 	    ts.DecreaseDeltaTime();
+			//     }
+            // }
+            
             for (Layer* layer : m_LayerStack)
                 layer->OnUpdate(ts);
 
-            if (m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR) {
+            // Render at maximum possible frames
+            // Render::Update(ts)
 
+            if (m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR) 
+            {
                 m_GuiLayer->Begin();
 
                 for (Layer* layer : m_LayerStack)

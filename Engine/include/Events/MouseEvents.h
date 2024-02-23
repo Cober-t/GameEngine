@@ -1,6 +1,9 @@
 #ifndef MOUSE_EVENTS_H
 #define MOUSE_EVENTS_H
 
+// Commment to test if precompile headers works
+// #include <sstream> 
+
 #include "Codes/MouseCodes.h"
 #include "Event.h"
 
