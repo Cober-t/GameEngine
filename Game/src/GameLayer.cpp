@@ -26,8 +26,9 @@ namespace Cober {
 		// m_Camera->SetViewportSize(1280, 720, ortho);
 
 		// m_Camera->OnUpdate(ts);
-		// RenderGlobals::SetClearColor(10, 0, 10, 255);
-		// RenderGlobals::Clear();
+		RenderGlobals::Init();
+		RenderGlobals::SetClearColor(10, 0, 10, 255);
+		RenderGlobals::Clear();
 
 		// m_ActiveScene->OnUpdateRuntime(ts, _camera);
 

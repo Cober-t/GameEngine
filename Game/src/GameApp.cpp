@@ -9,7 +9,7 @@ namespace Cober {
         
 	public:
 
-		GameApp() {
+		GameApp() : EngineApp("Game Application!!") {
 
 			PushLayer(new Game());
 			EngineApp::Get().SetGameState(GameState::PLAY);

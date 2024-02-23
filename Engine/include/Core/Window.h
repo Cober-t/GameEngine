@@ -8,8 +8,6 @@
 
 #include "Events/Event.h"
 
-// #include <sstream>
-	
 namespace Cober {
 
 	struct WindowProps {

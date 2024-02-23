@@ -1,8 +1,5 @@
 #include "Platforms/OpenGL/OpenGLContext.h"
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
 namespace Cober {
 
 	OpenGLContext::OpenGLContext(GLFWwindow* windowHandle)
@@ -22,11 +19,8 @@ namespace Cober {
 		LOG_CORE_INFO("  Renderer: {0}", (char*)glGetString(GL_RENDERER));
 		LOG_CORE_INFO("  Version: {0}", (char*)glGetString(GL_VERSION));
 
-		/*std::cout << glGetString(GL_VENDOR) << std::endl;
-		std::cout << glGetString(GL_RENDERER) << std::endl;
-		std::cout << glGetString(GL_VERSION) << std::endl;*/
-
-		LOG_CORE_ASSERT(GLVersion.major > 4 || (GLVersion.major == 4 && GLVersion.minor >= 5), "The Engine requires at least OpenGL version 4.5!");
+		LOG_CORE_ASSERT(GLVersion.major > 4 || (GLVersion.major == 4 && GLVersion.minor >= 5), \
+						"The Engine requires at least OpenGL version 4.5!");
 	}
 
 	void OpenGLContext::SwapBuffers()
