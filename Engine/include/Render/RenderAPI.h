@@ -2,17 +2,21 @@
 #define RENDER_API_H
 
 #include "Core/Core.h"
-//#include "Render/VertexArray.h"
+#include "Render/VertexArray.h"
 
 #include <glm/glm.hpp>
 
 namespace Cober {
 
-	class RenderAPI {
+	class RenderAPI 
+	{
+
 	public:
-		enum class API {
+		enum class API 
+		{
 			None = 0, OpenGL, OpenGLES, OpenGLES3
 		};
+		
 	public:
 
 		virtual ~RenderAPI() = default;
@@ -27,8 +31,7 @@ namespace Cober {
 
 		virtual void Clear() = 0;
 
-		//virtual void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) = 0;
-		//virtual void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) = 0;
+		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) = 0;
 
 		virtual void ClearErrors() = 0;
 		virtual void CheckErrors(const char* function) = 0;

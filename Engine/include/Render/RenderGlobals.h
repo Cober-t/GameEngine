@@ -1,8 +1,8 @@
 #ifndef RENDER_GLOBALS_H
 #define RENDER_GLOBALS_H
 
-#include "Core/Core.h"
 #include "RenderAPI.h"
+#include "VertexArray.h"
 
 namespace Cober {
 
@@ -19,7 +19,10 @@ namespace Cober {
 		static void SetClearColor(glm::vec4 color);
 		static void SetClearColor(float red, float green, float blue, float black);
 
-		//static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t count = 0);
+		static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t count = 0);
+
+		static void ClearErrors();
+		static void CheckErrors(const char* function);
 	};
 }
 

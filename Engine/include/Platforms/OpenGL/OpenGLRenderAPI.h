@@ -2,16 +2,17 @@
 #define OPENGL_RENDER_API_H
 
 #include "Render/RenderAPI.h"
+#include "Render/RenderGlobals.h"
 
 #define GLCallV( x ) \
-			Cober::OpenGLRenderAPI::ClearErrors(); \
+			RenderGlobals::ClearErrors(); \
 			x; \
-			Cober::OpenGLRenderAPI::CheckErrors(#x);
+			RenderGlobals::CheckErrors(#x);
 
 #define GLCall( x ) [&]() { \
-			Cober::OpenGLRenderAPI::ClearErrors(); \
+			RenderGlobals::ClearErrors(); \
 			auto retVal = x; \
-			Cober::OpenGLRenderAPI::CheckErrors(#x); \
+			RenderGlobals::CheckErrors(#x); \
 			return retVal; \
 		}()
 
@@ -31,8 +32,7 @@ namespace Cober {
 		virtual void SetClearColor(float red, float green, float blue, float black) override;
 		virtual void SetLineWidth(float width) override;
 
-		//virtual void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) override;
-		//virtual void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) override;
+		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) override;
 
 		virtual void ClearErrors() override;
 		virtual void CheckErrors(const char* function) override;

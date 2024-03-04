@@ -1,12 +1,20 @@
 #include "Platforms/OpenGL/OpenGLContext.h"
 
+
 namespace Cober {
 
+	
 	OpenGLContext::OpenGLContext(GLFWwindow* windowHandle)
 		: m_WindowHandle(windowHandle)
 	{
 		LOG_CORE_ASSERT(windowHandle, "Window handle is null!");
 	}
+
+	OpenGLContext::~OpenGLContext()
+	{
+		LOG_CORE_INFO("Destroyed Context!!");
+	}
+
 
 	void OpenGLContext::Init()
 	{
@@ -22,6 +30,7 @@ namespace Cober {
 		LOG_CORE_ASSERT(GLVersion.major > 4 || (GLVersion.major == 4 && GLVersion.minor >= 5), \
 						"The Engine requires at least OpenGL version 4.5!");
 	}
+
 
 	void OpenGLContext::SwapBuffers()
 	{

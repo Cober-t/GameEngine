@@ -1,22 +1,11 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-//[++++++++++++++++++++++++++]
-//[+++++++++ IMGUI ++++++++++]
-//[++++++++++++++++++++++++++]
-// #if defined __OPENGL__ && !defined __EMSCIPTEN__
- 	//#include <imgui/imgui.h>
- 	//#include <imgui/imconfig.h>
-	//#include <imgui/backends/imgui_impl_glfw.h>
- 	//#include <imgui/backends/imgui_impl_opengl3.h>
- 	//#include <imgui/imgui_internal.h>
- 	//#include <imgui/imstb_rectpack.h>
- 	//#include <imgui/imstb_textedit.h>
- 	//#include <imgui/imstb_truetype.h>
-// #endif 
+
 //[++++++++++++++++++++++++++]
 //[++++++++++ CORE ++++++++++]
 //[++++++++++++++++++++++++++]
+#include "Core/PlatformDetection.h"
 #include "Core/Core.h"
 #include "Core/EngineApp.h"
 #include "Core/Log.h"
@@ -25,7 +14,6 @@
 #include "Core/Input.h"
 #include "Core/Layer.h"
 #include "Core/Window.h"
-#include "Core/PlatformDetection.h"
 
 
 //[++++++++++++++++++++++++++]
@@ -55,22 +43,39 @@
 #include "Render/GraphicsContext.h"
 #include "Render/RenderAPI.h"
 #include "Render/RenderGlobals.h"
+#include "Render/Render2D.h"
+#include "Render/Buffer.h"
+#include "Render/VertexArray.h"
+#include "Render/Shader.h"
+#include "Render/Texture.h"
+#include "Render/Camera/Camera.h"
+#include "Render/Camera/GameCamera.h"
 
 
-//[++++++++++++++++++++++++++]
+//[++++++++++++++++++++++++++++]
 //[+++++++++ Platform +++++++++]
+//[++++++++++++++++++++++++++++]
+#include <Platforms/OpenGL/OpenGLContext.h>
+#include <Platforms/OpenGL/OpenGLRenderAPI.h>
+#include <Platforms/OpenGL/OpenGLBuffer.h>
+#include <Platforms/OpenGL/OpenGLVertexArray.h>
+#include <Platforms/OpenGL/OpenGLTexture.h>
+#include <Platforms/OpenGL/OpenGLShader.h>
+
+
+
 //[++++++++++++++++++++++++++]
-// #if __OPENGLES3__
-	#include <Platforms/OpenGL/OpenGLContext.h>
-	#include <Platforms/OpenGL/OpenGLRenderAPI.h>
-	//#include <Platforms/OpenGL/OpenGLFramebuffer.h>
-	//#include <Platforms/OpenGL/OpenGLShader.h>
-// #elif defined __OPENGLES3__
-	//#include <Platforms/OpenGL/OpenGLES3Context.h>
-	//#include <Platforms/OpenGL/OpenGLES3Framebuffer.h>
-	//#include <Platforms/OpenGL/OpenGLES3RenderAPI.h>
-	//#include <Platforms/OpenGL/OpenGLES3Shader.h>
-// #endif
+//[+++++++++ IMGUI ++++++++++]
+//[++++++++++++++++++++++++++]
+//#include <imgui/imgui.h>
+//#include <imgui/imconfig.h>
+//#include <imgui/backends/imgui_impl_glfw.h>
+//#include <imgui/backends/imgui_impl_opengl3.h>
+//#include <imgui/imgui_internal.h>
+//#include <imgui/imstb_rectpack.h>
+//#include <imgui/imstb_textedit.h>
+//#include <imgui/imstb_truetype.h>
+
 
 //[++++++++++++++++++++++++++]
 //[+++++++++ BOX 2D +++++++++]

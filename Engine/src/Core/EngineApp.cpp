@@ -1,5 +1,5 @@
 #include "Core/EngineApp.h"
-#include "Core/Log.h"
+
 
 namespace Cober {
 
@@ -8,9 +8,6 @@ namespace Cober {
     EngineApp::EngineApp(const std::string& name, uint32_t width, uint32_t height, bool vsync)
     {
         LOG_CORE_INFO("EngineApp Constructor!");
-        DEBUG = false;
-        GAME_2D = false;
-        PHYSICS_2D = false;
 
         LOG_CORE_ASSERT(!s_Instance, "Application already exists!");
         s_Instance = this;
@@ -18,42 +15,41 @@ namespace Cober {
         m_Window = CreateUnique<Window>(WindowProps(name, width, height, vsync));
         m_Window->SetEventCallback(BIND_EVENT_FN(EngineApp::OnEvent));
 
-        // m_AssetManager = CreateUnique<AssetManager>();
-
         m_GameState = GameState::PLAY;
     }
 
 
-    EngineApp::~EngineApp() {
-
+    EngineApp::~EngineApp() 
+    {
         LOG_CORE_INFO("EngineApp Destructor!");
     }
 
 
-    void EngineApp::PushLayer(Layer* layer) {
-
+    void EngineApp::PushLayer(Layer* layer)
+    {
         m_LayerStack.PushLayer(layer);
         layer->OnAttach();
     }
 
 
-    void EngineApp::PushOverlay(Layer* layer) {
-
+    void EngineApp::PushOverlay(Layer* layer)
+    {
         m_LayerStack.PushOverlay(layer);
         layer->OnAttach();
     }
 
 
-    void EngineApp::Start() {
-
-        if (m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR) {
+    void EngineApp::Start()
+    {
+        if (m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR) 
+        {
             m_GuiLayer = new ImGuiLayer("#version 460");
             PushOverlay(m_GuiLayer);
         }
     }
 
-    void EngineApp::Update() {
-     
+    void EngineApp::Update() 
+    {
         Timestep ts = Timestep();
 
         while (m_GameState == GameState::PLAY || m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR)
@@ -62,8 +58,8 @@ namespace Cober {
         }
     }
 
-    void EngineApp::Run(Timestep ts) {
-
+    void EngineApp::Run(Timestep ts)
+    {
         ts.Start();
     
         if(!m_Minimized) 
@@ -100,14 +96,14 @@ namespace Cober {
     }
 
 
-    void EngineApp::Close() {
-        
+    void EngineApp::Close()
+    {
         m_GameState = GameState::EXIT;
     }
 
 
-    void EngineApp::OnEvent(Event& event) {
-
+    void EngineApp::OnEvent(Event& event)
+    {
         // In the future each layer/object could save the event on a buffer
         // and handle it one per frame on Update instead of delay all the Application
 
@@ -144,23 +140,4 @@ namespace Cober {
 
 		return false;
 	}
-
-
-    // void Application::SubmitToMainThread(const std::function<void()>& function)
-	// {
-	// 	std::scoped_lock<std::mutex> lock(m_MainThreadQueueMutex);
-
-	// 	m_MainThreadQueue.emplace_back(function);
-	// }
-
-
-    // void EngineApp::ExecuteMainThreadQueue()
-	// {
-	// 	std::scoped_lock<std::mutex> lock(m_MainThreadQueueMutex);
-
-	// 	for (auto& func : m_MainThreadQueue)
-	// 		func();
-
-	// 	m_MainThreadQueue.clear();
-	// }
 }

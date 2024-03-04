@@ -36,6 +36,4 @@ namespace Cober {
 	}
 }
 
-#include "Core/Log.h"
-
 #endif

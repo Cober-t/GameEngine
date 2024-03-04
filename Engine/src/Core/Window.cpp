@@ -1,5 +1,6 @@
 #include <Core/Window.h>
 #include <Core/Core.h>
+#include <Core/EngineApp.h>
 
 #include "Events/ApplicationEvents.h"
 #include "Events/KeyEvents.h"
@@ -20,8 +21,9 @@ namespace Cober {
 		Init(props);
 	}
 
-	Window::~Window() {
-		
+	Window::~Window() 
+	{
+		LOG_CORE_INFO("Destroyed window!!");
 		Shutdown();
 	}
 

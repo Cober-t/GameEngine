@@ -7,8 +7,8 @@
 
 extern Cober::EngineApp* Cober::CreateApplication();
 
-int main(int argc, char** argv) {
-
+int main(int argc, char** argv)
+{
 	Cober::Log::Init();
 
 	auto app = Cober::CreateApplication();

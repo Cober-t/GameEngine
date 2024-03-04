@@ -1,11 +1,13 @@
-#pragma once
+#ifndef IMGUI_LAYER_H
+#define IMGUI_LAYER_H
 
 #include "Core/Layer.h"
 #include "Core/EngineApp.h"
 
 namespace Cober {
 
-	class ImGuiLayer : public Layer {
+	class ImGuiLayer : public Layer 
+	{
 	public:
 
 		ImGuiLayer(const char* glVersion = "#version 460");
@@ -23,3 +25,5 @@ namespace Cober {
 		const char* glsl_version;
 	};
 }
+
+#endif

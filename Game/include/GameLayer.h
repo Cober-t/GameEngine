@@ -3,9 +3,11 @@
 
 #include <Engine.h>
 
+
 namespace Cober {
 
-	class Game : public Layer {
+	class Game : public Layer 
+	{
 	public:
 		Game();
 		virtual ~Game() = default;
@@ -17,7 +19,7 @@ namespace Cober {
 		// void OnEvent(SDL_Event& event) override;
 	private:
 		// Ref<Scene> _activeScene;
-		// Ref<EditorCamera> _camera;
+		Ref<GameCamera> m_Camera;
 	};
 }
 

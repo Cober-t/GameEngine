@@ -10,7 +10,8 @@
 
 namespace Cober {
 
-	struct WindowProps {
+	struct WindowProps 
+	{
 		std::string Title;
 		uint32_t Width, Height;
 		bool VSync;
@@ -24,8 +25,8 @@ namespace Cober {
 			}
 	};
 
-	class Window {
-
+	class Window 
+	{
 	public:
 		using EventCallbackFn = std::function<void(Event&)>;
 
@@ -34,9 +35,9 @@ namespace Cober {
 
 		void OnUpdate();
 
-		std::string& GetTitle() { return m_Data.Title; }	
-		uint32_t GetWidth() const { return m_Data.Width; }
-		uint32_t GetHeight() const { return m_Data.Height; }
+		inline std::string& GetTitle() { return m_Data.Title; }	
+		inline uint32_t GetWidth() const { return m_Data.Width; }
+		inline uint32_t GetHeight() const { return m_Data.Height; }
 
 		inline void SetEventCallback(const EventCallbackFn& callback) { m_Data.EventCallback = callback; }
 		void SetVSync(bool enabled);
