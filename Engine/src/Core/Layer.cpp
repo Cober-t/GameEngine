@@ -3,15 +3,15 @@
 namespace Cober {
 
 	Layer::Layer(const std::string& debugName) 
-		: _debugName(debugName) 
+		: m_DebugName(debugName) 
 	{
 
 	}
 
 	Layer::~Layer()
 	{
-		for (Layer* layer : m_Layers) {
-            
+		for (Layer* layer : m_Layers) 
+		{
 			layer->OnDetach();
 			delete layer;
 		}
@@ -32,8 +32,8 @@ namespace Cober {
 	{
 		auto it = std::find(m_Layers.begin(), m_Layers.end(), layer);
 
-		if (it != m_Layers.end()) {
-
+		if (it != m_Layers.end()) 
+		{
 			layer->OnDetach();
 			m_Layers.erase(it);
 			m_LayerInsertIndex--;
@@ -44,8 +44,8 @@ namespace Cober {
 	{
 		auto it = std::find(m_Layers.begin(), m_Layers.end(), overlay);
 
-		if (it != m_Layers.end()) {
-
+		if (it != m_Layers.end()) 
+		{
 			overlay->OnDetach();
 			m_Layers.erase(it);
 		}

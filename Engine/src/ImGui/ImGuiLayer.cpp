@@ -16,13 +16,18 @@ namespace Cober {
 	ImGuiLayer::ImGuiLayer(const char* glVersion)
 		: glsl_version(glVersion)
 	{
-	}
-
-	ImGuiLayer::~ImGuiLayer() {
 
 	}
 
-	void ImGuiLayer::OnAttach() {
+
+	ImGuiLayer::~ImGuiLayer() 
+	{
+
+	}
+
+
+	void ImGuiLayer::OnAttach() 
+	{
 
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
@@ -60,15 +65,17 @@ namespace Cober {
 		ImGui_ImplOpenGL3_Init("#version 410");
 	}
 
-	void ImGuiLayer::OnDetach() {
 
+	void ImGuiLayer::OnDetach() 
+	{
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
 
-	void ImGuiLayer::OnEvent(Event& event) {
 
+	void ImGuiLayer::OnEvent(Event& event) 
+	{
 		auto gameState = EngineApp::Get().GetGameState();
 
 		// if (m_BlockEvents)
@@ -80,8 +87,9 @@ namespace Cober {
 		}
 	}
 
-	void ImGuiLayer::Begin() {
 
+	void ImGuiLayer::Begin() 
+	{
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();

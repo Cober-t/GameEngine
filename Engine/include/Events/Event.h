@@ -69,6 +69,7 @@ namespace Cober {
             }
             return false;
         }
+        
     private:
         Event& m_Event;
     };

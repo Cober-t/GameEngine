@@ -37,6 +37,10 @@
 #include <map>
 #include <set>
 
+/* --- CUSTOM HEADERS --- */
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 #include <Core/Core.h>
 #include <Core/Log.h>
 

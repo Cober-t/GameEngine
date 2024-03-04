@@ -8,12 +8,12 @@
 
 // GUI PANELS
 /*
+#include "Panels/ViewportPanel.h"
 #include "Panels/MenuPanel.h"
 #include "Panels/ContentBrowserPanel.h"
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/MenuPanel.h"
 #include "Panels/DataPanel.h"
-#include "Panels/ViewportPanel.h"
 */
 
 namespace Cober {

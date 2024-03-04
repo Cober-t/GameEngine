@@ -1,7 +1,5 @@
 #include "Core/Input.h"
-
 #include "Core/EngineApp.h"
-#include <GLFW/glfw3.h>
 
 namespace Cober {
 

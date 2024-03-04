@@ -1,0 +1,42 @@
+#include "RenderGlobals.h"
+
+
+namespace Cober {
+
+	Unique<RenderAPI> RenderGlobals::m_Api = RenderAPI::Create();
+
+	void RenderGlobals::Init() 
+	{
+		RenderGlobals::m_Api->Init();
+	}
+
+
+	void RenderGlobals::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) 
+	{
+		RenderGlobals::m_Api->SetViewport(x, y, width, height);
+	}
+
+
+	void RenderGlobals::SetClearColor(glm::vec4 color) 
+	{
+		RenderGlobals::m_Api->SetClearColor(color);
+	}
+
+
+	void RenderGlobals::SetClearColor(float red, float green, float blue, float black) 
+	{
+		RenderGlobals::m_Api->SetClearColor(red, green, blue, black);
+	}
+
+
+	void RenderGlobals::Clear() 
+	{
+		RenderGlobals::m_Api->Clear();
+	}
+
+
+	void RenderGlobals::DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t count)
+	{
+		RenderGlobals::m_Api->DrawIndexed(vertexArray, count);
+	}
+}

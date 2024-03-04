@@ -38,11 +38,16 @@ namespace Cober {
 		}
 
 		inline void CountUpdate() { m_Updates++; }
-		// inline void DecreaseDeltaTime() { deltaTime--; }
 
 		inline int GetFrames() { return frames; }
+		inline void LockFrameRate(double frameRateLimit) { m_FpsLimit = frameRateLimit; }
+		inline void UnlockFrameRate() { m_FpsLimit = 1; }
+
 		inline double GetUpdates() { return m_Updates; }
+		inline void IncreaseUpdate() { m_Updates++; }
+
 		inline double DeltaTime() { return deltaTime; }
+		inline void DecreaseDeltaTime() { deltaTime--; }
 
 	private:
 		int m_AuxTime, m_Updates;

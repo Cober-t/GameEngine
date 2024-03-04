@@ -1,6 +1,8 @@
 #ifndef CORE_H
 #define CORE_H
 
+#include "PlatformDetection.h"
+
 #include <memory>
 
 #ifdef __linux__
@@ -35,7 +37,5 @@ namespace Cober {
 		return std::make_shared<T>(std::forward<Args>(args)...);
 	}
 }
-
-#include "Core/Log.h"
 
 #endif

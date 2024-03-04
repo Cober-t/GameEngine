@@ -3,26 +3,29 @@
 
 #include "GameLayer.h"
 
+
 namespace Cober {
 
-	class GameApp: public EngineApp {
-        
+
+	class GameApp: public EngineApp 
+	{
 	public:
 
-		GameApp() {
-
+		GameApp() : EngineApp("Game Application!!") 
+		{
 			PushLayer(new Game());
 			EngineApp::Get().SetGameState(GameState::PLAY);
 		}
 
-		~GameApp() {
-
+		~GameApp() 
+		{
             LOG_INFO("Game Destructor!");
 		}
 	};
 
-	EngineApp* CreateApplication() {
 
+	EngineApp* CreateApplication() 
+	{
         LOG_INFO("Game Constructor!");
 		return new GameApp();
 	}

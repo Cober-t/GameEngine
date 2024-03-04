@@ -12,6 +12,7 @@ namespace Cober {
 		KeyCode GetKeyCode() const { return m_KeyCode; }
 
 		EVENT_CLASS_CATEGORY(EventCategoryKeyboard | EventCategoryInput)
+		
 	protected:
 		KeyEvent(const KeyCode keycode)
 			: m_KeyCode(keycode) {}
@@ -36,6 +37,7 @@ namespace Cober {
 		}
 
 		EVENT_CLASS_TYPE(KeyPressed)
+
 	private:
 		bool m_IsRepeat;
 	};
