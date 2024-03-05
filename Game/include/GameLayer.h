@@ -18,7 +18,7 @@ namespace Cober {
 		void OnUpdate(Timestep ts) override;
 		// void OnEvent(SDL_Event& event) override;
 	private:
-		// Ref<Scene> _activeScene;
+		Ref<Scene> m_ActiveScene;
 		Ref<GameCamera> m_Camera;
 	};
 }

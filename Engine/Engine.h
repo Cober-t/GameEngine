@@ -14,6 +14,7 @@
 #include "Core/Input.h"
 #include "Core/Layer.h"
 #include "Core/Window.h"
+#include "Core/UUID.h"
 
 
 //[++++++++++++++++++++++++++]
@@ -28,13 +29,17 @@
 
 
 //[++++++++++++++++++++++++++]
-//[++++++++ SYSTEMS +++++++++]
+//[+++++++++ SCENE ++++++++++]
 //[++++++++++++++++++++++++++]
+#include "Scene/Components.h"
+#include "Scene/Entity.h"
+#include "Scene/Scene.h"
 
 
 //[++++++++++++++++++++++++++]
-//[++++++++ ENTITIES ++++++++]
+//[+++++++++ SYSTEMS ++++++++]
 //[++++++++++++++++++++++++++]
+#include "Scene/Systems/RenderSystem.h"
 
 
 //[++++++++++++++++++++++++++]

@@ -175,7 +175,6 @@ namespace Cober {
 
 	void Render2D::EndScene() 
 	{
-		RenderGlobals::Clear();
 		Flush();
 	}
 

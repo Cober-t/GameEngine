@@ -11,29 +11,23 @@ namespace Cober {
 
 	void Game::OnAttach() 
 	{
-		RenderGlobals::Init();
-		RenderGlobals::SetClearColor(10, 0, 10, 255);
-		Render2D::Start();
+		m_ActiveScene = CreateRef<Scene>();
+		m_ActiveScene->OnSimulationStart();
 	}
 
 
 	void Game::OnDetach() 
 	{
+		m_ActiveScene->OnSimulationStop();
+		m_ActiveScene = nullptr;
+		m_Camera = nullptr;
  		LOG_INFO("Detached Game Layer!");
 	}
 
 
 	void Game::OnUpdate(Timestep ts) 
 	{
-		m_Camera->OnUpdate(ts);
-
-		Render2D::ResetStats();
-		Render2D::BeginScene(m_Camera);
-
-		// Draw anything!!
-		Render2D::DrawSolidPolygon();
-
-		Render2D::EndScene();
+		m_ActiveScene->OnUpdateSimulation(ts, m_Camera);
 	}
 
 
