@@ -39,10 +39,10 @@ Game Engine (MVP):
      - [X] Game Camera  
      - [ ] Editor Camera  
 
- - [ ] ECS
-     - [ ] Create Entity with unique UUID  
-     - [ ] TransformComponent  
-     - [ ] TagComponent  
+ - [X] ECS
+     - [X] Create Entity with unique UUID  
+     - [X] TransformComponent  
+     - [X] TagComponent  
      - [ ] Sprite/RenderComponent  
      - [ ] AnimationComponent (nodos en un futuro)  
      - [ ] ColliderComponent (active, gravity, mass, isTrigger, target...)  
@@ -52,7 +52,7 @@ Game Engine (MVP):
      - [ ] MovementSystem (para 2D y 3D, ease in, ease out, snap, speed, configuración de inputs...)  
 
  - [ ] Physics 2D  
- - [ ] Scene  
+ - [X] Scene  
  - [ ] Serializacion  
  - [ ] Scripting con Lua  
  - [ ] UILayer  
