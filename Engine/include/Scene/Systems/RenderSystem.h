@@ -3,7 +3,7 @@
 
 
 #include "Core/Core.h"
-#include "Scene/Entity.h"
+#include "Scene/ECS.h"
 #include "Render/Camera/GameCamera.h"
 #include "Render/Render2D.h"
 #include "Render/RenderGlobals.h"

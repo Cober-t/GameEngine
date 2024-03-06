@@ -5,14 +5,7 @@
 
 #include <glm/glm.hpp>
 
-#include "Scene/Entity.h"
-
-#include "b2World.h"
-#include "b2Body.h"
-#include "b2Fixture.h"
-#include "b2PolygonShape.h"
-#include "b2CircleShape.h"
-
+#include "Scene/ECS.h"
 
 
 namespace Cober {
@@ -82,6 +75,8 @@ namespace Cober {
 	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name)
 	{
 		Entity entity = { m_Registry.create(), this };
+
+		
 		entity.AddComponent<IDComponent>(uuid);
 		entity.AddComponent<TransformComponent>();
 		auto& tagComponent = entity.AddComponent<TagComponent>();
@@ -91,19 +86,15 @@ namespace Cober {
 
         LOG_INFO("Created entity with ID {0} and name {1}", uuid, tagComponent.tag);
 
-        AddEntityToSystems(entity); // In the future add to a vector and handle in Update
-
 		return entity;
 	}
 
 
 	void Scene::DestroyEntity(Entity entity)
 	{
-		// In the future add to a vector and handle in Update
+		entity.ResetComponentSignature();
 		m_EntityMap.erase(entity.GetUUID());
 		m_Registry.destroy(entity);
-
-        LOG_INFO("Drestroyed entity with ID {0} and name {1}", entity.GetUUID(), entity.GetName());
 	}
 
 
@@ -111,8 +102,7 @@ namespace Cober {
 	{
         GetSystem<RenderSystem>().Start();
 
-        // TEST
-        CreateEntity();
+		// Entity entity = CreateEntity();
 	}
 
     void Scene::OnSimulationStop()
@@ -120,10 +110,28 @@ namespace Cober {
 		// Delete Entities
 	}
 
+	void Scene::UpdateEntities()
+	{
+		for (auto& entity : m_EntitiesToBeAdded)
+		{
+			AddEntityToSystems(entity);
+		}
+
+		m_EntitiesToBeAdded.clear();
+
+		for (auto entity : m_EntitiesToBeKilled)
+		{
+			DestroyEntity(entity);
+		}
+
+		m_EntitiesToBeKilled.clear();
+	}
+
 
 	void Scene::OnUpdateSimulation(Timestep ts, const Ref<GameCamera>& camera)
 	{
-        Scene::GetSystem<RenderSystem>().Update(ts, camera);
+		UpdateEntities();
+        GetSystem<RenderSystem>().Update(ts, camera);
 	}
 
 
@@ -142,7 +150,7 @@ namespace Cober {
 
 	Entity Scene::GetEntityByUUID(UUID uuid)
 	{
-		// TODO(Yan): Maybe should be assert
+		// TODO: Maybe should be assert
 		if (m_EntityMap.find(uuid) != m_EntityMap.end())
 			return { m_EntityMap.at(uuid), this };
 
@@ -150,7 +158,7 @@ namespace Cober {
 	}
 
 
-    void Scene::AddEntityToSystems(Entity entity) 
+	void Scene::AddEntityToSystems(Entity entity) 
     {
 		for (auto& system : m_Systems) 
 		{
@@ -171,7 +179,7 @@ namespace Cober {
 
 
     template<typename TSystem, typename ... TArgs>
-	void Scene::AddSystem(TArgs&& ...args) 
+	void Scene::AddSystem(TArgs&& ...args)
     {
 		Ref<TSystem> newSystem(CreateRef<TSystem>(std::forward<TArgs>(args)...));
 		m_Systems.insert(std::make_pair(std::type_index(typeid(TSystem)), newSystem));
@@ -179,7 +187,7 @@ namespace Cober {
 
 
 	template<typename TSystem>
-	void Scene::RemoveSystem() 
+	void Scene::RemoveSystem()
     {
 		auto system = m_Systems.find(std::type_index(typeid(TSystem)));
 		m_Systems.erase(system);
@@ -187,14 +195,14 @@ namespace Cober {
 
 
 	template<typename TSystem>
-	bool Scene::HasSystem() const 
+	bool Scene::HasSystem() const
     {
 		return m_Systems.find(std::type_index(typeid(TSystem))) != m_Systems.end();
 	}
 
 
 	template<typename TSystem>
-	TSystem& Scene::GetSystem() const 
+	TSystem& Scene::GetSystem() const
     {
 		LOG_ASSERT(HasSystem<TSystem>(), "System is not added!");
 		auto system = m_Systems.find(std::type_index(typeid(TSystem)));
@@ -217,7 +225,6 @@ namespace Cober {
 	void Scene::OnComponentAdded<TransformComponent>(Entity entity, TransformComponent& component)
 	{
 	}
-
 
 	template<>
 	void Scene::OnComponentAdded<TagComponent>(Entity entity, TagComponent& component)

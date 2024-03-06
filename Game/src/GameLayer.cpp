@@ -13,6 +13,9 @@ namespace Cober {
 	{
 		m_ActiveScene = CreateRef<Scene>();
 		m_ActiveScene->OnSimulationStart();
+
+		// Test
+		Entity entity = m_ActiveScene->CreateEntity();
 	}
 
 

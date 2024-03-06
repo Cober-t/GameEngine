@@ -8,9 +8,6 @@
 #include <entt/entt.hpp>
 #include <typeindex>
 
-
-//class b2World;
-
 namespace Cober {
 
 	class Entity;
@@ -28,6 +25,8 @@ namespace Cober {
 
 		void OnSimulationStart();
 		void OnSimulationStop();
+
+		void UpdateEntities();
 
 		void OnUpdateSimulation(Timestep ts, const Ref<GameCamera>& camera);
 
@@ -74,9 +73,12 @@ namespace Cober {
 		bool m_IsRunning = false;
 		bool m_IsPaused = false;
 		int m_StepFrames = 0;
+		
+		std::vector<Entity> m_EntitiesToBeAdded;
+		std::vector<Entity> m_EntitiesToBeKilled;
 
         std::map<std::type_index, Ref<System>> m_Systems;
-		std::unordered_map<UUID, entt::entity> m_EntityMap;
+		std::unordered_map<UUID, Entity> m_EntityMap;
 
 		friend class Entity;
 		friend class System;

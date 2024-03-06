@@ -76,6 +76,51 @@ namespace Cober {
 	};
 
 
+	// enum class BodyType { Static = 0, Kinematic, Dynamic };
+
+	// struct Rigidbody2D 
+	// {
+	// 	glm::vec2 velocity;
+	// 	bool fixedRotation = false;
+
+	// 	BodyType type = BodyType::Static;
+
+	// 	void* runtimeBody;
+
+	// 	Rigidbody2D() = default;
+	// 	Rigidbody2D(const Rigidbody2D&) = default;
+	// 	Rigidbody2D(glm::vec2 vel, bool fxRotation, int bodyType = 1)
+	// 		: velocity(vel), fixedRotation(fxRotation), type((BodyType)bodyType), runtimeBody(nullptr) {}
+	// };
+
+	// struct Collider2D {
+
+	// };
+
+	// struct BoxCollider2D : public Collider2D 
+	// {
+	// 	glm::vec2 offset = { 0.0f, 0.0f };
+	// 	glm::vec2 size =   { 1.0f, 1.0f };
+
+	// 	b2Shape* body;
+	// 	b2PolygonShape shape;
+
+	// 	// Make a physics material maybe
+	// 	float density = 1.0f;
+	// 	float friction = 0.5f;
+	// 	float restitution = 0.0f;
+	// 	float restitutionThreshold = 0.5f;
+
+	// 	// Storage for runtime
+	// 	void* runtimeFixture = nullptr;
+
+	// 	BoxCollider2D() = default;
+	// 	BoxCollider2D(const BoxCollider2D&) = default;
+	// 	BoxCollider2D(glm::vec2 Offset, glm::vec2 Size, float Density, float Friction, float Rest, float RestThreshold)
+	// 		: offset(Offset), size(Size), 
+	// 		  density(Density), friction(Friction), restitution(Rest), restitutionThreshold(RestThreshold) {}
+	// };
+
 	/*
 	struct Sprite {
 		int w, h;
@@ -100,48 +145,6 @@ namespace Cober {
 		Animation2D(const Animation2D&) = default;
 		Animation2D(int numfrm = 1, int frmRateSpeed = 1, bool loop = true)
 			: numFrames(numfrm), currentFrame(1), frameRateSpeed(frmRateSpeed), shouldLoop(loop), startTime(SDL_GetTicks()) {}
-	};
-
-	enum class BodyType { Static = 0, Kinematic, Dynamic };
-	struct Rigidbody2D {
-		glm::vec2 velocity;
-		bool fixedRotation = false;
-
-		BodyType type = BodyType::Static;
-
-		void* runtimeBody;
-
-		Rigidbody2D() = default;
-		Rigidbody2D(const Rigidbody2D&) = default;
-		Rigidbody2D(glm::vec2 vel, bool fxRotation, int bodyType = 1)
-			: velocity(vel), fixedRotation(fxRotation), type((BodyType)bodyType), runtimeBody(nullptr) {}
-	};
-
-	struct Collider2D {
-
-	};
-
-	struct BoxCollider2D : public Collider2D {
-		glm::vec2 offset = { 0.0f, 0.0f };
-		glm::vec2 size =   { 1.0f, 1.0f };
-
-		b2Shape* body;
-		b2PolygonShape shape;
-
-		// Make a physics material maybe
-		float density = 1.0f;
-		float friction = 0.5f;
-		float restitution = 0.0f;
-		float restitutionThreshold = 0.5f;
-
-		// Storage for runtime
-		void* runtimeFixture = nullptr;
-
-		BoxCollider2D() = default;
-		BoxCollider2D(const BoxCollider2D&) = default;
-		BoxCollider2D(glm::vec2 Offset, glm::vec2 Size, float Density, float Friction, float Rest, float RestThreshold)
-			: offset(Offset), size(Size), 
-			  density(Density), friction(Friction), restitution(Rest), restitutionThreshold(RestThreshold) {}
 	};
 
 	struct CircleCollider2D : public Collider2D {

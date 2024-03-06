@@ -32,7 +32,7 @@
 //[+++++++++ SCENE ++++++++++]
 //[++++++++++++++++++++++++++]
 #include "Scene/Components.h"
-#include "Scene/Entity.h"
+#include "Scene/ECS.h"
 #include "Scene/Scene.h"
 
 
@@ -85,12 +85,11 @@
 //[++++++++++++++++++++++++++]
 //[+++++++++ BOX 2D +++++++++]
 //[++++++++++++++++++++++++++]
-// 
-//#include <box2D/b2_world.h>
-//#include <box2D/b2_body.h>
-//#include <box2D/b2_fixture.h>
-//#include <box2D/b2_polygon_shape.h>
-//#include <box2D/b2_draw.h>
-//class b2World;
+// #include <b2World.h>
+// #include <b2Body.h>
+// #include <b2Fixture.h>
+// #include <b2PolygonShape.h>
+// #include <b2Draw.h>
+// class b2World;
 
 #endif

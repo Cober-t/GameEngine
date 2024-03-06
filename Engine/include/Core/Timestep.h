@@ -53,8 +53,6 @@ namespace Cober {
 		int m_AuxTime, m_Updates;
 		double m_Timer, m_FpsLimit, m_LastFrameTime;
 		bool m_LimitedFrames;
-
-	public:
 		int frames;
 		double deltaTime;
 	};
