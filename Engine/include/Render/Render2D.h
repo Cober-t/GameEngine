@@ -8,6 +8,8 @@
 #include "Render/Texture.h"
 #include "Render/Camera/Camera.h"
 
+#include "Scene/ECS.h"
+
 #include <glm/gtc/matrix_transform.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
@@ -31,6 +33,7 @@ namespace Cober {
 
 		// EXPORT TO DEBUG RENDERER
 		static void DrawSolidPolygon();
+		static void DrawSolidPolygon(Entity& entity);
 
 	public:
 		struct Statistics

@@ -36,9 +36,8 @@ namespace Cober {
 
 		for (auto& entity : GetSystemEntities()) 
         {
-			TransformComponent transform = entity.GetComponent<TransformComponent>();
-		
-            Render2D::DrawSolidPolygon();
+			// TransformComponent transform = entity.GetComponent<TransformComponent>();
+            Render2D::DrawSolidPolygon(entity);
 		}
 
 		RenderGlobals::Clear();

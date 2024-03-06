@@ -218,4 +218,39 @@ namespace Cober {
 		data.QuadIndexCount += 6;
 		data.Stats.QuadCount++;
 	}
+
+	void Render2D::DrawSolidPolygon(Entity& entity) 
+	{
+		auto& enttTrans = entity.GetComponent<TransformComponent>();
+
+		glm::vec3 position{ enttTrans.position.x, enttTrans.position.y, enttTrans.position.z + 0.001f };
+		glm::vec3 scale{ enttTrans.scale.x, enttTrans.scale.y, 1.0f };
+
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+			* glm::toMat4(glm::quat(enttTrans.rotation))
+			* glm::scale(glm::mat4(1.0f), scale);
+
+		size_t quadVertexCount = 4;
+		float textureIndex = 0.0f; // White Texture
+		glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+		float tilingFactor = 1.0f;
+
+		if (data.QuadIndexCount >= data.MaxIndices)
+			Render2D::NextBatch();
+
+		glm::vec3 color = glm::vec3(1, 0, 0);	// Change color in settings
+		for (size_t i = 0; i < quadVertexCount; i++)
+		{
+			data.QuadVertexBufferPtr->Position = transform * data.QuadVertexPositions[i];
+			data.QuadVertexBufferPtr->Color = glm::vec4(color, 1);
+			data.QuadVertexBufferPtr->TexCoord = glm::vec2(0.0f, 0.0f);
+			data.QuadVertexBufferPtr->TexIndex = textureIndex;
+			data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+			data.QuadVertexBufferPtr->EntityID = entity.GetUUID();
+			data.QuadVertexBufferPtr++;
+		}
+
+		data.QuadIndexCount += 6;
+		data.Stats.QuadCount++;
+	}
 }

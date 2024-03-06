@@ -42,13 +42,11 @@ namespace Cober {
 			auto iterator = std::find(m_Scene->m_EntitiesToBeAdded.begin(), m_Scene->m_EntitiesToBeAdded.end(), *this);
 			if (iterator != m_Scene->m_EntitiesToBeAdded.end())
 			{
-				LOG_WARNING("Entity erased from promote system system {0}", GetUUID());
 				int index = iterator - m_Scene->m_EntitiesToBeAdded.begin();
 				m_Scene->m_EntitiesToBeAdded.erase(std::next(m_Scene->m_EntitiesToBeAdded.begin(), index));
 			}
 
 			m_Scene->m_EntitiesToBeAdded.push_back(*this);
-			LOG_WARNING("Entity added to promote vector system {0}", GetUUID());
 
 			return component;
 		}
