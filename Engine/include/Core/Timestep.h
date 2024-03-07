@@ -32,10 +32,14 @@ namespace Cober {
 			frames++;
 
 			if (glfwGetTime() - m_Timer > 1.0) {
+
+				LOG_CORE_TRACE("Frames: {0}", frames);
 				m_Timer++;
 				m_Updates = 0, frames = 0;
 			}
 		}
+
+		operator float() const { return deltaTime; }
 
 		inline void CountUpdate() { m_Updates++; }
 

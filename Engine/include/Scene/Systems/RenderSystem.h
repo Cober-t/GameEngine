@@ -24,6 +24,8 @@ namespace Cober {
 		void Update(Timestep ts, const Ref<GameCamera>& camera);
 
 		virtual std::vector<Entity> GetSystemEntities() const override;
+
+		//void OnEvent(Unique<EventHandler>& eventHandler);
 		
 	private:
 		Scene* m_Scene = nullptr;

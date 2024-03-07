@@ -12,10 +12,14 @@ namespace Cober {
 	void Game::OnAttach() 
 	{
 		m_ActiveScene = CreateRef<Scene>();
-		m_ActiveScene->OnSimulationStart();
-
+		
 		// Test
 		Entity entity = m_ActiveScene->CreateEntity();
+		entity.AddComponent<Rigidbody2D>();
+		entity.GetComponent<Rigidbody2D>().type = BodyType::Dynamic;
+		entity.AddComponent<BoxCollider2D>();
+
+		m_ActiveScene->OnSimulationStart();
 	}
 
 

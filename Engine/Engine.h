@@ -40,6 +40,7 @@
 //[+++++++++ SYSTEMS ++++++++]
 //[++++++++++++++++++++++++++]
 #include "Scene/Systems/RenderSystem.h"
+#include "Scene/Systems/PhysicsSystem2D.h"
 
 
 //[++++++++++++++++++++++++++]

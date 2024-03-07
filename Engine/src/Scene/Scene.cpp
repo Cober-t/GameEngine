@@ -2,6 +2,7 @@
 
 #include "Scene/Components.h"
 #include "Scene/Systems/RenderSystem.h"
+#include "Scene/Systems/PhysicsSystem2D.h"
 
 #include <glm/glm.hpp>
 
@@ -15,12 +16,14 @@ namespace Cober {
 	Scene::Scene()
 	{
         AddSystem<RenderSystem>(this);
+		AddSystem<PhysicsSystem2D>(this);
 	}
 
 
 	Scene::~Scene()
 	{
         RemoveSystem<RenderSystem>();
+		RemoveSystem<PhysicsSystem2D>();
 	}
 
 
@@ -100,8 +103,7 @@ namespace Cober {
 	void Scene::OnSimulationStart()
 	{
         GetSystem<RenderSystem>().Start();
-
-		// Entity entity = CreateEntity();
+		GetSystem<PhysicsSystem2D>().Start();
 	}
 
     void Scene::OnSimulationStop()
@@ -113,6 +115,7 @@ namespace Cober {
 	void Scene::OnUpdateSimulation(Timestep ts, const Ref<GameCamera>& camera)
 	{
         GetSystem<RenderSystem>().Update(ts, camera);
+		GetSystem<PhysicsSystem2D>().Update(ts);
 	}
 
 
@@ -189,6 +192,16 @@ namespace Cober {
 
 	template<>
 	void Scene::OnComponentAdded<TagComponent>(Entity entity, TagComponent& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<Rigidbody2D>(Entity entity, Rigidbody2D& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<BoxCollider2D>(Entity entity, BoxCollider2D& component)
 	{
 	}
 }
