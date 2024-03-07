@@ -17,13 +17,13 @@ namespace Cober {
 
 		SetViewportSize(1280, 720);
 
-		LOG_CORE_INFO("Game Camera Created!!");
+		LOG_INFO("Game Camera Created!!");
 	}
 
 
 	GameCamera::~GameCamera()
 	{
-		LOG_CORE_INFO("Game Camera Destroyed!!");
+		LOG_INFO("Game Camera Destroyed!!");
 	}
 
 

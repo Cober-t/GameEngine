@@ -7,6 +7,7 @@
 #include "Render/Camera/GameCamera.h"
 #include "Render/Render2D.h"
 #include "Render/RenderGlobals.h"
+#include "Scene/Scene.h"
 // #include "Events/EventHandler.h"
 
 
@@ -14,14 +15,18 @@ namespace Cober {
 
 	class RenderSystem : public System {
 	public:
-		RenderSystem();
+		RenderSystem() = default;
+		RenderSystem(Scene* scene);
 		~RenderSystem();
 
 		void Start();
 
 		void Update(Timestep ts, const Ref<GameCamera>& camera);
 
-		//void OnEvent(Unique<EventHandler>& eventHandler);
+		virtual std::vector<Entity> GetSystemEntities() const override;
+		
+	private:
+		Scene* m_Scene = nullptr;
 	};	
 }
 

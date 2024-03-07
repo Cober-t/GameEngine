@@ -3,10 +3,8 @@
 
 namespace Cober {
 
-	RenderSystem::RenderSystem() 
+	RenderSystem::RenderSystem(Scene* scene) : m_Scene(scene)
     {
-		RequireComponent<TransformComponent>();
-
 		LOG_INFO("Render System Added to Registry!!");
 	}
 
@@ -33,14 +31,30 @@ namespace Cober {
 		Render2D::BeginScene(camera);
 		RenderGlobals::SetClearColor(10, 0, 10, 255);
 
-
-		for (auto& entity : GetSystemEntities()) 
+		for (auto& entity : GetSystemEntities())
         {
-			// TransformComponent transform = entity.GetComponent<TransformComponent>();
+			TransformComponent transform = entity.GetComponent<TransformComponent>();
             Render2D::DrawSolidPolygon(entity);
 		}
 
 		RenderGlobals::Clear();
 		Render2D::EndScene();
 	}
+
+
+	std::vector<Entity> RenderSystem::GetSystemEntities() const
+	{
+		std::vector<Entity> entities;
+		auto entitiesView = m_Scene->GetAllEntitiesWith<TransformComponent, TagComponent>();
+		// auto entitiesView = m_Scene->GetAllEntitiesWith<TransformComponent, SpriteComponent>();
+
+		for (auto entity : entitiesView)
+		{
+			Entity newEntity = { entity, m_Scene };
+			// entities.emplace( newEntity );
+			entities.emplace_back( newEntity );
+		}
+
+		return entities;
+	};
 }

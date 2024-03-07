@@ -14,7 +14,7 @@ namespace Cober {
 
 	Scene::Scene()
 	{
-        AddSystem<RenderSystem>();
+        AddSystem<RenderSystem>(this);
 	}
 
 
@@ -92,7 +92,6 @@ namespace Cober {
 
 	void Scene::DestroyEntity(Entity entity)
 	{
-		entity.ResetComponentSignature();
 		m_EntityMap.erase(entity.GetUUID());
 		m_Registry.destroy(entity);
 	}
@@ -110,27 +109,9 @@ namespace Cober {
 		// Delete Entities
 	}
 
-	void Scene::UpdateEntities()
-	{
-		for (auto& entity : m_EntitiesToBeAdded)
-		{
-			AddEntityToSystems(entity);
-		}
-
-		m_EntitiesToBeAdded.clear();
-
-		for (auto entity : m_EntitiesToBeKilled)
-		{
-			DestroyEntity(entity);
-		}
-
-		m_EntitiesToBeKilled.clear();
-	}
-
 
 	void Scene::OnUpdateSimulation(Timestep ts, const Ref<GameCamera>& camera)
 	{
-		UpdateEntities();
         GetSystem<RenderSystem>().Update(ts, camera);
 	}
 
@@ -155,26 +136,6 @@ namespace Cober {
 			return { m_EntityMap.at(uuid), this };
 
 		return {};
-	}
-
-
-	void Scene::AddEntityToSystems(Entity entity) 
-    {
-		for (auto& system : m_Systems) 
-		{
-			const auto& entityComponentSignature = entity.GetComponentSignature();
-			const auto& systemComponentSignature = system.second->GetComponentSignature();
-			bool isInterested = (entityComponentSignature & systemComponentSignature) == systemComponentSignature;
-			if (isInterested)
-				system.second->AddEntityToSystem(entity);
-		}
-	}
-    
-
-	void Scene::RemoveEntityFromSystems(Entity entity) 
-    {
-        for (auto& system : m_Systems)
-			system.second->RemoveEntityFromSystem(entity);
 	}
 
 

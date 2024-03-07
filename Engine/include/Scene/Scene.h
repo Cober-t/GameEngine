@@ -26,9 +26,10 @@ namespace Cober {
 		void OnSimulationStart();
 		void OnSimulationStop();
 
-		void UpdateEntities();
-
 		void OnUpdateSimulation(Timestep ts, const Ref<GameCamera>& camera);
+
+		template<typename... Components>
+		inline auto GetAllEntitiesWith() { return m_Registry.view<Components...>(); }
 
 		Entity FindEntityByName(std::string_view name);
 		Entity GetEntityByUUID(UUID uuid);
@@ -39,12 +40,6 @@ namespace Cober {
 		void SetPaused(bool paused) { m_IsPaused = paused; }
 
 		void Step(int frames = 1);
-
-		template<typename... Components>
-		auto GetAllEntitiesWith()
-		{
-			return m_Registry.view<Components...>();
-		}
 
 	private:
 		template<typename T>
@@ -63,9 +58,6 @@ namespace Cober {
 		template<typename T>		
         T& GetSystem() const;
 
-		void AddEntityToSystems(Entity entity);
-		void RemoveEntityFromSystems(Entity entity);
-
         std::map<std::type_index, Ref<System>> GetSystems() { return m_Systems; }
 
 	private:
@@ -74,9 +66,6 @@ namespace Cober {
 		bool m_IsPaused = false;
 		int m_StepFrames = 0;
 		
-		std::vector<Entity> m_EntitiesToBeAdded;
-		std::vector<Entity> m_EntitiesToBeKilled;
-
         std::map<std::type_index, Ref<System>> m_Systems;
 		std::unordered_map<UUID, Entity> m_EntityMap;
 
