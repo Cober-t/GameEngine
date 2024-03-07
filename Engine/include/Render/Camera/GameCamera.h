@@ -63,7 +63,7 @@ namespace Cober {
 		GameCamera(float fov, float aspectRatio, float nearClip, float farClip, bool ortho = false);
 		virtual ~GameCamera();
 
-		void OnUpdate(Timestep ts);
+		void OnUpdate(Unique<Timestep>& ts);
 		void OnEvent(Event& event);
 
 		void BlockEvents(bool focus) { m_ViewportFocused = focus; }

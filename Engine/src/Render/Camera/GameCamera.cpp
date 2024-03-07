@@ -135,7 +135,7 @@ namespace Cober {
 	}
 
 
-	void GameCamera::OnUpdate(Timestep ts) 
+	void GameCamera::OnUpdate(Unique<Timestep>& ts) 
 	{
 		UpdateView();
 	}

@@ -67,11 +67,11 @@ namespace Cober {
 	}
 
 
-	void PhysicsSystem2D::Update(Timestep ts)
+	void PhysicsSystem2D::Update(Unique<Timestep>& ts)
 	{
 		const int32_t velocityIterations = 8;
 		const int32_t positionIterations = 3;
-		m_PhysicsWorld->Step(ts, velocityIterations, positionIterations);
+		m_PhysicsWorld->Step(ts->GetLimitFPS(), velocityIterations, positionIterations);
 
 		for (auto& entity : GetSystemEntities()) 
         {
@@ -98,12 +98,10 @@ namespace Cober {
 	{
 		std::vector<Entity> entities;
 		auto entitiesView = m_Scene->GetAllEntitiesWith<TransformComponent, Rigidbody2D>();
-		// auto entitiesView = m_Scene->GetAllEntitiesWith<TransformComponent, SpriteComponent>();
 
 		for (auto entity : entitiesView)
 		{
 			Entity newEntity = { entity, m_Scene };
-			// entities.emplace( newEntity );
 			entities.emplace_back( newEntity );
 		}
 

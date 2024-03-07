@@ -21,7 +21,7 @@ namespace Cober {
 
 		void Start();
 
-		void Update(Timestep ts, const Ref<GameCamera>& camera);
+		void Update(Unique<Timestep>& ts, const Ref<GameCamera>& camera);
 
 		virtual std::vector<Entity> GetSystemEntities() const override;
 

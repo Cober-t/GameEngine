@@ -23,7 +23,7 @@ namespace Cober {
 	}
 
 
-	void RenderSystem::Update(Timestep ts, const Ref<GameCamera>& camera)
+	void RenderSystem::Update(Unique<Timestep>& ts, const Ref<GameCamera>& camera)
 	{
         camera->OnUpdate(ts);
 
@@ -50,7 +50,6 @@ namespace Cober {
 		for (auto entity : entitiesView)
 		{
 			Entity newEntity = { entity, m_Scene };
-			// entities.emplace( newEntity );
 			entities.emplace_back( newEntity );
 		}
 

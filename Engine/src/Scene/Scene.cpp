@@ -79,7 +79,6 @@ namespace Cober {
 	{
 		Entity entity = { m_Registry.create(), this };
 
-		
 		entity.AddComponent<IDComponent>(uuid);
 		entity.AddComponent<TransformComponent>();
 		auto& tagComponent = entity.AddComponent<TagComponent>();
@@ -112,10 +111,15 @@ namespace Cober {
 	}
 
 
-	void Scene::OnUpdateSimulation(Timestep ts, const Ref<GameCamera>& camera)
+	void Scene::OnUpdateSimulation(Unique<Timestep>& ts, const Ref<GameCamera>& camera)
 	{
         GetSystem<RenderSystem>().Update(ts, camera);
-		GetSystem<PhysicsSystem2D>().Update(ts);
+
+		while(m_IsRunning || ts->GetDeltaTime() >= 1.0f)
+		{
+			ts->Update();
+			GetSystem<PhysicsSystem2D>().Update(ts);
+		}
 	}
 
 

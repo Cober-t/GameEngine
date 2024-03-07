@@ -28,7 +28,7 @@ namespace Cober {
 
 		void InitEntityPhysics(Entity entity);
 
-		void Update(Timestep ts);
+		void Update(Unique<Timestep>& ts);
         
         virtual std::vector<Entity> GetSystemEntities() const override;
 

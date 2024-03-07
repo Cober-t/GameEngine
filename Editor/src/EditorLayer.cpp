@@ -26,7 +26,7 @@ namespace Cober {
 		
 	}
 
-	void Editor::OnUpdate(Timestep ts) 
+	void Editor::OnUpdate(Unique<Timestep>& ts) 
 	{
 		
 	}

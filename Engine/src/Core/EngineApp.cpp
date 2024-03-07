@@ -14,8 +14,10 @@ namespace Cober {
 
         m_Window = CreateUnique<Window>(WindowProps(name, width, height, vsync));
         m_Window->SetEventCallback(BIND_EVENT_FN(EngineApp::OnEvent));
+        m_TimeStep = CreateUnique<Timestep>();
 
         m_GameState = GameState::PLAY;
+
     }
 
 
@@ -42,6 +44,7 @@ namespace Cober {
 
     void EngineApp::Start()
     {
+
         if (m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR) 
         {
             m_GuiLayer = new ImGuiLayer("#version 460");
@@ -51,18 +54,18 @@ namespace Cober {
 
     void EngineApp::Update() 
     {
-        Timestep ts = Timestep();
-
         while (m_GameState == GameState::PLAY || m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR)
         {
-            Run(ts);
+            m_TimeStep->Start();
+
+            Run(m_TimeStep);
+
+            m_TimeStep->ResetAfterOneSecond();
         }
     }
 
-    void EngineApp::Run(Timestep ts)
+    void EngineApp::Run(Unique<Timestep>& ts)
     {
-        ts.Start();
-    
         if(!m_Minimized) 
         {
             for (Layer* layer : m_LayerStack)
@@ -80,8 +83,6 @@ namespace Cober {
         }
 
         m_Window->OnUpdate();
-
-        ts.Reset();
     }
 
 

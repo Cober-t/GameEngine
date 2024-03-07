@@ -50,7 +50,7 @@ namespace Cober {
 		inline GameState GetGameState() { return m_GameState; }
 
 	private:
-		void Run(Timestep ts);
+		void Run(Unique<Timestep>& ts);
 		
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
@@ -60,6 +60,7 @@ namespace Cober {
 		Unique<Window> m_Window;
 		ImGuiLayer* m_GuiLayer;
 		Layer m_LayerStack;
+		Unique<Timestep> m_TimeStep;
 
 		sol::state lua;
 		float m_LastFrameTime = 0.0f;

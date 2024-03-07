@@ -20,7 +20,7 @@ namespace Cober {
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate(Timestep ts) {}
+		virtual void OnUpdate(Unique<Timestep>& ts) {}
 		virtual void OnEvent(Event& event) {}
 		virtual void OnImGuiRender() {}
 

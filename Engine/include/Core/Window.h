@@ -20,7 +20,7 @@ namespace Cober {
 					uint32_t width = 1280, 
 					uint32_t height = 720, 
 					bool vsync = true) 
-				: Title(title), Width(width), Height(height), VSync()
+				: Title(title), Width(width), Height(height), VSync(vsync)
 			{
 			}
 	};

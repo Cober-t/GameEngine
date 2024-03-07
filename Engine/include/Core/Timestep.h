@@ -10,55 +10,56 @@ namespace Cober {
 	class Timestep {
 		
 	public:
-		Timestep(float time = 0.0f)
-			: m_FpsLimit(60), frames(0), m_Updates(0), m_AuxTime(0), m_LimitedFrames(false), deltaTime(0) 
-		{
-			m_LastFrameTime = glfwGetTime();
-			m_Timer = m_LastFrameTime;
+		Timestep() 
+		 : m_DeltaTime(0), m_NowTime(0), m_LastFrameTime(glfwGetTime()), m_Timer(0),
+		  m_Frames(0), m_Updates(0), m_LimitFPS(1.0f / 120.0f) 
+		{ 
+			LOG_CORE_TRACE("Created Timer");
 		}
 
-		inline void Start(uint32_t framesLimit = 0) 
+		~Timestep()
 		{
-			if (framesLimit == 0)
-				framesLimit = m_FpsLimit;
-
-			m_AuxTime = glfwGetTime();
-			deltaTime += (m_AuxTime - m_LastFrameTime) / framesLimit;
-			m_LastFrameTime = m_AuxTime;
+			LOG_CORE_TRACE("Destroyed Timer");
 		}
 
-		inline void Reset(uint32_t framesLimit = 0) 
+		inline double GetDeltaTime() const { return m_DeltaTime; }
+
+		inline void Start()
 		{
-			frames++;
+			m_NowTime = glfwGetTime();
+			m_DeltaTime += (m_NowTime - m_LastFrameTime) / m_LimitFPS;
+			m_LastFrameTime = m_NowTime;
 
-			if (glfwGetTime() - m_Timer > 1.0) {
+			m_Frames++;
+		}
 
-				LOG_CORE_TRACE("Frames: {0}", frames);
+		inline double GetLimitFPS() const { return m_LimitFPS; }
+		inline void SetLimitFPS(int limitFPS = 1) { m_LimitFPS = limitFPS; }
+
+		inline void Update() 
+		{
+			m_Updates++; 
+			m_DeltaTime--;
+		}
+
+		inline void ResetAfterOneSecond() 
+		{ 
+			if (glfwGetTime() - m_Timer > 1.0)
+			{
 				m_Timer++;
-				m_Updates = 0, frames = 0;
+				LOG_CORE_INFO("Frames: {0} - Updates: {1}", m_Frames, m_Updates);
+				m_Updates = 0; m_Frames = 0;
 			}
 		}
 
-		operator float() const { return deltaTime; }
-
-		inline void CountUpdate() { m_Updates++; }
-
-		inline int GetFrames() { return frames; }
-		inline void LockFrameRate(double frameRateLimit) { m_FpsLimit = frameRateLimit; }
-		inline void UnlockFrameRate() { m_FpsLimit = 1; }
-
-		inline double GetUpdates() { return m_Updates; }
-		inline void IncreaseUpdate() { m_Updates++; }
-
-		inline double DeltaTime() { return deltaTime; }
-		inline void DecreaseDeltaTime() { deltaTime--; }
+		operator float() const { return m_DeltaTime; }
+		float GetSeconds() const { return m_DeltaTime; }
+		float GetMilliseconds() const { return m_DeltaTime * 1000.0f; }
 
 	private:
-		int m_AuxTime, m_Updates;
-		double m_Timer, m_FpsLimit, m_LastFrameTime;
-		bool m_LimitedFrames;
-		int frames;
-		double deltaTime;
+		double m_DeltaTime, m_NowTime, m_LastFrameTime, m_Timer;
+		double m_LimitFPS;
+		int m_Frames, m_Updates;
 	};
 }
 

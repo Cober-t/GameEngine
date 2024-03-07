@@ -32,7 +32,7 @@ namespace Cober {
 	}
 
 
-	void Game::OnUpdate(Timestep ts) 
+	void Game::OnUpdate(Unique<Timestep>& ts) 
 	{
 		m_ActiveScene->OnUpdateSimulation(ts, m_Camera);
 	}
