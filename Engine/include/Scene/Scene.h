@@ -17,9 +17,6 @@ namespace Cober {
 
 	class Entity;
 	class System;
-	class SceneSerializer;
-	class RenderSystem;
-	class PhysicsSystem2D;
 
 	class Scene
 	{
@@ -77,9 +74,6 @@ namespace Cober {
 
 		friend class Entity;
 		friend class System;
-		friend class SceneSerializer;
-		friend class RenderSystem;
-		friend class PhysicsSystem2D;
 		//friend class SceneHierarchyPanel;
 	};
 }

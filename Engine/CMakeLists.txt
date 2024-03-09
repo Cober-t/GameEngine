@@ -31,13 +31,6 @@ target_include_directories( Engine
         include/Render
         include/Platforms
         include/ImGui
-
-    #    ${CMAKE_CURRENT_SOURCE_DIR}/../libraries/imgui
-    #    ${CMAKE_CURRENT_SOURCE_DIR}/../libraries/glm
-    #    ${CMAKE_CURRENT_SOURCE_DIR}/../libraries/spdlog/include
-    #PRIVATE
-    #    ${CMAKE_CURRENT_SOURCE_DIR}/../libraries/glfw/include
-    #    ${CMAKE_CURRENT_SOURCE_DIR}/../libraries/glad/include
 )
 
 target_link_libraries(Engine PUBLIC 

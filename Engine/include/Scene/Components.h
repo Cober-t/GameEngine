@@ -25,22 +25,6 @@ namespace Cober {
 		IDComponent(const IDComponent&) = default;
 	};
 
-	// ++++++++++++++++++++++++++++++++++++++++++++++++
-	// ID's for componentes
-	struct IComponent {
-	protected:
-		static int nextIndex;
-	};
-
-	// Used to assign an index(ID) to a component type
-	template <typename T>
-	class Component : public IComponent {
-	public:
-		static int GetComponentID() {
-			static int index = nextIndex++;
-			return index;
-		}
-	};
 
 	// ++++++++++++++++++++
 	// Components for entities
@@ -93,9 +77,11 @@ namespace Cober {
 			: velocity(vel), fixedRotation(fxRotation), type((BodyType)bodyType), runtimeBody(nullptr) {}
 	};
 
-	struct Collider2D {
 
+	struct Collider2D 
+	{
 	};
+
 
 	struct BoxCollider2D : public Collider2D 
 	{
@@ -119,6 +105,20 @@ namespace Cober {
 		BoxCollider2D(glm::vec2 Offset, glm::vec2 Size, float Density, float Friction, float Rest, float RestThreshold)
 			: offset(Offset), size(Size), 
 			  density(Density), friction(Friction), restitution(Rest), restitutionThreshold(RestThreshold) {}
+	};
+
+
+	struct ScriptComponent
+	{
+		std::vector<sol::function> scripts;
+		// sol::function script = sol::lua_nil;
+
+		void AddScript(sol::function func) { scripts.push_back(func); }
+
+		ScriptComponent() = default;
+		ScriptComponent(const ScriptComponent&) = default;
+		ScriptComponent(std::vector<sol::function> funcs) : scripts(funcs) {}
+		// ScriptComponent(sol::function funcs = sol::lua_nil) : script(funcs) {}
 	};
 
 	/*
@@ -160,20 +160,6 @@ namespace Cober {
 	};
 	*/
 
-    /*
-	struct Script {
-
-		//std::vector<sol::function> scripts;
-		sol::function scripts = sol::lua_nil;
-
-		//void AddScript(sol::function func) { scripts.push_back(func); }
-
-		Script() = default;
-		Script(const Script&) = default;
-		//Script(std::vector<sol::function> funcs) : scripts(funcs) {}
-		Script(sol::function funcs = sol::lua_nil) : scripts(funcs) {}
-	};
-    */
 
    	template<typename... Component>
 	struct ComponentGroup

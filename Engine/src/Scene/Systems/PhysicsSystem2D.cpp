@@ -13,7 +13,7 @@ namespace Cober {
 	{
 		delete m_PhysicsWorld;
 		m_PhysicsWorld = nullptr;
-		LOG_INFO("Physics System removed from Registry");
+		LOG_INFO("Physics System Removed from Registry");
 	}
 
 
@@ -26,7 +26,7 @@ namespace Cober {
 			InitEntityPhysics(entity);
 		}
 
-		LOG_INFO("Physic System Started!!");
+		LOG_INFO("Physics System Started!!");
 	}
 
 

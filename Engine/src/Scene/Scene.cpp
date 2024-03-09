@@ -1,17 +1,16 @@
 #include "Scene/Scene.h"
 
 #include "Scene/ECS.h"
+#include "Scene/Components.h"
 #include "Scene/SceneSerializer.h"
 #include "Scene/Systems/RenderSystem.h"
 #include "Scene/Systems/PhysicsSystem2D.h"
-#include "Scene/Components.h"
+#include "Scene/Systems/ScriptSystem.h"
 
 #include <glm/glm.hpp>
 
 
 namespace Cober {
-
-	int IComponent::nextIndex = 0;
 
 	Scene::Scene()
 	{
@@ -118,9 +117,11 @@ namespace Cober {
 	{
 		AddSystem<RenderSystem>(this);
 		AddSystem<PhysicsSystem2D>(this);
+		AddSystem<ScriptSystem>(this);
 
         GetSystem<RenderSystem>().Start();
 		GetSystem<PhysicsSystem2D>().Start();
+		GetSystem<ScriptSystem>().Start();
 	}
 
     void Scene::OnSimulationStop()
@@ -128,11 +129,14 @@ namespace Cober {
 		// Delete Entities
 		RemoveSystem<RenderSystem>();
 		RemoveSystem<PhysicsSystem2D>();
+		RemoveSystem<ScriptSystem>();
 	}
 
 
 	void Scene::OnUpdateSimulation(Unique<Timestep>& ts, const Ref<GameCamera>& camera)
 	{
+		GetSystem<ScriptSystem>().Update();
+
         GetSystem<RenderSystem>().Update(ts, camera);
 
 		while(m_IsRunning || ts->GetDeltaTime() >= 1.0f)
@@ -140,6 +144,7 @@ namespace Cober {
 			ts->Update();
 			GetSystem<PhysicsSystem2D>().Update(ts);
 		}
+
 	}
 
 	std::vector<Entity> Scene::GetSceneEntities()
@@ -236,6 +241,11 @@ namespace Cober {
 
 	template<>
 	void Scene::OnComponentAdded<BoxCollider2D>(Entity entity, BoxCollider2D& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<ScriptComponent>(Entity entity, ScriptComponent& component)
 	{
 	}
 }

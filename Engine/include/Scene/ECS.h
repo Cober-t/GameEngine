@@ -31,7 +31,6 @@ namespace Cober {
 			TComponent& component = m_Scene->m_Registry.emplace<TComponent>(m_EntityHandle, std::forward<Args>(args)...);
 			m_Scene->OnComponentAdded<TComponent>(*this, component);
 
-            const auto componentID = Component<TComponent>::GetComponentID();
 			m_Scene->m_EntityMap[GetUUID()] = *this;
 
 			return component;

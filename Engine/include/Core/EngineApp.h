@@ -13,7 +13,6 @@
 #include "Events/Event.h"
 #include "Render/Render2D.h"
 
-#include <sol/sol.hpp>
 
 int main(int argc, char** argv);
 
@@ -62,7 +61,6 @@ namespace Cober {
 		Layer m_LayerStack;
 		Unique<Timestep> m_TimeStep;
 
-		sol::state lua;
 		float m_LastFrameTime = 0.0f;
 		bool m_Minimized = false;
 

@@ -10,6 +10,7 @@ set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_HOME_DIRECTORY}/bin/Game)
 # but you should comment this if you compile a release version and uncomment the next line
 add_compile_definitions(SCENES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/assets/scenes/")
 add_compile_definitions(PUBLIC SHADERS_DIR="${CMAKE_CURRENT_SOURCE_DIR}/assets/shaders/")
+add_compile_definitions(PUBLIC SCRIPTS_DIR="${CMAKE_CURRENT_SOURCE_DIR}/assets/scripts/")
 
 # Uncomment this line to setup the ASSETS_PATH macro to the final assets directory when you share the project
 #target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC RESOURCES_PATH="./resources/")
