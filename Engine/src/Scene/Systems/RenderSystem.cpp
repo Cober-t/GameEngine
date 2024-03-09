@@ -48,10 +48,7 @@ namespace Cober {
 		// auto entitiesView = m_Scene->GetAllEntitiesWith<TransformComponent, SpriteComponent>();
 
 		for (auto entity : entitiesView)
-		{
-			Entity newEntity = { entity, m_Scene };
-			entities.emplace_back( newEntity );
-		}
+			entities.emplace_back( Entity{ entity, m_Scene });
 
 		return entities;
 	};

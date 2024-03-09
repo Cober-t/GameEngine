@@ -1,12 +1,12 @@
 #include "Scene/Scene.h"
 
-#include "Scene/Components.h"
+#include "Scene/ECS.h"
+#include "Scene/SceneSerializer.h"
 #include "Scene/Systems/RenderSystem.h"
 #include "Scene/Systems/PhysicsSystem2D.h"
+#include "Scene/Components.h"
 
 #include <glm/glm.hpp>
-
-#include "Scene/ECS.h"
 
 
 namespace Cober {
@@ -15,15 +15,30 @@ namespace Cober {
 
 	Scene::Scene()
 	{
-        AddSystem<RenderSystem>(this);
-		AddSystem<PhysicsSystem2D>(this);
+		LOG_INFO("Scene Created!!");
 	}
 
 
 	Scene::~Scene()
 	{
-        RemoveSystem<RenderSystem>();
-		RemoveSystem<PhysicsSystem2D>();
+       LOG_INFO("Scene Destroyed!!");
+	}
+
+
+	void Scene::Save(const Ref<Scene>& scene, std::string sceneName) 
+	{
+	    SceneSerializer serializer(scene);
+
+	    serializer.Serialize(sceneName);
+	}
+
+
+	Ref<Scene> Scene::Load(std::string sceneName) 
+	{
+		Ref<Scene> newScene = CreateRef<Scene>();
+	    SceneSerializer serializer(newScene);
+
+	    return serializer.Deserialize(sceneName);
 	}
 
 
@@ -101,6 +116,9 @@ namespace Cober {
 
 	void Scene::OnSimulationStart()
 	{
+		AddSystem<RenderSystem>(this);
+		AddSystem<PhysicsSystem2D>(this);
+
         GetSystem<RenderSystem>().Start();
 		GetSystem<PhysicsSystem2D>().Start();
 	}
@@ -108,6 +126,8 @@ namespace Cober {
     void Scene::OnSimulationStop()
 	{
 		// Delete Entities
+		RemoveSystem<RenderSystem>();
+		RemoveSystem<PhysicsSystem2D>();
 	}
 
 
@@ -120,6 +140,16 @@ namespace Cober {
 			ts->Update();
 			GetSystem<PhysicsSystem2D>().Update(ts);
 		}
+	}
+
+	std::vector<Entity> Scene::GetSceneEntities()
+	{ 
+		std::vector<Entity> entities;
+
+		for (auto entity : GetAllEntitiesWith<IDComponent, TagComponent>())
+			entities.emplace_back( Entity{ entity, this } );
+
+		return entities;
 	}
 
 

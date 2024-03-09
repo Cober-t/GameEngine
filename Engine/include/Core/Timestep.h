@@ -14,12 +14,12 @@ namespace Cober {
 		 : m_DeltaTime(0), m_NowTime(0), m_LastFrameTime(glfwGetTime()), m_Timer(0),
 		  m_Frames(0), m_Updates(0), m_LimitFPS(1.0f / 120.0f) 
 		{ 
-			LOG_CORE_TRACE("Created Timer");
+			LOG_CORE_INFO("Created Timer");
 		}
 
 		~Timestep()
 		{
-			LOG_CORE_TRACE("Destroyed Timer");
+			LOG_CORE_INFO("Destroyed Timer");
 		}
 
 		inline double GetDeltaTime() const { return m_DeltaTime; }
@@ -45,11 +45,7 @@ namespace Cober {
 		inline void ResetAfterOneSecond() 
 		{ 
 			if (glfwGetTime() - m_Timer > 1.0)
-			{
-				m_Timer++;
-				LOG_CORE_INFO("Frames: {0} - Updates: {1}", m_Frames, m_Updates);
-				m_Updates = 0; m_Frames = 0;
-			}
+				m_Timer++, m_Updates = 0; m_Frames = 0;
 		}
 
 		operator float() const { return m_DeltaTime; }

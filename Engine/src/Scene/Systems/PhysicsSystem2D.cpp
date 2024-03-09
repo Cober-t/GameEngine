@@ -1,5 +1,6 @@
 #include "Scene/Systems/PhysicsSystem2D.h"
 
+
 namespace Cober {
 
 	PhysicsSystem2D::PhysicsSystem2D(Scene* scene) : m_Scene(scene)
@@ -100,10 +101,7 @@ namespace Cober {
 		auto entitiesView = m_Scene->GetAllEntitiesWith<TransformComponent, Rigidbody2D>();
 
 		for (auto entity : entitiesView)
-		{
-			Entity newEntity = { entity, m_Scene };
-			entities.emplace_back( newEntity );
-		}
+			entities.emplace_back( Entity{ entity, m_Scene } );
 
 		return entities;
 	};

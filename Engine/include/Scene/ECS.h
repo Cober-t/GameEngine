@@ -2,8 +2,8 @@
 #define ENTITY_H
 
 #include "Core/UUID.h"
-#include "Scene.h"
 #include "Components.h"
+#include "Scene.h"
 
 #include <entt/entt.hpp>
 

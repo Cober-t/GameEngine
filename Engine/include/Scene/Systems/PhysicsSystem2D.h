@@ -15,7 +15,7 @@
 
 namespace Cober {
 
-	class DebugSystem;
+	//class DebugSystem;
 
 	class PhysicsSystem2D : public System 
     {

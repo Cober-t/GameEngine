@@ -12,8 +12,8 @@ Game Engine (MVP):
      - [ ] Mac  
 
  - [X] Logging system (spdlog.h)  
-     - [ ] Backup del log  
-     - [ ] Sacar el backup en un archivo al terminar la aplicación  
+     - [X] Backup del log  
+     - [X] Sacar el backup en un archivo al terminar la aplicación  
 
  - [x] Editor básico con ImGui  
      - [ ] ViewportPanel  
@@ -45,15 +45,15 @@ Game Engine (MVP):
      - [X] TagComponent  
      - [ ] Sprite/RenderComponent  
      - [ ] AnimationComponent (nodos en un futuro)  
-     - [ ] ColliderComponent (active, gravity, mass, isTrigger, target...)  
+     - [X] ColliderComponent (active, gravity, mass, isTrigger, target...)  
      - [ ] ScriptComponent (Lua, C# en un futuro, C++ con dlls)
 
  - [ ] Sistemas para las entidades que tengan ciertos componentes  
      - [ ] MovementSystem (para 2D y 3D, ease in, ease out, snap, speed, configuración de inputs...)  
 
- - [ ] Physics 2D  
+ - [X] Physics 2D  
  - [X] Scene  
- - [ ] Serializacion  
+ - [X] Serializacion / Deserializacion  
  - [ ] Scripting con Lua  
  - [ ] UILayer  
  - [ ] Audio  

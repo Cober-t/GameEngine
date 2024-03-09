@@ -15,6 +15,7 @@
 #include "Core/Layer.h"
 #include "Core/Window.h"
 #include "Core/UUID.h"
+#include "Core/Utils.h"
 
 
 //[++++++++++++++++++++++++++]
@@ -34,6 +35,7 @@
 #include "Scene/Components.h"
 #include "Scene/ECS.h"
 #include "Scene/Scene.h"
+#include "Scene/SceneSerializer.h"
 
 
 //[++++++++++++++++++++++++++]

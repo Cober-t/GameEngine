@@ -3,15 +3,23 @@
 
 #include "Core/Timestep.h"
 #include "Core/UUID.h"
+#include "Core/Utils.h"
+
 #include "Render/Camera/GameCamera.h"
+
+#include "Scene/Components.h"
 
 #include <entt/entt.hpp>
 #include <typeindex>
+
 
 namespace Cober {
 
 	class Entity;
 	class System;
+	class SceneSerializer;
+	class RenderSystem;
+	class PhysicsSystem2D;
 
 	class Scene
 	{
@@ -30,11 +38,16 @@ namespace Cober {
 
 		template<typename... Components>
 		inline auto GetAllEntitiesWith() { return m_Registry.view<Components...>(); }
+		
+		std::vector<Entity> GetSceneEntities();
 
 		Entity FindEntityByName(std::string_view name);
 		Entity GetEntityByUUID(UUID uuid);
 
 		void SetPaused(bool paused) { m_IsRunning = !paused; }
+
+		static void Save(const Ref<Scene>& scene, std::string sceneName = "Scene1");
+		static Ref<Scene> Load(std::string scenePath);
 
 	private:
 		template<typename T>
@@ -64,7 +77,9 @@ namespace Cober {
 
 		friend class Entity;
 		friend class System;
-		//friend class SceneSerializer;
+		friend class SceneSerializer;
+		friend class RenderSystem;
+		friend class PhysicsSystem2D;
 		//friend class SceneHierarchyPanel;
 	};
 }

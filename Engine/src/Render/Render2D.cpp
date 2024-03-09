@@ -1,6 +1,5 @@
 #include "Render/Render2D.h"
-#include "Render/RenderGlobals.h"
-#include "Core/EngineApp.h"
+
 
 #include <memory>
 

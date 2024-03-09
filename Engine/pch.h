@@ -8,8 +8,10 @@
 #include <functional>
 
 #include <string>
+#include <string.h>	// For memset and memcpy Linux
 #include <sstream>
 #include <array>
+#include <stack>
 #include <vector>
 #include <map>
 #include <unordered_map>

@@ -1,12 +1,13 @@
 #ifndef RENDER_2D_H
 #define RENDER_2D_H
 
-#include <array>
+#include "Core/EngineApp.h"
 
 #include "Render/VertexArray.h"
 #include "Render/Shader.h"
 #include "Render/Texture.h"
 #include "Render/Camera/Camera.h"
+#include "Render/RenderGlobals.h"
 
 #include "Scene/ECS.h"
 

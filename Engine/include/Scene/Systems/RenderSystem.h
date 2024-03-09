@@ -3,17 +3,18 @@
 
 
 #include "Core/Core.h"
-#include "Scene/ECS.h"
 #include "Render/Camera/GameCamera.h"
 #include "Render/Render2D.h"
 #include "Render/RenderGlobals.h"
+#include "Scene/ECS.h"
 #include "Scene/Scene.h"
 // #include "Events/EventHandler.h"
 
 
 namespace Cober {
 
-	class RenderSystem : public System {
+	class RenderSystem : public System 
+	{
 	public:
 		RenderSystem() = default;
 		RenderSystem(Scene* scene);

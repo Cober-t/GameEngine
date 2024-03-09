@@ -54,8 +54,7 @@ namespace Cober {
 	std::string OpenGLShader::ReadFile(const std::string& filePath)
 	{
 		std::string result;
-		std::string absolutePath = "C:\\Users\\Jorge\\Documents\\GameEngine\\assets\\shaders\\";
-		std::ifstream in(absolutePath + filePath, std::ios::in | std::ios::binary);
+		std::ifstream in(SHADERS_DIR + filePath, std::ios::in | std::ios::binary);
 		if (in) {
 			in.seekg(0, std::ios::end);
 			result.resize(in.tellg());
