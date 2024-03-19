@@ -41,7 +41,7 @@ namespace Cober {
 		void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
 
 	private:
-		uint32_t _renderID;
+		uint32_t m_RenderID;
 		std::string _name;
 	};
 }

@@ -3,12 +3,13 @@
 
 namespace Cober {
 
-	//extern const std::filesystem::path _AssetPath;
+	// extern const std::filesystem::path _AssetPath;
 	Editor::Editor() : Layer("Editor")
 	{
-		//_editorCamera = CreateUnique<EditorCamera>(45.0f, 1.778f, 0.01f, 1000.0f);
+		m_EditorCamera = CreateUnique<EditorCamera>(45.0f, 1.778f, 0.01f, 1000.0f);
 
-		/*new ViewportPanel();
+		new ViewportPanel();
+		/*
 		new SceneHierarchyPanel();
 		new ContentBrowserPanel();
 		new DataPanel();
@@ -16,38 +17,84 @@ namespace Cober {
 		*/
 	}
 
+
 	void Editor::OnAttach() 
 	{
+		m_EditorScene = Scene::Load("Scene2.lua");
+		m_ActiveScene = m_EditorScene;
 
+		ViewportPanel::Get().CreateFramebuffer(1280, 720);
+
+		m_ActiveScene->OnRuntimeStart();
 	}
+
 
 	void Editor::OnDetach() 
 	{
-		
+		m_ActiveScene->OnRuntimeStop();
+		ViewportPanel::Get().UnbindFramebuffer();
+
+		m_EditorScene  = nullptr;
+		m_ActiveScene  = nullptr;
+		m_EditorCamera = nullptr;
 	}
+
 
 	void Editor::OnUpdate(Unique<Timestep>& ts) 
 	{
-		
+		bool projectMode = false;
+		ViewportPanel::Get().ResizeViewport(m_EditorCamera, m_ActiveScene, projectMode);
+		ViewportPanel::Get().BindFramebuffer();
+
+		// ViewportPanel::Get().RenderSkybox();
+
+		ViewportPanel::Get().FBOClearAttachments(1, -1);
+
+		switch (EngineApp::Get().GetGameState()) 
+		{
+			case GameState::EDITOR: 
+			{
+				// colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.000f, 0.000f, 0.000f, 0.586f);
+				m_EditorCamera->OnUpdate(ts);
+				m_ActiveScene->OnUpdateRuntime(ts, m_EditorCamera);
+				break;
+			}
+			case GameState::RUNTIME_EDITOR: 
+			{
+				// colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.000f, 0.000f, 0.000f, 0.586f);
+				m_ActiveScene->OnUpdateSimulation(ts, m_EditorCamera);
+				break;
+			}
+		}
+
+		// ViewportPanel::Get().SetCursorEntity(m_ActiveScene, m_ActiveScene->GetHoveredEntity());
+
+		// if (ImGui::IsMouseClicked(0) && m_ActiveScene->GetHoveredEntity().GetIndex() != -1)
+			// SceneHierarchyPanel::Get().SetSelectedEntity(m_ActiveScene->GetHoveredEntity());
+
+		ViewportPanel::Get().UnbindFramebuffer();
 	}
+
 
 	void Editor::OnImGuiRender() 
 	{
 		InitDockspace();
 
+		ViewportPanel::Get().OnGuiRender(m_EditorCamera, m_ActiveScene);
+
 		/* PANELS
-		Entity& hoveredEntity = _activeScene->GetHoveredEntity();
+		Entity& hoveredEntity = m_ActiveScene->GetHoveredEntity();
 		SceneHierarchyPanel::Get().OnGuiRender(hoveredEntity);
 		ContentBrowserPanel::Get().OnGuiRender();
-		ViewportPanel::Get().OnGuiRender(_editorCamera, _activeScene, hoveredEntity);
 		DataPanel::Get().OnGuiRender(Engine::Get().GetGameMode(), hoveredEntity);
-		MenuPanel::Get().OnGuiRender(_editorCamera, _activeScene, _editorScene, Engine::Get().GetGameMode(), Engine::Get().GetDebugMode());
+		MenuPanel::Get().OnGuiRender(m_EditorCamera, m_ActiveScene, m_EditorScene, Engine::Get().GetGameMode(), Engine::Get().GetDebugMode());
 
-		ViewportPanel::Get().PlayButtonBar(_editorScene, _activeScene, Engine::Get().GetGameState());
 		*/
+		ViewportPanel::Get().PlayButtonBar(m_EditorScene, m_ActiveScene, EngineApp::Get().GetGameState());
 
 		EndDockspace();
 	}
+
 
 	void Editor::InitDockspace() 
 	{
@@ -104,6 +151,7 @@ namespace Cober {
 		style.WindowMinSize.x = minWinSizeX;
 		//style.WindowMinSize.y = minWinSizeY;
 	}
+
 
 	void Editor::EndDockspace() 
 	{

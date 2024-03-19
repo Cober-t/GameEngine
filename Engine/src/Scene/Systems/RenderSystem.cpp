@@ -23,7 +23,7 @@ namespace Cober {
 	}
 
 
-	void RenderSystem::Update(Unique<Timestep>& ts, const Ref<GameCamera>& camera)
+	void RenderSystem::Update(Unique<Timestep>& ts, const Ref<Camera>& camera)
 	{
         camera->OnUpdate(ts);
 

@@ -28,10 +28,14 @@ namespace Cober {
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& name = std::string());
 		void DestroyEntity(Entity entity);
 
+		void OnRuntimeStart();
+		void OnRuntimeStop();
+
 		void OnSimulationStart();
 		void OnSimulationStop();
 
-		void OnUpdateSimulation(Unique<Timestep>& ts, const Ref<GameCamera>& camera);
+		void OnUpdateRuntime(Unique<Timestep>& ts, const Ref<Camera>& camera);
+		void OnUpdateSimulation(Unique<Timestep>& ts, const Ref<Camera>& camera);
 
 		template<typename... Components>
 		inline auto GetAllEntitiesWith() { return m_Registry.view<Components...>(); }
@@ -45,6 +49,7 @@ namespace Cober {
 
 		static void Save(const Ref<Scene>& scene, std::string sceneName = "Scene1");
 		static Ref<Scene> Load(std::string scenePath);
+		static Ref<Scene> Copy(Ref<Scene> scene);
 
 	private:
 		template<typename T>
@@ -67,6 +72,7 @@ namespace Cober {
 
 	private:
 		entt::registry m_Registry;
+		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
 		bool m_IsRunning = false;
 
         std::map<std::type_index, Ref<System>> m_Systems;

@@ -83,6 +83,35 @@ namespace Cober {
 	}
 
 
+	Ref<Scene> Scene::Copy(Ref<Scene> baseScene) 
+	{
+
+		Ref<Scene> newScene = CreateRef<Scene>();
+
+		newScene->m_ViewportWidth = baseScene->m_ViewportWidth;
+		newScene->m_ViewportHeight = baseScene->m_ViewportHeight;
+
+		auto& srcSceneRegistry = baseScene->m_Registry;
+		auto& dstSceneRegistry = newScene->m_Registry;
+		std::unordered_map<UUID, entt::entity> enttMap;
+
+		// Create entities in new scene
+		auto idView = srcSceneRegistry.view<IDComponent>();
+		for (auto e : idView)
+		{
+			UUID uuid = srcSceneRegistry.get<IDComponent>(e).ID;
+			const auto& name = srcSceneRegistry.get<TagComponent>(e).tag;
+			Entity newEntity = newScene->CreateEntityWithUUID(uuid, name);
+			enttMap[uuid] = (entt::entity)newEntity;
+		}
+
+		// Copy components (except IDComponent and TagComponent)
+		CopyComponent(AllComponents{}, dstSceneRegistry, srcSceneRegistry, enttMap);
+
+		return newScene;
+	}
+
+
 	Entity Scene::CreateEntity(const std::string& name)
 	{
 		return CreateEntityWithUUID(UUID(), name);
@@ -124,28 +153,45 @@ namespace Cober {
 		GetSystem<ScriptSystem>().Start();
 	}
 
+
     void Scene::OnSimulationStop()
 	{
-		// Delete Entities
 		RemoveSystem<RenderSystem>();
 		RemoveSystem<PhysicsSystem2D>();
 		RemoveSystem<ScriptSystem>();
 	}
 
 
-	void Scene::OnUpdateSimulation(Unique<Timestep>& ts, const Ref<GameCamera>& camera)
+	void Scene::OnRuntimeStart()
 	{
+		AddSystem<RenderSystem>(this);
+
+        GetSystem<RenderSystem>().Start();
+	}
+
+
+    void Scene::OnRuntimeStop()
+	{
+		RemoveSystem<RenderSystem>();
+	}
+
+
+	void Scene::OnUpdateSimulation(Unique<Timestep>& ts, const Ref<Camera>& camera)
+	{
+        GetSystem<RenderSystem>().Update(ts, camera);
+		GetSystem<PhysicsSystem2D>().Update(ts);
 		GetSystem<ScriptSystem>().Update();
 
-        GetSystem<RenderSystem>().Update(ts, camera);
-
 		while(m_IsRunning || ts->GetDeltaTime() >= 1.0f)
-		{
 			ts->Update();
-			GetSystem<PhysicsSystem2D>().Update(ts);
-		}
-
 	}
+
+
+	void Scene::OnUpdateRuntime(Unique<Timestep>& ts, const Ref<Camera>& camera)
+	{
+        GetSystem<RenderSystem>().Update(ts, camera);
+	}
+
 
 	std::vector<Entity> Scene::GetSceneEntities()
 	{ 

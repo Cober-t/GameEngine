@@ -55,10 +55,12 @@
 #include "Render/Render2D.h"
 #include "Render/Buffer.h"
 #include "Render/VertexArray.h"
-#include "Render/Shader.h"
 #include "Render/Texture.h"
+#include "Render/Shader.h"
+#include "Render/Framebuffer.h"
 #include "Render/Camera/Camera.h"
 #include "Render/Camera/GameCamera.h"
+#include "Render/Camera/EditorCamera.h"
 
 
 //[++++++++++++++++++++++++++++]
@@ -70,20 +72,23 @@
 #include <Platforms/OpenGL/OpenGLVertexArray.h>
 #include <Platforms/OpenGL/OpenGLTexture.h>
 #include <Platforms/OpenGL/OpenGLShader.h>
+#include <Platforms/OpenGL/OpenGLFramebuffer.h>
 
 
 
-//[++++++++++++++++++++++++++]
-//[+++++++++ IMGUI ++++++++++]
-//[++++++++++++++++++++++++++]
-//#include <imgui/imgui.h>
-//#include <imgui/imconfig.h>
-//#include <imgui/backends/imgui_impl_glfw.h>
-//#include <imgui/backends/imgui_impl_opengl3.h>
-//#include <imgui/imgui_internal.h>
-//#include <imgui/imstb_rectpack.h>
-//#include <imgui/imstb_textedit.h>
-//#include <imgui/imstb_truetype.h>
+    //[++++++++++++++++++++++++++]
+    //[+++++++++ IMGUI ++++++++++]
+    //[++++++++++++++++++++++++++]
+    #ifdef __EDITOR__
+        #include <imgui/imgui.h>
+        #include <imgui/imconfig.h>
+        #include <imgui/backends/imgui_impl_glfw.h>
+        #include <imgui/backends/imgui_impl_opengl3.h>
+        #include <imgui/imgui_internal.h>
+        #include <imgui/imstb_rectpack.h>
+        #include <imgui/imstb_textedit.h>
+        #include <imgui/imstb_truetype.h>
+    #endif
 
 
 //[++++++++++++++++++++++++++]

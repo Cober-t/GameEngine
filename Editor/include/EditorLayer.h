@@ -7,8 +7,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 // GUI PANELS
-/*
 #include "Panels/ViewportPanel.h"
+/*
 #include "Panels/MenuPanel.h"
 #include "Panels/ContentBrowserPanel.h"
 #include "Panels/SceneHierarchyPanel.h"
@@ -18,7 +18,8 @@
 
 namespace Cober {
 
-	class Editor : public Layer {
+	class Editor : public Layer 
+	{
 	public:
 		Editor();
 		virtual ~Editor() = default;
@@ -28,17 +29,17 @@ namespace Cober {
 
 		void OnUpdate(Unique<Timestep>& ts) override;
 		virtual void OnImGuiRender() override;
-		//void OnEvent(SDL_Event& event) override;
+		// void OnEvent(Event& event) override;
 
 	private:
 		void InitDockspace();
 		void EndDockspace();
 		//bool OnKeyPressed(KeyPressedEvent& event)
+
 	private:
-		//Ref<EditorCamera> _editorCamera;
-		//Ref<Scene> _activeScene, _editorScene;
-	private:
-		//Ref<Framebuffer> _fbo;
+		Ref<EditorCamera> m_EditorCamera;
+		Ref<Scene> m_ActiveScene, m_EditorScene;
+		Ref<Framebuffer> m_Fbo;
 
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 		glm::vec2 m_MinViewportBound;

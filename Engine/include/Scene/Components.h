@@ -166,7 +166,7 @@ namespace Cober {
 	{
 	};
 
-	using AllComponents = ComponentGroup<TransformComponent>;
+	using AllComponents = ComponentGroup<TransformComponent, TagComponent, ScriptComponent, Rigidbody2D, BoxCollider2D>;
 }
 
 #endif

@@ -2,9 +2,9 @@ project ( Game )
 
 file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS src/*.cpp)
 
-add_executable( Game ${MY_SOURCES})
+add_executable( ${PROJECT_NAME} ${MY_SOURCES})
 
-target_include_directories( Game
+target_include_directories( ${PROJECT_NAME}
     PUBLIC 
         include
         ${CMAKE_CURRENT_SOURCE_DIR}/../libraries/glm
@@ -13,4 +13,4 @@ target_include_directories( Game
         ${CMAKE_CURRENT_SOURCE_DIR}/../libraries/glad/include
 )
 
-target_link_libraries( Game PRIVATE Engine )
+target_link_libraries( ${PROJECT_NAME} PRIVATE Engine )

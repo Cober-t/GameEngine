@@ -13,7 +13,7 @@
 
 namespace Cober {
 
-	class RenderSystem : public System 
+	class RenderSystem : public System
 	{
 	public:
 		RenderSystem() = default;
@@ -22,7 +22,7 @@ namespace Cober {
 
 		void Start();
 
-		void Update(Unique<Timestep>& ts, const Ref<GameCamera>& camera);
+		void Update(Unique<Timestep>& ts, const Ref<Camera>& camera);
 
 		virtual std::vector<Entity> GetSystemEntities() const override;
 

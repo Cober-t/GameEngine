@@ -12,25 +12,9 @@ namespace Cober {
 	void Game::OnAttach() 
 	{
 		m_ActiveScene = CreateRef<Scene>();
-		
-		/////// Test
-		// Entity 1
-		Entity entity = m_ActiveScene->CreateEntity();
-		entity.AddComponent<Rigidbody2D>();
-		entity.GetComponent<Rigidbody2D>().type = BodyType::Dynamic;
-		entity.AddComponent<BoxCollider2D>();
 
-		// Entity 2
-		Entity entity2 = m_ActiveScene->CreateEntity();
-		entity2.GetComponent<TransformComponent>().position.y = -2.0f;
-		entity2.AddComponent<Rigidbody2D>();
-		entity2.AddComponent<BoxCollider2D>();
-		entity2.AddComponent<ScriptComponent>();
-
+		m_ActiveScene = Scene::Load("Scene2.lua");
 		m_ActiveScene->OnSimulationStart();
-
-		// m_ActiveScene = Scene::Load("Scene2.lua");
-		// m_ActiveScene->OnSimulationStart();
 	}
 
 

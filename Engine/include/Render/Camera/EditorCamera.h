@@ -1,5 +1,5 @@
-#ifndef GAME_CAMERA_H
-#define GAME_CAMERA_H
+#ifndef EDITOR_CAMERA_H
+#define EDITOR_CAMERA_H
 
 #include "Camera.h"
 #include "Core/Timestep.h"
@@ -7,7 +7,7 @@
 
 namespace Cober {
 
-	struct OrthoCamera 
+	struct EditorOrthoCamera 
 	{
 		float fov = 45.0f;
 		float aspectRatio = 1.778f;
@@ -22,15 +22,14 @@ namespace Cober {
 		float roll = 0.0f;
 		float distance = 3.0f;
 
-		OrthoCamera() = default;
-		OrthoCamera(float newFov, float ratio, float nearValue, float farValue)
+		EditorOrthoCamera() = default;
+		EditorOrthoCamera(float newFov, float ratio, float nearValue, float farValue)
 		 : fov(newFov), aspectRatio(ratio), nearClip(nearValue), farClip(farValue) { };
 
-		~OrthoCamera() = default;
+		~EditorOrthoCamera() = default;
 	};
 
-
-	struct PerspCamera 
+	struct EditorPerspCamera
 	{
 		float fov = 45.0f;
 		float aspectRatio = 1.778f;
@@ -45,23 +44,23 @@ namespace Cober {
 		float roll = 0.0f;
 		float distance = 5.0f;
 
-		PerspCamera() = default;
-		PerspCamera(float newFov, float ratio, float nearValue, float farValue)
+		EditorPerspCamera() = default;
+		EditorPerspCamera(float newFov, float ratio, float nearValue, float farValue)
 		 : fov(newFov), aspectRatio(ratio), nearClip(nearValue), farClip(farValue) { };
 
-		~PerspCamera() = default;
+		~EditorPerspCamera() = default;
 	};
 
 
-	class GameCamera : public Camera
+	class EditorCamera : public Camera
 	{
 
 	public:
-		GameCamera() = default;
-		GameCamera(float fov, float aspectRatio, float nearClip, float farClip, bool ortho = false);
-		virtual ~GameCamera();
+		EditorCamera() = default;
+		EditorCamera(float fov, float aspectRatio, float nearClip, float farClip, bool ortho = false);
+		virtual ~EditorCamera();
 
-		void OnUpdate(Unique<Timestep>& ts) override;
+		void OnUpdate(Unique<Timestep>& ts);
 		void OnEvent(Event& event);
 
 		void BlockEvents(bool focus) { m_ViewportFocused = focus; }
@@ -69,9 +68,9 @@ namespace Cober {
 		void SetViewportSize(float width, float height);
 		void UpdateProjection(bool& ortho);
 
-		OrthoCamera GetOrthoCamera() { return m_OrthoCamera; }
+		EditorOrthoCamera GetOrthoCamera() { return m_OrthoCamera; }
 
-		PerspCamera GetPerspCamera() { return m_PerspCamera; }
+		EditorPerspCamera GetPerspCamera() { return m_PerspCamera; }
 
 		glm::quat GetOrientation() const;
 
@@ -109,8 +108,8 @@ namespace Cober {
 		float ZoomSpeed() const;
 
 	private:
-		OrthoCamera m_OrthoCamera;
-		PerspCamera m_PerspCamera;
+		EditorOrthoCamera m_OrthoCamera;
+		EditorPerspCamera m_PerspCamera;
 		float m_ViewportWidth = 1280, m_ViewportHeight = 720;
 
 		glm::vec2 m_InitialMousePos = { 0.0f, 0.0f };

@@ -2,9 +2,9 @@ project ( Editor )
 
 file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS src/*.cpp)
 
-add_executable( Editor ${MY_SOURCES})
+add_executable( ${PROJECT_NAME} ${MY_SOURCES})
 
-target_include_directories( Engine
+target_include_directories( ${PROJECT_NAME}
     PUBLIC 
         include
         ${CMAKE_CURRENT_SOURCE_DIR}/../libraries/imgui
@@ -14,6 +14,8 @@ target_include_directories( Engine
         ${CMAKE_CURRENT_SOURCE_DIR}/../libraries/glad/include
 )
 
+add_compile_definitions(PUBLIC ICONS_DIR="${CMAKE_CURRENT_SOURCE_DIR}/icons/")
 
-target_link_libraries( Editor PRIVATE Engine )
+
+target_link_libraries( ${PROJECT_NAME} PRIVATE Engine )
 

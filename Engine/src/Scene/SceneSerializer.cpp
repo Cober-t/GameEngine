@@ -44,7 +44,8 @@ namespace Cober {
 				entityToBeSaved["Rigidbody2D"]["fixedRotation"].SetInt(rb2d.fixedRotation);
 			}
 
-			if (entity.HasComponent<BoxCollider2D>()) {
+			if (entity.HasComponent<BoxCollider2D>()) 
+			{
 				auto& bc2D = entity.GetComponent<BoxCollider2D>();
 				entityToBeSaved["BoxCollider2D"]["offset"].SetVec2(bc2D.offset);
 				entityToBeSaved["BoxCollider2D"]["size"].SetVec2(bc2D.size);
@@ -52,6 +53,12 @@ namespace Cober {
 				entityToBeSaved["BoxCollider2D"]["friction"].SetReal(bc2D.friction);
 				entityToBeSaved["BoxCollider2D"]["restitution"].SetReal(bc2D.restitution);
 				// entityToBeSaved["BoxCollider2D"]["restitution Threshold"].SetReal(bc2D.restitutionThreshold);
+			}
+
+			if (entity.HasComponent<ScriptComponent>()) 
+			{
+				auto& scriptComponent = entity.GetComponent<ScriptComponent>();
+				// entityToBeSaved["ScriptComponent"]["path"].SetVec2(scriptComponent.path);
 			}
 		}
 		
@@ -105,6 +112,12 @@ namespace Cober {
 						newEntity.GetComponent<BoxCollider2D>().friction = bc2d["friction"].GetReal();
 						newEntity.GetComponent<BoxCollider2D>().restitution = bc2d["restitution"].GetReal();
 						// newEntity.GetComponent<BoxCollider2D>().restitutionThreshold = bc2d["restitution threshold"].GetReal();
+					}
+
+					if (loader.HasProperty("ScriptComponent")) 
+					{
+						auto bc2d = loader["ScriptComponent"];
+						newEntity.AddComponent<ScriptComponent>();
 					}
 				}
 			}

@@ -1,8 +1,9 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-
 #include <glm/glm.hpp>
+#include "Core/Timestep.h"
+
 
 namespace Cober {
 
@@ -11,6 +12,8 @@ namespace Cober {
 		Camera() = default;
 		Camera(const glm::mat4& projection) : m_Projection(projection) {}
 		virtual ~Camera() = default;
+
+		virtual void OnUpdate(Unique<Timestep>& ts) = 0;
 
 		virtual const glm::mat4& GetProjection() const { return m_Projection; }
 		virtual const glm::mat4& GetView() const { return m_ViewMatrix; }
