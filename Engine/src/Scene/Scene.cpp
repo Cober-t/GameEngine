@@ -129,6 +129,8 @@ namespace Cober {
 
 		m_EntityMap[uuid] = entity;
 
+		// GetSystem<PhysicsSystem2D>().InitEntityPhysics(entity);
+
         LOG_INFO("Created entity with ID {0} and name {1}", uuid, tagComponent.tag);
 
 		return entity;

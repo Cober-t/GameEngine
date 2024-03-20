@@ -4,18 +4,30 @@
 #include "Core/Core.h"
 #include "Scene/ECS.h"
 #include "Scene/Scene.h"
-// #include "Events/EventHandler.h"
+// #include "Events/Event.h"
 
 #include <b2World.h>
 #include <b2Body.h>
 #include <b2Fixture.h>
 #include <b2PolygonShape.h>
 #include <b2Draw.h>
+#include <b2Contact.h>
 
 
 namespace Cober {
 
-	//class DebugSystem;
+	class ContactListener : public b2ContactListener
+	{
+	public:
+		void BeginContact(b2Contact* contact) override;
+
+		void EndContact(b2Contact* contact) override;
+
+		void PreSolve(b2Contact* contact, const b2Manifold* oldManifold) override;
+
+		void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) override;
+	};
+
 
 	class PhysicsSystem2D : public System 
     {
@@ -32,12 +44,14 @@ namespace Cober {
         
         virtual std::vector<Entity> GetSystemEntities() const override;
 
-		//void OnEvent(Unique<EventHandler>& eventHandler);
+		//void OnEvent(Event& event);
 	
 	private:
 		b2World* m_PhysicsWorld = nullptr;
 		Scene* m_Scene = nullptr;
 	};
+
+	static ContactListener contactListener;
 }
 
 #endif

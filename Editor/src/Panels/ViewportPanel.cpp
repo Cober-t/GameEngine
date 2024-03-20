@@ -201,6 +201,7 @@ namespace Cober {
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
 				const wchar_t* path = (const wchar_t*)payload->Data;
 				m_FilePath = (std::filesystem::path(ASSETS_DIR) / path).string();
+				LOG_INFO(m_FilePath);
 				
 				//Textures
 				//if (hoveredEntity.GetIndex() != -1 && hoveredEntity.HasComponent<Sprite>()) {

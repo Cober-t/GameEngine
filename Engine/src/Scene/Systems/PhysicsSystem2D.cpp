@@ -20,6 +20,7 @@ namespace Cober {
 	void PhysicsSystem2D::Start()
 	{
 		m_PhysicsWorld = new b2World({ 0.0f, -9.8f });
+		m_PhysicsWorld->SetContactListener(&contactListener);
 
 		for (auto& entity : GetSystemEntities())
 		{
@@ -58,6 +59,10 @@ namespace Cober {
 			bodyDef.position.Set(transform.position.x, transform.position.y);
 
 
+		Entity* staticRef = (Entity*)malloc(sizeof(entity));
+		*staticRef = entity;
+		bodyDef.userData = (void*)staticRef;
+		
 		b2Body* body = m_PhysicsWorld->CreateBody(&bodyDef);
 		body->SetFixedRotation(rb2d.fixedRotation);
 		
@@ -105,4 +110,41 @@ namespace Cober {
 
 		return entities;
 	};
+
+
+	void ContactListener::BeginContact(b2Contact* contact)
+	{
+		void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+		if ( bodyUserData )
+			LOG_WARNING("BEGIN CONTACT! {0}", static_cast<Entity*>(bodyUserData)->GetName());
+	
+		bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+		if ( bodyUserData )
+			LOG_WARNING("BEGIN CONTACT! {0}", static_cast<Entity*>(bodyUserData)->GetName());
+	}
+
+
+	void ContactListener::EndContact(b2Contact* contact)
+	{
+		void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+		if ( bodyUserData )
+			LOG_WARNING("END CONTACT! {0}", static_cast<Entity*>(bodyUserData)->GetName());
+  
+		bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+		if ( bodyUserData )
+			LOG_WARNING("END CONTACT! {0}", static_cast<Entity*>(bodyUserData)->GetName());
+
+	}
+
+
+	void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
+	{
+		// TODO: Implement me
+	}
+
+
+	void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
+	{
+		// TODO: Implement me
+	}
 }

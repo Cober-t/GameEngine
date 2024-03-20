@@ -16,7 +16,7 @@ Game Engine (MVP):
      - [X] Sacar el backup en un archivo al terminar la aplicación  
 
  - [x] Editor básico con ImGui  
-     - [ ] ViewportPanel  
+     - [X] ViewportPanel  
      - [ ] Menu / Settings  
      - [ ] Data    
      - [ ] Console  
@@ -35,7 +35,7 @@ Game Engine (MVP):
      - [X] Basic Render2D buffers and batching  
      - [X] Shaders  
      - [ ] Load Textures  
-     - [ ] Framebuffer  
+     - [X] Framebuffer  
      - [X] Game Camera  
      - [ ] Editor Camera  
 
