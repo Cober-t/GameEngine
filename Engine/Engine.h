@@ -25,8 +25,7 @@
 #include "Events/ApplicationEvents.h"
 #include "Events/KeyEvents.h"
 #include "Events/MouseEvents.h"
-#include "Events/Codes/KeyCodes.h"
-#include "Events/Codes/MouseCodes.h"
+#include "Events/KeyCodes.h"
 
 
 //[++++++++++++++++++++++++++]
