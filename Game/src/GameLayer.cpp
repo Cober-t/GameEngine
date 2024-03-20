@@ -5,7 +5,7 @@ namespace Cober {
 
 	Game::Game() : Layer("First 2D Game!") 
 	{
-		m_Camera = CreateRef<GameCamera>(45.0f, 1.778f, 0.01f, 1000.0f);
+		m_Camera = CreateRef<GameCamera>(45.0f, 1280, 720, 0.01f, 1000.0f);
 	}
 
 
@@ -13,6 +13,7 @@ namespace Cober {
 	{
 		m_ActiveScene = CreateRef<Scene>();
 
+		m_Camera->SetViewportSize(1280, 720);
 		m_ActiveScene = Scene::Load("Scene2.lua");
 		m_ActiveScene->OnSimulationStart();
 	}
@@ -29,6 +30,7 @@ namespace Cober {
 
 	void Game::OnUpdate(Unique<Timestep>& ts) 
 	{
+		m_Camera->OnUpdate(ts);
 		m_ActiveScene->OnUpdateSimulation(ts, m_Camera);
 	}
 

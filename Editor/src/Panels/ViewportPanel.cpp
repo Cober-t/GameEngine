@@ -156,7 +156,8 @@ namespace Cober {
 
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
-		editorCamera->BlockEvents(m_ViewportHovered);
+		// editorCamera->BlockEvents(m_ViewportHovered);
+
 
 		// START CONSTRAIN VIEWPORT SCENE
 		EngineApp& app = EngineApp::Get();

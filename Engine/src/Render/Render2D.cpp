@@ -118,8 +118,8 @@ namespace Cober {
 
 	void Render2D::BeginScene(const Ref<Camera>& camera)
 	{
-		data.CameraBuffer.View = camera->GetView();
-		data.CameraBuffer.Projection = camera->GetProjection();
+		data.CameraBuffer.View = camera->GetViewMatrix();
+		data.CameraBuffer.Projection = camera->GetProjectionMatrix();
 		data.CameraUniformBuffer->SetData(&data.CameraBuffer, sizeof(RenderData::CameraData));
 
 		Render2D::StartBatch();

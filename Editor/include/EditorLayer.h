@@ -27,14 +27,14 @@ namespace Cober {
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 
-		void OnUpdate(Unique<Timestep>& ts) override;
+		virtual void OnUpdate(Unique<Timestep>& ts) override;
 		virtual void OnImGuiRender() override;
-		// void OnEvent(Event& event) override;
+		virtual void OnEvent(Event& event) override;
 
 	private:
 		void InitDockspace();
 		void EndDockspace();
-		//bool OnKeyPressed(KeyPressedEvent& event)
+		bool OnKeyPressed(KeyPressedEvent& event);
 
 	private:
 		Ref<EditorCamera> m_EditorCamera;

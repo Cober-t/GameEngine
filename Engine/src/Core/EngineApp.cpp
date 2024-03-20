@@ -96,7 +96,6 @@ namespace Cober {
     {
         // In the future each layer/object could save the event on a buffer
         // and handle it one per frame on Update instead of delay all the Application
-
         EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(EngineApp::OnWindowClose));
         dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(EngineApp::OnWindowResize));

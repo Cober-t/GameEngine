@@ -25,8 +25,7 @@ namespace Cober {
 
 	void RenderSystem::Update(Unique<Timestep>& ts, const Ref<Camera>& camera)
 	{
-        camera->OnUpdate(ts);
-
+        // camera->OnUpdate(ts);
 		Render2D::ResetStats();
 		Render2D::BeginScene(camera);
 		RenderGlobals::SetClearColor(10, 0, 10, 255);

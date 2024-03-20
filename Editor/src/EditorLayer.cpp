@@ -6,7 +6,8 @@ namespace Cober {
 	// extern const std::filesystem::path _AssetPath;
 	Editor::Editor() : Layer("Editor")
 	{
-		m_EditorCamera = CreateUnique<EditorCamera>(45.0f, 1.778f, 0.01f, 1000.0f);
+		m_EditorCamera = CreateUnique<EditorCamera>(45.0f, 1280, 720, 0.01f, 1000.0f);
+		m_EditorCamera->SetActive(true);
 
 		new ViewportPanel();
 		/*
@@ -52,7 +53,7 @@ namespace Cober {
 
 		switch (EngineApp::Get().GetGameState()) 
 		{
-			case GameState::EDITOR: 
+			case GameState::EDITOR:
 			{
 				// colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.000f, 0.000f, 0.000f, 0.586f);
 				m_EditorCamera->OnUpdate(ts);
@@ -98,7 +99,7 @@ namespace Cober {
 
 	void Editor::InitDockspace() 
 	{
-		// [[----- Init variables & dockspace -----]] (from Cherno)
+		// [[----- Init variables & dockspace -----]]
 		static bool dockspaceOpen = true;
 		static bool opt_fullscreen_persistant = true;
 		bool opt_fullscreen = opt_fullscreen_persistant;
@@ -156,5 +157,18 @@ namespace Cober {
 	void Editor::EndDockspace() 
 	{
 		ImGui::End();
+	}
+
+
+	void Editor::OnEvent(Event& event)
+	{
+		m_EditorCamera->OnEvent(event);
+		// ViewportPanel::Get().OnEvent(event, _activeScene->GetHoveredEntity());
+	}
+
+
+	bool Editor::OnKeyPressed(KeyPressedEvent& event) 
+	{
+		return true;
 	}
 }

@@ -2,53 +2,16 @@
 #define EDITOR_CAMERA_H
 
 #include "Camera.h"
-#include "Core/Timestep.h"
-#include "Events/Event.h"
+#include "Core/Input.h"
+#include "Events/KeyEvents.h"
+#include "Events/MouseEvents.h"
+
 
 namespace Cober {
 
-	struct EditorOrthoCamera 
+	enum class CameraMode
 	{
-		float fov = 45.0f;
-		float aspectRatio = 1.778f;
-		float nearClip = 0.01f;
-		float farClip = 1000.0f;
-
-		glm::vec3 position   = { 0.0f, 0.0f,  0.0f };
-		glm::vec3 focalPoint = { 0.0f, 0.0f, -1.0f };
-
-		float pitch = 0.0f;
-		float yaw = 0.0f;
-		float roll = 0.0f;
-		float distance = 3.0f;
-
-		EditorOrthoCamera() = default;
-		EditorOrthoCamera(float newFov, float ratio, float nearValue, float farValue)
-		 : fov(newFov), aspectRatio(ratio), nearClip(nearValue), farClip(farValue) { };
-
-		~EditorOrthoCamera() = default;
-	};
-
-	struct EditorPerspCamera
-	{
-		float fov = 45.0f;
-		float aspectRatio = 1.778f;
-		float nearClip = 0.01f;
-		float farClip = 1000.0f;
-
-		glm::vec3 position	 = {   2.5f, 2.5f,  3.2f };
-		glm::vec3 focalPoint = { 0.625f, 0.57f, 0.5f };
-
-		float pitch = 6.8f;
-		float yaw = -6.8f;
-		float roll = 0.0f;
-		float distance = 5.0f;
-
-		EditorPerspCamera() = default;
-		EditorPerspCamera(float newFov, float ratio, float nearValue, float farValue)
-		 : fov(newFov), aspectRatio(ratio), nearClip(nearValue), farClip(farValue) { };
-
-		~EditorPerspCamera() = default;
+		NONE, FLYCAM, ARCBALL
 	};
 
 
@@ -57,49 +20,46 @@ namespace Cober {
 
 	public:
 		EditorCamera() = default;
-		EditorCamera(float fov, float aspectRatio, float nearClip, float farClip, bool ortho = false);
+		EditorCamera(float fov, float width, float height, float nearClip, float farClip, bool ortho = false);
 		virtual ~EditorCamera();
 
-		void OnUpdate(Unique<Timestep>& ts);
-		void OnEvent(Event& event);
-
-		void BlockEvents(bool focus) { m_ViewportFocused = focus; }
+		void Focus(const glm::vec3& focusPoint);
+		void OnUpdate(Unique<Timestep>& ts) override;
+		void OnEvent(Event& event) override;
 
 		void SetViewportSize(float width, float height);
-		void UpdateProjection(bool& ortho);
 
-		EditorOrthoCamera GetOrthoCamera() { return m_OrthoCamera; }
+		bool IsActive() const { return m_IsActive; }
+		void SetActive(bool active) { m_IsActive = active; }
+		CameraSettings GetEditorCamera() { return m_EditorCamera; }
 
-		EditorPerspCamera GetPerspCamera() { return m_PerspCamera; }
+		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
+		glm::mat4 GetViewProjection() const { return GetProjectionMatrix() * m_ViewMatrix; }
+		glm::mat4 GetUnReversedViewProjection() const { return GetUnReversedProjectionMatrix() * GetViewMatrix(); }
 
 		glm::quat GetOrientation() const;
-
 		glm::vec3 GetUpDirection() const;
-
 		glm::vec3 GetRightDirection() const;
-
 		glm::vec3 GetForwardDirection() const;
 
-		inline const glm::mat4& GetProjection() const override { return m_Projection; }
+		const glm::vec3& GetFocalPoint() const { return m_EditorCamera.focalPoint; }
+		inline float GetDistance() const { return m_EditorCamera.distance; }
+		inline void SetDistance(float distance) { m_EditorCamera.distance = distance; }
 
-		inline const glm::mat4& GetView() const override { return m_ViewMatrix; }
-
-		inline const glm::mat4 GetPV() const override { return m_Projection * m_ViewMatrix; }
-
-		inline float GetDistance() const { return m_OrthoProjection ? m_OrthoCamera.distance : m_PerspCamera.distance; }
-
-		inline void SetDistance(float distance) { m_OrthoProjection ? m_OrthoCamera.distance = distance : m_PerspCamera.distance = distance; }
-
-		const glm::vec3& GetPosition() const { return m_OrthoProjection ? m_OrthoCamera.position : m_PerspCamera.position; }
-
-		inline float GetPitch() const 	{ return m_OrthoProjection ? m_OrthoCamera.pitch : m_PerspCamera.pitch; }
-
-		inline float GetYaw() const 	{ return m_OrthoProjection ? m_OrthoCamera.yaw : m_PerspCamera.yaw; }
-
-		inline float GetRoll() const 	{ return m_OrthoProjection ? m_OrthoCamera.roll : m_PerspCamera.roll; }
+		const glm::vec3& GetPosition() const { return m_EditorCamera.position; }
+		inline float GetPitch() const 	{ return m_EditorCamera.pitch; }
+		inline float GetYaw() const 	{ return m_EditorCamera.yaw; }
+		inline float GetRoll() const 	{ return m_EditorCamera.roll; }
+		float GetCameraSpeed() const;
 
 	private:
-		void UpdateView();
+		void UpdateCameraView();
+
+		bool OnMouseScroll(MouseScrolledEvent& e);
+
+		void MousePan(const glm::vec2& delta);
+		void MouseRotate(const glm::vec2& delta);
+		void MouseZoom(float delta);
 
 		glm::vec3 CalculatePosition() const;
 
@@ -108,16 +68,25 @@ namespace Cober {
 		float ZoomSpeed() const;
 
 	private:
-		EditorOrthoCamera m_OrthoCamera;
-		EditorPerspCamera m_PerspCamera;
-		float m_ViewportWidth = 1280, m_ViewportHeight = 720;
+		glm::mat4 m_ViewMatrix;
+		CameraSettings m_EditorCamera;
 
-		glm::vec2 m_InitialMousePos = { 0.0f, 0.0f };
+		glm::vec2 m_InitialMousePosition = { 0.0f, 0.0f };
+		glm::vec3 m_InitialFocalPoint, m_InitialRotation;
 		float m_RotationSpeed = 0.8f;
-		bool m_ViewportFocused = false;
 		bool m_MouseButtonHeld = false;
 		bool m_AltKeyPressed = false;
-		bool m_OrthoProjection = false;
+
+		bool m_IsActive = true;
+		float m_NormalSpeed{ 0.002f };
+
+		CameraMode m_CameraMode{ CameraMode::ARCBALL };
+
+		float m_MinFocusDistance{ 100.0f };
+		uint32_t m_ViewportWidth{ 1280 }, m_ViewportHeight{ 720 };
+
+		constexpr static float MIN_SPEED{ 0.0005f }, MAX_SPEED{ 2.0f };
+		friend class Editor;
 	};
 }
 

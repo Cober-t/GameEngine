@@ -5,18 +5,30 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
+
 namespace Cober {
 
-	GameCamera::GameCamera(float fov, float aspectRatio, float nearClip, float farClip, bool ortho)
-		: m_OrthoProjection(ortho)
+	GameCamera::GameCamera(float fov, float width, float height, float nearClip, float farClip, bool ortho)
+		: Camera(glm::perspectiveFov(glm::radians(fov), width, height, farClip, nearClip), glm::perspectiveFov(glm::radians(fov), width, height, nearClip, farClip)),
+		m_GameCamera(CameraSettings(fov, width, height, nearClip, farClip, ortho))
 	{
-		if (m_OrthoProjection)
-			m_OrthoCamera = OrthoCamera(fov, aspectRatio, nearClip, farClip);
-		else
-			m_PerspCamera = PerspCamera(fov, aspectRatio, nearClip, farClip);
+		m_GameCamera.focalPoint = glm::vec3(0.0f);
+		m_GameCamera.verticalFov = glm::radians(fov);
+		m_GameCamera.nearClip = nearClip;
+		m_GameCamera.farClip = farClip;
+		
+		// glm::vec3 position = { -5, 5, 5 };
+		m_GameCamera.distance = glm::distance(m_GameCamera.position, m_GameCamera.focalPoint);
 
-		SetViewportSize(1280, 720);
+		m_GameCamera.yaw = 3.0f * glm::pi<float>() / 4.0f;
+		m_GameCamera.pitch = glm::pi<float>() / 4.0f;
 
+		m_GameCamera.position = CalculatePosition();
+		const glm::quat orientation = GetOrientation();
+		m_GameCamera.direction = glm::eulerAngles(orientation) * (180.0f / glm::pi<float>());
+		glm::mat4 viewMatrix = glm::translate(glm::mat4(1.0f), m_GameCamera.position) * glm::toMat4(orientation);
+		SetViewMatrix(glm::inverse(viewMatrix));
+		
 		LOG_INFO("Game Camera Created!!");
 	}
 
@@ -27,89 +39,39 @@ namespace Cober {
 	}
 
 
-	void GameCamera::UpdateProjection(bool& ortho) 
+	void GameCamera::UpdateCameraView()
 	{
-		m_OrthoProjection = ortho;
+		const float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
 
-		if (ortho) 
-		{
-			m_OrthoCamera.aspectRatio = m_ViewportWidth / m_ViewportHeight;
-			m_Projection = glm::ortho(-m_OrthoCamera.aspectRatio * m_OrthoCamera.distance, 	// Left
-									   m_OrthoCamera.aspectRatio * m_OrthoCamera.distance,	// Right
-									  -m_OrthoCamera.distance, m_OrthoCamera.distance, 		// Bottom & Top
-									   m_OrthoCamera.nearClip, m_OrthoCamera.farClip);		// Near & Far
-		}
-		else 
-		{
-			m_PerspCamera.aspectRatio = m_ViewportWidth / m_ViewportHeight;
-			m_Projection = glm::perspective(glm::radians(m_PerspCamera.fov),
-										   m_PerspCamera.aspectRatio, 
-										   m_PerspCamera.nearClip, 
-										   m_PerspCamera.farClip);
-		}
+		// Extra step to handle the problem when the camera direction is the same as the up vector
+		const float cosAngle = glm::dot(GetForwardDirection(), GetUpDirection());
+		if (cosAngle * yawSign > 0.99f)
+			m_GameCamera.pitchDelta = 0.0f;
+
+		const glm::vec3 lookAt = m_GameCamera.position + GetForwardDirection();
+		m_GameCamera.direction = glm::normalize(lookAt - m_GameCamera.position);
+		m_GameCamera.distance = glm::distance(m_GameCamera.position, m_GameCamera.focalPoint);
+		glm::mat4 viewMatrix = glm::lookAt(m_GameCamera.position, lookAt, glm::vec3{ 0.0f, yawSign, 0.0f });
+		SetViewMatrix(viewMatrix);
+
+		//damping for smooth camera
+		m_GameCamera.yawDelta *= 0.6f;
+		m_GameCamera.pitchDelta *= 0.6f;
+		m_GameCamera.positionDelta *= 0.8f;
 	}
 
 
 	void GameCamera::SetViewportSize(float width, float height)
 	{
+		if (m_ViewportWidth == width && m_ViewportHeight == height)
+				return;
+
+		SetPerspectiveProjectionMatrix(m_GameCamera.verticalFov, (float)width, (float)height, m_GameCamera.nearClip, m_GameCamera.farClip);
 		m_ViewportWidth = width;
 		m_ViewportHeight = height;
-		UpdateProjection(m_OrthoProjection);
 	}
 
 
-	void GameCamera::UpdateView() 
-	{
-		if (m_OrthoProjection) 
-		{
-			m_OrthoCamera.position = CalculatePosition();
-			glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_OrthoCamera.position) * glm::rotate(glm::mat4(1.0f), 0.0f, glm::vec3(0, 0, 1));
-			m_ViewMatrix = glm::inverse(transform);
-		}
-		else 
-		{
-			// _yaw = _pitch = 0.0f;	// Lock the camera's rotation
-			m_PerspCamera.position = CalculatePosition();
-			glm::quat orientation = GetOrientation();
-			m_ViewMatrix = glm::translate(glm::mat4(1.0f), m_PerspCamera.position) * glm::toMat4(orientation);
-			m_ViewMatrix = glm::inverse(m_ViewMatrix);
-		}
-	}
-
-	
-	std::pair<float, float> GameCamera::PanSpeed() const 
-	{
-		float x = std::min(m_ViewportWidth  / 1000.0f, 2.4f); // max = 2.4f
-		float y = std::min(m_ViewportHeight / 1000.0f, 2.4f); // max = 2.4f
-
-		float xFactor = 0.05f * (x * x) - 0.1778f * x + 0.3021f;
-		float yFactor = 0.05f * (y * y) - 0.1778f * y + 0.3021f;
-
-		return { xFactor, yFactor };
-	}
-
-
-	float GameCamera::ZoomSpeed() const 
-	{
-		float currentDistance = m_OrthoProjection == true ? m_OrthoCamera.distance : m_PerspCamera.distance;
-		float distance = currentDistance * 0.2f;
-		distance = std::max(distance, 0.0f);
-		float speed = distance * distance;
-		speed = std::min(speed, 100.0f);	// max speed = 100
-
-		return speed;
-	}
-
-	glm::quat GameCamera::GetOrientation() const
-	{
-		float newPitch = m_OrthoProjection ? m_OrthoCamera.pitch : m_PerspCamera.pitch;
-		float newYaw   = m_OrthoProjection ? m_OrthoCamera.yaw   : m_PerspCamera.yaw;
-		float newRoll  = m_OrthoProjection ? m_OrthoCamera.roll  : m_PerspCamera.roll;
-
-		return glm::quat(glm::vec3(-newPitch, -newYaw, newRoll));
-	}
-
-	
 	glm::vec3 GameCamera::GetUpDirection() const 
 	{ 
 		return glm::rotate(GetOrientation(), glm::vec3(0.0f, 1.0f, 0.0));
@@ -130,14 +92,20 @@ namespace Cober {
 
 	glm::vec3 GameCamera::CalculatePosition() const 
 	{
-		return m_OrthoProjection ? m_OrthoCamera.focalPoint - GetForwardDirection() * m_OrthoCamera.distance
-								 : m_PerspCamera.focalPoint - GetForwardDirection() * m_PerspCamera.distance;
+		return m_GameCamera.focalPoint - GetForwardDirection() * m_GameCamera.distance + m_GameCamera.positionDelta;
 	}
 
 
+	glm::quat GameCamera::GetOrientation() const
+	{
+		return glm::quat(glm::vec3(-m_GameCamera.pitch - m_GameCamera.pitchDelta, -m_GameCamera.yaw - m_GameCamera.yawDelta, 0.0f));
+	}
+
+	
 	void GameCamera::OnUpdate(Unique<Timestep>& ts) 
 	{
-		UpdateView();
+		m_GameCamera.position = CalculatePosition();
+		UpdateCameraView();
 	}
 
 	
