@@ -78,7 +78,7 @@ namespace Cober {
 		bool m_AltKeyPressed = false;
 
 		bool m_IsActive = true;
-		float m_NormalSpeed{ 0.002f };
+		float m_NormalSpeed{ 0.0005f };
 
 		CameraMode m_CameraMode{ CameraMode::ARCBALL };
 

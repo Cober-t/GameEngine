@@ -119,10 +119,8 @@ namespace Cober {
 
 	bool EditorCamera::OnMouseScroll(MouseScrolledEvent& e)
 	{
-
 		if (Input::IsMouseButtonDown(MouseButton::Right))
 		{
-			LOG_TRACE("OnMouseScroll Event");
 			m_NormalSpeed += e.GetYOffset() * 0.3f * m_NormalSpeed;
 			m_NormalSpeed = std::clamp(m_NormalSpeed, MIN_SPEED, MAX_SPEED);
 		}
@@ -140,7 +138,7 @@ namespace Cober {
 	{
 		auto [xSpeed, ySpeed] = PanSpeed();
 		m_EditorCamera.focalPoint -= GetRightDirection() * delta.x * xSpeed * m_EditorCamera.distance;
-		m_EditorCamera.positionDelta += GetUpDirection() * delta.y * ySpeed * m_EditorCamera.distance;
+		m_EditorCamera.focalPoint += GetUpDirection() * delta.y * ySpeed * m_EditorCamera.distance;
 	}
 
 	void EditorCamera::MouseRotate(const glm::vec2& delta)
@@ -160,7 +158,7 @@ namespace Cober {
 			m_EditorCamera.focalPoint += forwardDir * m_EditorCamera.distance;
 			m_EditorCamera.distance = 1.0f;
 		}
-		m_EditorCamera.positionDelta += delta * ZoomSpeed() * forwardDir;
+		m_EditorCamera.positionDelta -= delta * ZoomSpeed() * forwardDir;
 	}
 	
 
@@ -240,17 +238,17 @@ namespace Cober {
 			const float speed = GetCameraSpeed();
 
 			if (Input::IsKeyDown(KeyCode::Q))
-				m_EditorCamera.positionDelta -= ts->GetMilliseconds() * speed * glm::vec3{ 0.f, yawSign, 0.f };
+				m_EditorCamera.positionDelta -= ts->GetSeconds() * speed * glm::vec3{ 0.f, yawSign, 0.f };
 			if (Input::IsKeyDown(KeyCode::E))
-				m_EditorCamera.positionDelta += ts->GetMilliseconds() * speed * glm::vec3{ 0.f, yawSign, 0.f };
+				m_EditorCamera.positionDelta += ts->GetSeconds() * speed * glm::vec3{ 0.f, yawSign, 0.f };
 			if (Input::IsKeyDown(KeyCode::S))
-				m_EditorCamera.positionDelta -= ts->GetMilliseconds() * speed * m_EditorCamera.direction;
+				m_EditorCamera.positionDelta -= ts->GetSeconds() * speed * m_EditorCamera.direction;
 			if (Input::IsKeyDown(KeyCode::W))
-				m_EditorCamera.positionDelta += ts->GetMilliseconds() * speed * m_EditorCamera.direction;
+				m_EditorCamera.positionDelta += ts->GetSeconds() * speed * m_EditorCamera.direction;
 			if (Input::IsKeyDown(KeyCode::A))
-				m_EditorCamera.positionDelta -= ts->GetMilliseconds() * speed * m_EditorCamera.rightDirection;
+				m_EditorCamera.positionDelta -= ts->GetSeconds() * speed * m_EditorCamera.rightDirection;
 			if (Input::IsKeyDown(KeyCode::D))
-				m_EditorCamera.positionDelta += ts->GetMilliseconds() * speed * m_EditorCamera.rightDirection;
+				m_EditorCamera.positionDelta += ts->GetSeconds() * speed * m_EditorCamera.rightDirection;
 
 			constexpr float maxRate{ 0.12f };
 			m_EditorCamera.yawDelta += glm::clamp(yawSign * delta.x * RotationSpeed(), -maxRate, maxRate);

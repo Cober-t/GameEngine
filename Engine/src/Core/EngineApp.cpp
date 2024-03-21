@@ -13,7 +13,7 @@ namespace Cober {
         s_Instance = this;
 
         m_Window = CreateUnique<Window>(WindowProps(name, width, height, vsync));
-        m_Window->SetEventCallback(BIND_EVENT_FN(EngineApp::OnEvent));
+        m_Window->SetEventCallback([this](Event& e) { OnEvent(e); });
         m_TimeStep = CreateUnique<Timestep>();
 
         m_GameState = GameState::PLAY;
@@ -23,6 +23,8 @@ namespace Cober {
 
     EngineApp::~EngineApp() 
     {
+		m_Window->SetEventCallback([](Event& e) {});
+
         Render2D::Shutdown();   // Abstract in a global Render api class in the future
         LOG_CORE_INFO("EngineApp Destructor!");
     }
