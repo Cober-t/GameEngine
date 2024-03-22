@@ -11,6 +11,7 @@ namespace Cober {
 
 		new ViewportPanel();
 		new DataPanel();
+		new ConsolePanel();
 		/*
 		new SceneHierarchyPanel();
 		new ContentBrowserPanel();
@@ -86,6 +87,7 @@ namespace Cober {
 
 		ViewportPanel::Get().OnGuiRender(m_EditorCamera, m_ActiveScene);
 		DataPanel::Get().OnGuiRender(m_HoveredEntity);
+		ConsolePanel::Get().OnImGuiRender();
 
 		/* PANELS
 		Entity& hoveredEntity = m_ActiveScene->GetHoveredEntity();

@@ -26,6 +26,7 @@ add_library( Engine STATIC ${MY_SOURCES})
 target_include_directories( Engine
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/..
         include
         include/Core
         include/Render

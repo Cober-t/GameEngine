@@ -21,6 +21,7 @@ namespace Cober {
 
 		static Ref<spdlog::logger>& GetCoreLogger() { return s_CoreLogger; }
 		static Ref<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
+		static std::vector<spdlog::details::log_msg_buffer> GetRawLogMessages();
 
 	private:
 		static Ref<spdlog::logger> s_CoreLogger;
@@ -49,14 +50,14 @@ inline OStream& operator<<(OStream& os, glm::qua<T, Q> quaternion)
 // Core log macros
 #define LOG_CORE_TRACE(...)    ::Cober::Log::GetCoreLogger()->trace(__VA_ARGS__)
 #define LOG_CORE_INFO(...)     ::Cober::Log::GetCoreLogger()->info(__VA_ARGS__)
-#define LOG_CORE_WARNING(...)     ::Cober::Log::GetCoreLogger()->warn(__VA_ARGS__)
+#define LOG_CORE_WARNING(...)  ::Cober::Log::GetCoreLogger()->warn(__VA_ARGS__)
 #define LOG_CORE_ERROR(...)    ::Cober::Log::GetCoreLogger()->error(__VA_ARGS__)
 #define LOG_CORE_CRITICAL(...) ::Cober::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
 // Client log macros
 #define LOG_TRACE(...)         ::Cober::Log::GetClientLogger()->trace(__VA_ARGS__)
 #define LOG_INFO(...)          ::Cober::Log::GetClientLogger()->info(__VA_ARGS__)
-#define LOG_WARNING(...)          ::Cober::Log::GetClientLogger()->warn(__VA_ARGS__)
+#define LOG_WARNING(...)       ::Cober::Log::GetClientLogger()->warn(__VA_ARGS__)
 #define LOG_ERROR(...)         ::Cober::Log::GetClientLogger()->error(__VA_ARGS__)
 #define LOG_CRITICAL(...)      ::Cober::Log::GetClientLogger()->critical(__VA_ARGS__)
 

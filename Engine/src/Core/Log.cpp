@@ -1,16 +1,22 @@
+#include "Log.h"
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/ringbuffer_sink.h>
+#include <iostream>
 
 namespace Cober {
 
 	Ref<spdlog::logger> Log::s_CoreLogger;
 	Ref<spdlog::logger> Log::s_ClientLogger;
+	Ref<spdlog::sinks::ringbuffer_sink_mt> s_BufferMessages;
 
 	void Log::Init()
 	{
 		std::vector<spdlog::sink_ptr> logSinks;
+		s_BufferMessages = std::make_shared<spdlog::sinks::ringbuffer_sink_mt>(50);
 		logSinks.emplace_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
 		logSinks.emplace_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("Engine.log", true));
+		logSinks.emplace_back(s_BufferMessages);
 
 		logSinks[0]->set_pattern("%^[%T] %n: %v%$");
 		logSinks[1]->set_pattern("[%T] [%l] %n: %v");
@@ -26,4 +32,8 @@ namespace Cober {
 		s_ClientLogger->flush_on(spdlog::level::trace);
 	}
 
+	std::vector<spdlog::details::log_msg_buffer> Log::GetRawLogMessages()
+	{
+		return s_BufferMessages->last_raw();
+	}
 }
