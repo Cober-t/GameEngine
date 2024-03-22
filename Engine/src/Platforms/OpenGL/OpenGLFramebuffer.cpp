@@ -80,7 +80,7 @@ namespace Cober {
 		}
         
 
-		static GLenum HazelFBTextureFormatToGL(FramebufferTextureFormat format)
+		static GLenum FBTextureFormatToGL(FramebufferTextureFormat format)
 		{
 			switch (format)
 			{
@@ -88,7 +88,7 @@ namespace Cober {
 			case FramebufferTextureFormat::RED_INTEGER: return GL_RED_INTEGER;
 			}
 
-			//HZ_CORE_ASSERT(false);
+			LOG_CORE_ASSERT(false, "Unknown format for Framebuffer Texture");
 			return 0;
 		}
 	}
@@ -106,7 +106,8 @@ namespace Cober {
 		spec.Height = 720;
 		m_Specification = spec;
 
-		for (auto spec : m_Specification.Attachments.Attachments) {
+		for (auto spec : m_Specification.Attachments.Attachments) 
+		{
 			if (!Utils::IsDepthFormat(spec.TextureFormat))
 				m_ColorAttachmentSpecifications.emplace_back(spec);
 			else
@@ -177,7 +178,7 @@ namespace Cober {
 
 		if (m_ColorAttachments.size() > 1)
 		{
-			//HZ_CORE_ASSERT(m_ColorAttachments.size() <= 4);
+			LOG_CORE_ASSERT(m_ColorAttachments.size() <= 4, "Color attachmet beyond the buffer limit");
 			GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
 			glDrawBuffers(m_ColorAttachments.size(), buffers);
 		}
@@ -187,7 +188,7 @@ namespace Cober {
 			glDrawBuffer(GL_NONE);
 		}
 
-		//HZ_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete!");
+		LOG_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete!");
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
@@ -210,7 +211,7 @@ namespace Cober {
 	{
 		if (width == 0 || height == 0 || width > s_MaxFramebufferSize || height > s_MaxFramebufferSize)
 		{
-			//HZ_CORE_WARN("Attempted to rezize framebuffer to {0}, {1}", width, height);
+			LOG_CORE_ASSERT("Attempted to rezize framebuffer to {0}, {1}", width, height);
 			return;
 		}
 		m_Specification.Width = width;
@@ -222,22 +223,22 @@ namespace Cober {
 
 	int OpenGLFramebuffer::ReadPixel(uint32_t attachmentIndex, int x, int y)
 	{
-		//HZ_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size());
+		LOG_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "Attachment index out of bound");
 
 		glReadBuffer(GL_COLOR_ATTACHMENT0 + attachmentIndex);
 		int pixelData;
 		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
 		return pixelData;
-
 	}
 
 
 	void OpenGLFramebuffer::ClearAttachment(uint32_t attachmentIndex, int value)
 	{
-		//HZ_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size());
+		LOG_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "Attachment index out of bound");
 
 		auto& spec = m_ColorAttachmentSpecifications[attachmentIndex];
-		glClearTexImage(m_ColorAttachments[attachmentIndex], 0,
-			Utils::HazelFBTextureFormatToGL(spec.TextureFormat), GL_INT, &value);
+
+		glClearTexImage(m_ColorAttachments[1], 0, 
+			Utils::FBTextureFormatToGL(spec.TextureFormat), GL_INT, &value);
 	}
 }

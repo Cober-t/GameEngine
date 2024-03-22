@@ -17,7 +17,7 @@ namespace Cober {
 		float TilingFactor;
 
 		// Editor-only
-		float EntityID;
+		int EntityID;
 	};
 
 
@@ -66,7 +66,7 @@ namespace Cober {
 			{ ShaderDataType::Float2, "a_TexCoord"     },
 			{ ShaderDataType::Float,  "a_TexIndex"     },
 			{ ShaderDataType::Float,  "a_TilingFactor" },
-			{ ShaderDataType::Float,  "a_EntityID"	   }
+			{ ShaderDataType::Int,    "a_EntityID"	   }
 		});
 		data.QuadVertexArray->AddVertexBuffer(data.QuadVertexBuffer);
 		data.QuadVertexBufferBase = new QuadVertex[data.MaxVertices];
@@ -245,7 +245,9 @@ namespace Cober {
 			data.QuadVertexBufferPtr->TexCoord = glm::vec2(0.0f, 0.0f);
 			data.QuadVertexBufferPtr->TexIndex = textureIndex;
 			data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-			data.QuadVertexBufferPtr->EntityID = entity.GetUUID();
+
+			auto handle = (entt::entity)entity;
+			data.QuadVertexBufferPtr->EntityID = (int)handle;
 			data.QuadVertexBufferPtr++;
 		}
 

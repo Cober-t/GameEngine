@@ -29,13 +29,13 @@ namespace Cober {
 		Render2D::ResetStats();
 		Render2D::BeginScene(camera);
 		RenderGlobals::SetClearColor(10, 0, 10, 255);
+		RenderGlobals::Clear();
 
-		for (auto& entity : GetSystemEntities())
+		for (auto entity : GetSystemEntities())
         {
             Render2D::DrawSolidPolygon(entity);
 		}
 
-		RenderGlobals::Clear();
 		Render2D::EndScene();
 	}
 
@@ -47,7 +47,9 @@ namespace Cober {
 		// auto entitiesView = m_Scene->GetAllEntitiesWith<TransformComponent, SpriteComponent>();
 
 		for (auto entity : entitiesView)
-			entities.emplace_back( Entity{ entity, m_Scene });
+		{
+			entities.emplace_back( Entity((entt::entity)entity, m_Scene ));
+		}
 
 		return entities;
 	};

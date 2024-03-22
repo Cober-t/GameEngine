@@ -46,10 +46,9 @@ namespace Cober {
 		bool projectMode = false;
 		ViewportPanel::Get().ResizeViewport(m_EditorCamera, m_ActiveScene, projectMode);
 		ViewportPanel::Get().BindFramebuffer();
-
 		// ViewportPanel::Get().RenderSkybox();
-
 		ViewportPanel::Get().FBOClearAttachments(1, -1);
+
 
 		switch (EngineApp::Get().GetGameState()) 
 		{
@@ -68,7 +67,7 @@ namespace Cober {
 			}
 		}
 
-		// ViewportPanel::Get().SetCursorEntity(m_ActiveScene, m_ActiveScene->GetHoveredEntity());
+		ViewportPanel::Get().SetCursorEntity(m_ActiveScene, m_HoveredEntity);
 
 		// if (ImGui::IsMouseClicked(0) && m_ActiveScene->GetHoveredEntity().GetIndex() != -1)
 			// SceneHierarchyPanel::Get().SetSelectedEntity(m_ActiveScene->GetHoveredEntity());

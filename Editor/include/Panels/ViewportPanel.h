@@ -14,7 +14,7 @@ namespace Cober {
 
 		static ViewportPanel& Get() { return *m_Instance; }
 		
-		void RenderSkybox();
+		// void RenderSkybox();
 		void CreateFramebuffer(uint32_t width = 1280, uint32_t height = 720);
 
 		void BindFramebuffer();

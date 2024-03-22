@@ -66,11 +66,15 @@ namespace Cober {
 		//DataPanel::Get().SetMouseX(mouseX);
 		//DataPanel::Get().SetMouseY(mouseY);
 
-		if (mouseX >= 0 && mouseY >= 0 &&
-			mouseX < ((int)m_ViewportSize.x) && mouseY < ((int)m_ViewportSize.y)) {
+		if ( ImGui::IsMouseClicked(0) && mouseX >= 0 && mouseY >= 0 && 
+			mouseX < ((int)m_ViewportSize.x) && mouseY < ((int)m_ViewportSize.y))
+		{
 			int pixelData = m_Fbo->ReadPixel(1, mouseX, mouseY);
-			//if (pixelData != -1 && ImGui::IsMouseClicked(0))
-				//activeScene->GetEntity(pixelData, hoveredEntity);
+			LOG_WARNING(pixelData);
+			// hoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, activeScene.get());
+
+			// if (hoveredEntity)
+			// 	LOG_INFO(hoveredEntity.GetComponent<TagComponent>().tag);
 		}
 	}
 
@@ -199,7 +203,8 @@ namespace Cober {
 		// Export to DragDropViewportTarget
 		if (ImGui::BeginDragDropTarget()) 
 		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) 
+			{
 				const wchar_t* path = (const wchar_t*)payload->Data;
 				m_FilePath = (std::filesystem::path(ASSETS_DIR) / path).string();
 				LOG_INFO(m_FilePath);
