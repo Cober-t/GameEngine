@@ -1,7 +1,7 @@
 #include "Panels/ViewportPanel.h"
+#include "Panels/DataPanel.h"
 // #include "SceneHierarchyPanel.h"
 // #include "MenuPanel.h"
-// #include "DataPanel.h"
 
 // #include "ImGuizmo/ImGuizmo.h"
 // #include "Core/Utils.h"
@@ -63,17 +63,14 @@ namespace Cober {
 		int mouseX = (int)mx - m_ViewportMargin.x;
 		int mouseY = (int)my - m_ViewportMargin.y;
 
-		//DataPanel::Get().SetMouseX(mouseX);
-		//DataPanel::Get().SetMouseY(mouseY);
+		DataPanel::Get().SetMouseX(mouseX);
+		DataPanel::Get().SetMouseY(mouseY);
 
 		if ( ImGui::IsMouseClicked(0) && mouseX >= 0 && mouseY >= 0 && 
 			mouseX < ((int)m_ViewportSize.x) && mouseY < ((int)m_ViewportSize.y))
 		{
 			int pixelData = m_Fbo->ReadPixel(1, mouseX, mouseY);
 			hoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, activeScene.get());
-
-			if (hoveredEntity)
-				LOG_INFO(hoveredEntity.GetComponent<TagComponent>().tag);
 		}
 	}
 

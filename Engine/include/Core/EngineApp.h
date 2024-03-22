@@ -41,6 +41,7 @@ namespace Cober {
 
 		void Close();
 
+		inline int GetFrames() { return m_TimeStep->GetFrames(); }
 		inline void SetMinimized(bool min) { m_Minimized = min; }
 		inline void SetGameState(GameState state) { m_GameState = state; }
 

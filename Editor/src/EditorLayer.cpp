@@ -10,10 +10,10 @@ namespace Cober {
 		m_EditorCamera->SetActive(true);
 
 		new ViewportPanel();
+		new DataPanel();
 		/*
 		new SceneHierarchyPanel();
 		new ContentBrowserPanel();
-		new DataPanel();
 		new MenuPanel();
 		*/
 	}
@@ -85,12 +85,12 @@ namespace Cober {
 		InitDockspace();
 
 		ViewportPanel::Get().OnGuiRender(m_EditorCamera, m_ActiveScene);
+		DataPanel::Get().OnGuiRender(m_HoveredEntity);
 
 		/* PANELS
 		Entity& hoveredEntity = m_ActiveScene->GetHoveredEntity();
 		SceneHierarchyPanel::Get().OnGuiRender(hoveredEntity);
 		ContentBrowserPanel::Get().OnGuiRender();
-		DataPanel::Get().OnGuiRender(Engine::Get().GetGameMode(), hoveredEntity);
 		MenuPanel::Get().OnGuiRender(m_EditorCamera, m_ActiveScene, m_EditorScene, Engine::Get().GetGameMode(), Engine::Get().GetDebugMode());
 
 		*/
