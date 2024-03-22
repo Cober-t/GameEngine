@@ -70,11 +70,10 @@ namespace Cober {
 			mouseX < ((int)m_ViewportSize.x) && mouseY < ((int)m_ViewportSize.y))
 		{
 			int pixelData = m_Fbo->ReadPixel(1, mouseX, mouseY);
-			LOG_WARNING(pixelData);
-			// hoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, activeScene.get());
+			hoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, activeScene.get());
 
-			// if (hoveredEntity)
-			// 	LOG_INFO(hoveredEntity.GetComponent<TagComponent>().tag);
+			if (hoveredEntity)
+				LOG_INFO(hoveredEntity.GetComponent<TagComponent>().tag);
 		}
 	}
 

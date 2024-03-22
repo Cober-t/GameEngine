@@ -47,6 +47,10 @@ namespace Cober {
 		ViewportPanel::Get().ResizeViewport(m_EditorCamera, m_ActiveScene, projectMode);
 		ViewportPanel::Get().BindFramebuffer();
 		// ViewportPanel::Get().RenderSkybox();
+
+		RenderGlobals::SetClearColor(10, 0, 10, 255);
+		RenderGlobals::Clear();
+		
 		ViewportPanel::Get().FBOClearAttachments(1, -1);
 
 
@@ -55,7 +59,7 @@ namespace Cober {
 			case GameState::EDITOR:
 			{
 				// colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.000f, 0.000f, 0.000f, 0.586f);
-				m_EditorCamera->OnUpdate(ts);
+				// m_EditorCamera->OnUpdate(ts);
 				m_ActiveScene->OnUpdateRuntime(ts, m_EditorCamera);
 				break;
 			}

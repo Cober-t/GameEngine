@@ -8,13 +8,6 @@
 #include <entt/entt.hpp>
 
 
-const unsigned int MAX_COMPONENTS = 32;
-
-//// SIGNATURE
-// We use a bitset (1s and 0s) to keep track of which components an entity has
-// and also keep track of which entities a system is interested in.
-typedef std::bitset<MAX_COMPONENTS> Signature;
-
 namespace Cober {
 
 	class Entity
@@ -70,6 +63,7 @@ namespace Cober {
 		}
 
 		operator bool() const { return m_EntityHandle != entt::null; }
+		operator int() const { return (int)m_EntityHandle; }
 		operator entt::entity() const { return m_EntityHandle; }
 		operator uint32_t() const { return (uint32_t)m_EntityHandle; }
 

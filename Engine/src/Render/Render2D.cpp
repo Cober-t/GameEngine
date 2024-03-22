@@ -245,9 +245,7 @@ namespace Cober {
 			data.QuadVertexBufferPtr->TexCoord = glm::vec2(0.0f, 0.0f);
 			data.QuadVertexBufferPtr->TexIndex = textureIndex;
 			data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
-
-			auto handle = (entt::entity)entity;
-			data.QuadVertexBufferPtr->EntityID = (int)handle;
+			data.QuadVertexBufferPtr->EntityID = (int)entity;
 			data.QuadVertexBufferPtr++;
 		}
 
