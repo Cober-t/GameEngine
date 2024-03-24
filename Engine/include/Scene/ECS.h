@@ -58,7 +58,6 @@ namespace Cober {
 		void RemoveComponent()
 		{
 			LOG_CORE_ASSERT(HasComponent<TComponent>(), "Entity does not have component!");
-            const auto componentID = Component<TComponent>::GetComponentID();
 			m_Scene->m_Registry.remove<TComponent>(m_EntityHandle);
 		}
 

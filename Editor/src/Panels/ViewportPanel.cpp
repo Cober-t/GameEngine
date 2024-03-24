@@ -1,6 +1,6 @@
 #include "Panels/ViewportPanel.h"
 #include "Panels/DataPanel.h"
-// #include "SceneHierarchyPanel.h"
+#include "Panels/SceneHierarchyPanel.h"
 // #include "MenuPanel.h"
 
 // #include "ImGuizmo/ImGuizmo.h"
@@ -298,7 +298,7 @@ namespace Cober {
             {
 				EngineApp::Get().SetGameState(GameState::RUNTIME_EDITOR);
 				activeScene = Scene::Copy(editorScene);
-				//SceneHierarchyPanel::Get().SetContext(activeScene);
+				SceneHierarchyPanel::Get().SetContext(activeScene);
 				activeScene->OnSimulationStart();
 			}
 			else if (gameState == GameState::RUNTIME_EDITOR) 
@@ -306,8 +306,8 @@ namespace Cober {
 				EngineApp::Get().SetGameState(GameState::EDITOR);
 				activeScene->OnSimulationStop();
 				activeScene = editorScene;
-				//SceneHierarchyPanel::Get().SetContext(activeScene);
-				//SceneHierarchyPanel::Get().SetSelectedEntity(SceneHierarchyPanel::Get().GetNullEntity());
+				SceneHierarchyPanel::Get().SetContext(activeScene);
+				SceneHierarchyPanel::Get().SetSelectedEntity(SceneHierarchyPanel::Get().GetNullEntity());
 			}
 		}
 

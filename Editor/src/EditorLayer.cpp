@@ -12,8 +12,8 @@ namespace Cober {
 		new ViewportPanel();
 		new DataPanel();
 		new ConsolePanel();
-		/*
 		new SceneHierarchyPanel();
+		/*
 		new ContentBrowserPanel();
 		new MenuPanel();
 		*/
@@ -26,6 +26,7 @@ namespace Cober {
 		m_ActiveScene = m_EditorScene;
 
 		ViewportPanel::Get().CreateFramebuffer(1280, 720);
+		SceneHierarchyPanel::Get().SetContext(m_ActiveScene);
 
 		m_ActiveScene->OnRuntimeStart();
 	}
@@ -74,8 +75,8 @@ namespace Cober {
 
 		ViewportPanel::Get().SetCursorEntity(m_ActiveScene, m_HoveredEntity);
 
-		// if (ImGui::IsMouseClicked(0) && m_ActiveScene->GetHoveredEntity().GetIndex() != -1)
-			// SceneHierarchyPanel::Get().SetSelectedEntity(m_ActiveScene->GetHoveredEntity());
+		if (ImGui::IsMouseClicked(0))
+			SceneHierarchyPanel::Get().SetSelectedEntity(m_HoveredEntity);
 
 		ViewportPanel::Get().UnbindFramebuffer();
 	}
@@ -88,10 +89,10 @@ namespace Cober {
 		ViewportPanel::Get().OnGuiRender(m_EditorCamera, m_ActiveScene);
 		DataPanel::Get().OnGuiRender(m_HoveredEntity);
 		ConsolePanel::Get().OnImGuiRender();
+		SceneHierarchyPanel::Get().OnGuiRender(m_HoveredEntity);
 
 		/* PANELS
 		Entity& hoveredEntity = m_ActiveScene->GetHoveredEntity();
-		SceneHierarchyPanel::Get().OnGuiRender(hoveredEntity);
 		ContentBrowserPanel::Get().OnGuiRender();
 		MenuPanel::Get().OnGuiRender(m_EditorCamera, m_ActiveScene, m_EditorScene, Engine::Get().GetGameMode(), Engine::Get().GetDebugMode());
 
