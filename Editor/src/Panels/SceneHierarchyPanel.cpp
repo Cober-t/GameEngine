@@ -10,39 +10,38 @@
 
 namespace Cober {
 
-	SceneHierarchyPanel* SceneHierarchyPanel::instance = nullptr;
+	SceneHierarchyPanel* SceneHierarchyPanel::s_Instance = nullptr;
 	
 	SceneHierarchyPanel::SceneHierarchyPanel()
 	{
-		instance = this;
+		s_Instance = this;
 	}
 
 
 	SceneHierarchyPanel::~SceneHierarchyPanel() {
 
-		delete instance;
-		instance = nullptr;
+		delete s_Instance;
+		s_Instance = nullptr;
 	}
 
 
 	void SceneHierarchyPanel::SetContext(const Ref<Scene>& sceneContext)
 	{
-		_sceneContext = sceneContext;
-		_nullEntityContext = Entity();
-		_selectionContext = _nullEntityContext;
-		// sceneContext->GetHoveredEntity() = _nullEntityContext;
+		m_SceneContext = sceneContext;
+		m_NullEntityContext = Entity();
+		m_SelectionContext = m_NullEntityContext;
 	}
 
 
 	void SceneHierarchyPanel::SetSelectedEntity(Entity entity) 
     {
-		_selectionContext = entity;
+		m_SelectionContext = entity;
 	}
 
 
 	void SceneHierarchyPanel::SetNullEntityContext() 
     {
-		_selectionContext = _nullEntityContext;
+		m_SelectionContext = m_NullEntityContext;
 	}
 
 
@@ -51,23 +50,23 @@ namespace Cober {
 
 		ImGui::Begin("Scene Hierarchy");
 
-		for (auto& entity : _sceneContext->GetSceneEntities()) 
+		for (auto& entity : m_SceneContext->GetSceneEntities()) 
 		{
 			DrawEntityNode(entity, hoveredEntity);
 		}
 
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) 
 		{
-			_selectionContext = _nullEntityContext;
-			hoveredEntity = _selectionContext;
+			m_SelectionContext = m_NullEntityContext;
+			hoveredEntity = m_SelectionContext;
 		}
 
 		if (ImGui::BeginPopupContextWindow(0, 1)) 
 		{
-			if (_selectionContext == _nullEntityContext && ImGui::Selectable("Empty Entity")) 
+			if (m_SelectionContext == m_NullEntityContext && ImGui::Selectable("Empty Entity")) 
 			{
-				_selectionContext = _sceneContext->CreateEntity();
-				hoveredEntity = _selectionContext;
+				m_SelectionContext = m_SceneContext->CreateEntity();
+				hoveredEntity = m_SelectionContext;
 			}
 				
 			ImGui::EndPopup();
@@ -75,8 +74,8 @@ namespace Cober {
 		ImGui::End();
 
 		ImGui::Begin("Properties");
-		if (_selectionContext != _nullEntityContext)
-			DrawComponents(_selectionContext);
+		if (m_SelectionContext != m_NullEntityContext)
+			DrawComponents(m_SelectionContext);
 
 		ImGui::End();
 	}
@@ -86,19 +85,19 @@ namespace Cober {
     {
 
 		auto& tag = entity.GetComponent<TagComponent>().tag;
-		ImGuiTreeNodeFlags flags = ((_selectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
+		ImGuiTreeNodeFlags flags = ((m_SelectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
 		flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
 
 		if (ImGui::IsItemClicked()) 
         {
-			_selectionContext = entity;
-			hoveredEntity = _selectionContext;
+			m_SelectionContext = entity;
+			hoveredEntity = m_SelectionContext;
 		}
 
 		// Delete an Entity
 		bool entityDeleted = false;
-		if (_selectionContext == entity && ImGui::BeginPopupContextWindow(0, 1)) {
+		if (m_SelectionContext == entity && ImGui::BeginPopupContextWindow(0, 1)) {
 			if (ImGui::MenuItem("Delete Entity"))
 				entityDeleted = true;
 
@@ -109,11 +108,11 @@ namespace Cober {
 			ImGui::TreePop();
 
 		if (entityDeleted) {
-			if (_selectionContext == entity) {
-				_selectionContext = _nullEntityContext;
-				hoveredEntity = _nullEntityContext;
+			if (m_SelectionContext == entity) {
+				m_SelectionContext = m_NullEntityContext;
+				hoveredEntity = m_NullEntityContext;
 			}
-			_sceneContext->DestroyEntity(entity);
+			m_SceneContext->DestroyEntity(entity);
 		}
 	}
 
@@ -228,11 +227,11 @@ namespace Cober {
 	template<typename T>
 	void SceneHierarchyPanel::AddIfHasComponent(std::string name) 
     {
-		if (!_selectionContext.HasComponent<T>()) 
+		if (!m_SelectionContext.HasComponent<T>()) 
 		{
 			if (ImGui::MenuItem(name.c_str())) 
 			{
-				_selectionContext.AddComponent<T>();
+				m_SelectionContext.AddComponent<T>();
 				ImGui::CloseCurrentPopup();
 			}
 		}
@@ -247,14 +246,14 @@ namespace Cober {
 		strcpy_s(buffer, sizeof(buffer), entity.GetComponent<TagComponent>().tag.c_str());
 
 		if (ImGui::InputText("##Name", buffer, sizeof(buffer)))
-			_newEntityTag = buffer;
+			m_NewEntityTag = buffer;
 
 		ImGui::SameLine();
 
 		if (ImGui::Button("Rename")) 
         {
-			if (_newEntityTag != "") 
-				entity.GetComponent<TagComponent>().tag = (std::string)_newEntityTag;
+			if (m_NewEntityTag != "") 
+				entity.GetComponent<TagComponent>().tag = (std::string)m_NewEntityTag;
 		}
 
 		ImGui::PushItemWidth(100.0f);
@@ -277,12 +276,12 @@ namespace Cober {
 		memset(buffer, 0, sizeof(buffer));
 		//strcpy_s(buffer, sizeof(buffer), entity.GetGroup().c_str());
 		if (ImGui::InputText("NewGroup", buffer, sizeof(buffer)))
-			_newEntityGroup = buffer;
+			m_NewEntityGroup = buffer;
 
 		ImGui::SameLine();
 		// if (ImGui::Button("+")) {
-		// 	if (_newEntityGroup != "")
-		// 		entity.SetGroup(_newEntityGroup);
+		// 	if (m_NewEntityGroup != "")
+		// 		entity.SetGroup(m_NewEntityGroup);
 		// }
 
 		ImGui::PopItemWidth();
@@ -292,17 +291,16 @@ namespace Cober {
         {
 			if (ImGui::IsMouseDown(ImGuiMouseButton_Right)) 
             {
-				if (!_selectionContext.HasComponent<Rigidbody2D>()) 
+				if (!m_SelectionContext.HasComponent<Rigidbody2D>()) 
                 {
-					_selectionContext.AddComponent<Rigidbody2D>();
+					m_SelectionContext.AddComponent<Rigidbody2D>();
 				}
-				else if (!_selectionContext.HasComponent<BoxCollider2D>()) 
+				else if (!m_SelectionContext.HasComponent<BoxCollider2D>()) 
                 {
-					_selectionContext.AddComponent<BoxCollider2D>();
+					m_SelectionContext.AddComponent<BoxCollider2D>();
 				}
-				//else if (!_selectionContext.HasComponent<Script>()) {
-				//	_selectionContext.AddComponent<Script>();
-				//	_sceneContext->GetRegistry().AddEntityToSystems(_selectionContext);
+				//else if (!m_SelectionContext.HasComponent<Script>()) {
+				//	m_SelectionContext.AddComponent<Script>();
 				//}
 			}
 			else

@@ -13,14 +13,14 @@ namespace Cober {
 		SceneHierarchyPanel();
 		~SceneHierarchyPanel();
 
-		static SceneHierarchyPanel& Get() { return *instance; }
+		static SceneHierarchyPanel& Get() { return *s_Instance; }
 
 		void OnGuiRender(Entity& hoveredEntity);
 
 		void SetContext(const Ref<Scene>& selectionContext);
 
-		Entity GetSelectedEntity() const { return _selectionContext; }
-		Entity GetNullEntity() const { return _nullEntityContext; }
+		Entity GetSelectedEntity() const { return m_SelectionContext; }
+		Entity GetNullEntity() const { return m_NullEntityContext; }
 		void SetSelectedEntity(Entity entity);
 		void SetNullEntityContext();
 
@@ -33,13 +33,13 @@ namespace Cober {
 		void DrawEntityNode(Entity entity, Entity& hoveredEntity);
 		void DrawComponents(Entity& entity);
 	private:
-		Ref<Scene> _sceneContext;
-		Entity _selectionContext;
-		Entity _nullEntityContext;
-		std::string _newEntityGroup;
-		std::string _newEntityTag;
+		Ref<Scene> m_SceneContext;
+		Entity m_SelectionContext;
+		Entity m_NullEntityContext;
+		std::string m_NewEntityGroup;
+		std::string m_NewEntityTag;
 	private:
-		static SceneHierarchyPanel* instance;
+		static SceneHierarchyPanel* s_Instance;
 	};
 }
 
