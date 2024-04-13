@@ -1,5 +1,5 @@
+#include <pch.h>
 #include "Scene/Systems/ScriptSystem.h"
-
 
 namespace Cober {
 

@@ -1,5 +1,5 @@
+#include <pch.h>
 #include "RenderGlobals.h"
-
 
 namespace Cober {
 

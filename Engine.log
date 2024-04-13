@@ -1,0 +1,136 @@
+[14:00:56] [info] APP: Editor Constructor!
+[14:00:56] [info] ENGINE: EngineApp Constructor!
+[14:00:56] [info] ENGINE: Creating window Engine Editor (1280, 720)
+[14:00:57] [info] ENGINE: OpenGL Info:
+[14:00:57] [info] ENGINE:   Vendor: NVIDIA Corporation
+[14:00:57] [info] ENGINE:   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+[14:00:57] [info] ENGINE:   Version: 4.6.0 NVIDIA 551.86
+[14:00:57] [info] ENGINE: Created Timer
+[14:00:57] [info] APP: Editor Camera Created!!
+[14:00:57] [info] APP: Scene Created!!
+[14:00:57] [info] APP: Scene Created!!
+[14:00:57] [info] APP: Created entity with ID 14157170832740120571 and name Entity0
+[14:00:57] [info] APP: Created entity with ID 10547838414123230195 and name Entity1
+[14:00:57] [info] APP: Scene Destroyed!!
+[14:00:57] [info] APP: Render System Added to Registry!!
+[14:00:57] [trace] ENGINE: Render API init
+[14:00:57] [trace] ENGINE: Render VertexArray success
+[14:00:57] [trace] ENGINE: Render VertexBuffer success
+[14:00:57] [trace] ENGINE: Render IndexBuffer success
+[14:00:57] [trace] ENGINE: Render Texture success
+[14:00:57] [trace] ENGINE: Render Shader Quad.glsl success
+[14:00:57] [trace] ENGINE: Render UniformBuffer success
+[14:00:57] [info] APP: Render System Started!!
+[14:01:11] [info] APP: Scene Created!!
+[14:01:11] [info] APP: Created entity with ID 7393775681900424192 and name Entity1
+[14:01:11] [info] APP: Created entity with ID 9643654215064920064 and name Entity0
+[14:01:11] [info] APP: Render System Added to Registry!!
+[14:01:11] [info] APP: Physics System Added to Registry!!
+[14:01:11] [info] APP: Script System Added to Registry!!
+[14:01:11] [trace] ENGINE: Render API init
+[14:01:11] [trace] ENGINE: Render VertexArray success
+[14:01:11] [trace] ENGINE: Render VertexArray cleaned up
+[14:01:11] [trace] ENGINE: Render IndexBuffer cleaned up
+[14:01:11] [trace] ENGINE: Render VertexBuffer success
+[14:01:11] [trace] ENGINE: Render VertexBuffer cleaned up
+[14:01:11] [trace] ENGINE: Render IndexBuffer success
+[14:01:11] [trace] ENGINE: Render Texture success
+[14:01:11] [trace] ENGINE: Render Shader Quad.glsl success
+[14:01:11] [trace] ENGINE: Render Shader cleaned up
+[14:01:11] [trace] ENGINE: Render Texture cleaned up
+[14:01:11] [trace] ENGINE: Render UniformBuffer success
+[14:01:11] [trace] ENGINE: Render UniformBuffer cleaned up
+[14:01:11] [info] APP: Render System Started!!
+[14:01:11] [info] APP: Physics System Started!!
+[14:01:11] [info] APP: Script System Started!!
+[14:01:11] [warning] APP: BEGIN CONTACT! Entity0
+[14:01:11] [warning] APP: BEGIN CONTACT! Entity1
+[14:01:11] [warning] APP: END CONTACT! Entity0
+[14:01:11] [warning] APP: END CONTACT! Entity1
+[14:01:11] [info] APP: Render System Removed from Registry
+[14:01:11] [info] APP: Physics System Removed from Registry
+[14:01:11] [info] APP: Script System Removed from Registry
+[14:01:11] [info] APP: Scene Destroyed!!
+[14:01:13] [info] APP: Scene Created!!
+[14:01:13] [info] APP: Created entity with ID 7393775681900424192 and name Entity1
+[14:01:13] [info] APP: Created entity with ID 9643654215064920064 and name Entity0
+[14:01:13] [info] APP: Render System Added to Registry!!
+[14:01:13] [info] APP: Physics System Added to Registry!!
+[14:01:13] [info] APP: Script System Added to Registry!!
+[14:01:13] [trace] ENGINE: Render API init
+[14:01:13] [trace] ENGINE: Render VertexArray success
+[14:01:13] [trace] ENGINE: Render VertexArray cleaned up
+[14:01:13] [trace] ENGINE: Render IndexBuffer cleaned up
+[14:01:13] [trace] ENGINE: Render VertexBuffer success
+[14:01:13] [trace] ENGINE: Render VertexBuffer cleaned up
+[14:01:13] [trace] ENGINE: Render IndexBuffer success
+[14:01:13] [trace] ENGINE: Render Texture success
+[14:01:13] [trace] ENGINE: Render Shader Quad.glsl success
+[14:01:13] [trace] ENGINE: Render Shader cleaned up
+[14:01:13] [trace] ENGINE: Render Texture cleaned up
+[14:01:13] [trace] ENGINE: Render UniformBuffer success
+[14:01:13] [trace] ENGINE: Render UniformBuffer cleaned up
+[14:01:13] [info] APP: Render System Started!!
+[14:01:13] [info] APP: Physics System Started!!
+[14:01:13] [info] APP: Script System Started!!
+[14:01:14] [warning] APP: BEGIN CONTACT! Entity0
+[14:01:14] [warning] APP: BEGIN CONTACT! Entity1
+[14:01:14] [warning] APP: END CONTACT! Entity0
+[14:01:14] [warning] APP: END CONTACT! Entity1
+[14:01:14] [warning] APP: BEGIN CONTACT! Entity0
+[14:01:14] [warning] APP: BEGIN CONTACT! Entity1
+[14:01:14] [warning] APP: END CONTACT! Entity0
+[14:01:14] [warning] APP: END CONTACT! Entity1
+[14:01:14] [warning] APP: BEGIN CONTACT! Entity0
+[14:01:14] [warning] APP: BEGIN CONTACT! Entity1
+[14:01:14] [warning] APP: END CONTACT! Entity0
+[14:01:14] [warning] APP: END CONTACT! Entity1
+[14:01:14] [warning] APP: BEGIN CONTACT! Entity0
+[14:01:14] [warning] APP: BEGIN CONTACT! Entity1
+[14:01:15] [info] APP: Render System Removed from Registry
+[14:01:15] [info] APP: Physics System Removed from Registry
+[14:01:15] [info] APP: Script System Removed from Registry
+[14:01:15] [info] APP: Scene Destroyed!!
+[14:01:49] [info] APP: Scene Created!!
+[14:01:49] [info] APP: Created entity with ID 7393775681900424192 and name Entity1
+[14:01:49] [info] APP: Created entity with ID 9643654215064920064 and name Entity0
+[14:01:49] [info] APP: Render System Added to Registry!!
+[14:01:49] [info] APP: Physics System Added to Registry!!
+[14:01:49] [info] APP: Script System Added to Registry!!
+[14:01:49] [trace] ENGINE: Render API init
+[14:01:49] [trace] ENGINE: Render VertexArray success
+[14:01:49] [trace] ENGINE: Render VertexArray cleaned up
+[14:01:49] [trace] ENGINE: Render IndexBuffer cleaned up
+[14:01:49] [trace] ENGINE: Render VertexBuffer success
+[14:01:49] [trace] ENGINE: Render VertexBuffer cleaned up
+[14:01:49] [trace] ENGINE: Render IndexBuffer success
+[14:01:49] [trace] ENGINE: Render Texture success
+[14:01:49] [trace] ENGINE: Render Shader Quad.glsl success
+[14:01:49] [trace] ENGINE: Render Shader cleaned up
+[14:01:49] [trace] ENGINE: Render Texture cleaned up
+[14:01:49] [trace] ENGINE: Render UniformBuffer success
+[14:01:49] [trace] ENGINE: Render UniformBuffer cleaned up
+[14:01:49] [info] APP: Render System Started!!
+[14:01:49] [info] APP: Physics System Started!!
+[14:01:49] [info] APP: Script System Started!!
+[14:01:50] [warning] APP: BEGIN CONTACT! Entity0
+[14:01:50] [warning] APP: BEGIN CONTACT! Entity1
+[14:01:50] [warning] APP: END CONTACT! Entity0
+[14:01:50] [warning] APP: END CONTACT! Entity1
+[14:01:50] [info] APP: Render System Removed from Registry
+[14:01:50] [info] APP: Physics System Removed from Registry
+[14:01:50] [info] APP: Script System Removed from Registry
+[14:01:50] [info] APP: Scene Destroyed!!
+[14:01:51] [info] APP: Editor Destructor!
+[14:01:51] [info] ENGINE: EngineApp Destructor!
+[14:01:51] [info] ENGINE: Destroyed Timer
+[14:01:51] [info] APP: Render System Removed from Registry
+[14:01:51] [info] APP: Editor Camera Destroyed!!
+[14:01:51] [info] ENGINE: Window Destroyed
+[14:01:51] [info] ENGINE: Context Destroyed!!
+[14:01:51] [trace] ENGINE: Render UniformBuffer cleaned up
+[14:01:51] [trace] ENGINE: Render Texture cleaned up
+[14:01:51] [trace] ENGINE: Render Shader cleaned up
+[14:01:51] [trace] ENGINE: Render VertexArray cleaned up
+[14:01:51] [trace] ENGINE: Render IndexBuffer cleaned up
+[14:01:51] [trace] ENGINE: Render VertexBuffer cleaned up

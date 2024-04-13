@@ -2,6 +2,7 @@
 #define APPLICATION_EVENTS_H
 
 #include "Event.h"
+#include <sstream>
 
 namespace Cober {
 

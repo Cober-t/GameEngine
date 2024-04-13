@@ -1,11 +1,11 @@
-
-#include "ImGui.h"
+#include <pch.h>
 #include "ImGui/ImGuiLayer.h"
 
-#define IMGUI_IMPL_OPENGL_LOADER_GLAD
+#include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
 
-#include <backends/imgui_impl_glfw.h>
-#include <backends/imgui_impl_opengl3.h>
+#include <examples/imgui_impl_glfw.h>
+#include <examples/imgui_impl_opengl3.h>
 
 
 namespace Cober {

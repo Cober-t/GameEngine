@@ -1,7 +1,14 @@
-/out
-/bin
 /.vs
 /.vscode
 /assets
+bin/
+bin-int/
 .idea/
+__pycache__/
+
 CMakeSettings.json
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.users
+imgui.ini

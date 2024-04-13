@@ -3,6 +3,7 @@
 
 #include "Core/Core.h"
 
+#include <string>
 #include <functional>
 
 namespace Cober {
@@ -34,7 +35,6 @@ namespace Cober {
     class Event
     {
     public:
-        Event() = default;
         virtual ~Event() = default;
 
         bool Handled = false;

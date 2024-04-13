@@ -1,6 +1,7 @@
 #ifndef TIMESTEP_H
 #define TIMESTEP_H
 
+#include <Core/Log.h>
 #include <iostream>
 
 #include <GLFW/glfw3.h>

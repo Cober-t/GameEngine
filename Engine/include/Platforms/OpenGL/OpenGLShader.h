@@ -1,8 +1,12 @@
 #ifndef OPENGL_SHADER_H
 #define OPENGL_SHADER_H
 
+#include <unordered_map>
+#include <glad/glad.h>
+
 #include "Render/Shader.h"
 #include "OpenGLRenderAPI.h"
+
 
 namespace Cober {
 

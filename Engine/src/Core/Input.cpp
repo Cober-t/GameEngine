@@ -1,10 +1,10 @@
+#include <pch.h>
 #include "Core/Input.h"
 #include "Core/Window.h"
 
 #include "Core/EngineApp.h"
-
 #include <GLFW/glfw3.h>
-#include <imgui/imgui_internal.h>
+
 
 namespace Cober {
 
@@ -66,45 +66,37 @@ namespace Cober {
 
 	bool Input::IsKeyDown(KeyCode keycode)
 	{
-		// bool enableImGui = EngineApp::Get().GetSpecification().EnableImGui;
-		// if (!enableImGui)
-		// {
-		// 	auto& window = static_cast<Window&>(EngineApp::Get().GetWindow());
-		// 	auto state = glfwGetKey(static_cast<GLFWwindow*>(window.GetNativeWindow()), static_cast<int32_t>(keycode));
-		// 	return state == GLFW_PRESS || state == GLFW_REPEAT;
-		// }
-		
-		#ifndef __EDITOR__
+		//#ifndef __EDITOR__
 
-			auto& window = static_cast<Window&>(EngineApp::Get().GetWindow());
-			auto state = glfwGetKey(static_cast<GLFWwindow*>(window.GetNativeWindow()), static_cast<int32_t>(keycode));
-			return state == GLFW_PRESS || state == GLFW_REPEAT;
+		auto& window = static_cast<Window&>(EngineApp::Get().GetWindow());
+		auto state = glfwGetKey(static_cast<GLFWwindow*>(window.GetNativeWindow()), static_cast<int32_t>(keycode));
+		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	
-		#else
+		//#else
 
-			auto& window = static_cast<Window&>(EngineApp::Get().GetWindow());
-			GLFWwindow* win = static_cast<GLFWwindow*>(window.GetNativeWindow());
-			ImGuiContext* context = ImGui::GetCurrentContext();
-			bool pressed = false;
-			for (ImGuiViewport* viewport : context->Viewports)
-			{
-				if (!viewport->PlatformUserData)
-					continue;
+		//	auto& window = static_cast<Window&>(EngineApp::Get().GetWindow());
+		//	GLFWwindow* win = static_cast<GLFWwindow*>(window.GetNativeWindow());
+		//	ImGuiContext* context = ImGui::GetCurrentContext();
+		//	bool pressed = false;
+		//	for (ImGuiViewport* viewport : context->Viewports)
+		//	{
+		//		if (!viewport->PlatformUserData)
+		//			continue;
 
-				GLFWwindow* windowHandle = *(GLFWwindow**)viewport->PlatformUserData; // First member is GLFWwindow
-				if (!windowHandle)
-					continue;
-				auto state = glfwGetKey(windowHandle, static_cast<int32_t>(keycode));
-				if (state == GLFW_PRESS || state == GLFW_REPEAT)
-				{
-					pressed = true;
-					break;
-				}
-			}
+		//		GLFWwindow* windowHandle = *(GLFWwindow**)viewport->PlatformUserData; // First member is GLFWwindow
+		//		if (!windowHandle)
+		//			continue;
+		//		auto state = glfwGetKey(windowHandle, static_cast<int32_t>(keycode));
+		//		if (state == GLFW_PRESS || state == GLFW_REPEAT)
+		//		{
+		//			pressed = true;
+		//			break;
+		//		}
+		//	}
 
-		return pressed;
+		//return pressed;
 
-		#endif
+		//#endif
 	}
 
 	bool Input::IsKeyReleased(KeyCode key)
@@ -124,43 +116,35 @@ namespace Cober {
 
 	bool Input::IsMouseButtonDown(MouseButton button)
 	{
-		// bool enableImGui = EngineApp::Get().GetSpecification().EnableImGui;
-		// if (!enableImGui)
-		// {
-		// 	auto& window = static_cast<Window&>(EngineApp::Get().GetWindow());
-		// 	auto state = glfwGetMouseButton(static_cast<GLFWwindow*>(window.GetNativeWindow()), static_cast<int32_t>(button));
-		// 	return state == GLFW_PRESS;
-		// }
+		//#ifndef __EDITOR__
 
-		#ifndef __EDITOR__
-
-			auto& window = static_cast<Window&>(EngineApp::Get().GetWindow());
-			auto state = glfwGetMouseButton(static_cast<GLFWwindow*>(window.GetNativeWindow()), static_cast<int32_t>(button));
-			return state == GLFW_PRESS;
+		auto& window = static_cast<Window&>(EngineApp::Get().GetWindow());
+		auto state = glfwGetMouseButton(static_cast<GLFWwindow*>(window.GetNativeWindow()), static_cast<int32_t>(button));
+		return state == GLFW_PRESS;
 	
-		#else
+		//#else
 
-			ImGuiContext* context = ImGui::GetCurrentContext();
-			bool pressed = false;
-			for (ImGuiViewport* viewport : context->Viewports)
-			{
-				if (!viewport->PlatformUserData)
-					continue;
+		//	ImGuiContext* context = ImGui::GetCurrentContext();
+		//	bool pressed = false;
+		//	for (ImGuiViewport* viewport : context->Viewports)
+		//	{
+		//		if (!viewport->PlatformUserData)
+		//			continue;
 
-				GLFWwindow* windowHandle = *(GLFWwindow**)viewport->PlatformUserData; // First member is GLFWwindow
-				if (!windowHandle)
-					continue;
+		//		GLFWwindow* windowHandle = *(GLFWwindow**)viewport->PlatformUserData; // First member is GLFWwindow
+		//		if (!windowHandle)
+		//			continue;
 
-				auto state = glfwGetMouseButton(static_cast<GLFWwindow*>(windowHandle), static_cast<int32_t>(button));
-				if (state == GLFW_PRESS || state == GLFW_REPEAT)
-				{
-					pressed = true;
-					break;
-				}
-			}
-			return pressed;
+		//		auto state = glfwGetMouseButton(static_cast<GLFWwindow*>(windowHandle), static_cast<int32_t>(button));
+		//		if (state == GLFW_PRESS || state == GLFW_REPEAT)
+		//		{
+		//			pressed = true;
+		//			break;
+		//		}
+		//	}
+		//	return pressed;
 
-		#endif
+		//#endif
 	}
 
 	bool Input::IsMouseButtonReleased(MouseButton button)

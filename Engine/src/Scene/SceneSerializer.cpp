@@ -1,5 +1,5 @@
+#include <pch.h>
 #include "Scene/SceneSerializer.h"
-
 
 namespace Cober {
 
@@ -125,7 +125,7 @@ namespace Cober {
 			return newScene;
 		}
 		
-		LOG_ERROR("Cannot read scene with path: {0}{1}",SCENES_DIR,sceneName);
+		LOG_ERROR(("Cannot read scene with path: {0}{1}",SCENES_DIR, sceneName));
 		return nullptr;
     }
 }

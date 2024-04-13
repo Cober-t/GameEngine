@@ -7,6 +7,7 @@
 #include <string>
 #include <ctime>
 #include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
 
 
 namespace Cober {

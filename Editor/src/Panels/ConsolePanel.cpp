@@ -7,8 +7,6 @@
 // #include "Editor/FontAwesome.h"
 
 // #include "imgui/Colors.h"
-#include "imgui/imgui.h"
-#include "imgui/imgui_internal.h"
 
 namespace Cober {
 

@@ -1,3 +1,4 @@
+#include <pch.h>
 #include "Render/Camera/EditorCamera.h"
 
 #include "Render/RenderGlobals.h"
