@@ -66,8 +66,7 @@ namespace Cober {
 		DataPanel::Get().SetMouseX(mouseX);
 		DataPanel::Get().SetMouseY(mouseY);
 
-		if ( ImGui::IsMouseClicked(0) && mouseX >= 0 && mouseY >= 0 && 
-			mouseX < ((int)m_ViewportSize.x) && mouseY < ((int)m_ViewportSize.y))
+		if (mouseX >= 0 && mouseY >= 0 && mouseX < ((int)m_ViewportSize.x) && mouseY < ((int)m_ViewportSize.y))
 		{
 			int pixelData = m_Fbo->ReadPixel(1, mouseX, mouseY);
 			hoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, activeScene.get());

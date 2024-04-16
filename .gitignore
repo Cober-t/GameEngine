@@ -7,6 +7,7 @@ bin-int/
 __pycache__/
 
 CMakeSettings.json
+*.log
 *.sln
 *.vcxproj
 *.vcxproj.filters

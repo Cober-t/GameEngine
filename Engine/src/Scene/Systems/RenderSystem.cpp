@@ -32,7 +32,7 @@ namespace Cober {
 
 		for (auto entity : GetSystemEntities())
         {
-            Render2D::DrawSolidPolygon(entity);
+            Render2D::DrawSolidQuad(entity);
 		}
 
 		Render2D::EndScene();

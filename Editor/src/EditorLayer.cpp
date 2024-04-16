@@ -75,7 +75,7 @@ namespace Cober {
 
 		ViewportPanel::Get().SetCursorEntity(m_ActiveScene, m_HoveredEntity);
 
-		if (ImGui::IsMouseClicked(0))
+		if (ImGui::IsMouseClicked(0) && m_HoveredEntity)
 			SceneHierarchyPanel::Get().SetSelectedEntity(m_HoveredEntity);
 
 		ViewportPanel::Get().UnbindFramebuffer();

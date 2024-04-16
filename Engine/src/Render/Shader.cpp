@@ -29,6 +29,17 @@ namespace Cober {
 
 		return nullptr;
 	}
+	
+	void Shader::SetInt(const std::string& name, int value) { }
+	void Shader::SetIntArray(const std::string& name, int* values, uint32_t count) { }
+	void Shader::SetFloat(const std::string& name, float value) { }
+	void Shader::SetFloat3(const std::string& name, const glm::vec3& value) { }
+	void Shader::SetFloat4(const std::string& name, const glm::vec4& value) { }
+	void Shader::SetVec2(const std::string& name, const glm::vec2& value) { }
+	void Shader::SetVec3(const std::string& name, const glm::vec3& value) { }
+	void Shader::SetVec4(const std::string& name, const glm::vec4& value) { }
+	void Shader::SetMat3(const std::string& name, const glm::mat3& value) { }
+	void Shader::SetMat4(const std::string& name, const glm::mat4& value) { }
 
 
 	void ShaderLibrary::Add(const std::string& name, const Ref<Shader>& shader)

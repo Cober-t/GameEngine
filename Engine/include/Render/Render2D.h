@@ -11,6 +11,13 @@
 
 #include "Scene/ECS.h"
 
+// #include "Render/Primitives/Primitive.h"
+// #include "Render/Primitives/Line.h"
+// #include "Render/Primitives/Quad.h"
+// #include "Render/Primitives/Circle.h"
+// #include "Render/Primitives/Cube.h"
+
+
 #include <glm/gtc/matrix_transform.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
@@ -33,10 +40,11 @@ namespace Cober {
 		static void NextBatch();
 
 		// EXPORT TO DEBUG RENDERER
-		static void DrawSolidPolygon();
-		static void DrawSolidPolygon(Entity& entity);
+		// static void DrawSolidQuad();
+		static void DrawSolidQuad(Entity& entity);
 
 	public:
+
 		struct Statistics
 		{
 			uint32_t DrawCalls = 0;
@@ -45,11 +53,10 @@ namespace Cober {
 			uint32_t GetTotalVertexCount() { return QuadCount * 4; }
 			uint32_t GetTotalIndexCount()  { return QuadCount * 6; }
 		};
+
+	public:
 		static void ResetStats();
 		static Statistics GetStats();
-
-		// Grid data. Must be always float because WebGL dont work with ints
-		// Later in the shader we can convert to ints
 	};
 }
 

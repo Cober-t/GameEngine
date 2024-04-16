@@ -32,10 +32,10 @@ namespace Cober {
 		ImGui::Text("Quads: %d", Render2D::GetStats().QuadCount);
 		ImGui::Text("Mouse Coords: \nX: %i\nY: %i", mouseX, mouseY);
 
-        if (hoveredEntity)
-            ImGui::Text("Hovered Entity: %s", hoveredEntity.GetName().c_str());
-        else
-            ImGui::Text("Hovered Entity: %s", "None");
+		std::string name = "None";
+        if ((bool)hoveredEntity)
+            name =  hoveredEntity.GetName().c_str();
+		ImGui::Text("Hovered Entity: %s", name.c_str());
 
 		ImGui::End();
 	}

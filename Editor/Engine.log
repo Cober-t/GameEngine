@@ -1,64 +1,24 @@
-[12:18:44] [info] APP: Editor Constructor!
-[12:18:44] [info] ENGINE: EngineApp Constructor!
-[12:18:44] [info] ENGINE: Creating window Engine Editor (1280, 720)
-[12:18:44] [info] ENGINE: OpenGL Info:
-[12:18:44] [info] ENGINE:   Vendor: NVIDIA Corporation
-[12:18:44] [info] ENGINE:   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
-[12:18:44] [info] ENGINE:   Version: 4.6.0 NVIDIA 551.86
-[12:18:44] [info] ENGINE: Created Timer
-[12:18:44] [info] APP: Editor Camera Created!!
-[12:18:44] [info] APP: Scene Created!!
-[12:18:44] [info] APP: Scene Created!!
-[12:18:44] [info] APP: Created entity with ID 14272308717457144520 and name Entity0
-[12:18:44] [info] APP: Created entity with ID 5385516316266056775 and name Entity1
-[12:18:44] [info] APP: Scene Destroyed!!
-[12:18:44] [info] APP: Render System Added to Registry!!
-[12:18:44] [trace] ENGINE: Render API init
-[12:18:44] [trace] ENGINE: Render VertexArray success
-[12:18:44] [trace] ENGINE: Render VertexBuffer success
-[12:18:44] [trace] ENGINE: Render IndexBuffer success
-[12:18:44] [trace] ENGINE: Render Texture success
-[12:18:44] [info] APP: C:\Users\Jorge\Documents\GameEngine\assets\shaders\Quad.glsl
-[12:18:44] [trace] ENGINE: Render Shader Quad.glsl success
-[12:18:44] [trace] ENGINE: Render UniformBuffer success
-[12:18:44] [info] APP: Render System Started!!
-[12:18:54] [info] APP: Scene Created!!
-[12:18:54] [info] APP: Created entity with ID 7393775681900424192 and name Entity1
-[12:18:54] [info] APP: Created entity with ID 9643654215064920064 and name Entity0
-[12:18:54] [info] APP: Render System Added to Registry!!
-[12:18:54] [info] APP: Physics System Added to Registry!!
-[12:18:54] [info] APP: Script System Added to Registry!!
-[12:18:54] [trace] ENGINE: Render API init
-[12:18:54] [trace] ENGINE: Render VertexArray success
-[12:18:54] [trace] ENGINE: Render VertexArray cleaned up
-[12:18:54] [trace] ENGINE: Render IndexBuffer cleaned up
-[12:18:54] [trace] ENGINE: Render VertexBuffer success
-[12:18:54] [trace] ENGINE: Render VertexBuffer cleaned up
-[12:18:54] [trace] ENGINE: Render IndexBuffer success
-[12:18:54] [trace] ENGINE: Render Texture success
-[12:18:54] [info] APP: C:\Users\Jorge\Documents\GameEngine\assets\shaders\Quad.glsl
-[12:18:54] [trace] ENGINE: Render Shader Quad.glsl success
-[12:18:54] [trace] ENGINE: Render Shader cleaned up
-[12:18:54] [trace] ENGINE: Render Texture cleaned up
-[12:18:54] [trace] ENGINE: Render UniformBuffer success
-[12:18:54] [trace] ENGINE: Render UniformBuffer cleaned up
-[12:18:54] [info] APP: Render System Started!!
-[12:18:54] [info] APP: Physics System Started!!
-[12:18:54] [info] APP: Script System Started!!
-[12:18:55] [info] APP: Render System Removed from Registry
-[12:18:55] [info] APP: Physics System Removed from Registry
-[12:18:55] [info] APP: Script System Removed from Registry
-[12:18:55] [info] APP: Scene Destroyed!!
-[12:19:42] [info] APP: Editor Destructor!
-[12:19:42] [info] ENGINE: EngineApp Destructor!
-[12:19:42] [info] ENGINE: Destroyed Timer
-[12:19:42] [info] APP: Render System Removed from Registry
-[12:19:42] [info] APP: Editor Camera Destroyed!!
-[12:19:42] [info] ENGINE: Window Destroyed
-[12:19:42] [info] ENGINE: Context Destroyed!!
-[12:19:42] [trace] ENGINE: Render UniformBuffer cleaned up
-[12:19:42] [trace] ENGINE: Render Texture cleaned up
-[12:19:42] [trace] ENGINE: Render Shader cleaned up
-[12:19:42] [trace] ENGINE: Render VertexArray cleaned up
-[12:19:42] [trace] ENGINE: Render IndexBuffer cleaned up
-[12:19:42] [trace] ENGINE: Render VertexBuffer cleaned up
+[08:00:36] [info] APP: Editor Constructor!
+[08:00:36] [info] ENGINE: EngineApp Constructor!
+[08:00:36] [info] ENGINE: Creating window Engine Editor (1280, 720)
+[08:00:37] [info] ENGINE: OpenGL Info:
+[08:00:37] [info] ENGINE:   Vendor: NVIDIA Corporation
+[08:00:37] [info] ENGINE:   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+[08:00:37] [info] ENGINE:   Version: 4.6.0 NVIDIA 551.86
+[08:00:37] [info] ENGINE: Created Timer
+[08:00:37] [info] APP: Editor Camera Created!!
+[08:00:37] [info] APP: Scene Created!!
+[08:00:37] [info] APP: Scene Created!!
+[08:00:37] [info] APP: Created entity with ID 15468116478160770787 and name Entity0
+[08:00:37] [info] APP: Created entity with ID 9591973425760301832 and name Entity1
+[08:00:37] [info] APP: Scene Destroyed!!
+[08:00:37] [info] APP: Render System Added to Registry!!
+[08:00:37] [trace] ENGINE: Render API init
+[08:00:37] [trace] ENGINE: Render VertexArray success
+[08:00:37] [trace] ENGINE: Render VertexBuffer success
+[08:00:37] [trace] ENGINE: Render IndexBuffer success
+[08:00:37] [trace] ENGINE: Render Texture success
+[08:00:37] [trace] ENGINE: Render Shader Quad.glsl success
+[08:00:37] [trace] ENGINE: Render UniformBuffer success
+[08:00:37] [info] APP: Render System Started!!
+[08:00:38] [error] ENGINE: Assertion Failed: Entity does not have component!
