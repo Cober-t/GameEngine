@@ -42,6 +42,7 @@ namespace Cober {
 		Ref<Scene> m_ActiveScene, m_EditorScene;
 		Ref<Framebuffer> m_Fbo;
 		Entity m_HoveredEntity;
+		bool m_AllowViewportCameraEvents;
 
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 		glm::vec2 m_MinViewportBound;

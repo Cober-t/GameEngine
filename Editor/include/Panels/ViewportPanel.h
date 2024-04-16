@@ -2,6 +2,7 @@
 #define VIEWPORT_PANEL_H
 
 #include <Engine.h>
+#include <imgui/imgui.h>
 
 
 namespace Cober {
@@ -28,6 +29,7 @@ namespace Cober {
 
 		void SetCursorEntity(Ref<Scene>& activeScene, Entity& hoveredEntity);
 		void PlayButtonBar(Ref<Scene>& editorScene, Ref<Scene>& activeScene, GameState gameState);
+		inline bool AllowViewportCameraEvents() { return m_AllowViewportCameraEvents; }
 
 	private:
 		Ref<Framebuffer> m_Fbo;
@@ -36,8 +38,9 @@ namespace Cober {
 
 		glm::vec2 m_ViewportMargin = { 0.0f, 0.0f };
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
-		glm::vec2 m_MinViewportBound, m_MaxViewportBound;
+		ImVec2 m_MinViewportBound, m_MaxViewportBound;
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
+		bool m_StartedCameraClickInViewport = false, m_AllowViewportCameraEvents = false;
 
 		bool m_MouseButtonHeld = false;
 		glm::vec2 m_Mouse{0.0f, 0.0f}, m_LastMousePos{ 0.0f, 0.0f };

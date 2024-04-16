@@ -76,10 +76,7 @@ namespace Cober {
 
 	void ImGuiLayer::OnEvent(Event& event) 
 	{
-		auto gameState = EngineApp::Get().GetGameState();
-
-		// if (m_BlockEvents)
-		if (gameState == GameState::EDITOR || gameState == GameState::RUNTIME_EDITOR)
+		if (m_BlockEvents)
 		{
 			ImGuiIO& io = ImGui::GetIO();
 			event.Handled |= event.IsInCategory(EventCategoryMouse) & io.WantCaptureMouse;

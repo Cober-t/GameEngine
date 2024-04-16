@@ -19,6 +19,7 @@ namespace Cober {
 
 		void Begin();
 		void End();
+		void BlockEvents(bool block) { m_BlockEvents = block; }
 
 	private:
 		bool m_BlockEvents = true;

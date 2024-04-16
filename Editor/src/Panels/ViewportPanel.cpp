@@ -10,7 +10,6 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <filesystem>
-#include <imgui/imgui.h>
 
 namespace Cober {
 
@@ -58,7 +57,7 @@ namespace Cober {
 		auto [mx, my] = ImGui::GetMousePos();
 		mx -= m_MinViewportBound.x;
 		my -= m_MinViewportBound.y;
-		glm::vec2 viewportSize = m_MaxViewportBound - m_MinViewportBound;
+		glm::vec2 viewportSize = glm::vec2(m_MaxViewportBound.x - m_MinViewportBound.x, m_MaxViewportBound.y - m_MinViewportBound.y);
 		my = viewportSize.y - my;
 		int mouseX = (int)mx - m_ViewportMargin.x;
 		int mouseY = (int)my - m_ViewportMargin.y;
@@ -70,6 +69,7 @@ namespace Cober {
 		{
 			int pixelData = m_Fbo->ReadPixel(1, mouseX, mouseY);
 			hoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, activeScene.get());
+			
 		}
 	}
 
@@ -155,8 +155,7 @@ namespace Cober {
 
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
-		// editorCamera->BlockEvents(m_ViewportHovered);
-
+		EngineApp::Get().GetImGuiLayer()->BlockEvents(!m_ViewportHovered);
 
 		// START CONSTRAIN VIEWPORT SCENE
 		EngineApp& app = EngineApp::Get();
@@ -190,6 +189,13 @@ namespace Cober {
 								  (viewportPanelSize.y - m_ViewportSize.y) * 0.5f };
 		ImGui::SetCursorPos(contentRegionSize);
 
+		m_AllowViewportCameraEvents = (ImGui::IsMouseHoveringRect(m_MinViewportBound, m_MaxViewportBound) && m_ViewportFocused) || m_StartedCameraClickInViewport;
+
+		if (((Input::IsKeyDown(KeyCode::LeftAlt) && (Input::IsMouseButtonDown(MouseButton::Left) || (Input::IsMouseButtonDown(MouseButton::Middle)))) || Input::IsMouseButtonDown(MouseButton::Right)) && !m_StartedCameraClickInViewport && m_ViewportFocused && m_ViewportHovered)
+			m_StartedCameraClickInViewport = true;
+
+		if (!Input::IsMouseButtonDown(MouseButton::Right) && !(Input::IsKeyDown(KeyCode::LeftAlt) && (Input::IsMouseButtonDown(MouseButton::Left) || (Input::IsMouseButtonDown(MouseButton::Middle)))))
+			m_StartedCameraClickInViewport = false;
 
 		uint32_t textureID = m_Fbo->GetColorAttachmentRenderID();
 		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });

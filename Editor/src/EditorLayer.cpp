@@ -61,7 +61,8 @@ namespace Cober {
 			case GameState::EDITOR:
 			{
 				// colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.000f, 0.000f, 0.000f, 0.586f);
-				// m_EditorCamera->OnUpdate(ts);
+				m_EditorCamera->SetActive(ViewportPanel::Get().AllowViewportCameraEvents());
+				m_EditorCamera->OnUpdate(ts);
 				m_ActiveScene->OnUpdateRuntime(ts, m_EditorCamera);
 				break;
 			}
@@ -168,7 +169,13 @@ namespace Cober {
 
 	void Editor::OnEvent(Event& event)
 	{
-		m_EditorCamera->OnEvent(event);
+		auto gameState = EngineApp::Get().GetGameState();
+
+		if (gameState == GameState::EDITOR || gameState == GameState::RUNTIME_EDITOR)
+		{
+			if (m_AllowViewportCameraEvents)
+				m_EditorCamera->OnEvent(event);
+		}
 		// ViewportPanel::Get().OnEvent(event, _activeScene->GetHoveredEntity());
 	}
 
