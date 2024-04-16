@@ -48,6 +48,8 @@ namespace Cober {
 		inline ImGuiLayer* GetImGuiLayer() { return m_GuiLayer; }
 		inline Window& GetWindow() { return *m_Window; }
 		inline GameState GetGameState() { return m_GameState; }
+		void  SetDebugMode(bool debugMode)  { m_DebugMode = debugMode; }
+		bool& GetDebugMode() { return m_DebugMode; }
 
 	private:
 		void Run(Unique<Timestep>& ts);
@@ -64,6 +66,7 @@ namespace Cober {
 
 		float m_LastFrameTime = 0.0f;
 		bool m_Minimized = false;
+		bool m_DebugMode = false;
 
 	private:
 		static EngineApp* s_Instance;

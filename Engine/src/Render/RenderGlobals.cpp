@@ -11,9 +11,9 @@ namespace Cober {
 	}
 
 
-	void RenderGlobals::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) 
+	void RenderGlobals::SetViewport(uint32_t width, uint32_t height) 
 	{
-		RenderGlobals::m_Api->SetViewport(x, y, width, height);
+		RenderGlobals::m_Api->SetViewport(0, 0, width, height);
 	}
 
 

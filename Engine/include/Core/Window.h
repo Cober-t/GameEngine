@@ -14,6 +14,8 @@ namespace Cober {
 	{
 		std::string Title;
 		uint32_t Width, Height;
+		bool Decorated = true;
+		bool Fullscreen = false;
 		bool VSync;
 
 		WindowProps(const std::string& title = "Game Engine ;)",
@@ -42,6 +44,7 @@ namespace Cober {
 		void SetEventCallback(const EventCallbackFn& callback) { m_Data.EventCallback = callback; }
 		void SetVSync(bool enabled);
 		bool IsVSync() const;
+		void ChangeFullScreen();
 
 		virtual void* GetNativeWindow() const { return m_Window; }
 

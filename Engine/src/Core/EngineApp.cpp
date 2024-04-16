@@ -112,23 +112,23 @@ namespace Cober {
     }
   
 
-    bool EngineApp::OnWindowClose(WindowCloseEvent& e)
+    bool EngineApp::OnWindowClose(WindowCloseEvent& event)
 	{
 		m_GameState = GameState::EXIT;
 		return true;
 	}
 
 
-	bool EngineApp::OnWindowResize(WindowResizeEvent& e)
+	bool EngineApp::OnWindowResize(WindowResizeEvent& event)
 	{
-		if (e.GetWidth() == 0 || e.GetHeight() == 0)
+		if (event.GetWidth() == 0 || event.GetHeight() == 0)
 		{
 			m_Minimized = true;
 			return false;
 		}
 
 		m_Minimized = false;
-		// Render::OnWindowResize(e.GetWidth(), e.GetHeight());
+		RenderGlobals::SetViewport(event.GetWidth(), event.GetHeight());
 
 		return false;
 	}

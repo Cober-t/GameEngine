@@ -103,8 +103,8 @@ namespace Cober {
 			FramebufferTextureFormat::RED_INTEGER, 
 			FramebufferTextureFormat::Depth 
 		};
-		spec.Width = 1280;
-		spec.Height = 720;
+		spec.Width = width;
+		spec.Height = heigth;
 		m_Specification = spec;
 
 		for (auto spec : m_Specification.Attachments.Attachments) 

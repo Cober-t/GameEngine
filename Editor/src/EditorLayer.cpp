@@ -14,9 +14,7 @@ namespace Cober {
 		new ConsolePanel();
 		new SceneHierarchyPanel();
 		new ContentBrowserPanel();
-		/*
 		new MenuPanel();
-		*/
 	}
 
 
@@ -46,7 +44,7 @@ namespace Cober {
 	void Editor::OnUpdate(Unique<Timestep>& ts) 
 	{
 		bool projectMode = false;
-		ViewportPanel::Get().ResizeViewport(m_EditorCamera, m_ActiveScene, projectMode);
+		ViewportPanel::Get().ResizeViewport(m_EditorCamera, projectMode);
 		ViewportPanel::Get().BindFramebuffer();
 		// ViewportPanel::Get().RenderSkybox();
 
@@ -92,12 +90,10 @@ namespace Cober {
 		ConsolePanel::Get().OnImGuiRender();
 		SceneHierarchyPanel::Get().OnGuiRender(m_HoveredEntity);
 		ContentBrowserPanel::Get().OnGuiRender();
+		
+		bool world_2d = false;
+		MenuPanel::Get().OnGuiRender(m_EditorCamera, m_ActiveScene, m_EditorScene, world_2d, EngineApp::Get().GetDebugMode());
 
-		/* PANELS
-		Entity& hoveredEntity = m_ActiveScene->GetHoveredEntity();
-		MenuPanel::Get().OnGuiRender(m_EditorCamera, m_ActiveScene, m_EditorScene, Engine::Get().GetGameMode(), Engine::Get().GetDebugMode());
-
-		*/
 		ViewportPanel::Get().PlayButtonBar(m_EditorScene, m_ActiveScene, EngineApp::Get().GetGameState());
 
 		EndDockspace();
@@ -123,8 +119,8 @@ namespace Cober {
 			ImGui::SetNextWindowViewport(viewport->ID);
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-			//window_flags |= ImGuiWindowFlags_NoTitleBar |  ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-			window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiDragDropFlags_SourceAllowNullID;
+			window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+			window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 		}
 
 		// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.

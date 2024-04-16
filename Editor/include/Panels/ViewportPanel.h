@@ -23,7 +23,8 @@ namespace Cober {
 		void FBOClearAttachments(uint32_t attachmentIndex, int value) { m_Fbo->ClearAttachment(attachmentIndex, value); }
 
 		void OnEvent(Event& event, Entity& hoveredEntity);	// Abstract to EVENT API
-		void ResizeViewport(Ref<EditorCamera> editorCamera, Ref<Scene>& activeScene, bool& game2D);
+		void ResizeViewport(Ref<EditorCamera> editorCamera, bool& game2D);
+		void ResizeFramebufferSpecification(Ref<EditorCamera> editorCamera, uint32_t width, uint32_t height);
 
 		void OnGuiRender(Ref<EditorCamera> editorCamera, Ref<Scene>& scene);
 
