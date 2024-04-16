@@ -294,6 +294,11 @@ namespace Cober {
 	}
 
 	template<>
+	void Scene::OnComponentAdded<Render2DComponent>(Entity entity, Render2DComponent& component)
+	{
+	}
+
+	template<>
 	void Scene::OnComponentAdded<ScriptComponent>(Entity entity, ScriptComponent& component)
 	{
 	}

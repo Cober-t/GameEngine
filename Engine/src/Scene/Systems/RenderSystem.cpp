@@ -31,7 +31,18 @@ namespace Cober {
 
 		for (auto entity : GetSystemEntities())
         {
-            Render2D::DrawSolidQuad(entity);
+			switch (entity.GetComponent<Render2DComponent>().shapeType)
+			{
+			case Shape2D::Line:
+				break;
+			case Shape2D::Quad:
+	            Render2D::DrawSolidQuad(entity);
+				break;
+			case Shape2D::Circle:
+				break;
+			case Shape2D::Sprite:
+				break;
+			}
 		}
 
 		Render2D::EndScene();
@@ -41,7 +52,7 @@ namespace Cober {
 	std::vector<Entity> RenderSystem::GetSystemEntities() const
 	{
 		std::vector<Entity> entities;
-		auto entitiesView = m_Scene->GetAllEntitiesWith<TransformComponent, TagComponent>();
+		auto entitiesView = m_Scene->GetAllEntitiesWith<TransformComponent, TagComponent, Render2DComponent>();
 		// auto entitiesView = m_Scene->GetAllEntitiesWith<TransformComponent, SpriteComponent>();
 
 		for (auto entity : entitiesView)

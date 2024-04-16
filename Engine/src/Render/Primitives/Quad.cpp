@@ -142,7 +142,7 @@ namespace Cober {
 
 		float tilingFactor = 1.0f;
 		const int textureIndex = 0; // White Texture
-		glm::vec4 color = glm::vec4(1, 0, 0, 1);	// Change color in settings
+		glm::vec4 color = entity.GetComponent<Render2DComponent>().color;
 		glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
         if (data.IndexCount >= Data::MaxIndices)

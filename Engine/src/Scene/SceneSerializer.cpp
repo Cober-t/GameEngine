@@ -60,6 +60,13 @@ namespace Cober {
 				auto& scriptComponent = entity.GetComponent<ScriptComponent>();
 				// entityToBeSaved["ScriptComponent"]["path"].SetVec2(scriptComponent.path);
 			}
+
+			if (entity.HasComponent<Render2DComponent>()) 
+			{
+				auto& bc2D = entity.GetComponent<Render2DComponent>();
+				entityToBeSaved["Render2DComponent"]["color"].SetVec4(entity.GetComponent<Render2DComponent>().color);
+			}
+
 		}
 		
 		Utils::DataFile::Write(sceneSaver, sceneName);
@@ -118,6 +125,13 @@ namespace Cober {
 					{
 						auto bc2d = loader["ScriptComponent"];
 						newEntity.AddComponent<ScriptComponent>();
+					}
+
+					if (loader.HasProperty("Render2DComponent")) 
+					{
+						auto bc2d = loader["Render2DComponent"];
+						newEntity.AddComponent<Render2DComponent>();
+						newEntity.GetComponent<Render2DComponent>().color = loader["Render2DComponent"]["color"].GetVec4();
 					}
 				}
 			}

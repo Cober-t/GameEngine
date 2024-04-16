@@ -108,6 +108,26 @@ namespace Cober {
 	};
 
 
+	enum class Shape2D { Line = 0, Quad, Circle, Sprite, N_SHAPE_ITEMS };
+
+	struct Render2DComponent 
+	{
+		int w, h;
+		std::string assetID;
+		glm::vec4 color{ 1.0f };
+
+		Shape2D shapeType = Shape2D::Quad;
+		bool fill = true;
+
+		Ref<Texture> texture = nullptr;
+
+		Render2DComponent() = default;
+		Render2DComponent(const Render2DComponent&) = default;
+		Render2DComponent(const std::string& ID, int width, int height, glm::vec4 tintColor = glm::vec4(1.0f))
+			: assetID(ID), w(width), h(height), color(tintColor) {}
+	};
+
+
 	struct ScriptComponent
 	{
 		std::vector<sol::function> scripts;
@@ -121,19 +141,8 @@ namespace Cober {
 		// ScriptComponent(sol::function funcs = sol::lua_nil) : script(funcs) {}
 	};
 
+
 	/*
-	struct Sprite {
-		int w, h;
-		std::string assetID;
-		glm::vec4 color{ 1.0f };
-		Ref<Texture> texture = nullptr;
-
-		Sprite() = default;
-		Sprite(const Sprite&) = default;
-		Sprite(const std::string& ID, int width, int height, glm::vec4 tintColor = glm::vec4(1.0f))
-			: assetID(ID), w(width), h(height), color(tintColor) {}
-	};
-
 	struct Animation2D {
 		int numFrames;
 		int currentFrame;
@@ -166,7 +175,7 @@ namespace Cober {
 	{
 	};
 
-	using AllComponents = ComponentGroup<TransformComponent, TagComponent, ScriptComponent, Rigidbody2D, BoxCollider2D>;
+	using AllComponents = ComponentGroup<TransformComponent, TagComponent, ScriptComponent, Rigidbody2D, BoxCollider2D, Render2DComponent>;
 }
 
 #endif

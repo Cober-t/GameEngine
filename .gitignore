@@ -6,10 +6,9 @@ bin-int/
 .idea/
 __pycache__/
 
-CMakeSettings.json
 *.log
 *.sln
 *.vcxproj
 *.vcxproj.filters
-*.vcxproj.users
+*.vcxproj.user
 imgui.ini

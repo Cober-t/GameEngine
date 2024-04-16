@@ -19,7 +19,7 @@ namespace Cober {
 		void SerializeRuntime(const std::string& sceneName = "Scene1");
 
 		Ref<Scene> Deserialize(const std::string& sceneName);
-		Ref<Scene> DeserializeRuntime(const std::string& sceneName);
+		// Ref<Scene> DeserializeRuntime(const std::string& sceneName);
 
 	private:
 		Ref<Scene> m_Scene;

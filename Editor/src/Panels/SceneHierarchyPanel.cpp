@@ -256,37 +256,6 @@ namespace Cober {
 				entity.GetComponent<TagComponent>().tag = (std::string)m_NewEntityTag;
 		}
 
-		ImGui::PushItemWidth(100.0f);
-
-		// GROUPS
-		// if (ImGui::BeginCombo("Group", entity.GetGroup().c_str())) 
-        // {
-		// 	auto groupList = entity.registry->GetAllGroups();
-		// 	for (int n = 0; n < groupList.size(); n++) {
-		// 		bool selected = (entity.GetGroup() == groupList[n]);
-		// 		if (ImGui::Selectable(groupList[n].c_str(), selected))
-		// 			entity.SetGroup(groupList[n]);
-		// 	}
-		// 	ImGui::EndCombo();
-		// }
-
-		ImGui::SameLine();
-		ImGui::PushItemWidth(80.0f);
-
-		memset(buffer, 0, sizeof(buffer));
-		//strcpy_s(buffer, sizeof(buffer), entity.GetGroup().c_str());
-		if (ImGui::InputText("NewGroup", buffer, sizeof(buffer)))
-			m_NewEntityGroup = buffer;
-
-		ImGui::SameLine();
-		// if (ImGui::Button("+")) {
-		// 	if (m_NewEntityGroup != "")
-		// 		entity.SetGroup(m_NewEntityGroup);
-		// }
-
-		ImGui::PopItemWidth();
-		ImGui::PopItemWidth();
-
 		if (ImGui::Button("Add Component")) 
         {
 			if (ImGui::IsMouseDown(ImGuiMouseButton_Right)) 
@@ -299,6 +268,10 @@ namespace Cober {
                 {
 					m_SelectionContext.AddComponent<BoxCollider2D>();
 				}
+				else if (!m_SelectionContext.HasComponent<Render2DComponent>()) 
+                {
+					m_SelectionContext.AddComponent<Render2DComponent>();
+				}
 				//else if (!m_SelectionContext.HasComponent<Script>()) {
 				//	m_SelectionContext.AddComponent<Script>();
 				//}
@@ -310,6 +283,7 @@ namespace Cober {
 		if (ImGui::BeginPopup("AddComponent")) {
 			AddIfHasComponent<Rigidbody2D>("Rigidbody 2D Component");
 			AddIfHasComponent<BoxCollider2D>("BoxCollider 2D Component");
+			AddIfHasComponent<Render2DComponent>("Render 2D Shape Component");
 			//AddIfHasComponent<Script>("Script Component");
 			// ...
 			// ...
@@ -358,35 +332,61 @@ namespace Cober {
 				//ImGui::DragFloat("Restitution Threshold", &component.restitutionThreshold, 0.01f, 0.0f);
 			});
 
-		/*
-		DrawComponent<Sprite>("Sprite", entity, [](auto& component)
+		DrawComponent<Render2DComponent>("Render 2D Shape", entity, [](auto& component)
 			{
-				if (ImGui::BeginDragDropSource())
-				{
-					if (ImGui::BeginCombo("", currentScreenSize)) {
-						for (int n = 0; n < IM_ARRAYSIZE(_screenValues); n++) {
-							bool selected = (currentScreenSize == _screenValues[n]);
-							if (ImGui::Selectable(_screenValues[n], selected)) {
-								currentScreenSize = _screenValues[n];
-								switch (n) {
-								case SCREEN_SIZE::VERY_LOW:	 Resize(editorCamera, activeScene, _VPSize[n].x, _VPSize[n].y, game2D);	break;
-								case SCREEN_SIZE::LOW:		 Resize(editorCamera, activeScene, _VPSize[n].x, _VPSize[n].y, game2D);	break;
-								case SCREEN_SIZE::MID:		 Resize(editorCamera, activeScene, _VPSize[n].x, _VPSize[n].y, game2D);	break;
-								case SCREEN_SIZE::HIGH:		 Resize(editorCamera, activeScene, _VPSize[n].x, _VPSize[n].y, game2D);	break;
-								case SCREEN_SIZE::VERY_HIGH: Resize(editorCamera, activeScene, _VPSize[n].x, _VPSize[n].y, game2D);	break;
-								case SCREEN_SIZE::ULTRA:	 Resize(editorCamera, activeScene, _VPSize[n].x, _VPSize[n].y, game2D);	break;
-								}
-							}
+				ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
+
+				const char* shape2DString[] = { "Line", "Quad", "Circle", "Sprite"};
+				const char* current2DShape = shape2DString[(int)component.shapeType];
+				if (ImGui::BeginCombo("2D Shape", current2DShape)) {
+
+					for (int i = 0; i < (int)Shape2D::N_SHAPE_ITEMS; i++) {
+						bool isSelected = current2DShape == shape2DString[i];
+						if (ImGui::Selectable(shape2DString[i], isSelected)) {
+							current2DShape = shape2DString[i];
+							component.shapeType = (Shape2D)i;
 						}
-						ImGui::EndCombo();
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
 					}
-					ImGui::EndDragDropSource();
+
+					ImGui::EndCombo();
+				}
+			
+				if ((int)component.shapeType == (int)Shape2D::Line)
+				{
+				}
+
+				if ((int)component.shapeType == (int)Shape2D::Quad)
+				{
+					ImGui::Checkbox("Fill", &component.fill);
+				}
+
+				if ((int)component.shapeType == (int)Shape2D::Circle)
+				{
+				}
+
+				if ((int)component.shapeType == (int)Shape2D::Sprite)
+				{
+					std::string nameTexture = component.texture == nullptr ? "Texture" : component.texture->GetName();
+					ImGui::Button(nameTexture.c_str(), ImVec2(100.0f, 0.0f));
+
+					// if (ImGui::BeginDragDropTarget()) {
+					// 	if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
+					// 		const wchar_t* path = (const wchar_t*)payload->Data;
+					// 		std::filesystem::path texturePath = std::filesystem::path(ASSETS_DIR) / path;
+
+					// 		std::string format = texturePath.string();
+					// 		auto lastDot = format.find_last_of('.');
+					// 		format = lastDot != std::string::npos ? format.substr(lastDot) : "null";
+
+					// 		if (lastDot != std::string::npos && (format == ".png" || format == ".jpg" || format == ".jpeg"))
+					// 			component.texture = Texture::Create(texturePath.string());
+					// 	}
+					// 	ImGui::EndDragDropTarget();
+					// }
 				}
 
 			});
-		*/
-		// Draw Rigidbody3D Component
-
-		// Draw BoxCollider3D Component
 	}
 }
