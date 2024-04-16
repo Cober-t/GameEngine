@@ -13,8 +13,8 @@ namespace Cober {
 		new DataPanel();
 		new ConsolePanel();
 		new SceneHierarchyPanel();
-		/*
 		new ContentBrowserPanel();
+		/*
 		new MenuPanel();
 		*/
 	}
@@ -91,10 +91,10 @@ namespace Cober {
 		DataPanel::Get().OnGuiRender(m_HoveredEntity);
 		ConsolePanel::Get().OnImGuiRender();
 		SceneHierarchyPanel::Get().OnGuiRender(m_HoveredEntity);
+		ContentBrowserPanel::Get().OnGuiRender();
 
 		/* PANELS
 		Entity& hoveredEntity = m_ActiveScene->GetHoveredEntity();
-		ContentBrowserPanel::Get().OnGuiRender();
 		MenuPanel::Get().OnGuiRender(m_EditorCamera, m_ActiveScene, m_EditorScene, Engine::Get().GetGameMode(), Engine::Get().GetDebugMode());
 
 		*/

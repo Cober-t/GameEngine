@@ -63,10 +63,10 @@ project "Editor"
     {
         "_CRT_SECURE_NO_WARNINGS",
         "__EDITOR__",
-        'SCENES_DIR="$(SolutionDir)/assets/scenes/"',
-		'SHADERS_DIR="$(SolutionDir)/assets/shaders/"',
-		'SCRIPTS_DIR="$(SolutionDir)/assets/scripts/"',
-		'ASSETS_DIR="$(SolutionDir)/assets/"',
+        'SCENES_DIR=R"($(SolutionDir)assets\\scenes\\)"',
+		'SHADERS_DIR=R"($(SolutionDir)assets\\shaders\\)"',
+		'SCRIPTS_DIR=R"($(SolutionDir)assets\\scripts\\)"',
+		'ASSETS_DIR=R"($(SolutionDir)assets\\)"',
     }
 
     filter { "system:windows", "configurations:Debug" }

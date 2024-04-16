@@ -76,42 +76,12 @@ namespace Cober {
 
 	void ViewportPanel::OnEvent(Event& event, Entity& hoveredEntity) 
     {
-		// const Uint8* keyStateArray = SDL_GetKeyboardState(NULL);
-		//bool control = keyStateArray[SDL_SCANCODE_LCTRL];
-		//bool shift = keyStateArray[SDL_SCANCODE_LSHIFT];
-
-		/////////////////////////////////////////////////////
-		//					FIX INPUTS					   //
-		/////////////////////////////////////////////////////
 		// Gizmos
-		// if (event.type == SDL_KEYDOWN) {
-		// 	switch (event.key.keysym.sym) {
-		// 		case SDLK_q:
-		// 		{
-		// 			if (!ImGuizmo::IsUsing())
-		// 				m_GizmoType = -1;
-		// 			break;
-		// 		}
-		// 		case SDLK_w:
-		// 		{
-		// 			if (!ImGuizmo::IsUsing())
-		// 				m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
-		// 			break;
-		// 		}
-		// 		case SDLK_e:
-		// 		{
-		// 			if (!ImGuizmo::IsUsing())
-		// 				m_GizmoType = ImGuizmo::OPERATION::ROTATE;
-		// 			break;
-		// 		}
-		// 		case SDLK_r:
-		// 		{
-		// 			if (!ImGuizmo::IsUsing())
-		// 				m_GizmoType = ImGuizmo::OPERATION::SCALE;
-		// 			break;
-		// 		}
-		// 	}
-		// }
+		// 	if (Input::IsKeyDown(KeyCode::Q))
+		// 	if (Input::IsKeyDown(KeyCode::W))
+		// 	if (Input::IsKeyDown(KeyCode::E))
+		// 	if (Input::IsKeyDown(KeyCode::R))
+
 	}
 
 
@@ -133,7 +103,7 @@ namespace Cober {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
 
-		//if (ImGui::IsMouseClicked(0) && ImGui::IsWindowHovered() &&	!ImGuizmo::IsOver() && !SDL_GetKeyboardState(NULL)[SDL_SCANCODE_LALT])
+		//if (ImGui::IsMouseClicked(0) && ImGui::IsWindowHovered() && !ImGuizmo::IsOver() && !Input::IsKeyDown(KeyCode::LeftAlt))
 		//{
 			//LOG_INFO("Mouse clicked imgui event!!");
 			//scene->SetDefaultEntity(hoveredEntity);

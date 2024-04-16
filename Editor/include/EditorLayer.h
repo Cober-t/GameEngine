@@ -11,11 +11,8 @@
 #include "Panels/DataPanel.h"
 #include "Panels/ConsolePanel.h"
 #include "Panels/SceneHierarchyPanel.h"
-/*
-#include "Panels/MenuPanel.h"
 #include "Panels/ContentBrowserPanel.h"
-#include "Panels/MenuPanel.h"
-*/
+// #include "Panels/MenuPanel.h"
 
 namespace Cober {
 
