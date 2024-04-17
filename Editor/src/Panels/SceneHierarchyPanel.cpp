@@ -355,6 +355,9 @@ namespace Cober {
 			
 				if ((int)component.shapeType == (int)Shape2D::Line)
 				{
+					DrawVec3Control("Point 1", component.point1);
+					DrawVec3Control("Point 2", component.point2);
+					ImGui::DragFloat("LineWidth", &component.lineWidth, 1.0f);
 				}
 
 				if ((int)component.shapeType == (int)Shape2D::Quad)

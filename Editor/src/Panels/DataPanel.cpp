@@ -30,6 +30,7 @@ namespace Cober {
 		ImGui::Text("Frames: %d", EngineApp::Get().GetFrames());
 		ImGui::Text("Draw Calls: %d", Render2D::GetStats().DrawCalls);
 		ImGui::Text("Quads: %d", Render2D::GetStats().QuadCount);
+		ImGui::Text("Lines: %d", Render2D::GetStats().LineCount);
 		ImGui::Text("Mouse Coords: \nX: %i\nY: %i", mouseX, mouseY);
 
 		std::string name = "None";

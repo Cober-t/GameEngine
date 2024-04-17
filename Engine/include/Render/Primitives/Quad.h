@@ -39,8 +39,19 @@ namespace Cober {
 			int EntityID;
 		};
 
-		struct Data : PrimitiveData
+		struct Data
 		{
+			Ref<VertexArray> VertexArray;
+			Ref<VertexBuffer> VertexBuffer;
+			Ref<Shader> Shader;
+			Ref<Texture> WhiteTexture;
+
+			uint32_t IndexCount = 0;
+
+			static const uint32_t MaxTextureSlots = 32; // TODO: RenderCaps
+			std::array<Ref<Texture>, MaxTextureSlots> TextureSlots;
+			uint32_t TextureSlotIndex = 1; // 0 = white texture
+
 			static const uint32_t MaxQuads = 20000;
 			static const uint32_t MaxVertices = MaxQuads * 4; // Add Lines, Circles and Cubes to the count
 			static const uint32_t MaxIndices = MaxQuads * 6;  // Add Lines, Circles and Cubes to the count

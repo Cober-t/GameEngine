@@ -28,11 +28,11 @@ namespace Cober {
 	{
 
 	// #ifdef CB_DEBUG
-		glEnable(GL_DEBUG_OUTPUT);
-		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-		glDebugMessageCallback(OpenGLMessageCallback, nullptr);
+		// glEnable(GL_DEBUG_OUTPUT);
+		// glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		// glDebugMessageCallback(OpenGLMessageCallback, nullptr);
 		
-		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
+		// glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
 	// #endif
 
 		glEnable(GL_BLEND);
@@ -40,7 +40,6 @@ namespace Cober {
 
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_LINE_SMOOTH);
-
 
 		LOG_CORE_TRACE("Render API init");
 	}
@@ -58,17 +57,18 @@ namespace Cober {
 	}
 
 
-	void OpenGLRenderAPI::SetClearColor(float red, float green, float blue, float black) {
-
+	void OpenGLRenderAPI::SetClearColor(float red, float green, float blue, float black) 
+	{
 		float r = red / 255, g = green / 255, b = blue / 255, k = black / 255;
 		glClearColor(r, g, b, k);
 	}
 
 
-	void OpenGLRenderAPI::Clear() {
-
+	void OpenGLRenderAPI::Clear() 
+	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
+
 
 	void OpenGLRenderAPI::DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount)
 	{
@@ -77,6 +77,12 @@ namespace Cober {
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 	
+
+	void OpenGLRenderAPI::DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
+	{
+		vertexArray->Bind();
+		glDrawArrays(GL_LINES, 0, vertexCount);
+	}
 
 	void OpenGLRenderAPI::SetLineWidth(float width)
 	{

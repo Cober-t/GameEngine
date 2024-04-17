@@ -65,6 +65,18 @@ namespace Cober {
 			{
 				auto& bc2D = entity.GetComponent<Render2DComponent>();
 				entityToBeSaved["Render2DComponent"]["color"].SetVec4(entity.GetComponent<Render2DComponent>().color);
+				switch (entity.GetComponent<Render2DComponent>().shapeType)
+				{
+				case Shape2D::Line:
+					entityToBeSaved["Render2DComponent"]["shape2D"].SetString("Line");
+					break;
+				case Shape2D::Quad:
+					entityToBeSaved["Render2DComponent"]["shape2D"].SetString("Quad");
+					break;
+				case Shape2D::Circle:
+					entityToBeSaved["Render2DComponent"]["shape2D"].SetString("Circle");
+					break;
+				}
 			}
 
 		}
@@ -132,6 +144,16 @@ namespace Cober {
 						auto bc2d = loader["Render2DComponent"];
 						newEntity.AddComponent<Render2DComponent>();
 						newEntity.GetComponent<Render2DComponent>().color = loader["Render2DComponent"]["color"].GetVec4();
+
+						std::string shapeType = loader["Render2DComponent"]["shape2D"].GetString();
+						if (shapeType == "Line")
+							newEntity.GetComponent<Render2DComponent>().shapeType = Shape2D::Line;
+
+						if (shapeType == "Quad")
+							newEntity.GetComponent<Render2DComponent>().shapeType = Shape2D::Quad;
+
+						if (shapeType == "Circle")
+							newEntity.GetComponent<Render2DComponent>().shapeType = Shape2D::Circle;
 					}
 				}
 			}

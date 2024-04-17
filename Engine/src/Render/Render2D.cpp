@@ -15,7 +15,7 @@ namespace Cober {
 	struct Primitives 
 	{
 		Unique<Quad> quad = CreateUnique<Quad>();
-		// Unique<Line> line;
+		Unique<Line> line = CreateUnique<Line>();
 		// Unique<Circle> circle;
 		// Unique<Cube> cube;
 		// Unique<Mesh> mesh;
@@ -37,9 +37,9 @@ namespace Cober {
 	void Render2D::Start() 
 	{
 		primitives.quad->Init();
-		// data.primitives.line->Init();
-		// data.primitives.circle->Init();
-		// data.primitives.cube->Init();
+		primitives.line->Init();
+		// primitives.circle->Init();
+		// primitives.cube->Init();
 		
 
 		CameraUniformBuffer = UniformBuffer::Create(sizeof(CameraData), 0);
@@ -64,32 +64,35 @@ namespace Cober {
 			stats.DrawCalls++;
 		}
 
-		// if (data.primitives.line->IndexCount)
-		// 	data.primitives.line->Flush();
+		if (primitives.line->GetVertexCount())
+		{
+			primitives.line->Flush();
+			stats.DrawCalls++;	
+		}
 
-		// if (data.primitives.circle->IndexCount)
-		// 	data.primitives.circle->Flush();
+		// if (primitives.circle->IndexCount)
+		// 	primitives.circle->Flush();
 
-		// if (data.primitives.cube->IndexCount)
-		// 	data.primitives.cube->Flush();
+		// if (primitives.cube->IndexCount)
+		// 	primitives.cube->Flush();
 	}
 
 
 	void Render2D::StartBatch() 
 	{
 		primitives.quad->StartBatch();
-		// data.primitives.line->StartBatch();
-		// data.primitives.circle->StartBatch();
-		// data.primitives.cube->StartBatch();
+		primitives.line->StartBatch();
+		// primitives.circle->StartBatch();
+		// primitives.cube->StartBatch();
 	}
 
 
 	void Render2D::NextBatch() 
 	{
 		primitives.quad->NextBatch();
-		// data.primitives.line->NextBatch();
-		// data.primitives.circle->NextBatch();
-		// data.primitives.cube->NextBatch();
+		primitives.line->NextBatch();
+		// primitives.circle->NextBatch();
+		// primitives.cube->NextBatch();
 	}
 
 
@@ -120,5 +123,12 @@ namespace Cober {
 	{
 		primitives.quad->Draw(entity);
 		stats.QuadCount++;
+	}
+
+
+	void Render2D::DrawLine(Entity& entity) 
+	{
+		primitives.line->Draw(entity);
+		stats.LineCount++;
 	}
 }

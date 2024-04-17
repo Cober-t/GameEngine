@@ -34,6 +34,7 @@ namespace Cober {
 			switch (entity.GetComponent<Render2DComponent>().shapeType)
 			{
 			case Shape2D::Line:
+				Render2D::DrawLine(entity);
 				break;
 			case Shape2D::Quad:
 	            Render2D::DrawSolidQuad(entity);
