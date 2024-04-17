@@ -51,9 +51,9 @@ group "Tools"
     include "Editor"
 group ""
 
--- group "Application"
--- 	include "Game"
--- group ""
+group "Application"
+	include "Game"
+group ""
 
 
 

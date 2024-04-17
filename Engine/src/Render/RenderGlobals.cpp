@@ -28,15 +28,18 @@ namespace Cober {
 		RenderGlobals::m_Api->SetClearColor(red, green, blue, black);
 	}
 
+
 	void RenderGlobals::Clear() 
 	{
 		RenderGlobals::m_Api->Clear();
 	}
 
+
 	void RenderGlobals::DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
 	{
 		RenderGlobals::m_Api->DrawLines(vertexArray, vertexCount);
 	}
+
 
 	void RenderGlobals::SetLineWidth(float width)
 	{

@@ -20,13 +20,12 @@ namespace Cober {
 
 	void Editor::OnAttach() 
 	{
-		m_EditorScene = Scene::Load("Scene2.lua");
-		m_ActiveScene = m_EditorScene;
+		m_ActiveScene = Scene::Load("Scene2.lua");
+		m_ActiveScene->OnRuntimeStart();
+		m_EditorScene = m_ActiveScene;
 
 		ViewportPanel::Get().CreateFramebuffer(1280, 720);
 		SceneHierarchyPanel::Get().SetContext(m_ActiveScene);
-
-		m_ActiveScene->OnRuntimeStart();
 	}
 
 
@@ -35,9 +34,11 @@ namespace Cober {
 		m_ActiveScene->OnRuntimeStop();
 		ViewportPanel::Get().UnbindFramebuffer();
 
-		m_EditorScene  = nullptr;
 		m_ActiveScene  = nullptr;
+		m_EditorScene  = nullptr;
 		m_EditorCamera = nullptr;
+
+ 		LOG_INFO("Detached Editor Layer!");
 	}
 
 

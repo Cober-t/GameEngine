@@ -3,13 +3,8 @@
 
 namespace Cober {
 
-    SceneSerializer::SceneSerializer(const Ref<Scene>& scene)
-		: m_Scene(scene)
-	{
-	}
 
-
-    void SceneSerializer::Serialize(const std::string& sceneName)
+    void SceneSerializer::Serialize(const Ref<Scene>& scene, const std::string& sceneName)
     {
         Utils::DataFile sceneSaver;
 		std::string name;
@@ -18,13 +13,13 @@ namespace Cober {
 		else
 			name = sceneName;
 
-		// sceneSaver[name]["world2D"].SetInt(m_Scene->GetWorldType());
+		// sceneSaver[name]["world2D"].SetInt(scene->GetWorldType());
 
         EngineApp& app = EngineApp::Get();
-		sceneSaver[name]["numEntities"].SetInt(m_Scene->GetSceneEntities().size());
+		sceneSaver[name]["numEntities"].SetInt(scene->GetSceneEntities().size());
 
 		int32_t numEntity = 0;
-		for (auto& entity : m_Scene->GetSceneEntities()) 
+		for (auto& entity : scene->GetSceneEntities()) 
         {
 			auto& entityToBeSaved = sceneSaver[name]["Entity" + std::to_string(numEntity++)];
 			

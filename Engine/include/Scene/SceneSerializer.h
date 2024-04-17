@@ -13,16 +13,12 @@ namespace Cober {
 	class SceneSerializer
 	{
 	public:
-		SceneSerializer(const Ref<Scene>& scene);
+	
+		static void Serialize(const Ref<Scene>& scene, const std::string& sceneName = "Scene1");
+		static void SerializeRuntime(const std::string& sceneName = "Scene1");
 
-		void Serialize(const std::string& sceneName = "Scene1");
-		void SerializeRuntime(const std::string& sceneName = "Scene1");
-
-		Ref<Scene> Deserialize(const std::string& sceneName);
+		static Ref<Scene> Deserialize(const std::string& sceneName);
 		// Ref<Scene> DeserializeRuntime(const std::string& sceneName);
-
-	private:
-		Ref<Scene> m_Scene;
 	};
 }
 

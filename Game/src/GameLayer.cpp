@@ -11,8 +11,6 @@ namespace Cober {
 
 	void Game::OnAttach() 
 	{
-		m_ActiveScene = CreateRef<Scene>();
-
 		m_Camera->SetViewportSize(1280, 720);
 		m_ActiveScene = Scene::Load("Scene2.lua");
 		m_ActiveScene->OnSimulationStart();
@@ -30,6 +28,8 @@ namespace Cober {
 
 	void Game::OnUpdate(Unique<Timestep>& ts) 
 	{
+		RenderGlobals::SetClearColor(100, 0, 0, 255);
+		RenderGlobals::Clear();
 		m_Camera->OnUpdate(ts);
 		m_ActiveScene->OnUpdateSimulation(ts, m_Camera);
 	}

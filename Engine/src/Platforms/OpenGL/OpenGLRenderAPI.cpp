@@ -28,17 +28,22 @@ namespace Cober {
 	{
 
 	// #ifdef CB_DEBUG
-		// glEnable(GL_DEBUG_OUTPUT);
-		// glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-		// glDebugMessageCallback(OpenGLMessageCallback, nullptr);
+		glEnable(GL_DEBUG_OUTPUT);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		glDebugMessageCallback(OpenGLMessageCallback, nullptr);
 		
-		// glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
+		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
 	// #endif
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glEnable(GL_DEPTH_TEST);
+
+		// Actual camera has a problem with an inversed z buffer
+		// Delete it when solve it
+		glDepthFunc(GL_GREATER); 
+
 		glEnable(GL_LINE_SMOOTH);
 
 		LOG_CORE_TRACE("Render API init");
@@ -51,8 +56,8 @@ namespace Cober {
 	}
 
 
-	void OpenGLRenderAPI::SetClearColor(glm::vec4 color) {
-
+	void OpenGLRenderAPI::SetClearColor(glm::vec4 color) 
+	{
 		glClearColor(color.r, color.g, color.b, color.a);
 	}
 
@@ -66,6 +71,10 @@ namespace Cober {
 
 	void OpenGLRenderAPI::Clear() 
 	{
+		// Actual camera has a problem with an inversed z buffer
+		// Delete it when solve it
+		glClearDepth(0.0f);
+		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 

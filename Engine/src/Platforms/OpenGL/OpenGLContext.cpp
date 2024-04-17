@@ -8,11 +8,12 @@ namespace Cober {
 		: m_WindowHandle(windowHandle)
 	{
 		LOG_CORE_ASSERT(windowHandle, "Window handle is null!");
+		LOG_CORE_INFO("Window Context Created!!");
 	}
 
 	OpenGLContext::~OpenGLContext()
 	{
-		LOG_CORE_INFO("Context Destroyed!!");
+		LOG_CORE_INFO("Window Context Destroyed!!");
 	}
 
 

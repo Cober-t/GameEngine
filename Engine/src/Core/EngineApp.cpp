@@ -17,6 +17,9 @@ namespace Cober {
         m_Window->SetEventCallback([this](Event& e) { OnEvent(e); });
         m_TimeStep = CreateUnique<Timestep>();
 
+        RenderGlobals::Init();
+		Render2D::Start();
+
         m_GameState = GameState::PLAY;
 
     }

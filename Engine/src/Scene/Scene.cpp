@@ -27,18 +27,13 @@ namespace Cober {
 
 	void Scene::Save(const Ref<Scene>& scene, std::string sceneName) 
 	{
-	    SceneSerializer serializer(scene);
-
-	    serializer.Serialize(sceneName);
+	    SceneSerializer::Serialize(scene, sceneName);
 	}
 
 
 	Ref<Scene> Scene::Load(std::string sceneName) 
 	{
-		Ref<Scene> newScene = CreateRef<Scene>();
-	    SceneSerializer serializer(newScene);
-
-	    return serializer.Deserialize(sceneName);
+	    return SceneSerializer::Deserialize(sceneName);
 	}
 
 

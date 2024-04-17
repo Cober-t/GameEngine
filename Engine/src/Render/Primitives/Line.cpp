@@ -75,7 +75,6 @@ namespace Cober {
         glm::vec4 color = entity.GetComponent<Render2DComponent>().color;
         data.LineWidth = entity.GetComponent<Render2DComponent>().lineWidth;
 
-        data.Shader->Bind();
         SetAttributes(point1, point2, color, (int)entity);
 		data.VertexCount += 2;
     }

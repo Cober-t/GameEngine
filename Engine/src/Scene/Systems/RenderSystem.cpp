@@ -16,9 +16,6 @@ namespace Cober {
 
 	void RenderSystem::Start()
 	{
-		RenderGlobals::Init();
-		Render2D::Start();
-
 		LOG_INFO("Render System Started!!");
 	}
 
@@ -27,7 +24,6 @@ namespace Cober {
 	{
 		Render2D::ResetStats();
 		Render2D::BeginScene(camera);
-		
 
 		for (auto entity : GetSystemEntities())
         {
@@ -54,7 +50,6 @@ namespace Cober {
 	{
 		std::vector<Entity> entities;
 		auto entitiesView = m_Scene->GetAllEntitiesWith<TransformComponent, TagComponent, Render2DComponent>();
-		// auto entitiesView = m_Scene->GetAllEntitiesWith<TransformComponent, SpriteComponent>();
 
 		for (auto entity : entitiesView)
 		{

@@ -9,8 +9,6 @@ namespace Cober {
 	class RenderGlobals 
 	{
 	public:
-		static void Create();
-
 		static void Clear();
 		static void Init();
 

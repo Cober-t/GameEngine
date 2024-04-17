@@ -1,43 +1,43 @@
-[12:09:29] [info] APP: Editor Constructor!
-[12:09:29] [info] ENGINE: EngineApp Constructor!
-[12:09:29] [info] ENGINE: Creating window Engine Editor (1280, 720)
-[12:09:29] [info] ENGINE: OpenGL Info:
-[12:09:29] [info] ENGINE:   Vendor: NVIDIA Corporation
-[12:09:29] [info] ENGINE:   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
-[12:09:29] [info] ENGINE:   Version: 4.6.0 NVIDIA 551.86
-[12:09:29] [info] ENGINE: Created Timer
-[12:09:29] [info] APP: Editor Camera Created!!
-[12:09:29] [info] APP: Scene Created!!
-[12:09:29] [info] APP: Scene Created!!
-[12:09:29] [info] APP: Created entity with ID 10919367526086727181 and name Entity0
-[12:09:29] [info] APP: Created entity with ID 16794791379334320824 and name Entity1
-[12:09:29] [info] APP: Created entity with ID 14388857458205480165 and name Entity3
-[12:09:29] [info] APP: Scene Destroyed!!
-[12:09:29] [info] APP: Render System Added to Registry!!
-[12:09:29] [trace] ENGINE: Render API init
-[12:09:29] [trace] ENGINE: Render VertexArray success
-[12:09:29] [trace] ENGINE: Render VertexBuffer success
-[12:09:29] [trace] ENGINE: Render IndexBuffer success
-[12:09:29] [trace] ENGINE: Render Texture success
-[12:09:29] [trace] ENGINE: Render Shader Quad.glsl success
-[12:09:29] [trace] ENGINE: Render VertexArray success
-[12:09:29] [trace] ENGINE: Render VertexBuffer success
-[12:09:29] [trace] ENGINE: Render Shader Line.glsl success
-[12:09:29] [trace] ENGINE: Render UniformBuffer success
-[12:09:29] [info] APP: Render System Started!!
-[12:09:32] [info] APP: Editor Destructor!
-[12:09:32] [info] ENGINE: EngineApp Destructor!
-[12:09:32] [info] ENGINE: Destroyed Timer
-[12:09:32] [info] APP: Render System Removed from Registry
-[12:09:32] [info] APP: Editor Camera Destroyed!!
-[12:09:32] [info] ENGINE: Window Destroyed
-[12:09:32] [info] ENGINE: Context Destroyed!!
-[12:09:32] [trace] ENGINE: Render Texture cleaned up
-[12:09:32] [trace] ENGINE: Render Shader cleaned up
-[12:09:32] [trace] ENGINE: Render VertexArray cleaned up
-[12:09:32] [trace] ENGINE: Render IndexBuffer cleaned up
-[12:09:32] [trace] ENGINE: Render VertexBuffer cleaned up
-[12:09:32] [trace] ENGINE: Render Shader cleaned up
-[12:09:32] [trace] ENGINE: Render VertexArray cleaned up
-[12:09:32] [trace] ENGINE: Render VertexBuffer cleaned up
-[12:09:32] [trace] ENGINE: Render UniformBuffer cleaned up
+[17:37:24] [info] APP: Editor Constructor!
+[17:37:24] [info] ENGINE: EngineApp Constructor!
+[17:37:24] [info] ENGINE: Creating window Engine Editor (1280, 720)
+[17:37:25] [info] ENGINE: Window Context Created!!
+[17:37:25] [info] ENGINE: OpenGL Info:
+[17:37:25] [info] ENGINE:   Vendor: NVIDIA Corporation
+[17:37:25] [info] ENGINE:   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+[17:37:25] [info] ENGINE:   Version: 4.6.0 NVIDIA 551.86
+[17:37:25] [info] ENGINE: Created Timer
+[17:37:25] [trace] ENGINE: Render API init
+[17:37:25] [trace] ENGINE: Render VertexArray success
+[17:37:25] [trace] ENGINE: Render VertexBuffer success
+[17:37:25] [trace] ENGINE: Render IndexBuffer success
+[17:37:25] [trace] ENGINE: Render Texture success
+[17:37:25] [trace] ENGINE: Render Shader Quad.glsl success
+[17:37:25] [trace] ENGINE: Render VertexArray success
+[17:37:25] [trace] ENGINE: Render VertexBuffer success
+[17:37:25] [trace] ENGINE: Render Shader Line.glsl success
+[17:37:25] [trace] ENGINE: Render UniformBuffer success
+[17:37:25] [info] APP: Editor Camera Created!!
+[17:37:25] [info] APP: Scene Created!!
+[17:37:25] [info] APP: Created entity with ID 5062865450002814046 and name Entity3
+[17:37:25] [info] APP: Created entity with ID 11275618836852310347 and name Entity1
+[17:37:25] [info] APP: Created entity with ID 12175315602826996831 and name Entity0
+[17:37:25] [info] APP: Render System Added to Registry!!
+[17:37:25] [info] APP: Render System Started!!
+[17:37:31] [info] APP: Editor Destructor!
+[17:37:31] [info] ENGINE: EngineApp Destructor!
+[17:37:31] [info] ENGINE: Destroyed Timer
+[17:37:31] [info] APP: Render System Removed from Registry
+[17:37:31] [info] APP: Editor Camera Destroyed!!
+[17:37:31] [info] APP: Detached Editor Layer!
+[17:37:31] [info] ENGINE: Window Destroyed
+[17:37:31] [info] ENGINE: Window Context Destroyed!!
+[17:37:31] [trace] ENGINE: Render Texture cleaned up
+[17:37:31] [trace] ENGINE: Render Shader cleaned up
+[17:37:31] [trace] ENGINE: Render VertexArray cleaned up
+[17:37:31] [trace] ENGINE: Render IndexBuffer cleaned up
+[17:37:31] [trace] ENGINE: Render VertexBuffer cleaned up
+[17:37:31] [trace] ENGINE: Render Shader cleaned up
+[17:37:31] [trace] ENGINE: Render VertexArray cleaned up
+[17:37:31] [trace] ENGINE: Render VertexBuffer cleaned up
+[17:37:31] [trace] ENGINE: Render UniformBuffer cleaned up

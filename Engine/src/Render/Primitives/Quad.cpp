@@ -79,15 +79,13 @@ namespace Cober {
 
 		data.Shader = Shader::Create("Quad.glsl");
 
-		data.Shader->Bind();
-		data.Shader->SetIntArray("u_Textures", samplers, Data::MaxTextureSlots);
 		// Set first texture slot to 0
 		data.TextureSlots[0] = data.WhiteTexture;
 
-		data.VertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
-		data.VertexPositions[1] = {  0.5f, -0.5f, 0.0f, 1.0f };
-		data.VertexPositions[2] = {  0.5f,  0.5f, 0.0f, 1.0f };
-		data.VertexPositions[3] = { -0.5f,  0.5f, 0.0f, 1.0f };
+		data.VertexPositions[0] = { -1.0f, -1.0f, 0.0f, 1.0f };
+		data.VertexPositions[1] = {  1.0f, -1.0f, 0.0f, 1.0f };
+		data.VertexPositions[2] = {  1.0f,  1.0f, 0.0f, 1.0f };
+		data.VertexPositions[3] = { -1.0f,  1.0f, 0.0f, 1.0f };
 	}
 
 
@@ -123,7 +121,7 @@ namespace Cober {
 	// 	constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
     //     if (data.IndexCount >= Render2D::data.MaxIndices)
-    //         Primitive::NextBatch();
+    //         NextBatch();
 
 	// 	SetAttributes(transform, color, textureIndex, textureCoords, tilingFactor, entityID);
 	// }
@@ -146,9 +144,8 @@ namespace Cober {
 		glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
         if (data.IndexCount >= Data::MaxIndices)
-            Primitive::NextBatch();
+            NextBatch();
 
-		data.Shader->Bind();
 		SetAttributes(transform, color, textureIndex, textureCoords, 1.0f, (int)entity);
         data.IndexCount += 6;
 	}
@@ -157,11 +154,11 @@ namespace Cober {
 	void Quad::SetAttributes(const glm::mat4& transform, const glm::vec4& color, int textureIndex, const glm::vec2* textureCoords, float tilingFactor, int entityID) 
     {
 
-		int32_t samplers[Data::MaxIndices];
-		for (uint32_t i = 0; i < Data::MaxIndices; i++)
-			samplers[i] = i;
+		// int32_t samplers[Data::MaxIndices];
+		// for (uint32_t i = 0; i < Data::MaxIndices; i++)
+		// 	samplers[i] = i;
 
-		data.Shader->SetIntArray("u_Textures", samplers, Data::MaxTextureSlots);
+		// data.Shader->SetIntArray("u_Textures", samplers, Data::MaxTextureSlots);
 
 		for (size_t i = 0; i < data.VertexCount; i++) 
         {
