@@ -66,7 +66,6 @@
 #include "Render/Camera/Camera.h"
 #include "Render/Camera/GameCamera.h"
 #include "Render/Camera/EditorCamera.h"
-#include "Render/Primitives/Primitive.h"
 #include "Render/Primitives/Line.h"
 #include "Render/Primitives/Quad.h"
 #include "Render/Primitives/Circle.h"

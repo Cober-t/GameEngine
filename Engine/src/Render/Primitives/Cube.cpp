@@ -5,8 +5,12 @@
 
 namespace Cober {
 
+	// static Cube::Data data;
+	Cube* Cube::s_Instance = nullptr;
+
     Cube::Cube() 
     {
+        s_Instance = this;
 	}
 
     Cube::~Cube() 
@@ -33,7 +37,7 @@ namespace Cober {
     {
     }
 
-	void Cube::Draw() 
+	void Cube::Draw(Entity& entity) 
     {
 	}
 

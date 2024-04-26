@@ -2,7 +2,6 @@
 
 #include "Render/Render2D.h"
 
-#include "Render/Primitives/Primitive.h"
 #include "Render/Primitives/Line.h"
 #include "Render/Primitives/Quad.h"
 #include "Render/Primitives/Circle.h"
@@ -12,16 +11,6 @@
 
 namespace Cober {
 
-	struct Primitives 
-	{
-		Unique<Quad> quad = CreateUnique<Quad>();
-		Unique<Line> line = CreateUnique<Line>();
-		Unique<Circle> circle = CreateUnique<Circle>();
-		// Unique<Cube> cube;
-		// Unique<Mesh> mesh;
-	};
-	static Primitives primitives;
-
 	struct CameraData
 	{
 		glm::mat4 Projection;
@@ -30,17 +19,15 @@ namespace Cober {
 	static CameraData CameraBuffer;
 	static Ref<UniformBuffer> CameraUniformBuffer;
 
-
 	static Render2D::Statistics stats;
 
 
 	void Render2D::Start() 
 	{
-		primitives.quad->Init();
-		primitives.line->Init();
-		primitives.circle->Init();
-		// primitives.cube->Init();
-		
+		Primitive::Quad::Init();
+		Primitive::Line::Init();
+		Primitive::Circle::Init();
+		// Primitive::Cube::Init();
 
 		CameraUniformBuffer = UniformBuffer::Create(sizeof(CameraData), 0);
 	}
@@ -58,44 +45,44 @@ namespace Cober {
 
 	void Render2D::Flush()
 	{
-		if (primitives.quad->GetIndexCount())
+		if (Primitive::Quad::GetIndexCount())
 		{
-			primitives.quad->Flush();
+			Primitive::Quad::Flush();
 			stats.DrawCalls++;
 		}
 
-		if (primitives.line->GetVertexCount())
+		if (Primitive::Line::GetVertexCount())
 		{
-			primitives.line->Flush();
+			Primitive::Line::Flush();
 			stats.DrawCalls++;	
 		}
 
-		if (primitives.circle->GetIndexCount())
+		if (Primitive::Circle::GetIndexCount())
 		{
-			primitives.circle->Flush();
+			Primitive::Circle::Flush();
 			stats.DrawCalls++;	
 		}
 
-		// if (primitives.cube->IndexCount)
-		// 	primitives.cube->Flush();
+		// if (Cube::IndexCount)
+		// 	Cube::Flush();
 	}
 
 
 	void Render2D::StartBatch() 
 	{
-		primitives.quad->StartBatch();
-		primitives.line->StartBatch();
-		primitives.circle->StartBatch();
-		// primitives.cube->StartBatch();
+		Primitive::Quad::StartBatch();
+		Primitive::Line::StartBatch();
+		Primitive::Circle::StartBatch();
+		// Primitive::Cube::StartBatch();
 	}
 
 
 	void Render2D::NextBatch() 
 	{
-		primitives.quad->NextBatch();
-		primitives.line->NextBatch();
-		primitives.circle->NextBatch();
-		// primitives.cube->NextBatch();
+		Primitive::Quad::NextBatch();
+		Primitive::Line::NextBatch();
+		Primitive::Circle::NextBatch();
+		// Primitive::Cube::NextBatch();
 	}
 
 
@@ -124,21 +111,29 @@ namespace Cober {
 
 	void Render2D::DrawQuad(Entity& entity) 
 	{
-		primitives.quad->Draw(entity);
-		stats.QuadCount++;
+		if (entity.GetComponent<Render2DComponent>().fill)
+		{
+			Primitive::Quad::Draw(entity);
+			stats.QuadCount++;
+		}
+		else
+		{
+			Primitive::Quad::DrawRect(entity);
+			stats.LineCount += 4;
+		}
 	}
 
 
 	void Render2D::DrawLine(Entity& entity) 
 	{
-		primitives.line->Draw(entity);
+		Primitive::Line::Draw(entity);
 		stats.LineCount++;
 	}
 
 
 	void Render2D::DrawCircle(Entity& entity) 
 	{
-		primitives.circle->Draw(entity);
+		Primitive::Circle::Draw(entity);
 		stats.CircleCount++;
 	}
 }
