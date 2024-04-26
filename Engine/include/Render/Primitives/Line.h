@@ -44,7 +44,7 @@ namespace Cober  {
 			static const uint32_t MaxLines = 100000;
 			static const uint32_t MaxVertices = MaxLines * 2; // Add Lines, Circles and Cubes to the count
 
-			float LineWidth = 2.0f;
+			float thickness = 2.0f;
 		};
 
 	private:

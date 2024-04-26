@@ -11,13 +11,6 @@
 
 #include "Scene/ECS.h"
 
-// #include "Render/Primitives/Primitive.h"
-// #include "Render/Primitives/Line.h"
-// #include "Render/Primitives/Quad.h"
-// #include "Render/Primitives/Circle.h"
-// #include "Render/Primitives/Cube.h"
-
-
 #include <glm/gtc/matrix_transform.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
@@ -41,16 +34,17 @@ namespace Cober {
 
 		// EXPORT TO DEBUG RENDERER
 		// static void DrawSolidQuad();
-		static void DrawSolidQuad(Entity& entity);
+		static void DrawQuad(Entity& entity);
 		static void DrawLine(Entity& entity);
+		static void DrawCircle(Entity& entity);
 
 	public:
-
 		struct Statistics
 		{
 			uint32_t DrawCalls = 0;
 			uint32_t QuadCount = 0;
 			uint32_t LineCount = 0;
+			uint32_t CircleCount = 0;
 
 			uint32_t GetTotalVertexCount() { return QuadCount * 4 + LineCount * 2; }
 			uint32_t GetTotalIndexCount()  { return QuadCount * 6; }

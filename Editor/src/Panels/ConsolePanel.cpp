@@ -1,4 +1,5 @@
 #include "Panels/ConsolePanel.h"
+#include "Panels/MenuPanel.h"
 #include "Core/EngineApp.h"
 #include "Core/Log.h"
 
@@ -69,17 +70,25 @@ namespace Cober {
 			}
 
 			ImGui::PushStyleColor(ImGuiCol_Text, color);
-			ImGui::TextWrapped("[");	
-			ImGui::SameLine();
-			ImGui::TextWrapped(msg.fileName.c_str());
-			ImGui::SameLine();
-			ImGui::TextWrapped(msg.function.c_str());
-			ImGui::SameLine();
-			ImGui::TextWrapped("%i",msg.line);
-			ImGui::SameLine();
-			ImGui::TextWrapped("] ");
-			ImGui::SameLine();
-			ImGui::TextWrapped(msg.message.c_str());
+			if (EngineApp::Get().GetDebugMode())
+			{
+				ImGui::TextWrapped("[");	
+				ImGui::SameLine();
+				ImGui::TextWrapped(msg.fileName.c_str());
+				ImGui::SameLine();
+				ImGui::TextWrapped(msg.function.c_str());
+				ImGui::SameLine();
+				ImGui::TextWrapped("%i",msg.line);
+				ImGui::SameLine();
+				ImGui::TextWrapped("] ");
+				ImGui::SameLine();
+				ImGui::TextWrapped(msg.message.c_str());
+			}
+			else
+			{
+				ImGui::TextWrapped(msg.message.c_str());
+			}
+
 			// ImGui::SameLine();
 			// ImGui::TextWrapped("%i",msg.level);
 			ImGui::PopStyleColor();

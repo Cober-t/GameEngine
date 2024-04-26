@@ -23,8 +23,9 @@ namespace Cober {
 		s_Instance = nullptr;
 	}
 
-	void MenuPanel::OnGuiRender(Ref<EditorCamera>& editorCamera, Ref<Scene>& activeScene, Ref<Scene>& editorScene, bool& game2D, bool& debugMode) {
 
+	void MenuPanel::OnGuiRender(Ref<EditorCamera>& editorCamera, Ref<Scene>& activeScene, Ref<Scene>& editorScene, bool& game2D, bool& debugMode) 
+	{
 		m_FileBrowser.Display();
 		if (m_FileBrowser.HasSelected()) {
 			auto file_path = m_FileBrowser.GetSelected().string();
@@ -110,6 +111,7 @@ namespace Cober {
 		}
 	}
 
+
 	void MenuPanel::OpenFileDialog(Ref<Scene>& activeScene, const std::filesystem::path& path) 
     {
 		// if (m_MenuFileOption == MenuOptions::OPEN)
@@ -122,14 +124,14 @@ namespace Cober {
 	}
 	
 	
-	bool MenuPanel::MustSnap() {
-
+	bool MenuPanel::MustSnap() 
+	{
 		return m_World2D == true ? m_Snap2D : m_Snap3D;
 	}
 
 
-	float MenuPanel::SnapValue() {
-
+	float MenuPanel::SnapValue() 
+	{
 		return m_World2D == true ? m_Snap2DValue : m_Snap3DValue;
 	}
 

@@ -121,7 +121,8 @@ namespace Cober {
 
 		glm::vec3 point1 = glm::vec3(0.0f);
 		glm::vec3 point2 = glm::vec3(5.0f);
-		float lineWidth = 1.0f;
+		float thickness = 1.0f;
+		float fade = 0.005f;
 
 		Ref<Texture> texture = nullptr;
 

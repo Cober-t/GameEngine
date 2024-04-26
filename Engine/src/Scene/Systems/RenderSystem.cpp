@@ -33,9 +33,10 @@ namespace Cober {
 				Render2D::DrawLine(entity);
 				break;
 			case Shape2D::Quad:
-	            Render2D::DrawSolidQuad(entity);
+	            Render2D::DrawQuad(entity);
 				break;
 			case Shape2D::Circle:
+				Render2D::DrawCircle(entity);
 				break;
 			case Shape2D::Sprite:
 				break;

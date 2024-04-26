@@ -16,7 +16,7 @@ namespace Cober {
 	{
 		Unique<Quad> quad = CreateUnique<Quad>();
 		Unique<Line> line = CreateUnique<Line>();
-		// Unique<Circle> circle;
+		Unique<Circle> circle = CreateUnique<Circle>();
 		// Unique<Cube> cube;
 		// Unique<Mesh> mesh;
 	};
@@ -38,7 +38,7 @@ namespace Cober {
 	{
 		primitives.quad->Init();
 		primitives.line->Init();
-		// primitives.circle->Init();
+		primitives.circle->Init();
 		// primitives.cube->Init();
 		
 
@@ -70,8 +70,11 @@ namespace Cober {
 			stats.DrawCalls++;	
 		}
 
-		// if (primitives.circle->IndexCount)
-		// 	primitives.circle->Flush();
+		if (primitives.circle->GetIndexCount())
+		{
+			primitives.circle->Flush();
+			stats.DrawCalls++;	
+		}
 
 		// if (primitives.cube->IndexCount)
 		// 	primitives.cube->Flush();
@@ -82,7 +85,7 @@ namespace Cober {
 	{
 		primitives.quad->StartBatch();
 		primitives.line->StartBatch();
-		// primitives.circle->StartBatch();
+		primitives.circle->StartBatch();
 		// primitives.cube->StartBatch();
 	}
 
@@ -91,7 +94,7 @@ namespace Cober {
 	{
 		primitives.quad->NextBatch();
 		primitives.line->NextBatch();
-		// primitives.circle->NextBatch();
+		primitives.circle->NextBatch();
 		// primitives.cube->NextBatch();
 	}
 
@@ -119,7 +122,7 @@ namespace Cober {
 	}
 
 
-	void Render2D::DrawSolidQuad(Entity& entity) 
+	void Render2D::DrawQuad(Entity& entity) 
 	{
 		primitives.quad->Draw(entity);
 		stats.QuadCount++;
@@ -130,5 +133,12 @@ namespace Cober {
 	{
 		primitives.line->Draw(entity);
 		stats.LineCount++;
+	}
+
+
+	void Render2D::DrawCircle(Entity& entity) 
+	{
+		primitives.circle->Draw(entity);
+		stats.CircleCount++;
 	}
 }

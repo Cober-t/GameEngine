@@ -342,7 +342,8 @@ namespace Cober {
 
 					for (int i = 0; i < (int)Shape2D::N_SHAPE_ITEMS; i++) {
 						bool isSelected = current2DShape == shape2DString[i];
-						if (ImGui::Selectable(shape2DString[i], isSelected)) {
+						if (ImGui::Selectable(shape2DString[i], isSelected)) 
+						{
 							current2DShape = shape2DString[i];
 							component.shapeType = (Shape2D)i;
 						}
@@ -357,7 +358,7 @@ namespace Cober {
 				{
 					DrawVec3Control("Point 1", component.point1);
 					DrawVec3Control("Point 2", component.point2);
-					ImGui::DragFloat("LineWidth", &component.lineWidth, 1.0f);
+					ImGui::DragFloat("Thickness", &component.thickness, 0.1f, 0.1f, 5.0f);
 				}
 
 				if ((int)component.shapeType == (int)Shape2D::Quad)
@@ -367,6 +368,8 @@ namespace Cober {
 
 				if ((int)component.shapeType == (int)Shape2D::Circle)
 				{
+					ImGui::DragFloat("Thickness", &component.thickness, 0.1f, 0.1f, 5.0f);
+					ImGui::DragFloat("Fade", &component.fade, 0.005f);
 				}
 
 				if ((int)component.shapeType == (int)Shape2D::Sprite)

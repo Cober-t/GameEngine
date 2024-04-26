@@ -31,6 +31,8 @@ namespace Cober {
 		ImGui::Text("Draw Calls: %d", Render2D::GetStats().DrawCalls);
 		ImGui::Text("Quads: %d", Render2D::GetStats().QuadCount);
 		ImGui::Text("Lines: %d", Render2D::GetStats().LineCount);
+		ImGui::Text("Circles: %d", Render2D::GetStats().CircleCount);
+		ImGui::Spacing();
 		ImGui::Text("Mouse Coords: \nX: %i\nY: %i", mouseX, mouseY);
 
 		std::string name = "None";

@@ -64,12 +64,19 @@ namespace Cober {
 				{
 				case Shape2D::Line:
 					entityToBeSaved["Render2DComponent"]["shape2D"].SetString("Line");
+					entityToBeSaved["Render2DComponent"]["thickness"].SetReal(entity.GetComponent<Render2DComponent>().thickness);
 					break;
 				case Shape2D::Quad:
 					entityToBeSaved["Render2DComponent"]["shape2D"].SetString("Quad");
+					entityToBeSaved["Render2DComponent"]["fill"].SetInt(entity.GetComponent<Render2DComponent>().fill);
 					break;
 				case Shape2D::Circle:
 					entityToBeSaved["Render2DComponent"]["shape2D"].SetString("Circle");
+					entityToBeSaved["Render2DComponent"]["thickness"].SetReal(entity.GetComponent<Render2DComponent>().thickness);
+					entityToBeSaved["Render2DComponent"]["fade"].SetReal(entity.GetComponent<Render2DComponent>().fade);
+					break;
+				case Shape2D::Sprite:
+					entityToBeSaved["Render2DComponent"]["shape2D"].SetString("Sprite");
 					break;
 				}
 			}
@@ -142,13 +149,28 @@ namespace Cober {
 
 						std::string shapeType = loader["Render2DComponent"]["shape2D"].GetString();
 						if (shapeType == "Line")
+						{
 							newEntity.GetComponent<Render2DComponent>().shapeType = Shape2D::Line;
+							newEntity.GetComponent<Render2DComponent>().thickness = loader["Render2DComponent"]["thickness"].GetReal();
+						}
 
 						if (shapeType == "Quad")
+						{
 							newEntity.GetComponent<Render2DComponent>().shapeType = Shape2D::Quad;
+							newEntity.GetComponent<Render2DComponent>().fill = loader["Render2DComponent"]["fill"].GetInt();
+						}
 
 						if (shapeType == "Circle")
+						{
 							newEntity.GetComponent<Render2DComponent>().shapeType = Shape2D::Circle;
+							newEntity.GetComponent<Render2DComponent>().thickness = loader["Render2DComponent"]["thickness"].GetReal();
+							newEntity.GetComponent<Render2DComponent>().fade = loader["Render2DComponent"]["fade"].GetReal();
+						}
+
+						if (shapeType == "Sprite")
+						{
+							newEntity.GetComponent<Render2DComponent>().shapeType = Shape2D::Sprite;
+						}
 					}
 				}
 			}

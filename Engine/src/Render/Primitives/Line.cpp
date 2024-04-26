@@ -56,7 +56,7 @@ namespace Cober {
         data.VertexBuffer->SetData(data.VertexBufferBase, dataSize);
 
         data.Shader->Bind();
-        RenderGlobals::SetLineWidth(data.LineWidth);
+        RenderGlobals::SetLineWidth(data.thickness);
         RenderGlobals::DrawLines(data.VertexArray, data.VertexCount);
     }
     
@@ -73,7 +73,7 @@ namespace Cober {
         glm::vec3 point1 = entity.GetComponent<Render2DComponent>().point1;
         glm::vec3 point2 = entity.GetComponent<Render2DComponent>().point2;
         glm::vec4 color = entity.GetComponent<Render2DComponent>().color;
-        data.LineWidth = entity.GetComponent<Render2DComponent>().lineWidth;
+        data.thickness = entity.GetComponent<Render2DComponent>().thickness;
 
         SetAttributes(point1, point2, color, (int)entity);
 		data.VertexCount += 2;
