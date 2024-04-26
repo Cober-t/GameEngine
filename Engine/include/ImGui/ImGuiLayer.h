@@ -21,6 +21,9 @@ namespace Cober {
 		void End();
 		void BlockEvents(bool block) { m_BlockEvents = block; }
 
+		void StyleDefault();
+		void StyleCustom();
+
 	private:
 		bool m_BlockEvents = true;
 		const char* glsl_version;

@@ -1,233 +1,51 @@
-[2024-04-26 19:08:33.408] [APP] [info] [EditorApp.cpp:26] Editor Constructor!
-[2024-04-26 19:08:33.409] [ENGINE] [info] [EngineApp.cpp:11] EngineApp Constructor!
-[2024-04-26 19:08:33.410] [ENGINE] [info] [Window.cpp:38] Creating window Engine Editor (1280, 720)
-[2024-04-26 19:08:33.661] [ENGINE] [info] [OpenGLContext.cpp:11] Window Context Created!!
-[2024-04-26 19:08:33.668] [ENGINE] [info] [OpenGLContext.cpp:26] OpenGL Info:
-[2024-04-26 19:08:33.668] [ENGINE] [info] [OpenGLContext.cpp:27]   Vendor: NVIDIA Corporation
-[2024-04-26 19:08:33.668] [ENGINE] [info] [OpenGLContext.cpp:28]   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
-[2024-04-26 19:08:33.668] [ENGINE] [info] [OpenGLContext.cpp:29]   Version: 4.6.0 NVIDIA 551.86
-[2024-04-26 19:08:33.669] [ENGINE] [info] [Timestep.h:18] Created Timer
-[2024-04-26 19:08:33.669] [ENGINE] [trace] [OpenGLRenderAPI.cpp:49] Render API init
-[2024-04-26 19:08:33.669] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-04-26 19:08:33.670] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-04-26 19:08:33.671] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2024-04-26 19:08:33.672] [ENGINE] [trace] [OpenGLTexture.cpp:20] Render Texture success
-[2024-04-26 19:08:33.673] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Quad.glsl success
-[2024-04-26 19:08:33.673] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-04-26 19:08:33.673] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-04-26 19:08:33.675] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Line.glsl success
-[2024-04-26 19:08:33.675] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-04-26 19:08:33.675] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-04-26 19:08:33.677] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2024-04-26 19:08:33.677] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Circle.glsl success
-[2024-04-26 19:08:33.678] [ENGINE] [trace] [OpenGLBuffer.cpp:94] Render UniformBuffer success
-[2024-04-26 19:08:33.678] [APP] [info] [EditorCamera.cpp:36] Editor Camera Created!!
-[2024-04-26 19:08:33.681] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-04-26 19:08:33.681] [APP] [info] [Scene.cpp:130] Created entity with ID 1144111522565127232 and name Entity0
-[2024-04-26 19:08:33.682] [APP] [info] [Scene.cpp:130] Created entity with ID 6224898091718515728 and name Entity1
-[2024-04-26 19:08:33.683] [APP] [info] [Scene.cpp:130] Created entity with ID 15349936545096458196 and name Entity3
-[2024-04-26 19:08:33.683] [APP] [info] [RenderSystem.cpp:8] Render System Added to Registry!!
-[2024-04-26 19:08:33.684] [APP] [info] [RenderSystem.cpp:19] Render System Started!!
-[2024-04-26 19:08:40.686] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-04-26 19:08:40.687] [APP] [info] [Scene.cpp:130] Created entity with ID 14015225656328421433 and name Entity3
-[2024-04-26 19:08:40.688] [APP] [info] [Scene.cpp:130] Created entity with ID 16153870241761570813 and name Entity1
-[2024-04-26 19:08:40.689] [APP] [info] [Scene.cpp:130] Created entity with ID 10547032561696095668 and name Entity0
-[2024-04-26 19:08:40.689] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-04-26 19:08:40.689] [APP] [info] [RenderSystem.cpp:13] Render System Removed from Registry
-[2024-04-26 19:08:40.690] [APP] [info] [RenderSystem.cpp:8] Render System Added to Registry!!
-[2024-04-26 19:08:40.690] [APP] [info] [RenderSystem.cpp:19] Render System Started!!
-[2024-04-26 19:08:51.808] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-04-26 19:08:51.809] [APP] [info] [Scene.cpp:130] Created entity with ID 13187314381737070710 and name Entity0
-[2024-04-26 19:08:51.810] [APP] [info] [Scene.cpp:130] Created entity with ID 18255294704932207815 and name Entity1
-[2024-04-26 19:08:51.810] [APP] [info] [Scene.cpp:130] Created entity with ID 4666202741079584641 and name Entity3
-[2024-04-26 19:08:51.811] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-04-26 19:08:51.811] [APP] [info] [RenderSystem.cpp:13] Render System Removed from Registry
-[2024-04-26 19:08:51.811] [APP] [info] [RenderSystem.cpp:8] Render System Added to Registry!!
-[2024-04-26 19:08:51.812] [APP] [info] [RenderSystem.cpp:19] Render System Started!!
-[2024-04-26 19:09:33.340] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-04-26 19:09:33.341] [APP] [info] [Scene.cpp:130] Created entity with ID 10977796251269955584 and name Entity3
-[2024-04-26 19:09:33.341] [APP] [info] [Scene.cpp:130] Created entity with ID 7393775681900424192 and name Entity1
-[2024-04-26 19:09:33.341] [APP] [info] [Scene.cpp:130] Created entity with ID 9643654215064920064 and name Entity0
-[2024-04-26 19:09:33.342] [APP] [info] [RenderSystem.cpp:8] Render System Added to Registry!!
-[2024-04-26 19:09:33.342] [APP] [info] [PhysicsSystem2D.cpp:8] Physics System Added to Registry!!
-[2024-04-26 19:09:33.342] [APP] [info] [ScriptSystem.cpp:11] Script System Added to Registry!!
-[2024-04-26 19:09:33.343] [APP] [info] [RenderSystem.cpp:19] Render System Started!!
-[2024-04-26 19:09:33.343] [APP] [info] [PhysicsSystem2D.cpp:30] Physics System Started!!
-[2024-04-26 19:09:33.343] [APP] [info] [ScriptSystem.cpp:23] Script System Started!!
-[2024-04-26 19:09:33.677] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:33.678] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:09:33.683] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
-[2024-04-26 19:09:33.684] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
-[2024-04-26 19:09:34.017] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:34.017] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:09:34.023] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
-[2024-04-26 19:09:34.023] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
-[2024-04-26 19:09:34.199] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:34.200] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:09:34.211] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
-[2024-04-26 19:09:34.211] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
-[2024-04-26 19:09:34.289] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:34.290] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:09:35.964] [APP] [info] [RenderSystem.cpp:13] Render System Removed from Registry
-[2024-04-26 19:09:35.964] [APP] [info] [PhysicsSystem2D.cpp:16] Physics System Removed from Registry
-[2024-04-26 19:09:35.965] [APP] [info] [ScriptSystem.cpp:17] Script System Removed from Registry
-[2024-04-26 19:09:35.965] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-04-26 19:09:40.649] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-04-26 19:09:40.650] [APP] [info] [Scene.cpp:130] Created entity with ID 10977796251269955584 and name Entity3
-[2024-04-26 19:09:40.650] [APP] [info] [Scene.cpp:130] Created entity with ID 7393775681900424192 and name Entity1
-[2024-04-26 19:09:40.650] [APP] [info] [Scene.cpp:130] Created entity with ID 9643654215064920064 and name Entity0
-[2024-04-26 19:09:40.651] [APP] [info] [RenderSystem.cpp:8] Render System Added to Registry!!
-[2024-04-26 19:09:40.651] [APP] [info] [PhysicsSystem2D.cpp:8] Physics System Added to Registry!!
-[2024-04-26 19:09:40.652] [APP] [info] [ScriptSystem.cpp:11] Script System Added to Registry!!
-[2024-04-26 19:09:40.652] [APP] [info] [RenderSystem.cpp:19] Render System Started!!
-[2024-04-26 19:09:40.652] [APP] [info] [PhysicsSystem2D.cpp:30] Physics System Started!!
-[2024-04-26 19:09:40.652] [APP] [info] [ScriptSystem.cpp:23] Script System Started!!
-[2024-04-26 19:09:40.981] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:40.981] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:09:40.986] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
-[2024-04-26 19:09:40.987] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
-[2024-04-26 19:09:41.314] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:41.314] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:09:41.319] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
-[2024-04-26 19:09:41.320] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
-[2024-04-26 19:09:41.489] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:41.490] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:09:41.501] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
-[2024-04-26 19:09:41.502] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
-[2024-04-26 19:09:41.581] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:41.581] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:09:42.298] [APP] [info] [RenderSystem.cpp:13] Render System Removed from Registry
-[2024-04-26 19:09:42.298] [APP] [info] [PhysicsSystem2D.cpp:16] Physics System Removed from Registry
-[2024-04-26 19:09:42.298] [APP] [info] [ScriptSystem.cpp:17] Script System Removed from Registry
-[2024-04-26 19:09:42.299] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-04-26 19:09:42.849] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-04-26 19:09:42.850] [APP] [info] [Scene.cpp:130] Created entity with ID 10977796251269955584 and name Entity3
-[2024-04-26 19:09:42.850] [APP] [info] [Scene.cpp:130] Created entity with ID 7393775681900424192 and name Entity1
-[2024-04-26 19:09:42.851] [APP] [info] [Scene.cpp:130] Created entity with ID 9643654215064920064 and name Entity0
-[2024-04-26 19:09:42.852] [APP] [info] [RenderSystem.cpp:8] Render System Added to Registry!!
-[2024-04-26 19:09:42.852] [APP] [info] [PhysicsSystem2D.cpp:8] Physics System Added to Registry!!
-[2024-04-26 19:09:42.852] [APP] [info] [ScriptSystem.cpp:11] Script System Added to Registry!!
-[2024-04-26 19:09:42.852] [APP] [info] [RenderSystem.cpp:19] Render System Started!!
-[2024-04-26 19:09:42.852] [APP] [info] [PhysicsSystem2D.cpp:30] Physics System Started!!
-[2024-04-26 19:09:42.853] [APP] [info] [ScriptSystem.cpp:23] Script System Started!!
-[2024-04-26 19:09:43.181] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:43.181] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:09:43.192] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
-[2024-04-26 19:09:43.192] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
-[2024-04-26 19:09:43.520] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:43.520] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:09:43.526] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
-[2024-04-26 19:09:43.526] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
-[2024-04-26 19:09:43.696] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:43.696] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:09:43.708] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
-[2024-04-26 19:09:43.708] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
-[2024-04-26 19:09:43.793] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:43.793] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:09:45.516] [APP] [info] [RenderSystem.cpp:13] Render System Removed from Registry
-[2024-04-26 19:09:45.517] [APP] [info] [PhysicsSystem2D.cpp:16] Physics System Removed from Registry
-[2024-04-26 19:09:45.517] [APP] [info] [ScriptSystem.cpp:17] Script System Removed from Registry
-[2024-04-26 19:09:45.517] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-04-26 19:09:49.546] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-04-26 19:09:49.547] [APP] [info] [Scene.cpp:130] Created entity with ID 10977796251269955584 and name Entity3
-[2024-04-26 19:09:49.548] [APP] [info] [Scene.cpp:130] Created entity with ID 7393775681900424192 and name Entity1
-[2024-04-26 19:09:49.548] [APP] [info] [Scene.cpp:130] Created entity with ID 9643654215064920064 and name Entity0
-[2024-04-26 19:09:49.549] [APP] [info] [RenderSystem.cpp:8] Render System Added to Registry!!
-[2024-04-26 19:09:49.549] [APP] [info] [PhysicsSystem2D.cpp:8] Physics System Added to Registry!!
-[2024-04-26 19:09:49.549] [APP] [info] [ScriptSystem.cpp:11] Script System Added to Registry!!
-[2024-04-26 19:09:49.549] [APP] [info] [RenderSystem.cpp:19] Render System Started!!
-[2024-04-26 19:09:49.550] [APP] [info] [PhysicsSystem2D.cpp:30] Physics System Started!!
-[2024-04-26 19:09:49.550] [APP] [info] [ScriptSystem.cpp:23] Script System Started!!
-[2024-04-26 19:09:49.877] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:49.878] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:09:49.884] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
-[2024-04-26 19:09:49.884] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
-[2024-04-26 19:09:50.216] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:50.217] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:09:50.223] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
-[2024-04-26 19:09:50.223] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
-[2024-04-26 19:09:50.399] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:50.399] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:09:50.410] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
-[2024-04-26 19:09:50.411] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
-[2024-04-26 19:09:50.496] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:50.496] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:09:51.904] [APP] [info] [RenderSystem.cpp:13] Render System Removed from Registry
-[2024-04-26 19:09:51.905] [APP] [info] [PhysicsSystem2D.cpp:16] Physics System Removed from Registry
-[2024-04-26 19:09:51.905] [APP] [info] [ScriptSystem.cpp:17] Script System Removed from Registry
-[2024-04-26 19:09:51.905] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-04-26 19:09:53.643] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-04-26 19:09:53.644] [APP] [info] [Scene.cpp:130] Created entity with ID 10977796251269955584 and name Entity3
-[2024-04-26 19:09:53.644] [APP] [info] [Scene.cpp:130] Created entity with ID 7393775681900424192 and name Entity1
-[2024-04-26 19:09:53.645] [APP] [info] [Scene.cpp:130] Created entity with ID 9643654215064920064 and name Entity0
-[2024-04-26 19:09:53.645] [APP] [info] [RenderSystem.cpp:8] Render System Added to Registry!!
-[2024-04-26 19:09:53.646] [APP] [info] [PhysicsSystem2D.cpp:8] Physics System Added to Registry!!
-[2024-04-26 19:09:53.646] [APP] [info] [ScriptSystem.cpp:11] Script System Added to Registry!!
-[2024-04-26 19:09:53.646] [APP] [info] [RenderSystem.cpp:19] Render System Started!!
-[2024-04-26 19:09:53.647] [APP] [info] [PhysicsSystem2D.cpp:30] Physics System Started!!
-[2024-04-26 19:09:53.647] [APP] [info] [ScriptSystem.cpp:23] Script System Started!!
-[2024-04-26 19:09:53.974] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:53.975] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:09:53.980] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
-[2024-04-26 19:09:53.981] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
-[2024-04-26 19:09:54.308] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:54.308] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:09:54.320] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
-[2024-04-26 19:09:54.320] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
-[2024-04-26 19:09:54.496] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:54.496] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:09:54.508] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
-[2024-04-26 19:09:54.509] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
-[2024-04-26 19:09:54.592] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:09:54.593] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:10:02.777] [APP] [info] [RenderSystem.cpp:13] Render System Removed from Registry
-[2024-04-26 19:10:02.777] [APP] [info] [PhysicsSystem2D.cpp:16] Physics System Removed from Registry
-[2024-04-26 19:10:02.778] [APP] [info] [ScriptSystem.cpp:17] Script System Removed from Registry
-[2024-04-26 19:10:02.778] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-04-26 19:10:21.910] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-04-26 19:10:21.911] [APP] [info] [Scene.cpp:130] Created entity with ID 10977796251269955584 and name Entity3
-[2024-04-26 19:10:21.911] [APP] [info] [Scene.cpp:130] Created entity with ID 7393775681900424192 and name Entity1
-[2024-04-26 19:10:21.911] [APP] [info] [Scene.cpp:130] Created entity with ID 9643654215064920064 and name Entity0
-[2024-04-26 19:10:21.912] [APP] [info] [RenderSystem.cpp:8] Render System Added to Registry!!
-[2024-04-26 19:10:21.912] [APP] [info] [PhysicsSystem2D.cpp:8] Physics System Added to Registry!!
-[2024-04-26 19:10:21.913] [APP] [info] [ScriptSystem.cpp:11] Script System Added to Registry!!
-[2024-04-26 19:10:21.913] [APP] [info] [RenderSystem.cpp:19] Render System Started!!
-[2024-04-26 19:10:21.913] [APP] [info] [PhysicsSystem2D.cpp:30] Physics System Started!!
-[2024-04-26 19:10:21.913] [APP] [info] [ScriptSystem.cpp:23] Script System Started!!
-[2024-04-26 19:10:22.241] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:10:22.241] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:10:22.247] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
-[2024-04-26 19:10:22.247] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
-[2024-04-26 19:10:22.610] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:10:22.611] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:10:22.617] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
-[2024-04-26 19:10:22.617] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
-[2024-04-26 19:10:22.804] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:10:22.805] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:10:22.823] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
-[2024-04-26 19:10:22.823] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
-[2024-04-26 19:10:22.914] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
-[2024-04-26 19:10:22.914] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
-[2024-04-26 19:10:27.167] [APP] [info] [EditorApp.cpp:20] Editor Destructor!
-[2024-04-26 19:10:27.167] [ENGINE] [info] [EngineApp.cpp:33] EngineApp Destructor!
-[2024-04-26 19:10:27.168] [ENGINE] [info] [Timestep.h:23] Destroyed Timer
-[2024-04-26 19:10:27.169] [APP] [info] [RenderSystem.cpp:13] Render System Removed from Registry
-[2024-04-26 19:10:27.169] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-04-26 19:10:27.169] [APP] [info] [RenderSystem.cpp:13] Render System Removed from Registry
-[2024-04-26 19:10:27.169] [APP] [info] [EditorCamera.cpp:42] Editor Camera Destroyed!!
-[2024-04-26 19:10:27.169] [APP] [info] [EditorLayer.cpp:41] Detached Editor Layer!
-[2024-04-26 19:10:27.171] [ENGINE] [info] [Window.cpp:27] Window Destroyed
-[2024-04-26 19:10:27.190] [ENGINE] [info] [OpenGLContext.cpp:16] Window Context Destroyed!!
-[2024-04-26 19:10:27.190] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
-[2024-04-26 19:10:27.190] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
-[2024-04-26 19:10:27.191] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
-[2024-04-26 19:10:27.191] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
-[2024-04-26 19:10:27.191] [ENGINE] [trace] [OpenGLTexture.cpp:26] Render Texture cleaned up
-[2024-04-26 19:10:27.191] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
-[2024-04-26 19:10:27.192] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
-[2024-04-26 19:10:27.192] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
-[2024-04-26 19:10:27.192] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
-[2024-04-26 19:10:27.192] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
-[2024-04-26 19:10:27.193] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
-[2024-04-26 19:10:27.193] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
-[2024-04-26 19:10:27.193] [ENGINE] [trace] [OpenGLBuffer.cpp:100] Render UniformBuffer cleaned up
+[2024-04-26 19:39:47.111] [APP] [info] [EditorApp.cpp:26] Editor Constructor!
+[2024-04-26 19:39:47.113] [ENGINE] [info] [EngineApp.cpp:11] EngineApp Constructor!
+[2024-04-26 19:39:47.113] [ENGINE] [info] [Window.cpp:38] Creating window Engine Editor (1280, 720)
+[2024-04-26 19:39:47.373] [ENGINE] [info] [OpenGLContext.cpp:11] Window Context Created!!
+[2024-04-26 19:39:47.379] [ENGINE] [info] [OpenGLContext.cpp:26] OpenGL Info:
+[2024-04-26 19:39:47.380] [ENGINE] [info] [OpenGLContext.cpp:27]   Vendor: NVIDIA Corporation
+[2024-04-26 19:39:47.380] [ENGINE] [info] [OpenGLContext.cpp:28]   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+[2024-04-26 19:39:47.380] [ENGINE] [info] [OpenGLContext.cpp:29]   Version: 4.6.0 NVIDIA 551.86
+[2024-04-26 19:39:47.380] [ENGINE] [info] [Timestep.h:18] Created Timer
+[2024-04-26 19:39:47.381] [ENGINE] [trace] [OpenGLRenderAPI.cpp:49] Render API init
+[2024-04-26 19:39:47.381] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-04-26 19:39:47.381] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-04-26 19:39:47.383] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
+[2024-04-26 19:39:47.383] [ENGINE] [trace] [OpenGLTexture.cpp:20] Render Texture success
+[2024-04-26 19:39:47.384] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Quad.glsl success
+[2024-04-26 19:39:47.385] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-04-26 19:39:47.385] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-04-26 19:39:47.386] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Line.glsl success
+[2024-04-26 19:39:47.387] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-04-26 19:39:47.387] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-04-26 19:39:47.389] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
+[2024-04-26 19:39:47.389] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Circle.glsl success
+[2024-04-26 19:39:47.390] [ENGINE] [trace] [OpenGLBuffer.cpp:94] Render UniformBuffer success
+[2024-04-26 19:39:47.390] [APP] [info] [EditorCamera.cpp:36] Editor Camera Created!!
+[2024-04-26 19:39:47.393] [APP] [info] [Scene.cpp:18] Scene Created!!
+[2024-04-26 19:39:47.394] [APP] [info] [Scene.cpp:130] Created entity with ID 7417460500759453819 and name Entity0
+[2024-04-26 19:39:47.394] [APP] [info] [Scene.cpp:130] Created entity with ID 17980229753804785845 and name Entity1
+[2024-04-26 19:39:47.395] [APP] [info] [Scene.cpp:130] Created entity with ID 7808591779769639058 and name Entity3
+[2024-04-26 19:39:47.395] [APP] [info] [RenderSystem.cpp:8] Render System Added to Registry!!
+[2024-04-26 19:39:47.396] [APP] [info] [RenderSystem.cpp:19] Render System Started!!
+[2024-04-26 19:40:31.200] [APP] [info] [EditorApp.cpp:20] Editor Destructor!
+[2024-04-26 19:40:31.201] [ENGINE] [info] [EngineApp.cpp:33] EngineApp Destructor!
+[2024-04-26 19:40:31.201] [ENGINE] [info] [Timestep.h:23] Destroyed Timer
+[2024-04-26 19:40:31.201] [APP] [info] [RenderSystem.cpp:13] Render System Removed from Registry
+[2024-04-26 19:40:31.201] [APP] [info] [EditorCamera.cpp:42] Editor Camera Destroyed!!
+[2024-04-26 19:40:31.202] [APP] [info] [EditorLayer.cpp:41] Detached Editor Layer!
+[2024-04-26 19:40:31.203] [ENGINE] [info] [Window.cpp:27] Window Destroyed
+[2024-04-26 19:40:31.220] [ENGINE] [info] [OpenGLContext.cpp:16] Window Context Destroyed!!
+[2024-04-26 19:40:31.221] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
+[2024-04-26 19:40:31.221] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
+[2024-04-26 19:40:31.221] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
+[2024-04-26 19:40:31.221] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
+[2024-04-26 19:40:31.222] [ENGINE] [trace] [OpenGLTexture.cpp:26] Render Texture cleaned up
+[2024-04-26 19:40:31.222] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
+[2024-04-26 19:40:31.222] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
+[2024-04-26 19:40:31.223] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
+[2024-04-26 19:40:31.223] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
+[2024-04-26 19:40:31.223] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
+[2024-04-26 19:40:31.223] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
+[2024-04-26 19:40:31.224] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
+[2024-04-26 19:40:31.224] [ENGINE] [trace] [OpenGLBuffer.cpp:100] Render UniformBuffer cleaned up
