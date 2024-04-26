@@ -1,43 +1,71 @@
-[17:37:24] [info] APP: Editor Constructor!
-[17:37:24] [info] ENGINE: EngineApp Constructor!
-[17:37:24] [info] ENGINE: Creating window Engine Editor (1280, 720)
-[17:37:25] [info] ENGINE: Window Context Created!!
-[17:37:25] [info] ENGINE: OpenGL Info:
-[17:37:25] [info] ENGINE:   Vendor: NVIDIA Corporation
-[17:37:25] [info] ENGINE:   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
-[17:37:25] [info] ENGINE:   Version: 4.6.0 NVIDIA 551.86
-[17:37:25] [info] ENGINE: Created Timer
-[17:37:25] [trace] ENGINE: Render API init
-[17:37:25] [trace] ENGINE: Render VertexArray success
-[17:37:25] [trace] ENGINE: Render VertexBuffer success
-[17:37:25] [trace] ENGINE: Render IndexBuffer success
-[17:37:25] [trace] ENGINE: Render Texture success
-[17:37:25] [trace] ENGINE: Render Shader Quad.glsl success
-[17:37:25] [trace] ENGINE: Render VertexArray success
-[17:37:25] [trace] ENGINE: Render VertexBuffer success
-[17:37:25] [trace] ENGINE: Render Shader Line.glsl success
-[17:37:25] [trace] ENGINE: Render UniformBuffer success
-[17:37:25] [info] APP: Editor Camera Created!!
-[17:37:25] [info] APP: Scene Created!!
-[17:37:25] [info] APP: Created entity with ID 5062865450002814046 and name Entity3
-[17:37:25] [info] APP: Created entity with ID 11275618836852310347 and name Entity1
-[17:37:25] [info] APP: Created entity with ID 12175315602826996831 and name Entity0
-[17:37:25] [info] APP: Render System Added to Registry!!
-[17:37:25] [info] APP: Render System Started!!
-[17:37:31] [info] APP: Editor Destructor!
-[17:37:31] [info] ENGINE: EngineApp Destructor!
-[17:37:31] [info] ENGINE: Destroyed Timer
-[17:37:31] [info] APP: Render System Removed from Registry
-[17:37:31] [info] APP: Editor Camera Destroyed!!
-[17:37:31] [info] APP: Detached Editor Layer!
-[17:37:31] [info] ENGINE: Window Destroyed
-[17:37:31] [info] ENGINE: Window Context Destroyed!!
-[17:37:31] [trace] ENGINE: Render Texture cleaned up
-[17:37:31] [trace] ENGINE: Render Shader cleaned up
-[17:37:31] [trace] ENGINE: Render VertexArray cleaned up
-[17:37:31] [trace] ENGINE: Render IndexBuffer cleaned up
-[17:37:31] [trace] ENGINE: Render VertexBuffer cleaned up
-[17:37:31] [trace] ENGINE: Render Shader cleaned up
-[17:37:31] [trace] ENGINE: Render VertexArray cleaned up
-[17:37:31] [trace] ENGINE: Render VertexBuffer cleaned up
-[17:37:31] [trace] ENGINE: Render UniformBuffer cleaned up
+[2024-04-26 13:28:18.856] [APP] [info] [EditorApp.cpp:26] Editor Constructor!
+[2024-04-26 13:28:18.858] [ENGINE] [info] [EngineApp.cpp:11] EngineApp Constructor!
+[2024-04-26 13:28:18.858] [ENGINE] [info] [Window.cpp:38] Creating window Engine Editor (1280, 720)
+[2024-04-26 13:28:19.120] [ENGINE] [info] [OpenGLContext.cpp:11] Window Context Created!!
+[2024-04-26 13:28:19.125] [ENGINE] [info] [OpenGLContext.cpp:26] OpenGL Info:
+[2024-04-26 13:28:19.126] [ENGINE] [info] [OpenGLContext.cpp:27]   Vendor: NVIDIA Corporation
+[2024-04-26 13:28:19.126] [ENGINE] [info] [OpenGLContext.cpp:28]   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+[2024-04-26 13:28:19.126] [ENGINE] [info] [OpenGLContext.cpp:29]   Version: 4.6.0 NVIDIA 551.86
+[2024-04-26 13:28:19.126] [ENGINE] [info] [Timestep.h:18] Created Timer
+[2024-04-26 13:28:19.127] [ENGINE] [trace] [OpenGLRenderAPI.cpp:49] Render API init
+[2024-04-26 13:28:19.127] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-04-26 13:28:19.127] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-04-26 13:28:19.129] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
+[2024-04-26 13:28:19.130] [ENGINE] [trace] [OpenGLTexture.cpp:20] Render Texture success
+[2024-04-26 13:28:19.131] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Quad.glsl success
+[2024-04-26 13:28:19.131] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-04-26 13:28:19.131] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-04-26 13:28:19.133] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Line.glsl success
+[2024-04-26 13:28:19.133] [ENGINE] [trace] [OpenGLBuffer.cpp:94] Render UniformBuffer success
+[2024-04-26 13:28:19.133] [APP] [info] [EditorCamera.cpp:36] Editor Camera Created!!
+[2024-04-26 13:28:19.136] [APP] [info] [Scene.cpp:18] Scene Created!!
+[2024-04-26 13:28:19.137] [APP] [info] [Scene.cpp:130] Created entity with ID 12741487086959704823 and name Entity0
+[2024-04-26 13:28:19.138] [APP] [info] [Scene.cpp:130] Created entity with ID 8768873892830262930 and name Entity1
+[2024-04-26 13:28:19.138] [APP] [info] [Scene.cpp:130] Created entity with ID 17425559599377643476 and name Entity3
+[2024-04-26 13:28:19.139] [APP] [info] [RenderSystem.cpp:8] Render System Added to Registry!!
+[2024-04-26 13:28:19.139] [APP] [info] [RenderSystem.cpp:19] Render System Started!!
+[2024-04-26 13:28:30.908] [APP] [info] [Scene.cpp:18] Scene Created!!
+[2024-04-26 13:28:30.908] [APP] [info] [Scene.cpp:130] Created entity with ID 10977796251269955584 and name Entity3
+[2024-04-26 13:28:30.909] [APP] [info] [Scene.cpp:130] Created entity with ID 7393775681900424192 and name Entity1
+[2024-04-26 13:28:30.909] [APP] [info] [Scene.cpp:130] Created entity with ID 9643654215064920064 and name Entity0
+[2024-04-26 13:28:30.910] [APP] [info] [RenderSystem.cpp:8] Render System Added to Registry!!
+[2024-04-26 13:28:30.910] [APP] [info] [PhysicsSystem2D.cpp:8] Physics System Added to Registry!!
+[2024-04-26 13:28:30.911] [APP] [info] [ScriptSystem.cpp:11] Script System Added to Registry!!
+[2024-04-26 13:28:30.911] [APP] [info] [RenderSystem.cpp:19] Render System Started!!
+[2024-04-26 13:28:30.911] [APP] [info] [PhysicsSystem2D.cpp:30] Physics System Started!!
+[2024-04-26 13:28:30.911] [APP] [info] [ScriptSystem.cpp:23] Script System Started!!
+[2024-04-26 13:28:31.246] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
+[2024-04-26 13:28:31.246] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
+[2024-04-26 13:28:31.251] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
+[2024-04-26 13:28:31.252] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
+[2024-04-26 13:28:31.585] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
+[2024-04-26 13:28:31.585] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
+[2024-04-26 13:28:31.591] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
+[2024-04-26 13:28:31.591] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
+[2024-04-26 13:28:31.767] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
+[2024-04-26 13:28:31.767] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
+[2024-04-26 13:28:31.779] [APP] [warning] [PhysicsSystem2D.cpp:131] END CONTACT! Entity0
+[2024-04-26 13:28:31.779] [APP] [warning] [PhysicsSystem2D.cpp:135] END CONTACT! Entity1
+[2024-04-26 13:28:31.870] [APP] [warning] [PhysicsSystem2D.cpp:119] BEGIN CONTACT! Entity0
+[2024-04-26 13:28:31.870] [APP] [warning] [PhysicsSystem2D.cpp:123] BEGIN CONTACT! Entity1
+[2024-04-26 13:28:39.236] [APP] [info] [RenderSystem.cpp:13] Render System Removed from Registry
+[2024-04-26 13:28:39.237] [APP] [info] [PhysicsSystem2D.cpp:16] Physics System Removed from Registry
+[2024-04-26 13:28:39.237] [APP] [info] [ScriptSystem.cpp:17] Script System Removed from Registry
+[2024-04-26 13:28:39.237] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
+[2024-04-26 13:29:36.007] [APP] [info] [EditorApp.cpp:20] Editor Destructor!
+[2024-04-26 13:29:36.008] [ENGINE] [info] [EngineApp.cpp:33] EngineApp Destructor!
+[2024-04-26 13:29:36.008] [ENGINE] [info] [Timestep.h:23] Destroyed Timer
+[2024-04-26 13:29:36.008] [APP] [info] [RenderSystem.cpp:13] Render System Removed from Registry
+[2024-04-26 13:29:36.008] [APP] [info] [EditorCamera.cpp:42] Editor Camera Destroyed!!
+[2024-04-26 13:29:36.009] [APP] [info] [EditorLayer.cpp:41] Detached Editor Layer!
+[2024-04-26 13:29:36.010] [ENGINE] [info] [Window.cpp:27] Window Destroyed
+[2024-04-26 13:29:36.026] [ENGINE] [info] [OpenGLContext.cpp:16] Window Context Destroyed!!
+[2024-04-26 13:29:36.027] [ENGINE] [trace] [OpenGLTexture.cpp:26] Render Texture cleaned up
+[2024-04-26 13:29:36.027] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
+[2024-04-26 13:29:36.027] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
+[2024-04-26 13:29:36.028] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
+[2024-04-26 13:29:36.028] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
+[2024-04-26 13:29:36.028] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
+[2024-04-26 13:29:36.028] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
+[2024-04-26 13:29:36.029] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
+[2024-04-26 13:29:36.029] [ENGINE] [trace] [OpenGLBuffer.cpp:100] Render UniformBuffer cleaned up

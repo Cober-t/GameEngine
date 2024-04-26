@@ -2,7 +2,7 @@
 #define COLLISION_EVENTS_H
 
 #include "Event.h"
-
+#include <sstream>
 
 namespace Cober {
 

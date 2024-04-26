@@ -51,11 +51,38 @@ namespace Cober {
 	{
 		ImGui::Begin("Console");
         
-        for (auto msg : Log::GetRawLogMessages())
+        for (auto msg : Log::GetMessages())
         {
-            // BUILD CONSOLE MESSAGE AND PRINT INTO IMGUI
-            // std::cout << msg << std::endl;
-            // ImGui::Text(msg.c_str());
+			ImVec4 color;
+			switch (msg.level)
+			{
+				case Log::LOG_LEVELS::TRACE:
+					color = ImVec4(0.95f, 0.95f, 0.95f, 1);	break;
+				case Log::LOG_LEVELS::INFO:
+					color = ImVec4(0.11f, 0.61f, 0.95f, 1);	break;
+				case Log::LOG_LEVELS::WARN:
+					color = ImVec4(0.93f, 0.57f, 0.21f, 1);	break;
+				case Log::LOG_LEVELS::ERR:
+					color = ImVec4(1, 0, 0.24f, 1);	break;
+				case Log::LOG_LEVELS::CRITICAL:
+					color = ImVec4(1, 0, 1, 1);	break;
+			}
+
+			ImGui::PushStyleColor(ImGuiCol_Text, color);
+			ImGui::TextWrapped("[");	
+			ImGui::SameLine();
+			ImGui::TextWrapped(msg.fileName.c_str());
+			ImGui::SameLine();
+			ImGui::TextWrapped(msg.function.c_str());
+			ImGui::SameLine();
+			ImGui::TextWrapped("%i",msg.line);
+			ImGui::SameLine();
+			ImGui::TextWrapped("] ");
+			ImGui::SameLine();
+			ImGui::TextWrapped(msg.message.c_str());
+			// ImGui::SameLine();
+			// ImGui::TextWrapped("%i",msg.level);
+			ImGui::PopStyleColor();
         }
 
 		ImGui::End();

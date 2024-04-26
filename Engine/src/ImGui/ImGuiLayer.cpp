@@ -40,9 +40,13 @@ namespace Cober {
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
-		//float fontSize = 18.0f;// *2.0f;
-		//io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Bold.ttf", fontSize);
-		//io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/opensans/OpenSans-Regular.ttf", fontSize);
+		float fontSize = 18.0f;// *2.0f;
+
+		std::string fontPath = (std::string)ASSETS_DIR + "fonts\\opensans\\";
+		std::string fontFile = fontPath + "OpenSans-Bold.ttf";
+		io.Fonts->AddFontFromFileTTF(fontFile.c_str(), fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
+		fontFile = fontPath + "OpenSans-Regular.ttf";
+		io.FontDefault = io.Fonts->AddFontFromFileTTF(fontFile.c_str(), fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
 
 		// Setup Dear ImGui style
 		//Style();
