@@ -45,7 +45,9 @@ namespace Cober {
 
 		static Ref<spdlog::logger>& GetCoreLogger() { return s_CoreLogger; }
 		static Ref<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
-		static std::vector<LogMessage> GetMessages();
+		
+		static void Log::ClearLogMessages() { s_LogMessages.clear(); }
+		static std::vector<Log::LogMessage> Log::GetMessages() { return s_LogMessages; }
 		static void FormatMessages();
 
 

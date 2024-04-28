@@ -63,10 +63,4 @@ namespace Cober {
 			s_LogMessages.push_back(logMessage);
 		}
 	}
-
-
-	std::vector<Log::LogMessage> Log::GetMessages()
-	{
-		return s_LogMessages;
-	}
 }

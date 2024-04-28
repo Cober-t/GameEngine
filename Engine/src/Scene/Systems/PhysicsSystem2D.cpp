@@ -46,7 +46,7 @@ namespace Cober {
 		{
 			auto& bc2d = entity.GetComponent<BoxCollider2D>();
 
-			bc2d.shape.SetAsBox((abs(bc2d.size.x)* abs(transform.scale.x)) * 0.5f, (abs(bc2d.size.y) * abs(transform.scale.y)) * 0.5f);
+			bc2d.shape.SetAsBox((abs(bc2d.size.x)* abs(transform.scale.x)), (abs(bc2d.size.y) * abs(transform.scale.y)));
 			bodyDef.position.Set(transform.position.x + bc2d.offset.x, transform.position.y + bc2d.offset.y);
 
 			fixtureDef.shape = &bc2d.shape;

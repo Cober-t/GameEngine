@@ -276,6 +276,7 @@ namespace Cober {
         {
 			if (gameState == GameState::EDITOR) 
             {
+				Log::ClearLogMessages();	
 				EngineApp::Get().SetGameState(GameState::RUNTIME_EDITOR);
 				activeScene = Scene::Copy(editorScene);
 				SceneHierarchyPanel::Get().SetContext(activeScene);
