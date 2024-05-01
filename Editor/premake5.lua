@@ -39,6 +39,7 @@ project "Editor"
         "%{IncludeDir.entt}",
         "%{IncludeDir.Glad}",
         "%{IncludeDir.ImGui}",
+        "%{IncludeDir.ImGuizmo}",
         "%{IncludeDir.Box2D}",
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.raudio}",
@@ -53,6 +54,7 @@ project "Editor"
     {
         "Engine",
         "ImGui",
+        "ImGuizmo",
 		"GLFW",
         "opengl32.lib",
         "Glad",

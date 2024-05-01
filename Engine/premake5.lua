@@ -36,7 +36,6 @@ project "Engine"
 		'SHADERS_DIR=R"($(SolutionDir)assets\\shaders\\)"',
 		'SCRIPTS_DIR=R"($(SolutionDir)assets\\scripts\\)"',
 		'ASSETS_DIR=R"($(SolutionDir)assets\\)"',
-		"__EDITOR__",
 	}
 
 	includedirs 

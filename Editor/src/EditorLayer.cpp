@@ -15,6 +15,8 @@ namespace Cober {
 		new SceneHierarchyPanel();
 		new ContentBrowserPanel();
 		new MenuPanel();
+
+		Primitive::Grid::Init();
 	}
 
 
@@ -54,7 +56,6 @@ namespace Cober {
 		
 		ViewportPanel::Get().FBOClearAttachments(1, -1);
 
-
 		switch (EngineApp::Get().GetGameState()) 
 		{
 			case GameState::EDITOR:
@@ -63,6 +64,9 @@ namespace Cober {
 				m_EditorCamera->SetActive(ViewportPanel::Get().AllowViewportCameraEvents());
 				m_EditorCamera->OnUpdate(ts);
 				m_ActiveScene->OnUpdateRuntime(ts, m_EditorCamera);
+
+				// Commented because of a problem with the framebuffer and camera depth
+				// Primitive::Grid::Draw(m_EditorCamera);
 				break;
 			}
 			case GameState::RUNTIME_EDITOR: 

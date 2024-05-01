@@ -70,6 +70,7 @@
 #include "Render/Primitives/Quad.h"
 #include "Render/Primitives/Circle.h"
 #include "Render/Primitives/Cube.h"
+#include "Render/Primitives/Grid.h"
 
 
 //[++++++++++++++++++++++++++++]

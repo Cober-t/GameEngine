@@ -3,7 +3,7 @@
 #include "Panels/SceneHierarchyPanel.h"
 // #include "MenuPanel.h"
 
-// #include "ImGuizmo/ImGuizmo.h"
+#include "ImGuizmo/ImGuizmo.h"
 // #include "Core/Utils.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -68,8 +68,10 @@ namespace Cober {
 		if (mouseX >= 0 && mouseY >= 0 && mouseX < ((int)m_ViewportSize.x) && mouseY < ((int)m_ViewportSize.y))
 		{
 			int pixelData = m_Fbo->ReadPixel(1, mouseX, mouseY);
-			hoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, activeScene.get());
-			
+
+			std::cout << pixelData << std::endl;
+			if (pixelData != -1 && ImGui::IsMouseClicked(0))
+				hoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, activeScene.get());
 		}
 	}
 
