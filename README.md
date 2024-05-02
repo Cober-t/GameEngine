@@ -17,16 +17,16 @@ Game Engine (MVP):
 
  - [x] Editor básico con ImGui  
      - [X] ViewportPanel  
-     - [ ] Menu / Settings  
-     - [ ] Data    
-     - [ ] Console  
-     - [ ] Content Browser  
-     - [ ] Scene Hierarchy  
-     - [ ] Properties
+     - [x] Menu / Settings  
+     - [x] Data    
+     - [x] Console  
+     - [x] Content Browser  
+     - [x] Scene Hierarchy  
+     - [x] Properties
 
  - [X] Input System  
      - [ ] Gamepads  
-     - [ ] Better KeyCodes  
+     - [x] Better KeyCodes  
 
  - [X] Event System  
      - [ ] Event buffer que guarde los eventos y los gestione en el Update, permite no tener que detener la aplicación para gestionar inmediatamente el evento que llegue y también la creación de acciones complejas para conjuntos de eventos  
@@ -37,7 +37,7 @@ Game Engine (MVP):
      - [ ] Load Textures  
      - [X] Framebuffer  
      - [X] Game Camera  
-     - [ ] Editor Camera  
+     - [X] Editor Camera  
 
  - [X] ECS
      - [X] Create Entity with unique UUID  

@@ -214,7 +214,7 @@ namespace Cober {
 
 		///////////////////////////////
 		//Gizmos
-		if (EngineApp::Get().GetGameState() == GameState::EDITOR && hoveredEntity && m_GizmoType != -1)
+		if (hoveredEntity && m_GizmoType != -1)
 		{
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();

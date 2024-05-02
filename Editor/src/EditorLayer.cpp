@@ -95,7 +95,7 @@ namespace Cober {
 		ContentBrowserPanel::Get().OnGuiRender();
 		
 		bool world_2d = false;
-		MenuPanel::Get().OnGuiRender(m_EditorCamera, m_ActiveScene, m_EditorScene, world_2d, EngineApp::Get().GetDebugMode());
+		MenuPanel::Get().OnGuiRender(m_EditorCamera, m_ActiveScene, m_EditorScene, m_HoveredEntity, world_2d, EngineApp::Get().GetDebugMode());
 
 		ViewportPanel::Get().PlayButtonBar(m_EditorScene, m_ActiveScene, EngineApp::Get().GetGameState(), m_HoveredEntity);
 

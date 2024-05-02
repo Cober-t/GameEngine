@@ -14,7 +14,7 @@ namespace Cober {
 
 		static MenuPanel& Get() { return *s_Instance; }
 
-		void OnGuiRender(Ref<EditorCamera>& editorCamera, Ref<Scene>& activeScene, Ref<Scene>& editorScene, bool& game2D, bool& debugMode);
+		void OnGuiRender(Ref<EditorCamera>& editorCamera, Ref<Scene>& activeScene, Ref<Scene>& editorScene, Entity& hoveredEntity, bool& game2D, bool& debugMode);
 
 		void OpenFileDialog(Ref<Scene>& activeScene, const std::filesystem::path& path);
 

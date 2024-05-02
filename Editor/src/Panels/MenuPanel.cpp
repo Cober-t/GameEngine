@@ -24,7 +24,7 @@ namespace Cober {
 	}
 
 
-	void MenuPanel::OnGuiRender(Ref<EditorCamera>& editorCamera, Ref<Scene>& activeScene, Ref<Scene>& editorScene, bool& game2D, bool& debugMode) 
+	void MenuPanel::OnGuiRender(Ref<EditorCamera>& editorCamera, Ref<Scene>& activeScene, Ref<Scene>& editorScene, Entity& hoveredEntity, bool& game2D, bool& debugMode) 
 	{
 		m_FileBrowser.Display();
 		if (m_FileBrowser.HasSelected()) {
@@ -38,19 +38,22 @@ namespace Cober {
 
 		m_World2D = game2D;
 
-		if (ImGui::BeginMenuBar()) {
-			
-			if (ImGui::BeginMenu("File")) {
-				
+		if (ImGui::BeginMenuBar()) 
+		{
+			if (ImGui::BeginMenu("File")) 
+			{
 				if(ImGui::MenuItem("Open File Explorer"))
 					m_FileBrowser.Open();
 
 				if (ImGui::MenuItem("Save Scene"))
 					Scene::Save(activeScene, "Scene2.lua");	 // Test Scene
 
-				if (ImGui::MenuItem("Load Scene")) {
+				if (ImGui::MenuItem("Load Scene")) 
+				{
+					hoveredEntity = Entity();
 					editorScene = Scene::Load("Scene2.lua"); // Test Scene
 					activeScene = editorScene;
+					EngineApp::Get().SetGameState(GameState::EDITOR);
 					SceneHierarchyPanel::Get().SetContext(activeScene);
 					activeScene->OnRuntimeStart();
 				}
@@ -68,10 +71,13 @@ namespace Cober {
 					EngineApp::Get().GetWindow().ChangeFullScreen();
 
 
-				if (ImGui::BeginCombo("Build Option", m_CurrentBuildOption)) {
-					for (int n = 0; n < IM_ARRAYSIZE(m_BuildValues); n++) {
+				if (ImGui::BeginCombo("Build Option", m_CurrentBuildOption)) 
+				{
+					for (int n = 0; n < IM_ARRAYSIZE(m_BuildValues); n++) 
+					{
 						bool selected = (m_CurrentBuildOption == m_BuildValues[n]);
-						if (ImGui::Selectable(m_BuildValues[n], selected)) {
+						if (ImGui::Selectable(m_BuildValues[n], selected)) 
+						{
 							m_CurrentBuildOption = m_BuildValues[n];
 							switch (n) {
 							case BUILD_OPTION::WINDOWS:	/*Lod makefile path*/ break;
