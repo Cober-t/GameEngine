@@ -12,8 +12,6 @@ namespace Cober {
 	struct CameraSettings
 	{
 		float fov = 45.0f;
-		float verticalFov = 0.0f;
-		float aspectRatio = 1.778f;
 		float nearClip = 0.01f;
 		float farClip = 1000.0f;
 		bool orthoPerspective = true;
@@ -51,25 +49,22 @@ namespace Cober {
 		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
 		void SetViewMatrix(glm::mat4& viewMatrix) { m_ViewMatrix = viewMatrix; }
 		const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
-		const glm::mat4& GetUnReversedProjectionMatrix() const { return m_UnReversedProjectionMatrix; }
+		const glm::mat4& GetViewProjectionMatrix() const { return m_ProjectionMatrix * m_ViewMatrix; }
 
 		void SetProjectionMatrix(const glm::mat4 projection, const glm::mat4 unReversedProjection)
 		{
 			m_ProjectionMatrix = projection;
-			m_UnReversedProjectionMatrix = unReversedProjection;
 		}
 
 		void SetPerspectiveProjectionMatrix(float radFov, float width, float height, float nearClip, float farClip)
 		{
-			m_ProjectionMatrix = glm::perspectiveFov(radFov, width, height, farClip, nearClip);
-			m_UnReversedProjectionMatrix = glm::perspectiveFov(radFov, width, height, nearClip, farClip);
+			m_ProjectionMatrix = glm::perspectiveFov(radFov, width, height, nearClip, farClip);
 		}
 
 		void SetOrthoProjectionMatrix(float width, float height, float nearClip, float farClip)
 		{
 			//TODO(Karim): Make sure this is correct.
-			m_ProjectionMatrix = glm::ortho(-width * 0.5f, width * 0.5f, -height * 0.5f, height * 0.5f, farClip, nearClip);
-			m_UnReversedProjectionMatrix = glm::ortho(-width * 0.5f, width * 0.5f, -height * 0.5f, height * 0.5f, nearClip, farClip);
+			m_ProjectionMatrix = glm::ortho(-width * 0.5f, width * 0.5f, -height * 0.5f, height * 0.5f, nearClip, farClip);
 		}
 
 		float GetExposure() const { return m_Exposure; }
@@ -81,8 +76,6 @@ namespace Cober {
 	private:
 		glm::mat4 m_ViewMatrix = glm::mat4(1.0f);
 		glm::mat4 m_ProjectionMatrix = glm::mat4(1.0f);
-		//Needed in the future for shadow maps and ImGuizmo
-		glm::mat4 m_UnReversedProjectionMatrix = glm::mat4(1.0f);
 	};
 }
 

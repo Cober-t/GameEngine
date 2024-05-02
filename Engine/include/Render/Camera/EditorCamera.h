@@ -9,11 +9,6 @@
 
 namespace Cober {
 
-	enum class CameraMode
-	{
-		NONE, FLYCAM, ARCBALL
-	};
-
 
 	class EditorCamera : public Camera
 	{
@@ -23,7 +18,6 @@ namespace Cober {
 		EditorCamera(float fov, float width, float height, float nearClip, float farClip, bool ortho = false);
 		virtual ~EditorCamera();
 
-		void Focus(const glm::vec3& focusPoint);
 		void OnUpdate(Unique<Timestep>& ts) override;
 		void OnEvent(Event& event) override;
 
@@ -33,9 +27,8 @@ namespace Cober {
 		void SetActive(bool active) { m_IsActive = active; }
 		CameraSettings GetEditorCamera() { return m_EditorCamera; }
 
-		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
-		glm::mat4 GetViewProjection() const { return GetProjectionMatrix() * m_ViewMatrix; }
-		glm::mat4 GetUnReversedViewProjection() const { return GetUnReversedProjectionMatrix() * GetViewMatrix(); }
+		// const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
+		// glm::mat4 GetViewProjection() const { return GetProjectionMatrix() * m_ViewMatrix; }
 
 		glm::quat GetOrientation() const;
 		glm::vec3 GetUpDirection() const;
@@ -44,7 +37,6 @@ namespace Cober {
 
 		const glm::vec3& GetFocalPoint() const { return m_EditorCamera.focalPoint; }
 		inline float GetDistance() const { return m_EditorCamera.distance; }
-		inline void SetDistance(float distance) { m_EditorCamera.distance = distance; }
 
 		const glm::vec3& GetPosition() const { return m_EditorCamera.position; }
 		inline float GetPitch() const 	{ return m_EditorCamera.pitch; }
@@ -55,7 +47,7 @@ namespace Cober {
 	private:
 		void UpdateCameraView();
 
-		bool OnMouseScroll(MouseScrolledEvent& e);
+		bool OnMouseScroll(MouseScrolledEvent& events);
 
 		void MousePan(const glm::vec2& delta);
 		void MouseRotate(const glm::vec2& delta);
@@ -79,8 +71,6 @@ namespace Cober {
 
 		bool m_IsActive = true;
 		float m_NormalSpeed{ 0.0005f };
-
-		CameraMode m_CameraMode{ CameraMode::ARCBALL };
 
 		float m_MinFocusDistance{ 100.0f };
 		uint32_t m_ViewportWidth{ 1280 }, m_ViewportHeight{ 720 };

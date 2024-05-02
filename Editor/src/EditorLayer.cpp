@@ -16,7 +16,6 @@ namespace Cober {
 		new ContentBrowserPanel();
 		new MenuPanel();
 
-		Primitive::Grid::Init();
 	}
 
 
@@ -25,6 +24,8 @@ namespace Cober {
 		m_ActiveScene = Scene::Load("Scene2.lua");
 		m_ActiveScene->OnRuntimeStart();
 		m_EditorScene = m_ActiveScene;
+
+		Primitive::Grid::Init();
 
 		ViewportPanel::Get().CreateFramebuffer(1280, 720);
 		SceneHierarchyPanel::Get().SetContext(m_ActiveScene);
@@ -64,9 +65,9 @@ namespace Cober {
 				m_EditorCamera->SetActive(ViewportPanel::Get().AllowViewportCameraEvents());
 				m_EditorCamera->OnUpdate(ts);
 				m_ActiveScene->OnUpdateRuntime(ts, m_EditorCamera);
-
 				// Commented because of a problem with the framebuffer and camera depth
 				// Primitive::Grid::Draw(m_EditorCamera);
+
 				break;
 			}
 			case GameState::RUNTIME_EDITOR: 
@@ -79,9 +80,6 @@ namespace Cober {
 
 		ViewportPanel::Get().SetCursorEntity(m_ActiveScene, m_HoveredEntity);
 
-		if (ImGui::IsMouseClicked(0) && m_HoveredEntity)
-			SceneHierarchyPanel::Get().SetSelectedEntity(m_HoveredEntity);
-
 		ViewportPanel::Get().UnbindFramebuffer();
 	}
 
@@ -90,7 +88,7 @@ namespace Cober {
 	{
 		InitDockspace();
 
-		ViewportPanel::Get().OnGuiRender(m_EditorCamera, m_ActiveScene);
+		ViewportPanel::Get().OnGuiRender(m_EditorCamera, m_ActiveScene, m_HoveredEntity);
 		DataPanel::Get().OnGuiRender(m_HoveredEntity);
 		ConsolePanel::Get().OnImGuiRender();
 		SceneHierarchyPanel::Get().OnGuiRender(m_HoveredEntity);
@@ -177,7 +175,8 @@ namespace Cober {
 			if (m_AllowViewportCameraEvents)
 				m_EditorCamera->OnEvent(event);
 		}
-		// ViewportPanel::Get().OnEvent(event, _activeScene->GetHoveredEntity());
+		
+		ViewportPanel::Get().OnEvent(event);
 	}
 
 

@@ -27,7 +27,7 @@ namespace Cober {
 		Primitive::Quad::Init();
 		Primitive::Line::Init();
 		Primitive::Circle::Init();
-		// Primitive::Cube::Init();
+		// Primitive::Cube::Init()
 
 		CameraUniformBuffer = UniformBuffer::Create(sizeof(CameraData), 0);
 	}

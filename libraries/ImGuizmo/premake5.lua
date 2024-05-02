@@ -9,6 +9,8 @@ project "ImGuizmo"
 
 	files
 	{
+		"GraphEditor.h",
+		"GraphEditor.cpp",
 		"ImCurveEdit.cpp",
         "ImCurveEdit.h",
         "ImGradient.cpp",
@@ -17,6 +19,7 @@ project "ImGuizmo"
         "ImGuizmo.h",
         "ImSequencer.cpp",
         "ImSequencer.h",
+		"ImZoomSlider.h",
 	}
 
 	includedirs

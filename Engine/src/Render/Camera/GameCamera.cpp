@@ -14,11 +14,9 @@ namespace Cober {
 		m_GameCamera(CameraSettings(fov, width, height, nearClip, farClip, ortho))
 	{
 		m_GameCamera.focalPoint = glm::vec3(0.0f);
-		m_GameCamera.verticalFov = glm::radians(fov);
 		m_GameCamera.nearClip = nearClip;
 		m_GameCamera.farClip = farClip;
 		
-		// glm::vec3 position = { -5, 5, 5 };
 		m_GameCamera.distance = glm::distance(m_GameCamera.position, m_GameCamera.focalPoint);
 
 		m_GameCamera.yaw = 3.0f * glm::pi<float>() / 4.0f;
@@ -67,7 +65,7 @@ namespace Cober {
 		if (m_ViewportWidth == width && m_ViewportHeight == height)
 				return;
 
-		SetPerspectiveProjectionMatrix(m_GameCamera.verticalFov, (float)width, (float)height, m_GameCamera.nearClip, m_GameCamera.farClip);
+		SetPerspectiveProjectionMatrix(glm::radians(m_GameCamera.fov), (float)width, (float)height, m_GameCamera.nearClip, m_GameCamera.farClip);
 		m_ViewportWidth = width;
 		m_ViewportHeight = height;
 	}

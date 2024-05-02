@@ -140,5 +140,6 @@ namespace Cober {
     {
         // Todo: Change between ortho and perspective projection
 		ViewportPanel::Get().ResizeFramebufferSpecification(camera, width, height);
+		camera->SetViewportSize(width, height);
 	}
 }

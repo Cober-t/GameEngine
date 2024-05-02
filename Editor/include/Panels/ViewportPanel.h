@@ -22,11 +22,11 @@ namespace Cober {
 		void UnbindFramebuffer();
 		void FBOClearAttachments(uint32_t attachmentIndex, int value) { m_Fbo->ClearAttachment(attachmentIndex, value); }
 
-		void OnEvent(Event& event, Entity& hoveredEntity);	// Abstract to EVENT API
+		void OnEvent(Event& event);	// Abstract to EVENT API
 		void ResizeViewport(Ref<EditorCamera> editorCamera, bool& game2D);
 		void ResizeFramebufferSpecification(Ref<EditorCamera> editorCamera, uint32_t width, uint32_t height);
 
-		void OnGuiRender(Ref<EditorCamera> editorCamera, Ref<Scene>& scene);
+		void OnGuiRender(Ref<EditorCamera> editorCamera, Ref<Scene>& scene, Entity& hoveredEntity);
 
 		void SetCursorEntity(Ref<Scene>& activeScene, Entity& hoveredEntity);
 		void PlayButtonBar(Ref<Scene>& editorScene, Ref<Scene>& activeScene, GameState gameState);

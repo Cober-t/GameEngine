@@ -19,6 +19,9 @@ namespace Cober {
 
 		void Begin();
 		void End();
+		
+		bool IsInputEnabled();
+		void SetInputEnabled(bool enabled);
 		void BlockEvents(bool block) { m_BlockEvents = block; }
 
 		void StyleDefault();

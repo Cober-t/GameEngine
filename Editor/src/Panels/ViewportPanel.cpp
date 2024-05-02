@@ -1,6 +1,7 @@
 #include "Panels/ViewportPanel.h"
 #include "Panels/DataPanel.h"
 #include "Panels/SceneHierarchyPanel.h"
+#include "Core/Utils.h"
 // #include "MenuPanel.h"
 
 #include "ImGuizmo/ImGuizmo.h"
@@ -69,21 +70,34 @@ namespace Cober {
 		{
 			int pixelData = m_Fbo->ReadPixel(1, mouseX, mouseY);
 
-			std::cout << pixelData << std::endl;
-			if (pixelData != -1 && ImGui::IsMouseClicked(0))
+			if (ImGui::IsMouseClicked(0) && !ImGuizmo::IsUsing())
+			{
 				hoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, activeScene.get());
+
+				if (!Input::IsKeyDown(KeyCode::LeftAlt))
+				{
+					m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;	
+					SceneHierarchyPanel::Get().SetSelectedEntity(hoveredEntity);
+				}
+			}
 		}
 	}
 
 
-	void ViewportPanel::OnEvent(Event& event, Entity& hoveredEntity) 
+	void ViewportPanel::OnEvent(Event& event) 
     {
 		// Gizmos
-		// 	if (Input::IsKeyDown(KeyCode::Q))
-		// 	if (Input::IsKeyDown(KeyCode::W))
-		// 	if (Input::IsKeyDown(KeyCode::E))
-		// 	if (Input::IsKeyDown(KeyCode::R))
-
+		if (!ImGuizmo::IsUsing())
+		{
+			if (Input::IsKeyDown(KeyCode::Q))
+				m_GizmoType = -1;
+			if (Input::IsKeyDown(KeyCode::W))
+				m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+			if (Input::IsKeyDown(KeyCode::E))
+				m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+			if (Input::IsKeyDown(KeyCode::R))
+				m_GizmoType = ImGuizmo::OPERATION::SCALE;
+		}
 	}
 
 
@@ -105,7 +119,7 @@ namespace Cober {
 	}
 
 
-	void ViewportPanel::OnGuiRender(Ref<EditorCamera> editorCamera, Ref<Scene>& scene) 
+	void ViewportPanel::OnGuiRender(Ref<EditorCamera> editorCamera, Ref<Scene>& scene, Entity& hoveredEntity) 
     {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
@@ -200,57 +214,51 @@ namespace Cober {
 
 		///////////////////////////////
 		//Gizmos
-		//Entity selectedEntity = SceneHierarchyPanel::Get().GetSelectedEntity();
-		//if (selectedEntity.GetIndex() != -1 && selectedEntity.HasComponent<Sprite>() && m_GizmoType != -1)
-		//{
-		//	ImGuizmo::SetOrthographic(Engine::Get().GetGameMode());
-		//	ImGuizmo::SetDrawlist();
+		if (EngineApp::Get().GetGameState() == GameState::EDITOR && hoveredEntity && m_GizmoType != -1)
+		{
+			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetDrawlist();
 
-		//	ImGuizmo::SetRect(m_MinViewportBound.x, m_MinViewportBound.y, 
-		//					  m_MaxViewportBound.x - m_MinViewportBound.x, 
-		//					  m_MaxViewportBound.y - m_MinViewportBound.y);
-		//	
-		//	// Runtime camera from entity
-		//	// auto cameraEntity = m_ActiveScene->GetPrimaryCameraEntity();
-		//	// const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
-		//	// const glm::mat4& cameraProjection = camera.GetProjection();
-		//	// glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+			ImGuizmo::SetRect(m_MinViewportBound.x, m_MinViewportBound.y, 
+								m_MaxViewportBound.x - m_MinViewportBound.x, 
+								m_MaxViewportBound.y - m_MinViewportBound.y);
 
-		//	// Editor camera
-		//	const glm::mat4& cameraProjection = editorCamera->GetProjection();
-		//	glm::mat4 cameraView = editorCamera->GetView();
+			glm::mat4 cameraView = editorCamera->GetViewMatrix();
+			const glm::mat4& cameraProjection = editorCamera->GetProjectionMatrix();
 
-		//	// Entity transform
-		//	auto& tc = selectedEntity.GetComponent<Transform>();
-		//	glm::mat4 transform = tc.GetTransform();
+			auto& tc = hoveredEntity.GetComponent<TransformComponent>();
+			glm::mat4 transform = tc.GetTransform();
 
-		//	bool snap = MenuPanel::Get().MustSnap();
-		//	float snapValue = MenuPanel::Get().SnapValue() / 10; // Snap to 0.5m for translation/scale
-		//	// Snap to 45 degrees for rotation
-		//	if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
-		//		snapValue = 45.0f;
+			// bool snap = MenuPanel::Get().MustSnap();
+			// float snapValue = MenuPanel::Get().SnapValue() / 10; // Snap to 0.5m for translation/scale
+			bool snap = false;
+			float snapValue = 0.5f;
+			// Snap to 45 degrees for rotation
+			if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
+				snapValue = 45.0f;
 
-		//	float snapValues[3] = { snapValue, snapValue, snapValue };
+			float snapValues[3] = { snapValue, snapValue, snapValue };
 
-		//	ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
-		//		(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
-		//		nullptr, snap ? snapValues : nullptr);
+			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
+				(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
+				nullptr, snap ? snapValues : nullptr);
 
-		//	if (ImGuizmo::IsUsing() && !SDL_GetKeyboardState(NULL)[SDL_SCANCODE_LALT])
-		//	{
-		//		glm::vec3 translation, rotation, scale;
-		//		Utils::DecomposeTransform(transform, translation, rotation, scale);
+			
+			if (ImGuizmo::IsUsing() && !Input::IsKeyDown(KeyCode::LeftAlt))
+			{
+				glm::vec3 translation, rotation, scale;
+				Utils::DecomposeTransform(transform, translation, rotation, scale);
 
-		//		if (Engine::Get().GetGameMode())
-		//			translation.z = tc.position.z;
-		//		
-		//		glm::vec3 deltaRotation = rotation - tc.rotation;
+				// if (Engine::Get().GetGameMode())
+				// translation.z = tc.position.z;
+				
+				glm::vec3 deltaRotation = rotation - tc.rotation;
 
-		//		tc.position = translation;
-		//		tc.rotation += deltaRotation;
-		//		tc.scale = scale;
-		//	}
-		//}
+				tc.position = translation;
+				tc.rotation += deltaRotation;
+				tc.scale = scale;
+			}
+		}
 
 		ImGui::PopStyleVar();
 		ImGui::End();
@@ -276,6 +284,7 @@ namespace Cober {
 
 		if (ImGui::Button(icon, ImVec2(size, size))) 
         {
+			m_GizmoType = -1;
 			if (gameState == GameState::EDITOR) 
             {
 				Log::ClearLogMessages();	

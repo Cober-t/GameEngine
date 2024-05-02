@@ -1,5 +1,6 @@
 #include <pch.h>
 #include "Render/Camera/EditorCamera.h"
+#include "Core/EngineApp.h"
 
 #include "Render/RenderGlobals.h"
 
@@ -14,9 +15,7 @@ namespace Cober {
 		: Camera(glm::perspectiveFov(glm::radians(fov), width, height, farClip, nearClip), glm::perspectiveFov(glm::radians(fov), width, height, nearClip, farClip)),
 		m_EditorCamera(CameraSettings(fov, width, height, nearClip, farClip, ortho))
 	{
-
-		m_EditorCamera.focalPoint = glm::vec3(0.0f);
-		m_EditorCamera.verticalFov = glm::radians(fov);
+		m_EditorCamera.focalPoint = glm::vec3(0.0f, 0.0f, -1.0f);
 		m_EditorCamera.nearClip = nearClip;
 		m_EditorCamera.farClip = farClip;
 
@@ -24,6 +23,7 @@ namespace Cober {
 
 		m_EditorCamera.yaw = 3.0f * glm::pi<float>() / 4.0f;
 		m_EditorCamera.pitch = glm::pi<float>() / 4.0f;
+		m_EditorCamera.roll = 0.0f;
 
 		m_EditorCamera.position = CalculatePosition();
 		const glm::quat orientation = GetOrientation();
@@ -31,7 +31,7 @@ namespace Cober {
 		glm::mat4 viewMatrix = glm::translate(glm::mat4(1.0f), m_EditorCamera.position) * glm::toMat4(orientation);
 		SetViewMatrix(glm::inverse(viewMatrix));
 		
-		SetViewportSize(1280, 720);
+		SetViewportSize(width, height);
 
 		LOG_INFO("Editor Camera Created!!");
 	}
@@ -47,49 +47,24 @@ namespace Cober {
 	{
 		if (m_ViewportWidth == width && m_ViewportHeight == height)
 				return;
-		SetPerspectiveProjectionMatrix(m_EditorCamera.verticalFov, (float)width, (float)height, m_EditorCamera.nearClip, m_EditorCamera.farClip);
+		SetPerspectiveProjectionMatrix(glm::radians(m_EditorCamera.fov), (float)width, (float)height, m_EditorCamera.nearClip, m_EditorCamera.farClip);
 		m_ViewportWidth = width;
 		m_ViewportHeight = height;
+
+		// In the future, to change between ortho and perspective
+		// UpdateCameraView();
 	}
 
 
 	void EditorCamera::UpdateCameraView() 
 	{
-		const float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
-
-		// Extra step to handle the problem when the camera direction is the same as the up vector
-		const float cosAngle = glm::dot(GetForwardDirection(), GetUpDirection());
-		if (cosAngle * yawSign > 0.99f)
-			m_EditorCamera.pitchDelta = 0.f;
-
-		const glm::vec3 lookAt = m_EditorCamera.position + GetForwardDirection();
-		m_EditorCamera.direction = glm::normalize(lookAt - m_EditorCamera.position);
-		m_EditorCamera.distance = glm::distance(m_EditorCamera.position, m_EditorCamera.focalPoint);
-		glm::mat4 viewMatrix = glm::lookAt(m_EditorCamera.position, lookAt, glm::vec3{ 0.0f, yawSign, 0.0f });
-		SetViewMatrix(viewMatrix);
-
-		//damping for smooth camera
-		m_EditorCamera.yawDelta *= 0.6f;
-		m_EditorCamera.pitchDelta *= 0.6f;
-		m_EditorCamera.positionDelta *= 0.8f;
+		m_EditorCamera.position = CalculatePosition();
+		glm::quat orientation = GetOrientation();
+		m_ViewMatrix = glm::translate(glm::mat4(1.0f), m_EditorCamera.position) * glm::toMat4(orientation);
+		SetViewMatrix(glm::inverse(m_ViewMatrix));
 	}
 
 
-	void EditorCamera::Focus(const glm::vec3& focusPoint)
-	{
-		m_EditorCamera.focalPoint = focusPoint;
-		m_CameraMode = CameraMode::FLYCAM;
-		if (m_EditorCamera.distance > m_MinFocusDistance)
-		{
-			m_EditorCamera.distance -= m_EditorCamera.distance - m_MinFocusDistance;
-			m_EditorCamera.position = m_EditorCamera.focalPoint - GetForwardDirection() * m_EditorCamera.distance;
-		}
-		m_EditorCamera.position = m_EditorCamera.focalPoint - GetForwardDirection() * m_EditorCamera.distance;
-		UpdateCameraView();
-	}
-
-
-	
 	std::pair<float, float> EditorCamera::PanSpeed() const 
 	{
 		float x = std::min(m_ViewportWidth  / 1000.0f, 2.4f); // max = 2.4f
@@ -105,9 +80,8 @@ namespace Cober {
 	float EditorCamera::ZoomSpeed() const 
 	{
 		float distance = m_EditorCamera.distance * 0.2f;
-		distance = std::max(distance, 0.0f);
 		float speed = distance * distance;
-		speed = std::min(speed, 50.0f);	// max speed = 50
+		speed = std::min(speed, 100.0f);	// max speed = 100
 
 		return speed;
 	}
@@ -118,18 +92,10 @@ namespace Cober {
 	}
 
 
-	bool EditorCamera::OnMouseScroll(MouseScrolledEvent& e)
+	bool EditorCamera::OnMouseScroll(MouseScrolledEvent& event)
 	{
-		if (Input::IsMouseButtonDown(MouseButton::Right))
-		{
-			m_NormalSpeed += e.GetYOffset() * 0.3f * m_NormalSpeed;
-			m_NormalSpeed = std::clamp(m_NormalSpeed, MIN_SPEED, MAX_SPEED);
-		}
-		else
-		{
-			MouseZoom(e.GetYOffset() * 0.1f);
-			UpdateCameraView();
-		}
+		MouseZoom(event.GetYOffset() * 0.1f);
+		UpdateCameraView();
 
 		return true;
 	}
@@ -137,29 +103,30 @@ namespace Cober {
 
 	void EditorCamera::MousePan(const glm::vec2& delta)
 	{
+		std::cout << "ENTER" << std::endl;
 		auto [xSpeed, ySpeed] = PanSpeed();
 		m_EditorCamera.focalPoint -= GetRightDirection() * delta.x * xSpeed * m_EditorCamera.distance;
 		m_EditorCamera.focalPoint += GetUpDirection() * delta.y * ySpeed * m_EditorCamera.distance;
 	}
 
+
 	void EditorCamera::MouseRotate(const glm::vec2& delta)
 	{
 		const float yawSign = GetUpDirection().y < 0.0f ? -1.0f : 1.0f;
-		m_EditorCamera.yawDelta += yawSign * delta.x * RotationSpeed();
-		m_EditorCamera.pitchDelta += delta.y * RotationSpeed();
+		m_EditorCamera.yaw += yawSign * delta.x * RotationSpeed();
+		m_EditorCamera.pitch += delta.y * RotationSpeed();
 	}
+
 
 	void EditorCamera::MouseZoom(float delta)
 	{
 		m_EditorCamera.distance -= delta * ZoomSpeed();
-		const glm::vec3 forwardDir = GetForwardDirection();
-		m_EditorCamera.position = m_EditorCamera.focalPoint - forwardDir * m_EditorCamera.distance;
+
 		if (m_EditorCamera.distance < 1.0f)
 		{
-			m_EditorCamera.focalPoint += forwardDir * m_EditorCamera.distance;
+			m_EditorCamera.focalPoint += GetForwardDirection();
 			m_EditorCamera.distance = 1.0f;
 		}
-		m_EditorCamera.positionDelta -= delta * ZoomSpeed() * forwardDir;
 	}
 	
 
@@ -195,79 +162,43 @@ namespace Cober {
 
 	glm::vec3 EditorCamera::CalculatePosition() const 
 	{
-		return m_EditorCamera.focalPoint - GetForwardDirection() * m_EditorCamera.distance +  m_EditorCamera.positionDelta;
+		return m_EditorCamera.focalPoint - GetForwardDirection() * m_EditorCamera.distance;
 	}
 
 
 	glm::quat EditorCamera::GetOrientation() const
 	{
-		return glm::quat(glm::vec3(-m_EditorCamera.pitch - m_EditorCamera.pitchDelta, -m_EditorCamera.yaw - m_EditorCamera.yawDelta, 0.0f));
+		return glm::quat(glm::vec3(-m_EditorCamera.pitch - m_EditorCamera.pitchDelta, -m_EditorCamera.yaw, -m_EditorCamera.roll));
 	}
 
 
 	static void DisableMouse()
 	{
 		Input::SetCursorMode(CursorMode::Locked);
-		// UI::SetInputEnabled(false);
+		// EngineApp::Get().GetImGuiLayer()->SetInputEnabled(false);
 	}
 
 	static void EnableMouse()
 	{
 		Input::SetCursorMode(CursorMode::Normal);
-		// UI::SetInputEnabled(true);
+		// EngineApp::Get().GetImGuiLayer()->SetInputEnabled(true);
 	}
 
 	void EditorCamera::OnUpdate(Unique<Timestep>& ts) 
 	{
 		const glm::vec2& mouse{ Input::GetMouseX(), Input::GetMouseY() };
-		const glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.002f;
+		const glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.003f;
 
 		if (!m_IsActive)
 		{
-			// if (!UI::IsInputEnabled())
-			// 	UI::SetInputEnabled(true);
+			// if (!EngineApp::Get().GetImGuiLayer()->IsInputEnabled())
+			// 	EngineApp::Get().GetImGuiLayer()->SetInputEnabled(true);
 
 			return;
 		}
 
-		if (Input::IsMouseButtonDown(MouseButton::Right) && !Input::IsKeyDown(KeyCode::LeftAlt))
+		if (Input::IsKeyDown(KeyCode::LeftAlt))
 		{
-			m_CameraMode = CameraMode::FLYCAM;
-			DisableMouse();
-			const float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
-
-			const float speed = GetCameraSpeed();
-
-			if (Input::IsKeyDown(KeyCode::Q))
-				m_EditorCamera.positionDelta -= ts->GetSeconds() * speed * glm::vec3{ 0.f, yawSign, 0.f };
-			if (Input::IsKeyDown(KeyCode::E))
-				m_EditorCamera.positionDelta += ts->GetSeconds() * speed * glm::vec3{ 0.f, yawSign, 0.f };
-			if (Input::IsKeyDown(KeyCode::S))
-				m_EditorCamera.positionDelta -= ts->GetSeconds() * speed * m_EditorCamera.direction;
-			if (Input::IsKeyDown(KeyCode::W))
-				m_EditorCamera.positionDelta += ts->GetSeconds() * speed * m_EditorCamera.direction;
-			if (Input::IsKeyDown(KeyCode::A))
-				m_EditorCamera.positionDelta -= ts->GetSeconds() * speed * m_EditorCamera.rightDirection;
-			if (Input::IsKeyDown(KeyCode::D))
-				m_EditorCamera.positionDelta += ts->GetSeconds() * speed * m_EditorCamera.rightDirection;
-
-			constexpr float maxRate{ 0.12f };
-			m_EditorCamera.yawDelta += glm::clamp(yawSign * delta.x * RotationSpeed(), -maxRate, maxRate);
-			m_EditorCamera.pitchDelta += glm::clamp(delta.y * RotationSpeed(), -maxRate, maxRate);
-
-			m_EditorCamera.rightDirection = glm::cross(m_EditorCamera.direction, glm::vec3{ 0.f, yawSign, 0.f });
-
-			m_EditorCamera.direction = glm::rotate(glm::normalize(glm::cross(glm::angleAxis(-m_EditorCamera.pitchDelta, m_EditorCamera.rightDirection),
-				glm::angleAxis(-m_EditorCamera.yawDelta, glm::vec3{ 0.f, yawSign, 0.f }))), m_EditorCamera.direction);
-
-			const float distance = glm::distance(m_EditorCamera.focalPoint, m_EditorCamera.position);
-			m_EditorCamera.focalPoint = m_EditorCamera.position + GetForwardDirection() * distance;
-			m_EditorCamera.distance = distance;
-		}
-		else if (Input::IsKeyDown(KeyCode::LeftAlt))
-		{
-			m_CameraMode = CameraMode::ARCBALL;
-
 			if (Input::IsMouseButtonDown(MouseButton::Middle))
 			{
 				DisableMouse();
@@ -281,7 +212,7 @@ namespace Cober {
 			else if (Input::IsMouseButtonDown(MouseButton::Right))
 			{
 				DisableMouse();
-				MouseZoom((delta.x + delta.y) * 0.1f);
+				MouseZoom(delta.y);
 			}
 			else
 				EnableMouse();
@@ -292,12 +223,6 @@ namespace Cober {
 		}
 
 		m_InitialMousePosition = mouse;
-		m_EditorCamera.position += m_EditorCamera.positionDelta;
-		m_EditorCamera.yaw += m_EditorCamera.yawDelta;
-		m_EditorCamera.pitch += m_EditorCamera.pitchDelta;
-
-		if (m_CameraMode == CameraMode::ARCBALL)
-			m_EditorCamera.position = CalculatePosition();
 
 		UpdateCameraView();
 	}

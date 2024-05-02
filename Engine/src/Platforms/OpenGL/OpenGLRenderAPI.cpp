@@ -40,10 +40,6 @@ namespace Cober {
 
 		glEnable(GL_DEPTH_TEST);
 
-		// Actual camera has a problem with an inversed z buffer
-		// Delete it when solve it
-		glDepthFunc(GL_GREATER); 
-
 		glEnable(GL_LINE_SMOOTH);
 
 		LOG_CORE_TRACE("Render API init");
@@ -71,10 +67,6 @@ namespace Cober {
 
 	void OpenGLRenderAPI::Clear() 
 	{
-		// Actual camera has a problem with an inversed z buffer
-		// Delete it when solve it
-		glClearDepth(0.0f);
-		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
