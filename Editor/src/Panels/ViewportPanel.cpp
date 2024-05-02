@@ -265,7 +265,7 @@ namespace Cober {
 	}
 
 
-	void ViewportPanel::PlayButtonBar(Ref<Scene>& editorScene, Ref<Scene>& activeScene, GameState gameState) 
+	void ViewportPanel::PlayButtonBar(Ref<Scene>& editorScene, Ref<Scene>& activeScene, GameState gameState, Entity& hoveredEntity) 
     {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
@@ -289,17 +289,21 @@ namespace Cober {
             {
 				Log::ClearLogMessages();	
 				EngineApp::Get().SetGameState(GameState::RUNTIME_EDITOR);
+
 				activeScene = Scene::Copy(editorScene);
-				SceneHierarchyPanel::Get().SetContext(activeScene);
 				activeScene->OnSimulationStart();
+				SceneHierarchyPanel::Get().SetContext(activeScene);
 			}
 			else if (gameState == GameState::RUNTIME_EDITOR) 
             {
 				EngineApp::Get().SetGameState(GameState::EDITOR);
+
 				activeScene->OnSimulationStop();
 				activeScene = editorScene;
 				SceneHierarchyPanel::Get().SetContext(activeScene);
-				SceneHierarchyPanel::Get().SetSelectedEntity(SceneHierarchyPanel::Get().GetNullEntity());
+
+				// Provisional fix to avoid crash
+				hoveredEntity = Entity();
 			}
 		}
 

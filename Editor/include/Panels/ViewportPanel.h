@@ -29,7 +29,7 @@ namespace Cober {
 		void OnGuiRender(Ref<EditorCamera> editorCamera, Ref<Scene>& scene, Entity& hoveredEntity);
 
 		void SetCursorEntity(Ref<Scene>& activeScene, Entity& hoveredEntity);
-		void PlayButtonBar(Ref<Scene>& editorScene, Ref<Scene>& activeScene, GameState gameState);
+		void PlayButtonBar(Ref<Scene>& editorScene, Ref<Scene>& activeScene, GameState gameState, Entity& hoveredEntity);
 		inline bool AllowViewportCameraEvents() { return m_AllowViewportCameraEvents; }
 
 	private:
