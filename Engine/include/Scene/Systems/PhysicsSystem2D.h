@@ -10,6 +10,8 @@
 #include <b2Body.h>
 #include <b2Fixture.h>
 #include <b2PolygonShape.h>
+#include <b2CircleShape.h>
+#include <b2EdgeShape.h>
 #include <b2Draw.h>
 #include <b2Contact.h>
 #include <Render/Primitives/Line.h>

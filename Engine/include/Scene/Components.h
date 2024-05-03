@@ -6,6 +6,8 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
+#include <b2EdgeShape.h>
+#include <b2CircleShape.h>
 #include <b2PolygonShape.h>
 
 #include <sol/sol.hpp>
@@ -64,22 +66,27 @@ namespace Cober {
 
 	struct Rigidbody2D 
 	{
-		glm::vec2 velocity;
 		bool fixedRotation = false;
 
 		BodyType type = BodyType::Static;
 
-		void* runtimeBody;
+		void* runtimeBody = nullptr;
 
 		Rigidbody2D() = default;
 		Rigidbody2D(const Rigidbody2D&) = default;
-		Rigidbody2D(glm::vec2 vel, bool fxRotation, int bodyType = 1)
-			: velocity(vel), fixedRotation(fxRotation), type((BodyType)bodyType), runtimeBody(nullptr) {}
 	};
 
 
 	struct Collider2D 
 	{
+		b2Shape* body;
+
+		float density = 1.0f;
+		float friction = 0.5f;
+		float restitution = 0.0f;
+
+		// Storage for runtime
+		void* runtimeFixture = nullptr;
 	};
 
 
@@ -88,23 +95,45 @@ namespace Cober {
 		glm::vec2 offset = { 0.0f, 0.0f };
 		glm::vec2 size =   { 1.0f, 1.0f };
 
-		b2Shape* body;
 		b2PolygonShape shape;
-
-		// Make a physics material maybe
-		float density = 1.0f;
-		float friction = 0.5f;
-		float restitution = 0.0f;
-		float restitutionThreshold = 0.5f;
-
-		// Storage for runtime
-		void* runtimeFixture = nullptr;
 
 		BoxCollider2D() = default;
 		BoxCollider2D(const BoxCollider2D&) = default;
-		BoxCollider2D(glm::vec2 Offset, glm::vec2 Size, float Density, float Friction, float Rest, float RestThreshold)
-			: offset(Offset), size(Size), 
-			  density(Density), friction(Friction), restitution(Rest), restitutionThreshold(RestThreshold) {}
+	};
+        
+        
+	struct CircleCollider2D : public Collider2D 
+	{
+		glm::vec2 offset = { 0.0f, 0.0f };
+		float radius = 0.5f;
+
+		b2CircleShape shape;
+
+		CircleCollider2D() = default;
+		CircleCollider2D(const CircleCollider2D&) = default;
+	};
+
+
+	struct PolygonCollider2D : public Collider2D 
+	{
+		glm::vec2 offset = { 0.0f, 0.0f };
+
+		b2PolygonShape shape;
+
+		PolygonCollider2D() = default;
+		PolygonCollider2D(const PolygonCollider2D&) = default;
+	};
+
+
+	struct EdgeCollider2D : public Collider2D 
+	{
+		glm::vec2 pointA = { 0.0f, 0.0f };
+		glm::vec2 pointB = { 5.0f, 0.0f };
+
+		b2EdgeShape shape;
+
+		EdgeCollider2D() = default;
+		EdgeCollider2D(const EdgeCollider2D&) = default;
 	};
 
 
@@ -119,8 +148,8 @@ namespace Cober {
 		Shape2D shapeType = Shape2D::Quad;
 		bool fill = true;
 
-		glm::vec3 point1 = glm::vec3(0.0f);
-		glm::vec3 point2 = glm::vec3(5.0f);
+		glm::vec3 point1 = glm::vec3(-3.0f, 0.0f, 0.0f);
+		glm::vec3 point2 = glm::vec3(3.0f, 0.0f, 0.0f);
 		float thickness = 1.0f;
 		float fade = 0.005f;
 
@@ -160,18 +189,6 @@ namespace Cober {
 		Animation2D(int numfrm = 1, int frmRateSpeed = 1, bool loop = true)
 			: numFrames(numfrm), currentFrame(1), frameRateSpeed(frmRateSpeed), shouldLoop(loop), startTime(SDL_GetTicks()) {}
 	};
-
-	struct CircleCollider2D : public Collider2D {
-
-	};
-
-	struct LineCollider2D : public Collider2D {
-
-	};
-
-	struct CapsuleCollider2D : public Collider2D {
-
-	};
 	*/
 
 
@@ -180,7 +197,8 @@ namespace Cober {
 	{
 	};
 
-	using AllComponents = ComponentGroup<TransformComponent, TagComponent, ScriptComponent, Rigidbody2D, BoxCollider2D, Render2DComponent>;
+	using AllComponents = ComponentGroup<TransformComponent, TagComponent, ScriptComponent, Render2DComponent,
+				Rigidbody2D, BoxCollider2D, CircleCollider2D, EdgeCollider2D, PolygonCollider2D>;
 }
 
 #endif

@@ -40,37 +40,62 @@ namespace Cober {
 
 		b2BodyDef bodyDef;
 		bodyDef.type = (b2BodyType)rb2d.type;
+		bodyDef.position.Set(transform.position.x, transform.position.y);
 		bodyDef.angle = transform.rotation.z;
-
-		// BOX COLLIDER
-		b2FixtureDef fixtureDef;
-		if (entity.HasComponent<BoxCollider2D>()) 
-		{
-			auto& bc2d = entity.GetComponent<BoxCollider2D>();
-
-			bc2d.shape.SetAsBox((abs(bc2d.size.x)* abs(transform.scale.x)), (abs(bc2d.size.y) * abs(transform.scale.y)));
-			bodyDef.position.Set(transform.position.x + bc2d.offset.x, transform.position.y + bc2d.offset.y);
-
-			fixtureDef.shape = &bc2d.shape;
-			fixtureDef.density = bc2d.density;
-			fixtureDef.friction = bc2d.friction;
-			fixtureDef.restitution = bc2d.restitution;
-		}
-		else 
-			bodyDef.position.Set(transform.position.x, transform.position.y);
-
 
 		Entity* staticRef = (Entity*)malloc(sizeof(entity));
 		*staticRef = entity;
 		bodyDef.userData = (void*)staticRef;
-		
-		b2Body* body = m_PhysicsWorld->CreateBody(&bodyDef);
-		body->SetFixedRotation(rb2d.fixedRotation);
-		
-		if(entity.HasComponent<BoxCollider2D>())
-			body->CreateFixture(&fixtureDef);
 
+		b2Body* body = m_PhysicsWorld->CreateBody(&bodyDef);
+
+		body->SetFixedRotation(rb2d.fixedRotation);
 		rb2d.runtimeBody = body;
+
+		if (entity.HasComponent<BoxCollider2D>()) 
+		{
+			auto& boxEntity = entity.GetComponent<BoxCollider2D>();
+
+			boxEntity.shape.SetAsBox((abs(boxEntity.size.x) * abs(transform.scale.x)), 
+								(abs(boxEntity.size.y) * abs(transform.scale.y)),
+								(b2Vec2(boxEntity.offset.x, boxEntity.offset.y)),
+								0.0f);
+
+			b2FixtureDef fixtureDef;
+			fixtureDef.shape = &boxEntity.shape;
+			fixtureDef.density = boxEntity.density;
+			fixtureDef.friction = boxEntity.friction;
+			fixtureDef.restitution = boxEntity.restitution;
+			body->CreateFixture(&fixtureDef);
+		}
+		else if (entity.HasComponent<CircleCollider2D>())
+		{
+			std::cout << entity.GetComponent<TagComponent>().tag << std::endl;
+			
+			auto& circleEntity = entity.GetComponent<CircleCollider2D>();
+
+			circleEntity.shape.m_p.Set(circleEntity.offset.x, circleEntity.offset.y);
+			circleEntity.shape.m_radius = transform.scale.x * circleEntity.radius;
+			
+			b2FixtureDef fixtureDef;
+			fixtureDef.shape = &circleEntity.shape;
+			fixtureDef.density = circleEntity.density;
+			fixtureDef.friction = circleEntity.friction;
+			fixtureDef.restitution = circleEntity.restitution;
+			body->CreateFixture(&fixtureDef);
+		}
+		// else if (entity.HasComponent<PolygonCollider2D>())
+		// {
+		// 	auto& polygonEntity = entity.GetComponent<PolygonCollider2D>();
+		// 	// Manage physics...
+		// 	//
+		// }
+		// else if (entity.HasComponent<EdgeCollider2D>())
+		// {
+		// 	auto& edgeEntity = entity.GetComponent<EdgeCollider2D>();
+		// 	// Manage physics...
+		// 	//
+		// }
 	}
 
 
@@ -93,8 +118,6 @@ namespace Cober {
 				transform.position.x = position.x;
 				transform.position.y = position.y;
 
-				transform.rotation.x = 0.0f;	// 2D
-				transform.rotation.y = 0.0f;	// 2D
 				transform.rotation.z = rb2d.fixedRotation ? 0.0f : body->GetAngle();
 			}
 		}
@@ -134,7 +157,6 @@ namespace Cober {
 		bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
 		if ( bodyUserData )
 			LOG_WARNING("END CONTACT! {0}", static_cast<Entity*>(bodyUserData)->GetName());
-
 	}
 
 

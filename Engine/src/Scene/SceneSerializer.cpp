@@ -47,7 +47,35 @@ namespace Cober {
 				entityToBeSaved["BoxCollider2D"]["density"].SetReal(bc2D.density);
 				entityToBeSaved["BoxCollider2D"]["friction"].SetReal(bc2D.friction);
 				entityToBeSaved["BoxCollider2D"]["restitution"].SetReal(bc2D.restitution);
-				// entityToBeSaved["BoxCollider2D"]["restitution Threshold"].SetReal(bc2D.restitutionThreshold);
+			}
+
+			if (entity.HasComponent<CircleCollider2D>()) 
+			{
+				auto& bc2D = entity.GetComponent<CircleCollider2D>();
+				entityToBeSaved["CircleCollider2D"]["offset"].SetVec2(bc2D.offset);
+				entityToBeSaved["CircleCollider2D"]["radius"].SetReal(bc2D.radius);
+				entityToBeSaved["CircleCollider2D"]["density"].SetReal(bc2D.density);
+				entityToBeSaved["CircleCollider2D"]["friction"].SetReal(bc2D.friction);
+				entityToBeSaved["CircleCollider2D"]["restitution"].SetReal(bc2D.restitution);
+			}
+
+			if (entity.HasComponent<EdgeCollider2D>()) 
+			{
+				auto& bc2D = entity.GetComponent<EdgeCollider2D>();
+				entityToBeSaved["EdgeCollider2D"]["pointA"].SetVec2(bc2D.pointA);
+				entityToBeSaved["EdgeCollider2D"]["pointB"].SetVec2(bc2D.pointB);
+				entityToBeSaved["EdgeCollider2D"]["density"].SetReal(bc2D.density);
+				entityToBeSaved["EdgeCollider2D"]["friction"].SetReal(bc2D.friction);
+				entityToBeSaved["EdgeCollider2D"]["restitution"].SetReal(bc2D.restitution);
+			}
+
+			if (entity.HasComponent<PolygonCollider2D>()) 
+			{
+				auto& bc2D = entity.GetComponent<PolygonCollider2D>();
+				entityToBeSaved["PolygonCollider2D"]["offset"].SetVec2(bc2D.offset);
+				entityToBeSaved["PolygonCollider2D"]["density"].SetReal(bc2D.density);
+				entityToBeSaved["PolygonCollider2D"]["friction"].SetReal(bc2D.friction);
+				entityToBeSaved["PolygonCollider2D"]["restitution"].SetReal(bc2D.restitution);
 			}
 
 			if (entity.HasComponent<ScriptComponent>()) 
@@ -132,7 +160,38 @@ namespace Cober {
 						newEntity.GetComponent<BoxCollider2D>().density = bc2d["density"].GetReal();
 						newEntity.GetComponent<BoxCollider2D>().friction = bc2d["friction"].GetReal();
 						newEntity.GetComponent<BoxCollider2D>().restitution = bc2d["restitution"].GetReal();
-						// newEntity.GetComponent<BoxCollider2D>().restitutionThreshold = bc2d["restitution threshold"].GetReal();
+					}
+
+					if (loader.HasProperty("CircleCollider2D")) 
+					{
+						auto bc2d = loader["CircleCollider2D"];
+						newEntity.AddComponent<CircleCollider2D>();
+						newEntity.GetComponent<CircleCollider2D>().offset = bc2d["offset"].GetVec2();
+						newEntity.GetComponent<CircleCollider2D>().radius = bc2d["radius"].GetReal();
+						newEntity.GetComponent<CircleCollider2D>().density = bc2d["density"].GetReal();
+						newEntity.GetComponent<CircleCollider2D>().friction = bc2d["friction"].GetReal();
+						newEntity.GetComponent<CircleCollider2D>().restitution = bc2d["restitution"].GetReal();
+					}
+
+					if (loader.HasProperty("EdgeCollider2D")) 
+					{
+						auto bc2d = loader["EdgeCollider2D"];
+						newEntity.AddComponent<EdgeCollider2D>();
+						newEntity.GetComponent<EdgeCollider2D>().pointA = bc2d["pointA"].GetVec2();
+						newEntity.GetComponent<EdgeCollider2D>().pointB = bc2d["pointB"].GetVec2();
+						newEntity.GetComponent<EdgeCollider2D>().density = bc2d["density"].GetReal();
+						newEntity.GetComponent<EdgeCollider2D>().friction = bc2d["friction"].GetReal();
+						newEntity.GetComponent<EdgeCollider2D>().restitution = bc2d["restitution"].GetReal();
+					}
+
+					if (loader.HasProperty("PolygonCollider2D")) 
+					{
+						auto bc2d = loader["PolygonCollider2D"];
+						newEntity.AddComponent<PolygonCollider2D>();
+						newEntity.GetComponent<PolygonCollider2D>().offset = bc2d["offset"].GetVec2();
+						newEntity.GetComponent<PolygonCollider2D>().density = bc2d["density"].GetReal();
+						newEntity.GetComponent<PolygonCollider2D>().friction = bc2d["friction"].GetReal();
+						newEntity.GetComponent<PolygonCollider2D>().restitution = bc2d["restitution"].GetReal();
 					}
 
 					if (loader.HasProperty("ScriptComponent")) 

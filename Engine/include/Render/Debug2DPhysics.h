@@ -1,7 +1,6 @@
 #ifndef DEBUG_2D_PHYSICS_H
 #define DEBUG_2D_PHYSICS_H
 
-#include <Render/Primitives/Line.h>
 #include <b2Draw.h>
 
 namespace Cober {

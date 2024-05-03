@@ -140,14 +140,21 @@ namespace Cober {
 	
 	void Render2D::DebugDrawQuad(Entity& entity)
 	{
-		if (entity.GetComponent<Render2DComponent>().fill)
-		{
-			// m_DebugPhysics->DrawSolidPolygon();
-		}
-		else
-		{
-			// m_DebugPhysics->DrawPolygon();
-		}
+		// glm::vec4 color = entity.GetComponent<Render2DComponent>().color;
+		glm::mat4 transform = entity.GetComponent<TransformComponent>().GetTransform();
+		glm::vec3 lineVertices[4];
+
+		// for (size_t i = 0; i < 4; i++)
+		//     lineVertices[i] = transform * Primitive::Quad.VertexPositions[i];
+
+		// if (entity.GetComponent<Render2DComponent>().fill)
+		// {
+		// 	Debug2DPhysics::Get().DrawSolidPolygon();
+		// }
+		// else
+		// {
+		// 	Debug2DPhysics::Get().DrawPolygon();
+		// }
 	}
 
 
@@ -157,31 +164,41 @@ namespace Cober {
 		// b2Vec2 p2 = b2Vec2(0.0f, 0.0f);
 		// b2Color color = b2Color(0.0f, 1.0f, 0.0f);
 		// Debug2DPhysics::Get().DrawSegment(p1, p2, color);
+		// stats.LineCount++;
 	}
 
 
 	void Render2D::DebugDrawCircle(Entity& entity)
 	{
+		// glm::vec4 color = entity.GetComponent<Render2DComponent>().color;
+		glm::mat4 transform = entity.GetComponent<TransformComponent>().GetTransform();
+		glm::vec3 lineVertices[4];
+
+		// for (size_t i = 0; i < 4; i++)
+		//     lineVertices[i] = transform * Primitive::Quad.VertexPositions[i];
+
 		// if (entity.GetComponent<Render2DComponent>().fill)
 		// {
-		// 	m_DebugPhysics->DrawSolidCircle();
+		// 		Debug2DPhysics::Get().DrawSolidCircle();
 		// }
 		// else
 		// {
-		// 	m_DebugPhysics->DrawCircle();
+		// 		Debug2DPhysics::Get().DrawCircle();
 		// }
 
 		// Test
-		b2Vec2 p1 = b2Vec2(0.0f, 5.0f);
-		b2Vec2 p2 = b2Vec2(0.0f, 0.0f);
-		b2Color color = b2Color(0.0f, 1.0f, 0.0f);
-		Debug2DPhysics::Get().DrawSegment(p1, p2, color);
-		stats.LineCount++;
 	}
 
 
 	void Render2D::DebugDrawTransform(Entity& entity)
 	{
-		// m_DebugPhysics->DrawTransform();
+		glm::vec3 pos = entity.GetComponent<TransformComponent>().position;
+		glm::vec3 rot = entity.GetComponent<TransformComponent>().rotation;
+
+		b2Vec2 position(pos.x, pos.y);
+		b2Rot rotation(rot.z);
+		b2Transform transform(position, rotation);
+
+		Debug2DPhysics::Get().DrawTransform(transform);
 	}
 }

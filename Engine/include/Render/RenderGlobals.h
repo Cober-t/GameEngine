@@ -14,7 +14,7 @@ namespace Cober {
 
 		static void SetViewport(uint32_t width, uint32_t height);
 		static void SetClearColor(glm::vec4 color);
-		static void SetClearColor(float red, float green, float blue, float black);
+		static void SetClearColor(float red, float green, float blue, float black = 255.0f);
 
 		static void SetLineWidth(float width);
 		static void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount);

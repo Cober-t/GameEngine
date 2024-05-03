@@ -289,6 +289,21 @@ namespace Cober {
 	}
 
 	template<>
+	void Scene::OnComponentAdded<CircleCollider2D>(Entity entity, CircleCollider2D& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<EdgeCollider2D>(Entity entity, EdgeCollider2D& component)
+	{
+	}
+
+	template<>
+	void Scene::OnComponentAdded<PolygonCollider2D>(Entity entity, PolygonCollider2D& component)
+	{
+	}
+
+	template<>
 	void Scene::OnComponentAdded<Render2DComponent>(Entity entity, Render2DComponent& component)
 	{
 	}

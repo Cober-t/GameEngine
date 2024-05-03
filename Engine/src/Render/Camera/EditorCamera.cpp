@@ -21,9 +21,12 @@ namespace Cober {
 
 		m_EditorCamera.distance = glm::distance(m_EditorCamera.position, m_EditorCamera.focalPoint);
 
-		m_EditorCamera.yaw = 3.0f * glm::pi<float>() / 4.0f;
-		m_EditorCamera.pitch = glm::pi<float>() / 4.0f;
+		m_EditorCamera.yaw = 0.0f;
+		m_EditorCamera.pitch = 0.0;
 		m_EditorCamera.roll = 0.0f;
+		// m_EditorCamera.yaw = 3.0f * glm::pi<float>() / 4.0f;
+		// m_EditorCamera.pitch = glm::pi<float>() / 4.0f;
+		// m_EditorCamera.roll = 0.0f;
 
 		m_EditorCamera.position = CalculatePosition();
 		const glm::quat orientation = GetOrientation();

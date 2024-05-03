@@ -28,7 +28,7 @@ namespace Cober {
 
 		Primitive::Grid::Init();
 
-		ViewportPanel::Get().CreateFramebuffer(1280, 720);
+		ViewportPanel::Get().CreateFramebuffer(m_EditorCamera->m_ViewportWidth, m_EditorCamera->m_ViewportHeight);
 		SceneHierarchyPanel::Get().SetContext(m_ActiveScene);
 	}
 
@@ -53,7 +53,8 @@ namespace Cober {
 		ViewportPanel::Get().BindFramebuffer();
 		// ViewportPanel::Get().RenderSkybox();
 
-		RenderGlobals::SetClearColor(10, 0, 10, 255);
+		RenderGlobals::SetClearColor(46, 47, 52);
+		// RenderGlobals::SetClearColor(32, 167, 219);
 		RenderGlobals::Clear();
 		
 		ViewportPanel::Get().FBOClearAttachments(1, -1);

@@ -268,6 +268,18 @@ namespace Cober {
                 {
 					m_SelectionContext.AddComponent<BoxCollider2D>();
 				}
+				else if (!m_SelectionContext.HasComponent<CircleCollider2D>()) 
+                {
+					m_SelectionContext.AddComponent<CircleCollider2D>();
+				}
+				else if (!m_SelectionContext.HasComponent<EdgeCollider2D>()) 
+                {
+					m_SelectionContext.AddComponent<EdgeCollider2D>();
+				}
+				else if (!m_SelectionContext.HasComponent<PolygonCollider2D>()) 
+                {
+					m_SelectionContext.AddComponent<PolygonCollider2D>();
+				}
 				else if (!m_SelectionContext.HasComponent<Render2DComponent>()) 
                 {
 					m_SelectionContext.AddComponent<Render2DComponent>();
@@ -280,9 +292,13 @@ namespace Cober {
 				ImGui::OpenPopup("AddComponent");
 		}
 
-		if (ImGui::BeginPopup("AddComponent")) {
+		if (ImGui::BeginPopup("AddComponent")) 
+		{
 			AddIfHasComponent<Rigidbody2D>("Rigidbody 2D Component");
-			AddIfHasComponent<BoxCollider2D>("BoxCollider 2D Component");
+			AddIfHasComponent<BoxCollider2D>("Box Collider 2D Component");
+			AddIfHasComponent<CircleCollider2D>("Circle Collider 2D Component");
+			AddIfHasComponent<EdgeCollider2D>("Edge Collider 2D Component");
+			AddIfHasComponent<PolygonCollider2D>("Polygon Collider 2D Component");
 			AddIfHasComponent<Render2DComponent>("Render 2D Shape Component");
 			//AddIfHasComponent<Script>("Script Component");
 			// ...
@@ -329,8 +345,34 @@ namespace Cober {
 				ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
 				ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
 				ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
-				//ImGui::DragFloat("Restitution Threshold", &component.restitutionThreshold, 0.01f, 0.0f);
 			});
+
+
+		DrawComponent<CircleCollider2D>("Circle Collider 2D", entity, [](auto& component)
+			{
+				ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
+				ImGui::DragFloat("Radius", &component.radius, 0.5f, 0.0f, 100.0f);
+				ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
+				ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
+				ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
+			});
+
+
+		DrawComponent<EdgeCollider2D>("Edge Collider 2D", entity, [](auto& component)
+			{
+				ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
+				ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
+				ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
+			});
+
+
+		DrawComponent<PolygonCollider2D>("Polygon Collider 2D", entity, [](auto& component)
+			{
+				ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
+				ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
+				ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
+			});
+		
 
 		DrawComponent<Render2DComponent>("Render 2D Shape", entity, [](auto& component)
 			{
@@ -368,8 +410,8 @@ namespace Cober {
 
 				if ((int)component.shapeType == (int)Shape2D::Circle)
 				{
-					ImGui::DragFloat("Thickness", &component.thickness, 0.1f, 0.1f, 5.0f);
-					ImGui::DragFloat("Fade", &component.fade, 0.005f);
+					ImGui::DragFloat("Thickness", &component.thickness, 0.1f, 0.1f, 1.0f);
+					ImGui::DragFloat("Fade", &component.fade, 0.0f, 0.0f, 1.0f);
 				}
 
 				if ((int)component.shapeType == (int)Shape2D::Sprite)
