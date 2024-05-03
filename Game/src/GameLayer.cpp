@@ -28,15 +28,15 @@ namespace Cober {
 
 	void Game::OnUpdate(Unique<Timestep>& ts) 
 	{
-		RenderGlobals::SetClearColor(100, 0, 0, 255);
+		RenderGlobals::SetClearColor(10, 0, 100, 255);
 		RenderGlobals::Clear();
 		m_Camera->OnUpdate(ts);
 		m_ActiveScene->OnUpdateSimulation(ts, m_Camera);
 	}
 
 
-	// void Game2D::OnEvent(SDL_Event& event) 
-	// {
-	// 	m_Camera->OnEvent(event);
-	// }
+	void Game::OnEvent(Event& event) 
+	{
+		m_Camera->OnEvent(event);
+	}
 }

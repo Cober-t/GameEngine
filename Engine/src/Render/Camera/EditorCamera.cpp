@@ -60,8 +60,8 @@ namespace Cober {
 	{
 		m_EditorCamera.position = CalculatePosition();
 		glm::quat orientation = GetOrientation();
-		m_ViewMatrix = glm::translate(glm::mat4(1.0f), m_EditorCamera.position) * glm::toMat4(orientation);
-		SetViewMatrix(glm::inverse(m_ViewMatrix));
+		glm::mat4 viewMatrix = glm::translate(glm::mat4(1.0f), m_EditorCamera.position) * glm::toMat4(orientation);
+		SetViewMatrix(glm::inverse(viewMatrix));
 	}
 
 
@@ -103,7 +103,6 @@ namespace Cober {
 
 	void EditorCamera::MousePan(const glm::vec2& delta)
 	{
-		std::cout << "ENTER" << std::endl;
 		auto [xSpeed, ySpeed] = PanSpeed();
 		m_EditorCamera.focalPoint -= GetRightDirection() * delta.x * xSpeed * m_EditorCamera.distance;
 		m_EditorCamera.focalPoint += GetUpDirection() * delta.y * ySpeed * m_EditorCamera.distance;
@@ -168,7 +167,7 @@ namespace Cober {
 
 	glm::quat EditorCamera::GetOrientation() const
 	{
-		return glm::quat(glm::vec3(-m_EditorCamera.pitch - m_EditorCamera.pitchDelta, -m_EditorCamera.yaw, -m_EditorCamera.roll));
+		return glm::quat(glm::vec3(-m_EditorCamera.pitch, -m_EditorCamera.yaw, -m_EditorCamera.roll));
 	}
 
 

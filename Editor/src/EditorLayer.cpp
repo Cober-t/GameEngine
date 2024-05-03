@@ -74,6 +74,7 @@ namespace Cober {
 			{
 				// colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.000f, 0.000f, 0.000f, 0.586f);
 				m_ActiveScene->OnUpdateSimulation(ts, m_EditorCamera);
+				Render2D::EndScene();
 				break;
 			}
 		}
@@ -94,8 +95,7 @@ namespace Cober {
 		SceneHierarchyPanel::Get().OnGuiRender(m_HoveredEntity);
 		ContentBrowserPanel::Get().OnGuiRender();
 		
-		bool world_2d = false;
-		MenuPanel::Get().OnGuiRender(m_EditorCamera, m_ActiveScene, m_EditorScene, m_HoveredEntity, world_2d, EngineApp::Get().GetDebugMode());
+		MenuPanel::Get().OnGuiRender(m_EditorCamera, m_ActiveScene, m_EditorScene, m_HoveredEntity);
 
 		ViewportPanel::Get().PlayButtonBar(m_EditorScene, m_ActiveScene, EngineApp::Get().GetGameState(), m_HoveredEntity);
 

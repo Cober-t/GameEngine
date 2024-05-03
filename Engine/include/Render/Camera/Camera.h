@@ -9,12 +9,13 @@
 
 namespace Cober {
 
+
 	struct CameraSettings
 	{
 		float fov = 45.0f;
 		float nearClip = 0.01f;
 		float farClip = 1000.0f;
-		bool orthoPerspective = true;
+		bool perspectiveProjection = true;
 
 		glm::vec3 position	 = {   -5.0f, 5.0f, 5.0f };
 		glm::vec3 direction	 = {   0.0f, 0.0f,  0.0f };
@@ -23,13 +24,9 @@ namespace Cober {
 		float pitch, yaw, roll, distance;
 		float width, height;
 
-		float pitchDelta{}, yawDelta{};
-		glm::vec3 positionDelta{};
-		glm::vec3 rightDirection{};
-
 		CameraSettings() = default;
 		CameraSettings(float newFov, float widthValue, float heightValue, float nearValue, float farValue, bool ortho)
-		 : fov(newFov), width(widthValue), height(heightValue), nearClip(nearValue), farClip(farValue), orthoPerspective(ortho) { };
+		 : fov(newFov), width(widthValue), height(heightValue), nearClip(nearValue), farClip(farValue), perspectiveProjection(ortho) { };
 
 		~CameraSettings() = default;
 	};
@@ -67,12 +64,6 @@ namespace Cober {
 			m_ProjectionMatrix = glm::ortho(-width * 0.5f, width * 0.5f, -height * 0.5f, height * 0.5f, nearClip, farClip);
 		}
 
-		float GetExposure() const { return m_Exposure; }
-		float& GetExposure() { return m_Exposure; }
-
-	protected:
-		float m_Exposure = 0.8f;
-		
 	private:
 		glm::mat4 m_ViewMatrix = glm::mat4(1.0f);
 		glm::mat4 m_ProjectionMatrix = glm::mat4(1.0f);

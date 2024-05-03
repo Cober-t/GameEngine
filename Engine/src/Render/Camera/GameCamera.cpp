@@ -13,14 +13,15 @@ namespace Cober {
 		: Camera(glm::perspectiveFov(glm::radians(fov), width, height, farClip, nearClip), glm::perspectiveFov(glm::radians(fov), width, height, nearClip, farClip)),
 		m_GameCamera(CameraSettings(fov, width, height, nearClip, farClip, ortho))
 	{
-		m_GameCamera.focalPoint = glm::vec3(0.0f);
+		m_GameCamera.focalPoint = glm::vec3(0.0f, 0.0f, -1.0f);
 		m_GameCamera.nearClip = nearClip;
 		m_GameCamera.farClip = farClip;
-		
+
 		m_GameCamera.distance = glm::distance(m_GameCamera.position, m_GameCamera.focalPoint);
 
 		m_GameCamera.yaw = 3.0f * glm::pi<float>() / 4.0f;
 		m_GameCamera.pitch = glm::pi<float>() / 4.0f;
+		m_GameCamera.roll = 0.0f;
 
 		m_GameCamera.position = CalculatePosition();
 		const glm::quat orientation = GetOrientation();
@@ -28,7 +29,9 @@ namespace Cober {
 		glm::mat4 viewMatrix = glm::translate(glm::mat4(1.0f), m_GameCamera.position) * glm::toMat4(orientation);
 		SetViewMatrix(glm::inverse(viewMatrix));
 		
-		LOG_INFO("Game Camera Created!!");
+		SetViewportSize(width, height);
+
+		LOG_INFO("Editor Camera Created!!");
 	}
 
 
@@ -40,23 +43,10 @@ namespace Cober {
 
 	void GameCamera::UpdateCameraView()
 	{
-		const float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
-
-		// Extra step to handle the problem when the camera direction is the same as the up vector
-		const float cosAngle = glm::dot(GetForwardDirection(), GetUpDirection());
-		if (cosAngle * yawSign > 0.99f)
-			m_GameCamera.pitchDelta = 0.0f;
-
-		const glm::vec3 lookAt = m_GameCamera.position + GetForwardDirection();
-		m_GameCamera.direction = glm::normalize(lookAt - m_GameCamera.position);
-		m_GameCamera.distance = glm::distance(m_GameCamera.position, m_GameCamera.focalPoint);
-		glm::mat4 viewMatrix = glm::lookAt(m_GameCamera.position, lookAt, glm::vec3{ 0.0f, yawSign, 0.0f });
-		SetViewMatrix(viewMatrix);
-
-		//damping for smooth camera
-		m_GameCamera.yawDelta *= 0.6f;
-		m_GameCamera.pitchDelta *= 0.6f;
-		m_GameCamera.positionDelta *= 0.8f;
+		m_GameCamera.position = CalculatePosition();
+		glm::quat orientation = GetOrientation();
+		m_ViewMatrix = glm::translate(glm::mat4(1.0f), m_GameCamera.position) * glm::toMat4(orientation);
+		SetViewMatrix(glm::inverse(m_ViewMatrix));
 	}
 
 
@@ -91,19 +81,19 @@ namespace Cober {
 
 	glm::vec3 GameCamera::CalculatePosition() const 
 	{
-		return m_GameCamera.focalPoint - GetForwardDirection() * m_GameCamera.distance + m_GameCamera.positionDelta;
+		return m_GameCamera.focalPoint - GetForwardDirection() * m_GameCamera.distance;
 	}
 
 
 	glm::quat GameCamera::GetOrientation() const
 	{
-		return glm::quat(glm::vec3(-m_GameCamera.pitch - m_GameCamera.pitchDelta, -m_GameCamera.yaw - m_GameCamera.yawDelta, 0.0f));
+		return glm::quat(glm::vec3(-m_GameCamera.pitch, -m_GameCamera.yaw, 0.0f));
 	}
 
 	
 	void GameCamera::OnUpdate(Unique<Timestep>& ts) 
 	{
-		m_GameCamera.position = CalculatePosition();
+		// m_GameCamera.position = CalculatePosition();
 		UpdateCameraView();
 	}
 

@@ -16,7 +16,7 @@ namespace Cober {
 		virtual void OnDetach() override;
 
 		void OnUpdate(Unique<Timestep>& ts) override;
-		// void OnEvent(SDL_Event& event) override;
+		void OnEvent(Event& event) override;
 	private:
 		Ref<Scene> m_ActiveScene;
 		Ref<GameCamera> m_Camera;

@@ -35,7 +35,9 @@ namespace Cober {
 		glm::vec3 CalculatePosition() const;
 
 	private:
+		glm::mat4 m_ViewMatrix;
 		CameraSettings m_GameCamera;
+		
 		float m_ViewportWidth = 1280, m_ViewportHeight = 720;
 	};
 }

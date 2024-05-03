@@ -22,6 +22,22 @@ namespace Cober {
 		m_PhysicsWorld = new b2World({ 0.0f, -9.8f });
 		m_PhysicsWorld->SetContactListener(&contactListener);
 
+		uint32 flags = 0;
+		flags += b2Draw::e_shapeBit;
+		flags += b2Draw::e_jointBit;
+		flags += b2Draw::e_aabbBit;
+		flags += b2Draw::e_pairBit;
+		flags += b2Draw::e_centerOfMassBit;
+		// flags += settings.m_drawShapes * b2Draw::e_shapeBit;
+		// flags += settings.m_drawJoints * b2Draw::e_jointBit;
+		// flags += settings.m_drawAABBs * b2Draw::e_aabbBit;
+		// flags += settings.m_drawCOMs * b2Draw::e_centerOfMassBit;
+
+		m_DebugPhysics = new DebugPhysics();
+		m_DebugPhysics->SetFlags(flags);
+
+		m_PhysicsWorld->SetDebugDraw(m_DebugPhysics);
+
 		for (auto& entity : GetSystemEntities())
 		{
 			InitEntityPhysics(entity);
@@ -82,6 +98,12 @@ namespace Cober {
 		for (auto& entity : GetSystemEntities()) 
         {
 			auto& transform = entity.GetComponent<TransformComponent>();
+
+			b2Vec2 p1 = b2Vec2(0.0f, 5.0f);
+			b2Vec2 p2 = b2Vec2(0.0f, 0.0f);
+			b2Color color = b2Color(0.0f, 1.0f, 0.0f);
+			m_DebugPhysics->DrawSegment(p1, p2, color);
+
 			auto& rb2d = entity.GetComponent<Rigidbody2D>();
 			
 			b2Body* body = (b2Body*)rb2d.runtimeBody;

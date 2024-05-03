@@ -9,7 +9,6 @@
 
 namespace Cober {
 
-
 	class EditorCamera : public Camera
 	{
 
@@ -25,7 +24,8 @@ namespace Cober {
 
 		bool IsActive() const { return m_IsActive; }
 		void SetActive(bool active) { m_IsActive = active; }
-		CameraSettings GetEditorCamera() { return m_EditorCamera; }
+		CameraSettings& GetSettings() { return m_EditorCamera; }
+		bool& IsPerspective() { return m_EditorCamera.perspectiveProjection; }
 
 		// const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
 		// glm::mat4 GetViewProjection() const { return GetProjectionMatrix() * m_ViewMatrix; }
@@ -60,19 +60,13 @@ namespace Cober {
 		float ZoomSpeed() const;
 
 	private:
-		glm::mat4 m_ViewMatrix;
 		CameraSettings m_EditorCamera;
 
 		glm::vec2 m_InitialMousePosition = { 0.0f, 0.0f };
-		glm::vec3 m_InitialFocalPoint, m_InitialRotation;
-		float m_RotationSpeed = 0.8f;
-		bool m_MouseButtonHeld = false;
-		bool m_AltKeyPressed = false;
 
 		bool m_IsActive = true;
 		float m_NormalSpeed{ 0.0005f };
 
-		float m_MinFocusDistance{ 100.0f };
 		uint32_t m_ViewportWidth{ 1280 }, m_ViewportHeight{ 720 };
 
 		constexpr static float MIN_SPEED{ 0.0005f }, MAX_SPEED{ 2.0f };

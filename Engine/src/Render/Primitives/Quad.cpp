@@ -137,7 +137,6 @@ namespace Cober {
 			SetAttributes(transform, color, textureIndex, textureCoords, 1.0f, (int)entity);
 		}
 
-
 		
         void Quad::DrawRect(Entity& entity)
         {

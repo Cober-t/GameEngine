@@ -4,6 +4,7 @@
 #include "Panels/ViewportPanel.h"
 #include "Panels/SceneHierarchyPanel.h"
 #include "Render/Render2D.h"
+#include "Core/EngineApp.h"
 
 #include <imgui/imgui.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -24,7 +25,7 @@ namespace Cober {
 	}
 
 
-	void MenuPanel::OnGuiRender(Ref<EditorCamera>& editorCamera, Ref<Scene>& activeScene, Ref<Scene>& editorScene, Entity& hoveredEntity, bool& game2D, bool& debugMode) 
+	void MenuPanel::OnGuiRender(Ref<EditorCamera>& editorCamera, Ref<Scene>& activeScene, Ref<Scene>& editorScene, Entity& hoveredEntity) 
 	{
 		m_FileBrowser.Display();
 		if (m_FileBrowser.HasSelected()) {
@@ -36,14 +37,12 @@ namespace Cober {
 			m_FileBrowser.ClearSelected();
 		}
 
-		m_World2D = game2D;
-
 		if (ImGui::BeginMenuBar()) 
 		{
 			if (ImGui::BeginMenu("File")) 
 			{
-				if(ImGui::MenuItem("Open File Explorer"))
-					m_FileBrowser.Open();
+				// if(ImGui::MenuItem("Open File Explorer"))
+				// 	m_FileBrowser.Open();
 
 				if (ImGui::MenuItem("Save Scene"))
 					Scene::Save(activeScene, "Scene2.lua");	 // Test Scene
@@ -61,7 +60,7 @@ namespace Cober {
 				if (ImGui::MenuItem("Exit"))
 					EngineApp::Get().Close();
 
-				if (ImGui::Checkbox("2D", &game2D))
+				if (ImGui::Checkbox("2D", &editorCamera->IsPerspective()))
                 {
                     // TODO: Change to 2D projection
 					// editorCamera->UpdateProjection(game2D);
@@ -103,13 +102,13 @@ namespace Cober {
                         {
 							m_CurrentScreenSize = m_ScreenValues[i];
 							if (isSelected)
-								Resize(editorCamera, activeScene, m_VPSize[i].x, m_VPSize[i].y, game2D);
+								Resize(editorCamera, activeScene, m_VPSize[i].x, m_VPSize[i].y, editorCamera->IsPerspective());
 						}
 					}
 					ImGui::EndCombo();
 				}
 
-				ImGui::Checkbox("Debug Mode", &debugMode);
+				ImGui::Checkbox("Debug Mode", &EngineApp::Get().IsDebugMode());
 				ImGui::EndMenu();
 			}
 

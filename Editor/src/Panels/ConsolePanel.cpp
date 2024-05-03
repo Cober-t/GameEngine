@@ -70,7 +70,7 @@ namespace Cober {
 			}
 
 			ImGui::PushStyleColor(ImGuiCol_Text, color);
-			if (EngineApp::Get().GetDebugMode())
+			if (EngineApp::Get().IsDebugMode())
 			{
 				ImGui::TextWrapped("[");	
 				ImGui::SameLine();

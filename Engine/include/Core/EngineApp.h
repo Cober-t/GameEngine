@@ -22,7 +22,6 @@ namespace Cober {
 
 	enum class GameState { PLAY, EDITOR, RUNTIME_EDITOR, EXIT };
 
-
 	class EngineApp
 	{
 	public:
@@ -49,7 +48,7 @@ namespace Cober {
 		inline Window& GetWindow() { return *m_Window; }
 		inline GameState GetGameState() { return m_GameState; }
 		void  SetDebugMode(bool debugMode)  { m_DebugMode = debugMode; }
-		bool& GetDebugMode() { return m_DebugMode; }
+		bool& IsDebugMode() { return m_DebugMode; }
 
 	private:
 		void Run(Unique<Timestep>& ts);

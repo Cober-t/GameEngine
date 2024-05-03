@@ -86,7 +86,7 @@ namespace Cober {
 
         void Line::Draw(const glm::vec3& p0, glm::vec3& p1, const glm::vec4& color, int entityID)
         {
-            SetAttributes(p0, p1, color, (int)entityID);
+            SetAttributes(p0, p1, color, entityID);
         }
 
 
