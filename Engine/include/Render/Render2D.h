@@ -8,6 +8,7 @@
 #include "Render/Texture.h"
 #include "Render/Camera/Camera.h"
 #include "Render/RenderGlobals.h"
+#include "Render/Debug2DPhysics.h"
 
 #include "Scene/ECS.h"
 
@@ -37,6 +38,11 @@ namespace Cober {
 		static void DrawQuad(Entity& entity);
 		static void DrawLine(Entity& entity);
 		static void DrawCircle(Entity& entity);
+
+		static void DebugDrawQuad(Entity& entity);
+		static void DebugDrawLine(Entity& entity);
+		static void DebugDrawCircle(Entity& entity);
+		static void DebugDrawTransform(Entity& entity);
 
 	public:
 		struct Statistics

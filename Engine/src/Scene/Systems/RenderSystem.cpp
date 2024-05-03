@@ -1,5 +1,6 @@
 #include <pch.h>
 #include "Scene/Systems/RenderSystem.h"
+#include "Scene/Systems/PhysicsSystem2D.h"
 
 namespace Cober {
 
@@ -40,6 +41,26 @@ namespace Cober {
 				break;
 			case Shape2D::Sprite:
 				break;
+			}
+
+			// In the future... if (EngineApp::Get().IsDebugMode() && entity.GetComponent<DebugComponent>.isActive)
+			if (EngineApp::Get().IsDebugMode())
+			{
+				switch (entity.GetComponent<Render2DComponent>().shapeType)
+				{
+				case Shape2D::Quad:
+					if (Debug2DPhysics::Settings().QUADS)
+						Render2D::DebugDrawQuad(entity);
+					break;
+					
+				case Shape2D::Circle:
+					if (Debug2DPhysics::Settings().CIRCLES)
+						Render2D::DebugDrawCircle(entity);
+					break;
+				}
+
+				if (Debug2DPhysics::Settings().TRANSFORMS)
+					Render2D::DebugDrawTransform(entity);
 			}
 		}
 

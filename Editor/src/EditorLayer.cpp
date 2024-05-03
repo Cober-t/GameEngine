@@ -16,6 +16,7 @@ namespace Cober {
 		new ContentBrowserPanel();
 		new MenuPanel();
 
+		new Debug2DPhysics();
 	}
 
 
@@ -67,14 +68,12 @@ namespace Cober {
 				m_ActiveScene->OnUpdateRuntime(ts, m_EditorCamera);
 				// Commented because of a problem with the framebuffer and camera depth
 				// Primitive::Grid::Draw(m_EditorCamera);
-
 				break;
 			}
 			case GameState::RUNTIME_EDITOR: 
 			{
 				// colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.000f, 0.000f, 0.000f, 0.586f);
 				m_ActiveScene->OnUpdateSimulation(ts, m_EditorCamera);
-				Render2D::EndScene();
 				break;
 			}
 		}

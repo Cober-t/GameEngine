@@ -5,6 +5,7 @@
 #include "Core/Core.h"
 #include "Render/Camera/GameCamera.h"
 #include "Render/Render2D.h"
+#include "Render/Debug2DPhysics.h"
 #include "Render/RenderGlobals.h"
 #include "Scene/ECS.h"
 #include "Scene/Scene.h"

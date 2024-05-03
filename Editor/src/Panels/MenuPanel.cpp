@@ -108,7 +108,30 @@ namespace Cober {
 					ImGui::EndCombo();
 				}
 
-				ImGui::Checkbox("Debug Mode", &EngineApp::Get().IsDebugMode());
+				if (ImGui::Checkbox("Debug Mode", &EngineApp::Get().IsDebugMode()))
+				{
+					Debug2DPhysics::Get().UpdateVisibilitySettings();
+				}
+
+				if (EngineApp::Get().IsDebugMode())
+				{
+					ImGui::Checkbox("Lines", &Debug2DPhysics::Settings().LINES);
+					ImGui::Checkbox("Quads", &Debug2DPhysics::Settings().QUADS);
+					ImGui::Checkbox("Circles", &Debug2DPhysics::Settings().CIRCLES);
+					ImGui::Checkbox("Transforms", &Debug2DPhysics::Settings().TRANSFORMS);
+
+					ImGui::Separator();
+
+					if (ImGui::Checkbox("Shapes", &Debug2DPhysics::Settings().SHAPES) ||
+						ImGui::Checkbox("Joints", &Debug2DPhysics::Settings().JOINTS) ||
+						ImGui::Checkbox("AABBs", &Debug2DPhysics::Settings().AABBS) ||
+						ImGui::Checkbox("Pair", &Debug2DPhysics::Settings().PAIR) ||
+						ImGui::Checkbox("Center of Mass", &Debug2DPhysics::Settings().CENTER_OF_MASS))
+					{
+							Debug2DPhysics::Get().UpdateVisibilitySettings();
+					}
+				}
+				
 				ImGui::EndMenu();
 			}
 

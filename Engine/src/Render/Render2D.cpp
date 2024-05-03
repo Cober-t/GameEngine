@@ -136,4 +136,52 @@ namespace Cober {
 		Primitive::Circle::Draw(entity);
 		stats.CircleCount++;
 	}
+
+	
+	void Render2D::DebugDrawQuad(Entity& entity)
+	{
+		if (entity.GetComponent<Render2DComponent>().fill)
+		{
+			// m_DebugPhysics->DrawSolidPolygon();
+		}
+		else
+		{
+			// m_DebugPhysics->DrawPolygon();
+		}
+	}
+
+
+	void Render2D::DebugDrawLine(Entity& entity)
+	{
+		// b2Vec2 p1 = b2Vec2(0.0f, 5.0f);
+		// b2Vec2 p2 = b2Vec2(0.0f, 0.0f);
+		// b2Color color = b2Color(0.0f, 1.0f, 0.0f);
+		// Debug2DPhysics::Get().DrawSegment(p1, p2, color);
+	}
+
+
+	void Render2D::DebugDrawCircle(Entity& entity)
+	{
+		// if (entity.GetComponent<Render2DComponent>().fill)
+		// {
+		// 	m_DebugPhysics->DrawSolidCircle();
+		// }
+		// else
+		// {
+		// 	m_DebugPhysics->DrawCircle();
+		// }
+
+		// Test
+		b2Vec2 p1 = b2Vec2(0.0f, 5.0f);
+		b2Vec2 p2 = b2Vec2(0.0f, 0.0f);
+		b2Color color = b2Color(0.0f, 1.0f, 0.0f);
+		Debug2DPhysics::Get().DrawSegment(p1, p2, color);
+		stats.LineCount++;
+	}
+
+
+	void Render2D::DebugDrawTransform(Entity& entity)
+	{
+		// m_DebugPhysics->DrawTransform();
+	}
 }

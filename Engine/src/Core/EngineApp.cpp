@@ -21,7 +21,6 @@ namespace Cober {
 		Render2D::Start();
 
         m_GameState = GameState::PLAY;
-
     }
 
 
