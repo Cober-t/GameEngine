@@ -1,28 +1,28 @@
 #ifndef DEBUG_2D_PHYSICS_H
 #define DEBUG_2D_PHYSICS_H
 
-#include <b2Draw.h>
+#include <b2_draw.h>
 
 namespace Cober {
 
-    class Debug2DPhysics : public b2Draw
+    class Debug2DPhysics
     {
     public:
         Debug2DPhysics();
         ~Debug2DPhysics();
 
-        inline static Debug2DPhysics& Get() { return *s_Instance; }
+        // inline static b2Draw& Get() { return *s_Instance; }
 
-        void DrawPoint(const b2Vec2& p, float32 size, const b2Color& color) override;
-        void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) override;
-        void DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) override;
-        void DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color) override;
-        void DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color) override;
-        void DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) override;
-        void DrawTransform(const b2Transform& xf) override;
+        // void DrawPoint(const b2Vec2& p, float32 size, const b2Color& color) override;
+        // void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) override;
+        // void DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color) override;
+        // void DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color) override;
+        // void DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color) override;
+        // void DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) override;
+        // void DrawTransform(const b2Transform& xf) override;
 
         void UpdateVisibilitySettings();
-        uint32_t GetFlags() { return m_Flags; }
+        // uint32_t GetFlags() { return m_Flags; }
 
     public:
         struct DebugSettings
@@ -44,7 +44,7 @@ namespace Cober {
         
     private:
         uint32_t m_Flags = 0;
-        static Debug2DPhysics* s_Instance;
+        // static b2Draw* s_Instance;
         static DebugSettings* m_DebugSettings;
     };
 }

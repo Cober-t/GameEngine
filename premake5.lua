@@ -1,6 +1,6 @@
 workspace "Cober"
     architecture "x64"
-    startproject "Editor"
+    startproject "Game"
 
     configurations { 
         "Debug", 
@@ -24,7 +24,7 @@ IncludeDir["ImGui"]         = "%{wks.location}/libraries/imgui"
 IncludeDir["ImGuizmo"]      = "%{wks.location}/libraries/ImGuizmo"
 IncludeDir["glm"]           = "%{wks.location}/libraries/glm"
 IncludeDir["entt"]          = "%{wks.location}/libraries/entt"
-IncludeDir["Box2D"]         = "%{wks.location}/libraries/box2d/includes"
+IncludeDir["Box2D"]         = "%{wks.location}/libraries/box2d/include/box2d"
 IncludeDir["spdlog"]        = "%{wks.location}/libraries/spdlog/include"
 IncludeDir["raudio"]        = "%{wks.location}/libraries/raudio"
 IncludeDir["stb_image"]     = "%{wks.location}/libraries/stb_image/include"

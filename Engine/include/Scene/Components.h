@@ -6,9 +6,9 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
-#include <b2EdgeShape.h>
-#include <b2CircleShape.h>
-#include <b2PolygonShape.h>
+#include <b2_edge_shape.h>
+#include <b2_circle_shape.h>
+#include <b2_polygon_shape.h>
 
 #include <sol/sol.hpp>
 

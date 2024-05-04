@@ -19,9 +19,12 @@ namespace Cober {
 
 		m_GameCamera.distance = glm::distance(m_GameCamera.position, m_GameCamera.focalPoint);
 
-		m_GameCamera.yaw = 3.0f * glm::pi<float>() / 4.0f;
-		m_GameCamera.pitch = glm::pi<float>() / 4.0f;
+		m_GameCamera.yaw = 0.0f;
+		m_GameCamera.pitch = 0.0f;
 		m_GameCamera.roll = 0.0f;
+		// m_GameCamera.yaw = 3.0f * glm::pi<float>() / 4.0f;
+		// m_GameCamera.pitch = glm::pi<float>() / 4.0f;
+		// m_GameCamera.roll = 0.0f;
 
 		m_GameCamera.position = CalculatePosition();
 		const glm::quat orientation = GetOrientation();

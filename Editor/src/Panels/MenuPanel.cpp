@@ -110,7 +110,7 @@ namespace Cober {
 
 				if (ImGui::Checkbox("Debug Mode", &EngineApp::Get().IsDebugMode()))
 				{
-					Debug2DPhysics::Get().UpdateVisibilitySettings();
+					// Debug2DPhysics::Get().UpdateVisibilitySettings();
 				}
 
 				if (EngineApp::Get().IsDebugMode())
@@ -128,7 +128,7 @@ namespace Cober {
 						ImGui::Checkbox("Pair", &Debug2DPhysics::Settings().PAIR) ||
 						ImGui::Checkbox("Center of Mass", &Debug2DPhysics::Settings().CENTER_OF_MASS))
 					{
-							Debug2DPhysics::Get().UpdateVisibilitySettings();
+							// Debug2DPhysics::Get().UpdateVisibilitySettings();
 					}
 				}
 				

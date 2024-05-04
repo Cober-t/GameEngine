@@ -9,26 +9,17 @@ project "Box2D"
 
 	files
 	{
-		"Collision/**.cpp",
-		"Collision/Shapes/**.cpp",
-		"Common/**.cpp",
-		"Dynamics/**.cpp",
-		"Dynamics/Contacts/**.cpp",
-		"Dynamics/Joints/**.cpp",
-		"Rope/**.cpp",
-		"includes/**.h",
-		"**.h"
+		"src/collision/**.cpp",
+		"src/common/**.cpp",
+		"src/dynamics/**.cpp",
+		"src/rope/**.cpp",
+		"include/**.h",
 	}
 
 	includedirs
 	{
-		"includes",
-		"Collision",
-		"Collision/Shapes",
-		"Dynamics",
-		"Dynamics/Contacts",
-		"Dynamics/Joints",
-		"Rope",
+		"include",
+		"include/box2d",
 	}
 
 	filter "system:windows"

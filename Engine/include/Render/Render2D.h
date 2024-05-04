@@ -39,10 +39,10 @@ namespace Cober {
 		static void DrawLine(Entity& entity);
 		static void DrawCircle(Entity& entity);
 
-		static void DebugDrawQuad(Entity& entity);
-		static void DebugDrawLine(Entity& entity);
-		static void DebugDrawCircle(Entity& entity);
-		static void DebugDrawTransform(Entity& entity);
+		// static void DebugDrawQuad(Entity& entity);
+		// static void DebugDrawLine(Entity& entity);
+		// static void DebugDrawCircle(Entity& entity);
+		// static void DebugDrawTransform(Entity& entity);
 
 	public:
 		struct Statistics

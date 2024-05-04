@@ -44,24 +44,24 @@ namespace Cober {
 			}
 
 			// In the future... if (EngineApp::Get().IsDebugMode() && entity.GetComponent<DebugComponent>.isActive)
-			if (EngineApp::Get().IsDebugMode())
-			{
-				switch (entity.GetComponent<Render2DComponent>().shapeType)
-				{
-				case Shape2D::Quad:
-					if (Debug2DPhysics::Settings().QUADS)
-						Render2D::DebugDrawQuad(entity);
-					break;
+			// if (EngineApp::Get().IsDebugMode())
+			// {
+			// 	switch (entity.GetComponent<Render2DComponent>().shapeType)
+			// 	{
+			// 	case Shape2D::Quad:
+			// 		if (Debug2DPhysics::Settings().QUADS)
+			// 			Render2D::DebugDrawQuad(entity);
+			// 		break;
 					
-				case Shape2D::Circle:
-					if (Debug2DPhysics::Settings().CIRCLES)
-						Render2D::DebugDrawCircle(entity);
-					break;
-				}
+			// 	case Shape2D::Circle:
+			// 		if (Debug2DPhysics::Settings().CIRCLES)
+			// 			Render2D::DebugDrawCircle(entity);
+			// 		break;
+			// 	}
 
-				if (Debug2DPhysics::Settings().TRANSFORMS)
-					Render2D::DebugDrawTransform(entity);
-			}
+			// 	if (Debug2DPhysics::Settings().TRANSFORMS)
+			// 		Render2D::DebugDrawTransform(entity);
+			// }
 		}
 
 		Render2D::EndScene();

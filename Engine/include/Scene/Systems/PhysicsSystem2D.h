@@ -6,14 +6,15 @@
 #include "Scene/Scene.h"
 // #include "Events/Event.h"
 
-#include <b2World.h>
-#include <b2Body.h>
-#include <b2Fixture.h>
-#include <b2PolygonShape.h>
-#include <b2CircleShape.h>
-#include <b2EdgeShape.h>
-#include <b2Draw.h>
-#include <b2Contact.h>
+#include <b2_world.h>
+#include <b2_body.h>
+#include <b2_fixture.h>
+#include <b2_edge_shape.h>
+#include <b2_circle_shape.h>
+#include <b2_polygon_shape.h>
+#include <b2_draw.h>
+#include <b2_contact.h>
+
 #include <Render/Primitives/Line.h>
 #include <Render/Debug2DPhysics.h>
 

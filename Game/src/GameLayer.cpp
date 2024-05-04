@@ -28,7 +28,7 @@ namespace Cober {
 
 	void Game::OnUpdate(Unique<Timestep>& ts) 
 	{
-		RenderGlobals::SetClearColor(10, 0, 100, 255);
+		RenderGlobals::SetClearColor(46, 47, 52);
 		RenderGlobals::Clear();
 		m_Camera->OnUpdate(ts);
 		m_ActiveScene->OnUpdateSimulation(ts, m_Camera);

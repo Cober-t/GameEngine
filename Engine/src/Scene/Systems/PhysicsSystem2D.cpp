@@ -1,5 +1,6 @@
 #include <pch.h>
 #include "Scene/Systems/PhysicsSystem2D.h"
+#include "Core/EngineApp.h"
 
 namespace Cober {
 
@@ -22,7 +23,11 @@ namespace Cober {
 		m_PhysicsWorld = new b2World({ 0.0f, -9.8f });
 		m_PhysicsWorld->SetContactListener(&contactListener);
 
-		m_PhysicsWorld->SetDebugDraw(static_cast<b2Draw*>(&Debug2DPhysics::Get()));
+		if (EngineApp::Get().IsDebugMode())
+		{
+			// m_PhysicsWorld->SetDebugDraw(&Debug2DPhysics::Get());
+			// m_PhysicsWorld->DebugDraw();
+		}
 
 		for (auto& entity : GetSystemEntities())
 		{
@@ -45,7 +50,7 @@ namespace Cober {
 
 		Entity* staticRef = (Entity*)malloc(sizeof(entity));
 		*staticRef = entity;
-		bodyDef.userData = (void*)staticRef;
+		bodyDef.userData.pointer = (uintptr_t)staticRef;
 
 		b2Body* body = m_PhysicsWorld->CreateBody(&bodyDef);
 
@@ -70,8 +75,6 @@ namespace Cober {
 		}
 		else if (entity.HasComponent<CircleCollider2D>())
 		{
-			std::cout << entity.GetComponent<TagComponent>().tag << std::endl;
-			
 			auto& circleEntity = entity.GetComponent<CircleCollider2D>();
 
 			circleEntity.shape.m_p.Set(circleEntity.offset.x, circleEntity.offset.y);
@@ -96,6 +99,7 @@ namespace Cober {
 		// 	// Manage physics...
 		// 	//
 		// }
+
 	}
 
 
@@ -117,7 +121,6 @@ namespace Cober {
 			{
 				transform.position.x = position.x;
 				transform.position.y = position.y;
-
 				transform.rotation.z = rb2d.fixedRotation ? 0.0f : body->GetAngle();
 			}
 		}
@@ -138,25 +141,37 @@ namespace Cober {
 
 	void ContactListener::BeginContact(b2Contact* contact)
 	{
-		void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-		if ( bodyUserData )
-			LOG_WARNING("BEGIN CONTACT! {0}", static_cast<Entity*>(bodyUserData)->GetName());
+		b2Fixture* fixtureA = contact->GetFixtureA();
+		if ( fixtureA )
+		{
+			uintptr_t index = fixtureA->GetBody()->GetUserData().pointer;
+			LOG_WARNING("BEGIN CONTACT! {0}", reinterpret_cast<Entity*>(index)->GetName());
+		}
 	
-		bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-		if ( bodyUserData )
-			LOG_WARNING("BEGIN CONTACT! {0}", static_cast<Entity*>(bodyUserData)->GetName());
+		b2Fixture* fixtureB = contact->GetFixtureB();
+		if ( fixtureB )
+		{
+			uintptr_t index = fixtureB->GetBody()->GetUserData().pointer;
+			LOG_WARNING("BEGIN CONTACT! {0}", reinterpret_cast<Entity*>(index)->GetName());
+		}
 	}
 
 
 	void ContactListener::EndContact(b2Contact* contact)
 	{
-		void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-		if ( bodyUserData )
-			LOG_WARNING("END CONTACT! {0}", static_cast<Entity*>(bodyUserData)->GetName());
-  
-		bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-		if ( bodyUserData )
-			LOG_WARNING("END CONTACT! {0}", static_cast<Entity*>(bodyUserData)->GetName());
+		b2Fixture* fixtureA = contact->GetFixtureA();
+		uintptr_t indexBodyA = fixtureA->GetBody()->GetUserData().pointer;
+		if (indexBodyA)
+		{
+			LOG_WARNING("END CONTACT! {0}", reinterpret_cast<Entity*>(indexBodyA)->GetName());
+		}
+	
+		b2Fixture* fixtureB = contact->GetFixtureB();
+		uintptr_t indexBodyB = fixtureB->GetBody()->GetUserData().pointer;
+		if (indexBodyB)
+		{
+			LOG_WARNING("END CONTACT! {0}", reinterpret_cast<Entity*>(indexBodyB)->GetName());
+		}
 	}
 
 
