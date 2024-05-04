@@ -16,6 +16,7 @@
 #include "Core/Window.h"
 #include "Core/UUID.h"
 #include "Core/Utils.h"
+#include "Core/Settings.h"
 
 
 //[++++++++++++++++++++++++++]
@@ -74,7 +75,7 @@
 
 
 //[++++++++++++++++++++++++++]
-//[+++++++++ RENDER +++++++++]
+//[+++++++++ Debug +++++++++]
 //[++++++++++++++++++++++++++]
 #include "Render/Debug2DPhysics.h"
 

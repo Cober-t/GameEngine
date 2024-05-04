@@ -23,9 +23,6 @@ namespace Cober {
 
 	void RenderSystem::Update(Unique<Timestep>& ts, const Ref<Camera>& camera)
 	{
-		Render2D::ResetStats();
-		Render2D::BeginScene(camera);
-
 		for (auto entity : GetSystemEntities())
         {
 			switch (entity.GetComponent<Render2DComponent>().shapeType)
@@ -42,29 +39,7 @@ namespace Cober {
 			case Shape2D::Sprite:
 				break;
 			}
-
-			// In the future... if (EngineApp::Get().IsDebugMode() && entity.GetComponent<DebugComponent>.isActive)
-			// if (EngineApp::Get().IsDebugMode())
-			// {
-			// 	switch (entity.GetComponent<Render2DComponent>().shapeType)
-			// 	{
-			// 	case Shape2D::Quad:
-			// 		if (Debug2DPhysics::Settings().QUADS)
-			// 			Render2D::DebugDrawQuad(entity);
-			// 		break;
-					
-			// 	case Shape2D::Circle:
-			// 		if (Debug2DPhysics::Settings().CIRCLES)
-			// 			Render2D::DebugDrawCircle(entity);
-			// 		break;
-			// 	}
-
-			// 	if (Debug2DPhysics::Settings().TRANSFORMS)
-			// 		Render2D::DebugDrawTransform(entity);
-			// }
 		}
-
-		Render2D::EndScene();
 	}
 
 

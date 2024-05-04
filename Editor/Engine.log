@@ -1,34 +1,34 @@
-[2024-05-03 13:36:46.004] [APP] [info] [EditorApp.cpp:26] Editor Constructor!
-[2024-05-03 13:36:46.005] [ENGINE] [info] [EngineApp.cpp:11] EngineApp Constructor!
-[2024-05-03 13:36:46.005] [ENGINE] [info] [Window.cpp:38] Creating window Engine Editor (1280, 720)
-[2024-05-03 13:36:46.334] [ENGINE] [info] [OpenGLContext.cpp:11] Window Context Created!!
-[2024-05-03 13:36:46.340] [ENGINE] [info] [OpenGLContext.cpp:26] OpenGL Info:
-[2024-05-03 13:36:46.340] [ENGINE] [info] [OpenGLContext.cpp:27]   Vendor: NVIDIA Corporation
-[2024-05-03 13:36:46.341] [ENGINE] [info] [OpenGLContext.cpp:28]   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
-[2024-05-03 13:36:46.341] [ENGINE] [info] [OpenGLContext.cpp:29]   Version: 4.6.0 NVIDIA 551.86
-[2024-05-03 13:36:46.341] [ENGINE] [info] [Timestep.h:18] Created Timer
-[2024-05-03 13:36:46.342] [ENGINE] [trace] [OpenGLRenderAPI.cpp:45] Render API init
-[2024-05-03 13:36:46.342] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-05-03 13:36:46.342] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-05-03 13:36:46.344] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2024-05-03 13:36:46.344] [ENGINE] [trace] [OpenGLTexture.cpp:20] Render Texture success
-[2024-05-03 13:36:46.346] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Quad.glsl success
-[2024-05-03 13:36:46.346] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-05-03 13:36:46.346] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-05-03 13:36:46.348] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Line.glsl success
-[2024-05-03 13:36:46.348] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-05-03 13:36:46.348] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-05-03 13:36:46.350] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2024-05-03 13:36:46.351] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Circle.glsl success
-[2024-05-03 13:36:46.351] [ENGINE] [trace] [OpenGLBuffer.cpp:94] Render UniformBuffer success
-[2024-05-03 13:36:46.351] [APP] [info] [EditorCamera.cpp:36] Editor Camera Created!!
-[2024-05-03 13:36:46.354] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-03 13:36:46.355] [APP] [info] [Scene.cpp:130] Created entity with ID 7780449693378874762 and name Entity3
-[2024-05-03 13:36:46.356] [APP] [info] [Scene.cpp:130] Created entity with ID 3941051621700177731 and name Entity1
-[2024-05-03 13:36:46.356] [APP] [info] [Scene.cpp:130] Created entity with ID 18399488236306675749 and name Entity0
-[2024-05-03 13:36:46.357] [APP] [info] [RenderSystem.cpp:9] Render System Added to Registry!!
-[2024-05-03 13:36:46.357] [APP] [info] [RenderSystem.cpp:20] Render System Started!!
-[2024-05-03 13:36:46.359] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-05-03 13:36:46.360] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-05-03 13:36:46.361] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2024-05-03 13:36:46.362] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Grid.glsl success
+[2024-05-04 14:23:06.833] [APP] [info] [EditorApp.cpp:26] Editor Constructor!
+[2024-05-04 14:23:06.834] [ENGINE] [info] [EngineApp.cpp:11] EngineApp Constructor!
+[2024-05-04 14:23:06.834] [ENGINE] [info] [Window.cpp:38] Creating window Engine Editor (1280, 720)
+[2024-05-04 14:23:07.138] [ENGINE] [info] [OpenGLContext.cpp:11] Window Context Created!!
+[2024-05-04 14:23:07.143] [ENGINE] [info] [OpenGLContext.cpp:26] OpenGL Info:
+[2024-05-04 14:23:07.143] [ENGINE] [info] [OpenGLContext.cpp:27]   Vendor: NVIDIA Corporation
+[2024-05-04 14:23:07.143] [ENGINE] [info] [OpenGLContext.cpp:28]   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+[2024-05-04 14:23:07.143] [ENGINE] [info] [OpenGLContext.cpp:29]   Version: 4.6.0 NVIDIA 551.86
+[2024-05-04 14:23:07.144] [ENGINE] [info] [Timestep.h:18] Created Timer
+[2024-05-04 14:23:07.144] [ENGINE] [trace] [OpenGLRenderAPI.cpp:45] Render API init
+[2024-05-04 14:23:07.144] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-05-04 14:23:07.144] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-05-04 14:23:07.146] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
+[2024-05-04 14:23:07.146] [ENGINE] [trace] [OpenGLTexture.cpp:20] Render Texture success
+[2024-05-04 14:23:07.148] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Quad.glsl success
+[2024-05-04 14:23:07.148] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-05-04 14:23:07.148] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-05-04 14:23:07.150] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Line.glsl success
+[2024-05-04 14:23:07.150] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-05-04 14:23:07.150] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-05-04 14:23:07.151] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
+[2024-05-04 14:23:07.152] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Circle.glsl success
+[2024-05-04 14:23:07.152] [ENGINE] [trace] [OpenGLBuffer.cpp:94] Render UniformBuffer success
+[2024-05-04 14:23:07.152] [APP] [info] [EditorCamera.cpp:39] Editor Camera Created!!
+[2024-05-04 14:23:07.155] [APP] [info] [Scene.cpp:18] Scene Created!!
+[2024-05-04 14:23:07.155] [APP] [info] [Scene.cpp:130] Created entity with ID 11206667668339436677 and name Entity0
+[2024-05-04 14:23:07.156] [APP] [info] [Scene.cpp:130] Created entity with ID 14262529110280247206 and name Entity1
+[2024-05-04 14:23:07.156] [APP] [info] [Scene.cpp:130] Created entity with ID 310639542327291344 and name Entity3
+[2024-05-04 14:23:07.157] [APP] [info] [RenderSystem.cpp:9] Render System Added to Registry!!
+[2024-05-04 14:23:07.157] [APP] [info] [RenderSystem.cpp:20] Render System Started!!
+[2024-05-04 14:23:07.158] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-05-04 14:23:07.158] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-05-04 14:23:07.160] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
+[2024-05-04 14:23:07.161] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Grid.glsl success

@@ -11,6 +11,7 @@
 #include "Render/Debug2DPhysics.h"
 
 #include "Scene/ECS.h"
+#include "Core/Settings.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
@@ -33,32 +34,14 @@ namespace Cober {
 		static void StartBatch();
 		static void NextBatch();
 
-		// EXPORT TO DEBUG RENDERER
-		// static void DrawSolidQuad();
 		static void DrawQuad(Entity& entity);
 		static void DrawLine(Entity& entity);
 		static void DrawCircle(Entity& entity);
 
-		// static void DebugDrawQuad(Entity& entity);
-		// static void DebugDrawLine(Entity& entity);
-		// static void DebugDrawCircle(Entity& entity);
-		// static void DebugDrawTransform(Entity& entity);
-
-	public:
-		struct Statistics
-		{
-			uint32_t DrawCalls = 0;
-			uint32_t QuadCount = 0;
-			uint32_t LineCount = 0;
-			uint32_t CircleCount = 0;
-
-			uint32_t GetTotalVertexCount() { return QuadCount * 4 + LineCount * 2; }
-			uint32_t GetTotalIndexCount()  { return QuadCount * 6; }
-		};
-
 	public:
 		static void ResetStats();
-		static Statistics GetStats();
+		static RenderSettings& GetStats();
+		static RenderSettings* m_RenderSettings;
 	};
 }
 

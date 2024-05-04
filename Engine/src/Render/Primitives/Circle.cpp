@@ -1,6 +1,7 @@
 #include <pch.h>
 #include "Render/Primitives/Circle.h"
 #include "Render/RenderGlobals.h"
+#include "Render/Render2D.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -25,7 +26,7 @@ namespace Cober {
 		{
 			data.VertexArray = VertexArray::Create();
 
-			data.VertexBuffer = VertexBuffer::Create(data.MaxVertices * sizeof(Attributes));
+			data.VertexBuffer = VertexBuffer::Create(Render2D::GetStats().MaxVertices * sizeof(Attributes));
 			data.VertexBuffer->SetLayout({
 				{ ShaderDataType::Float3, "a_WorldPosition" },
 				{ ShaderDataType::Float3, "a_LocalPosition" },
@@ -36,44 +37,30 @@ namespace Cober {
 			});
 
 			data.VertexArray->AddVertexBuffer(data.VertexBuffer);
-			data.VertexBufferBase = new Attributes[Data::MaxVertices];
+			data.VertexBufferBase = new Attributes[Render2D::GetStats().MaxVertices];
 			
-			uint32_t* circleIndices = new uint32_t[Data::MaxIndices];
-			
-			uint32_t offset = 0;
-			for (uint32_t i = 0; i < Data::MaxIndices; i += 6)
-			{
-				circleIndices[i + 0] = offset + 0;
-				circleIndices[i + 1] = offset + 1;
-				circleIndices[i + 2] = offset + 2;
+			uint32_t* circleIndices = Render2D::GetStats().GetIndices();
 
-				circleIndices[i + 3] = offset + 2;
-				circleIndices[i + 4] = offset + 3;
-				circleIndices[i + 5] = offset + 0;
-
-				offset += 4;
-			}
-
-			Ref<IndexBuffer> circleIB = IndexBuffer::Create(circleIndices, Data::MaxIndices);
+			Ref<IndexBuffer> circleIB = IndexBuffer::Create(circleIndices, Render2D::GetStats().MaxVertices);
 			data.VertexArray->SetIndexBuffer(circleIB); // The shame as Quads Index Buffer
 			delete[] circleIndices;
 
 			data.Shader = Shader::Create("Circle.glsl");
-
-			data.VertexPositions[0] = { -1.0f, -1.0f, 0.0f, 1.0f };
-			data.VertexPositions[1] = {  1.0f, -1.0f, 0.0f, 1.0f };
-			data.VertexPositions[2] = {  1.0f,  1.0f, 0.0f, 1.0f };
-			data.VertexPositions[3] = { -1.0f,  1.0f, 0.0f, 1.0f };
 		}
 
 
 		void Circle::Flush()
 		{
-			uint32_t dataSize = (uint32_t)((uint8_t*)data.VertexBufferPtr - (uint8_t*)data.VertexBufferBase);
-			data.VertexBuffer->SetData(data.VertexBufferBase, dataSize);
+			if (data.IndexCount)
+			{
+				uint32_t dataSize = (uint32_t)((uint8_t*)data.VertexBufferPtr - (uint8_t*)data.VertexBufferBase);
+				data.VertexBuffer->SetData(data.VertexBufferBase, dataSize);
 
-			data.Shader->Bind();
-			RenderGlobals::DrawIndexed(data.VertexArray, data.IndexCount);
+				data.Shader->Bind();
+				RenderGlobals::DrawIndexed(data.VertexArray, data.IndexCount);
+
+				Render2D::GetStats().DrawCalls++;
+			}
 		}
 
 
@@ -114,7 +101,7 @@ namespace Cober {
 				* glm::toMat4(glm::quat(enttTrans.rotation))
 				* glm::scale(glm::mat4(1.0f), scale);
 
-			if (data.IndexCount >= Data::MaxIndices)
+			if (data.IndexCount >= Render2D::GetStats().MaxIndices)
 				NextBatch();
 			
 			glm::vec4 color = entity.GetComponent<Render2DComponent>().color;
@@ -127,10 +114,11 @@ namespace Cober {
 
 		void Circle::SetAttributes(const glm::mat4& transform, const glm::vec4& color, float thickness, float fade, int entityID) 
 		{
-			for (size_t i = 0; i < data.VertexCount; i++)
+			size_t VertexCount = sizeof(Render2D::GetStats().QuadVertexPositions) / sizeof(Render2D::GetStats().QuadVertexPositions[0]);
+			for (size_t i = 0; i < VertexCount; i++)
 			{
-				data.VertexBufferPtr->WorldPosition = transform * data.VertexPositions[i];
-				data.VertexBufferPtr->LocalPosition = data.VertexPositions[i] * 2.0f;
+				data.VertexBufferPtr->WorldPosition = transform * Render2D::GetStats().QuadVertexPositions[i];
+				data.VertexBufferPtr->LocalPosition = Render2D::GetStats().QuadVertexPositions[i] * 2.0f;
 				data.VertexBufferPtr->Color = color;
 				data.VertexBufferPtr->Thickness = thickness;
 				data.VertexBufferPtr->Fade = fade;
@@ -139,6 +127,8 @@ namespace Cober {
 			}
 			
 			data.IndexCount += 6;
+
+			Render2D::GetStats().CircleCount++;
 		}
 	}
 }

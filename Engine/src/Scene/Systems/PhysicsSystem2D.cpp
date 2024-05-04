@@ -25,8 +25,7 @@ namespace Cober {
 
 		if (EngineApp::Get().IsDebugMode())
 		{
-			// m_PhysicsWorld->SetDebugDraw(&Debug2DPhysics::Get());
-			// m_PhysicsWorld->DebugDraw();
+			m_PhysicsWorld->SetDebugDraw(reinterpret_cast<b2Draw*>(&Debug2DPhysics::Get()));
 		}
 
 		for (auto& entity : GetSystemEntities())
@@ -124,6 +123,9 @@ namespace Cober {
 				transform.rotation.z = rb2d.fixedRotation ? 0.0f : body->GetAngle();
 			}
 		}
+
+		if (EngineApp::Get().IsDebugMode())
+			m_PhysicsWorld->DebugDraw();
 	}
 
 

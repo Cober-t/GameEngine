@@ -2,6 +2,7 @@
 #include "Render/Primitives/Quad.h"
 #include "Render/Primitives/Line.h"
 #include "Render/RenderGlobals.h"
+#include "Render/Render2D.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -42,7 +43,7 @@ namespace Cober {
 		{
 			data.VertexArray = VertexArray::Create();
 
-			data.VertexBuffer = VertexBuffer::Create(Data::MaxVertices * sizeof(Attributes));
+			data.VertexBuffer = VertexBuffer::Create(Render2D::GetStats().MaxVertices * sizeof(Attributes));
 			data.VertexBuffer->SetLayout({
 				{ ShaderDataType::Float3, "a_Position"     },
 				{ ShaderDataType::Float4, "a_Color"        },
@@ -52,28 +53,15 @@ namespace Cober {
 				{ ShaderDataType::Int,    "a_EntityID"	   }
 			});
 			data.VertexArray->AddVertexBuffer(data.VertexBuffer);
-			data.VertexBufferBase = new Attributes[Data::MaxVertices];
+			data.VertexBufferBase = new Attributes[Render2D::GetStats().MaxVertices];
 
-			uint32_t* quadIndices = new uint32_t[Data::MaxIndices];
+			uint32_t* quadIndices = Render2D::GetStats().GetIndices();
 
-			uint32_t offset = 0;
-			for (uint32_t i = 0; i < Data::MaxIndices; i += 6)
-			{
-				quadIndices[i + 0] = offset + 0;
-				quadIndices[i + 1] = offset + 1;
-				quadIndices[i + 2] = offset + 2;
-
-				quadIndices[i + 3] = offset + 2;
-				quadIndices[i + 4] = offset + 3;
-				quadIndices[i + 5] = offset + 0;
-
-				offset += 4;
-			}
-
-			Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, Data::MaxIndices);
+			Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, Render2D::GetStats().MaxIndices);
 			data.VertexArray->SetIndexBuffer(quadIB);
 			delete[] quadIndices;
 
+			// TEXTURE
 			data.WhiteTexture = Texture::Create(1, 1);
 			uint32_t whiteTextureData = 0xffffffff;
 
@@ -83,29 +71,30 @@ namespace Cober {
 			for (uint32_t i = 0; i < Data::MaxTextureSlots; i++)
 				samplers[i] = i;
 
+			// SHADER
 			data.Shader = Shader::Create("Quad.glsl");
 
 			// Set first texture slot to 0
 			data.TextureSlots[0] = data.WhiteTexture;
-
-			data.VertexPositions[0] = { -1.0f, -1.0f, 0.0f, 1.0f };
-			data.VertexPositions[1] = {  1.0f, -1.0f, 0.0f, 1.0f };
-			data.VertexPositions[2] = {  1.0f,  1.0f, 0.0f, 1.0f };
-			data.VertexPositions[3] = { -1.0f,  1.0f, 0.0f, 1.0f };
 		}
 
 
 		void Quad::Flush()
 		{
-			uint32_t dataSize = (uint32_t)((uint8_t*)data.VertexBufferPtr - (uint8_t*)data.VertexBufferBase);
-			data.VertexBuffer->SetData(data.VertexBufferBase, dataSize);
+			if (data.IndexCount)
+			{
+				uint32_t dataSize = (uint32_t)((uint8_t*)data.VertexBufferPtr - (uint8_t*)data.VertexBufferBase);
+				data.VertexBuffer->SetData(data.VertexBufferBase, dataSize);
 
-			// Bind textures
-			for (uint32_t i = 0; i < data.TextureSlotIndex; i++)
-				data.TextureSlots[i]->Bind(i);
+				// Bind textures
+				for (uint32_t i = 0; i < data.TextureSlotIndex; i++)
+					data.TextureSlots[i]->Bind(i);
 
-			data.Shader->Bind();
-			RenderGlobals::DrawIndexed(data.VertexArray, data.IndexCount);
+				data.Shader->Bind();
+				RenderGlobals::DrawIndexed(data.VertexArray, data.IndexCount);
+
+				Render2D::GetStats().DrawCalls++;
+			}
 		}
 
 
@@ -144,7 +133,7 @@ namespace Cober {
             glm::mat4 transform = entity.GetComponent<TransformComponent>().GetTransform();
             glm::vec3 lineVertices[4];
             for (size_t i = 0; i < 4; i++)
-                lineVertices[i] = transform * data.VertexPositions[i];
+                lineVertices[i] = transform * Render2D::GetStats().QuadVertexPositions[i];
 
             Line::Draw(lineVertices[0], lineVertices[1], color, (int)entity);
             Line::Draw(lineVertices[1], lineVertices[2], color, (int)entity);
@@ -162,12 +151,13 @@ namespace Cober {
 
 			// data.Shader->SetIntArray("u_Textures", samplers, Data::MaxTextureSlots);
 			
-			if (data.IndexCount >= Data::MaxIndices)
+			if (data.IndexCount >= Render2D::GetStats().MaxIndices)
 				NextBatch();
 
-			for (size_t i = 0; i < data.VertexCount; i++) 
+			size_t VertexCount = sizeof(Render2D::GetStats().QuadVertexPositions) / sizeof(Render2D::GetStats().QuadVertexPositions[0]);
+			for (size_t i = 0; i < VertexCount; i++) 
 			{
-				data.VertexBufferPtr->Position = transform * data.VertexPositions[i];
+				data.VertexBufferPtr->Position = transform * Render2D::GetStats().QuadVertexPositions[i];
 				data.VertexBufferPtr->Color = color;
 				data.VertexBufferPtr->TexCoord = textureCoords[i];
 				data.VertexBufferPtr->TexIndex = textureIndex;
@@ -177,6 +167,8 @@ namespace Cober {
 			}
 
 			data.IndexCount += 6;
+
+			Render2D::GetStats().QuadCount++;
 		}
 	}
 }

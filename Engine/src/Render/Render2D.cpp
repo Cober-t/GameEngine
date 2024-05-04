@@ -19,11 +19,12 @@ namespace Cober {
 	static CameraData CameraBuffer;
 	static Ref<UniformBuffer> CameraUniformBuffer;
 
-	static Render2D::Statistics stats;
+	RenderSettings* Render2D::m_RenderSettings = nullptr;
 
 
 	void Render2D::Start() 
 	{
+		m_RenderSettings = new RenderSettings();
 		Primitive::Quad::Init();
 		Primitive::Line::Init();
 		Primitive::Circle::Init();
@@ -45,25 +46,9 @@ namespace Cober {
 
 	void Render2D::Flush()
 	{
-		if (Primitive::Quad::GetIndexCount())
-		{
-			Primitive::Quad::Flush();
-			stats.DrawCalls++;
-		}
-
-		if (Primitive::Line::GetVertexCount())
-		{
-			Primitive::Line::Flush();
-			stats.DrawCalls++;	
-		}
-
-		if (Primitive::Circle::GetIndexCount())
-		{
-			Primitive::Circle::Flush();
-			stats.DrawCalls++;	
-		}
-
-		// if (Cube::IndexCount)
+		Primitive::Quad::Flush();
+		Primitive::Line::Flush();
+		Primitive::Circle::Flush();
 		// 	Cube::Flush();
 	}
 
@@ -88,13 +73,14 @@ namespace Cober {
 
 	void Render2D::ResetStats() 
 	{
-		memset(&stats, 0, sizeof(Statistics));
+		m_RenderSettings->Reset();
+		// memset(&m_RenderSettings, 0, sizeof(RenderSettings));
 	}
 
 
-	Render2D::Statistics Render2D::GetStats() 
+	RenderSettings& Render2D::GetStats() 
 	{
-		return stats;
+		return *m_RenderSettings;
 	}
 
 
@@ -114,12 +100,10 @@ namespace Cober {
 		if (entity.GetComponent<Render2DComponent>().fill)
 		{
 			Primitive::Quad::Draw(entity);
-			stats.QuadCount++;
 		}
 		else
 		{
 			Primitive::Quad::DrawRect(entity);
-			stats.LineCount += 4;
 		}
 	}
 
@@ -127,76 +111,11 @@ namespace Cober {
 	void Render2D::DrawLine(Entity& entity) 
 	{
 		Primitive::Line::Draw(entity);
-		stats.LineCount++;
 	}
 
 
 	void Render2D::DrawCircle(Entity& entity) 
 	{
 		Primitive::Circle::Draw(entity);
-		stats.CircleCount++;
 	}
-
-	
-	// void Render2D::DebugDrawQuad(Entity& entity)
-	// {
-	// 	if (!entity.HasComponent<BoxCollider2D>())
-	// 		return;
-
-	// 	auto& shape = entity.GetComponent<BoxCollider2D>().shape;
-	// 	b2Color color(200.0f, 100.0f, 0.0f, 255.0f);
-
-	// 	if (entity.GetComponent<Render2DComponent>().fill)
-	// 	{
-	// 		// Debug2DPhysics::Get().DrawSolidPolygon(shape.m_vertices, sizeof(shape.m_vertices) / sizeof(shape.m_vertices[0]), color);
-	// 	}
-	// 	else
-	// 	{
-	// 		// Debug2DPhysics::Get().DrawPolygon();
-	// 	}
-	// }
-
-
-	// void Render2D::DebugDrawLine(Entity& entity)
-	// {
-	// 	// b2Vec2 p1 = b2Vec2(0.0f, 5.0f);
-	// 	// b2Vec2 p2 = b2Vec2(0.0f, 0.0f);
-	// 	// b2Color color = b2Color(0.0f, 1.0f, 0.0f);
-	// 	// Debug2DPhysics::Get().DrawSegment(p1, p2, color);
-	// 	// stats.LineCount++;
-	// }
-
-
-	// void Render2D::DebugDrawCircle(Entity& entity)
-	// {
-	// 	// glm::vec4 color = entity.GetComponent<Render2DComponent>().color;
-	// 	glm::mat4 transform = entity.GetComponent<TransformComponent>().GetTransform();
-	// 	glm::vec3 lineVertices[4];
-
-	// 	// for (size_t i = 0; i < 4; i++)
-	// 	//     lineVertices[i] = transform * Primitive::Quad.VertexPositions[i];
-
-	// 	// if (entity.GetComponent<Render2DComponent>().fill)
-	// 	// {
-	// 	// 		Debug2DPhysics::Get().DrawSolidCircle();
-	// 	// }
-	// 	// else
-	// 	// {
-	// 	// 		Debug2DPhysics::Get().DrawCircle();
-	// 	// }
-	// }
-
-
-	// void Render2D::DebugDrawTransform(Entity& entity)
-	// {
-	// 	glm::vec3 pos = entity.GetComponent<TransformComponent>().position;
-	// 	glm::vec3 rot = entity.GetComponent<TransformComponent>().rotation;
-
-	// 	b2Vec2 position(pos.x, pos.y);
-	// 	b2Rot rotation(rot.z);
-	// 	b2Transform transform(position, rotation);
-
-	// 	Debug2DPhysics::Get().DrawTransform(transform);
-	// 	stats.LineCount +=2;
-	// }
 }

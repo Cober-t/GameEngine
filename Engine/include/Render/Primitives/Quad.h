@@ -6,6 +6,8 @@
 #include "Render/Shader.h"
 #include "Scene/ECS.h"
 
+class Render2D;
+
 namespace Cober {
 
 	namespace Primitive {
@@ -53,16 +55,9 @@ namespace Cober {
 				static const uint32_t MaxTextureSlots = 32; // TODO: RenderCaps
 				std::array<Ref<Texture>, MaxTextureSlots> TextureSlots;
 				uint32_t TextureSlotIndex = 1; // 0 = white texture
-
-				static const uint32_t MaxQuads = 20000;
-				static const uint32_t MaxVertices = MaxQuads * 4; // Add Lines, Circles and Cubes to the count
-				static const uint32_t MaxIndices = MaxQuads * 6;  // Add Lines, Circles and Cubes to the count
 				
 				Attributes* VertexBufferBase = nullptr;
 				Attributes* VertexBufferPtr = nullptr;
-
-				glm::vec4 VertexPositions[4];
-				size_t VertexCount = 4;
 			};
 
 		private:

@@ -93,6 +93,11 @@ namespace Cober {
 
 			if (ImGui::BeginMenu("Options")) 
             {
+				if (ImGui::InputFloat("Line Thickness", &Render2D::GetStats().LineThickness))
+				{
+					RenderGlobals::SetLineWidth(Render2D::GetStats().LineThickness);
+				}
+
 				if (ImGui::BeginCombo("Resolution", m_CurrentScreenSize)) 
                 {
 					for (int i = 0; i < SCREEN_SIZE::N_RESOLUTIONS; i++) 
@@ -110,25 +115,18 @@ namespace Cober {
 
 				if (ImGui::Checkbox("Debug Mode", &EngineApp::Get().IsDebugMode()))
 				{
-					// Debug2DPhysics::Get().UpdateVisibilitySettings();
+					Debug2DPhysics::Get().UpdateFlags();
 				}
 
 				if (EngineApp::Get().IsDebugMode())
 				{
-					ImGui::Checkbox("Lines", &Debug2DPhysics::Settings().LINES);
-					ImGui::Checkbox("Quads", &Debug2DPhysics::Settings().QUADS);
-					ImGui::Checkbox("Circles", &Debug2DPhysics::Settings().CIRCLES);
-					ImGui::Checkbox("Transforms", &Debug2DPhysics::Settings().TRANSFORMS);
-
-					ImGui::Separator();
-
-					if (ImGui::Checkbox("Shapes", &Debug2DPhysics::Settings().SHAPES) ||
-						ImGui::Checkbox("Joints", &Debug2DPhysics::Settings().JOINTS) ||
-						ImGui::Checkbox("AABBs", &Debug2DPhysics::Settings().AABBS) ||
-						ImGui::Checkbox("Pair", &Debug2DPhysics::Settings().PAIR) ||
-						ImGui::Checkbox("Center of Mass", &Debug2DPhysics::Settings().CENTER_OF_MASS))
+					if (ImGui::Checkbox("Shapes", &Debug2DPhysics::Settings().shapes) ||
+						ImGui::Checkbox("Joints", &Debug2DPhysics::Settings().joints) ||
+						ImGui::Checkbox("AABBs", &Debug2DPhysics::Settings().aabbs) ||
+						ImGui::Checkbox("Pair", &Debug2DPhysics::Settings().pair) ||
+						ImGui::Checkbox("Center of Mass", &Debug2DPhysics::Settings().center_of_mass))
 					{
-							// Debug2DPhysics::Get().UpdateVisibilitySettings();
+							Debug2DPhysics::Get().UpdateFlags();
 					}
 				}
 				

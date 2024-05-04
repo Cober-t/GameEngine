@@ -6,6 +6,8 @@
 #include "Render/Shader.h"
 #include "Scene/ECS.h"
 
+class Render2D;
+
 namespace Cober  {
 
 	namespace Primitive {
@@ -45,11 +47,6 @@ namespace Cober  {
 				uint32_t VertexCount = 0;
 				Attributes* VertexBufferBase = nullptr;
 				Attributes* VertexBufferPtr = nullptr;
-				
-				static const uint32_t MaxLines = 100000;
-				static const uint32_t MaxVertices = MaxLines * 2; // Add Lines, Circles and Cubes to the count
-
-				float thickness = 2.0f;
 			};
 
 		private:

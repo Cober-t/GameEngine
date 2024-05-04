@@ -6,6 +6,7 @@
 #include "Render/Shader.h"
 #include "Scene/ECS.h"
 
+class Render2D;
 
 namespace Cober  {
 
@@ -49,15 +50,8 @@ namespace Cober  {
 				
 				uint32_t IndexCount = 0;
 
-				static const uint32_t MaxCircles = 20000;
-				static const uint32_t MaxVertices = MaxCircles * 4;
-				static const uint32_t MaxIndices = MaxCircles * 6;
-
 				Attributes* VertexBufferBase = nullptr;
 				Attributes* VertexBufferPtr = nullptr;
-
-				glm::vec4 VertexPositions[4];
-				size_t VertexCount = 4;
 			};
 
 			Attributes* attributes;
