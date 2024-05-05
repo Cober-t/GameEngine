@@ -181,9 +181,6 @@ namespace Cober {
 		GetSystem<PhysicsSystem2D>().Update(ts);
 		GetSystem<ScriptSystem>().Update();
 
-		while(m_IsRunning || ts->GetDeltaTime() >= 1.0f)
-			ts->Update();
-			
 		Render2D::EndScene();
 	}
 

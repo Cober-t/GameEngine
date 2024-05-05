@@ -6,11 +6,12 @@
 namespace Cober {
 
     b2World* Physics2D::m_PhysicsWorld = nullptr;
-
+    bool Physics2D::m_DebugActive = false;
 
     void Physics2D::Init()
     {
         m_PhysicsWorld = new b2World({ 0.0f, -9.8f });
+
         CreateWorld(m_PhysicsWorld);
         
         m_PhysicsWorld->SetContactListener(new ContactListener());
@@ -18,6 +19,7 @@ namespace Cober {
         if (EngineApp::Get().IsDebugMode())
 		{
 			m_PhysicsWorld->SetDebugDraw(reinterpret_cast<b2Draw*>(&Debug2DPhysics::Get()));
+            m_DebugActive = true;
 		}
     }
 
@@ -38,8 +40,16 @@ namespace Cober {
     {
 		if (EngineApp::Get().IsDebugMode())
         {
+            if (!m_DebugActive)
+            {
+                m_DebugActive = true;
+                m_PhysicsWorld->SetDebugDraw(reinterpret_cast<b2Draw*>(&Debug2DPhysics::Get()));
+            }
+
             m_PhysicsWorld->DebugDraw();
         }
+        else
+            m_DebugActive = false;
     }
 
 

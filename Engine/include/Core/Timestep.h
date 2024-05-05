@@ -34,7 +34,7 @@ namespace Cober {
 			m_Frames++;
 		}
 
-		inline int GetFrames() const { return m_Frames; }
+		inline int GetFrames() const { return m_FramesOneSec; }
 		inline double GetLimitFPS() const { return m_LimitFPS; }
 		inline void SetLimitFPS(int limitFPS = 1) { m_LimitFPS = limitFPS; }
 
@@ -47,7 +47,11 @@ namespace Cober {
 		inline void ResetAfterOneSecond() 
 		{ 
 			if (glfwGetTime() - m_Timer > 1.0)
+			{
+				m_FramesOneSec = m_Frames;
+				m_UpdatesOneSec = m_Updates;
 				m_Timer++, m_Updates = 0; m_Frames = 0;
+			}
 		}
 
 		operator float() const { return m_DeltaTime; }
@@ -58,6 +62,7 @@ namespace Cober {
 		double m_DeltaTime, m_NowTime, m_LastFrameTime, m_Timer;
 		double m_LimitFPS;
 		int m_Frames, m_Updates;
+		int m_FramesOneSec, m_UpdatesOneSec;
 	};
 }
 

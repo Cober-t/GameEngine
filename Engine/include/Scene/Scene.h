@@ -45,8 +45,6 @@ namespace Cober {
 		Entity FindEntityByName(std::string_view name);
 		Entity GetEntityByUUID(UUID uuid);
 
-		void SetPaused(bool paused) { m_IsRunning = !paused; }
-
 		static void Save(const Ref<Scene>& scene, std::string sceneName = "Scene1");
 		static Ref<Scene> Load(std::string scenePath);
 		static Ref<Scene> Copy(Ref<Scene> scene);
@@ -73,7 +71,6 @@ namespace Cober {
 	private:
 		entt::registry m_Registry;
 		uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
-		bool m_IsRunning = false;
 
         std::map<std::type_index, Ref<System>> m_Systems;
 		std::unordered_map<UUID, Entity> m_EntityMap;

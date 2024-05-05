@@ -37,6 +37,7 @@ namespace Cober {
         
     private:
         static b2World* m_PhysicsWorld;
+        static bool m_DebugActive;
     };
 }
 
