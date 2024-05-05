@@ -9,7 +9,7 @@ namespace Cober {
 
 	public:
 	
-		EditorApp() : EngineApp("Engine Editor")
+		EditorApp() : EngineApp("Engine Editor", 1280, 720)
 		{
 			PushLayer(new Editor());
 			EngineApp::Get().SetGameState(GameState::EDITOR);

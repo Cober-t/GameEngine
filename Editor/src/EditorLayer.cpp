@@ -6,7 +6,7 @@ namespace Cober {
 	// extern const std::filesystem::path _AssetPath;
 	Editor::Editor() : Layer("Editor")
 	{
-		m_EditorCamera = CreateUnique<EditorCamera>(45.0f, 1280, 720, 0.01f, 1000.0f);
+		m_EditorCamera = CreateUnique<EditorCamera>(45.0f, EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight(), 0.01f, 1000.0f);
 		m_EditorCamera->SetActive(true);
 
 		new ViewportPanel();
@@ -59,11 +59,13 @@ namespace Cober {
 		
 		ViewportPanel::Get().FBOClearAttachments(1, -1);
 
+		auto& colors = ImGui::GetStyle().Colors;
+
 		switch (EngineApp::Get().GetGameState()) 
 		{
 			case GameState::EDITOR:
 			{
-				// colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.000f, 0.000f, 0.000f, 0.586f);
+				colors[ImGuiCol_WindowBg] = ImGui::ColorConvertU32ToFloat4(Colors::Theme::titlebar);
 				m_EditorCamera->SetActive(ViewportPanel::Get().AllowViewportCameraEvents());
 				m_EditorCamera->OnUpdate(ts);
 				m_ActiveScene->OnUpdateRuntime(ts, m_EditorCamera);
@@ -73,7 +75,7 @@ namespace Cober {
 			}
 			case GameState::RUNTIME_EDITOR: 
 			{
-				// colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.000f, 0.000f, 0.000f, 0.586f);
+				colors[ImGuiCol_WindowBg] = ImVec4(0, 0.0, 0.0, 0.268f);
 				m_ActiveScene->OnUpdateSimulation(ts, m_EditorCamera);
 				break;
 			}

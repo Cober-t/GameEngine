@@ -1,6 +1,6 @@
 workspace "Cober"
     architecture "x64"
-    startproject "Game"
+    startproject "Editor"
 
     configurations { 
         "Debug", 
@@ -56,7 +56,3 @@ group ""
 group "Application"
 	include "Game"
 group ""
-
-
-
-

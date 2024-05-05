@@ -13,7 +13,7 @@ namespace Cober {
 	public:
 		Timestep() 
 		 : m_DeltaTime(0), m_NowTime(0), m_LastFrameTime(glfwGetTime()), m_Timer(0),
-		  m_Frames(0), m_Updates(0), m_LimitFPS(1.0f / 120.0f) 
+		  m_Frames(0), m_Updates(0), m_LimitFPS(1.0f / 60.0f) 
 		{ 
 			LOG_CORE_INFO("Created Timer");
 		}

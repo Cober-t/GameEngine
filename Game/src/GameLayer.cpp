@@ -5,13 +5,12 @@ namespace Cober {
 
 	Game::Game() : Layer("First 2D Game!") 
 	{
-		m_Camera = CreateRef<GameCamera>(45.0f, 1280, 720, 0.01f, 1000.0f);
+		m_Camera = CreateRef<GameCamera>(45.0f, EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight(), 0.01f, 1000.0f);
 	}
 
 
 	void Game::OnAttach() 
 	{
-		m_Camera->SetViewportSize(1280, 720);
 		m_ActiveScene = Scene::Load("Scene2.lua");
 		m_ActiveScene->OnSimulationStart();
 	}

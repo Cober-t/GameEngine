@@ -22,7 +22,7 @@ namespace Cober {
 		float SnapValue();
 
 	private:
-		void Resize(Ref<EditorCamera>& camera, Ref<Scene>& scene, int width, int height, bool ortho);
+		void Resize(Ref<EditorCamera>& camera, int width, int height, bool ortho);
 
 	private:
 		bool m_Fullscreen   = false;
@@ -49,7 +49,7 @@ namespace Cober {
 			{ "2560 x 1440" }
 		};
 		glm::vec2 m_VPSize[6] = { 
-            {640, 480}, 
+            {1, 30}, 
             {800, 400}, 
             {1280, 720}, 
             {1366, 768}, 

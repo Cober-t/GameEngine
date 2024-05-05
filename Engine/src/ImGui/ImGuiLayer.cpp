@@ -259,6 +259,7 @@ namespace Cober {
 		colors[ImGuiCol_SeparatorHovered]	= ImColor(39, 185, 242, 150);
 
 		// Window Background
+		// colors[ImGuiCol_ModalWindowDimBg]	= ImVec4{0.0f, 1.0f, 0.0f, 0.568f};
 		colors[ImGuiCol_WindowBg]			= ImGui::ColorConvertU32ToFloat4(Colors::Theme::titlebar);
 		colors[ImGuiCol_ChildBg]			= ImGui::ColorConvertU32ToFloat4(Colors::Theme::background);
 		colors[ImGuiCol_PopupBg]			= ImGui::ColorConvertU32ToFloat4(Colors::Theme::backgroundPopup);

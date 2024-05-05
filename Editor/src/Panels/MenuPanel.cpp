@@ -107,7 +107,7 @@ namespace Cober {
                         {
 							m_CurrentScreenSize = m_ScreenValues[i];
 							if (isSelected)
-								Resize(editorCamera, activeScene, m_VPSize[i].x, m_VPSize[i].y, editorCamera->IsPerspective());
+								Resize(editorCamera, m_VPSize[i].x, m_VPSize[i].y, editorCamera->IsPerspective());
 						}
 					}
 					ImGui::EndCombo();
@@ -162,10 +162,9 @@ namespace Cober {
 	}
 
 
-	void MenuPanel::Resize(Ref<EditorCamera>& camera, Ref<Scene>& scene, int width, int height, bool ortho) 
+	void MenuPanel::Resize(Ref<EditorCamera>& camera, int width, int height, bool ortho) 
     {
         // Todo: Change between ortho and perspective projection
 		ViewportPanel::Get().ResizeFramebufferSpecification(camera, width, height);
-		camera->SetViewportSize(width, height);
 	}
 }

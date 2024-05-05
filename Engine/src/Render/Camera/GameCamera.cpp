@@ -2,6 +2,7 @@
 #include "Render/Camera/GameCamera.h"
 
 #include "Render/RenderGlobals.h"
+#include "Events/ApplicationEvents.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
@@ -103,6 +104,9 @@ namespace Cober {
 	
 	void GameCamera::OnEvent(Event& event) 
 	{
-	
+		if (event.GetEventType() == EventType::WindowResize)
+		{
+			SetViewportSize(static_cast<WindowResizeEvent&>(event).GetWidth(), static_cast<WindowResizeEvent&>(event).GetHeight());
+		}
 	}
 }

@@ -80,16 +80,16 @@ namespace Cober {
         {
             for (Layer* layer : m_LayerStack)
                 layer->OnUpdate(ts);
+        }
 
-            if (m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR) 
-            {
-                m_GuiLayer->Begin();
+        if (m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR) 
+        {
+            m_GuiLayer->Begin();
 
-                for (Layer* layer : m_LayerStack)
-                    layer->OnImGuiRender();
+            for (Layer* layer : m_LayerStack)
+                layer->OnImGuiRender();
 
-                m_GuiLayer->End();
-            }
+            m_GuiLayer->End();
         }
 
         m_Window->OnUpdate();

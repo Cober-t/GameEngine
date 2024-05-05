@@ -34,6 +34,8 @@ namespace Cober {
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
 		m_Data.VSync = props.VSync;
+		m_Data.FullScreen = props.Fullscreen;
+		m_Data.Decorated = props.Decorated;
 
 		LOG_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
@@ -190,6 +192,15 @@ namespace Cober {
 
 	void Window::ChangeFullScreen() 
 	{
-		// TODO Fullscreen
+		if (m_Data.FullScreen)
+		{
+			glfwRestoreWindow(m_Window);
+		}
+		else
+		{
+			glfwMaximizeWindow(m_Window);
+		}
+		
+		m_Data.FullScreen = m_Data.FullScreen == true ? false : true;
 	}
 }

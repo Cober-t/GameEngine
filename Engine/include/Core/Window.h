@@ -16,7 +16,7 @@ namespace Cober {
 		uint32_t Width, Height;
 		bool Decorated = true;
 		bool Fullscreen = false;
-		bool VSync;
+		bool VSync = true;
 
 		WindowProps(const std::string& title = "Game Engine ;)",
 					uint32_t width = 1280, 
@@ -62,6 +62,8 @@ namespace Cober {
 			std::string Title;
 			unsigned int Width, Height;
 			bool VSync;
+			bool FullScreen;
+			bool Decorated;
 
 			EventCallbackFn EventCallback;
 		};

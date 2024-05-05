@@ -3,7 +3,6 @@
 
 #include "Camera.h"
 
-
 namespace Cober {
 
 

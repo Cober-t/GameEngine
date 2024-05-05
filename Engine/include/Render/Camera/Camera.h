@@ -12,6 +12,7 @@ namespace Cober {
 
 	struct CameraSettings
 	{
+		float aspectRatio = 1.7f;
 		float fov = 45.0f;
 		float nearClip = 0.01f;
 		float farClip = 1000.0f;
