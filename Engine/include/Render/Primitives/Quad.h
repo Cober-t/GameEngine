@@ -21,6 +21,8 @@ namespace Cober {
 			static void Init();
 
 			static void Draw(Entity& entity);
+			static void Draw(const std::vector<glm::vec3> vertices, int vertexCount, const glm::vec4& color);
+
 			static void DrawRect(Entity& entity);
 
 			static void Flush();

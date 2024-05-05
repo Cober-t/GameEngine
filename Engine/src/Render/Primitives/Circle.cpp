@@ -112,9 +112,16 @@ namespace Cober {
 		}
 
 
+		void Circle::Draw(const glm::mat4& transform, const glm::vec4& color, float thickness)
+		{
+			SetAttributes(transform, color, thickness, 0, -1);
+		}
+
+
 		void Circle::SetAttributes(const glm::mat4& transform, const glm::vec4& color, float thickness, float fade, int entityID) 
 		{
 			size_t VertexCount = sizeof(Render2D::GetStats().QuadVertexPositions) / sizeof(Render2D::GetStats().QuadVertexPositions[0]);
+
 			for (size_t i = 0; i < VertexCount; i++)
 			{
 				data.VertexBufferPtr->WorldPosition = transform * Render2D::GetStats().QuadVertexPositions[i];

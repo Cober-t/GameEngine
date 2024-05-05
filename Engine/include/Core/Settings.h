@@ -30,6 +30,17 @@ namespace Cober {
     };
 
 
+    struct DebugColors
+    {
+        const glm::vec4 red = glm::vec4(255.0f, 0.0f, 0.0f, 255.0f);
+        const glm::vec4 green = glm::vec4(0.0f, 255.0f, 0.0f, 255.0f);
+        const glm::vec4 cyan = glm::vec4(0.0f, 255.0f, 255.0f, 255.0f);
+        const glm::vec4 blue = glm::vec4(0.0f, 0.0f, 255.0f, 255.0f);
+        const glm::vec4 yellow = glm::vec4(255.0f, 255.0f, 0.0f, 255.0f);
+        const glm::vec4 purple = glm::vec4(255.0f, 0.0f, 255.0f, 255.0f);
+    };
+
+
     struct RenderSettings
     {
         RenderSettings()

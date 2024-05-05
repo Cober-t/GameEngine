@@ -21,13 +21,13 @@ namespace Cober  {
 			static void Init();
 
 			static void Draw(Entity& entity);
+			static void Draw(const glm::mat4& transform, const glm::vec4& color, float thickness);
 			
 			static void Flush();
 			static void StartBatch();
 			static void NextBatch();
 			static void EndBatch();
 			static uint32_t GetIndexCount();
-
 
 		public:
 			struct Attributes

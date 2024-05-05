@@ -48,53 +48,68 @@ namespace Cober {
 
     void Debug2DPhysics::DrawPoint(const b2Vec2& p, float size, const b2Color& color)
     {
-        // std::cout << "Draw Debug RECT" << std::endl;
         // Primitive::Circle::Draw();
     }
 
     
     void Debug2DPhysics::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
     {
-        // std::cout << "Draw Debug POLYGON" << std::endl;
-        // Primitive::Quad::DrawRect();
+        // glm::vec4 convertedColor(color.a, color.b, color.g, color.r);
+        // std::vector<glm::vec3> convertedVertices
+        // {
+        //     {vertices[0].x, vertices[0].y, 0.0f},
+        //     {vertices[0].x, vertices[0].y, 0.0f},
+        //     {vertices[0].x, vertices[0].y, 0.0f},
+        //     {vertices[0].x, vertices[0].y, 0.0f},
+        // };
+
+        // Primitive::Quad::Draw(convertedVertices, vertexCount, convertedColor);
+
+
+        s_Instance->DrawSegment(vertices[0], vertices[1], color);
+        s_Instance->DrawSegment(vertices[1], vertices[2], color);
+        s_Instance->DrawSegment(vertices[2], vertices[3], color);
+        s_Instance->DrawSegment(vertices[3], vertices[0], color);
     }
     
     
     void Debug2DPhysics::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
     {
-        // std::cout << "Draw Debug SOLID POLYGON" << std::endl;
+        glm::vec4 convertedColor(color.r, color.g, color.b, color.r);
 
-        // b2Color fillColor(0.5f * color.r, 0.5f * color.g, 0.5f * color.b, 0.5f);
+        std::vector<glm::vec3> convertedVertices;
 
-        // for (int32 i = 1; i < vertexCount - 1; ++i)
-        // {
-        //     m_triangles->Vertex(vertices[0], fillColor);
-        //     m_triangles->Vertex(vertices[i], fillColor);
-        //     m_triangles->Vertex(vertices[i + 1], fillColor);
-        // }
+        for (int i = 0; i < vertexCount; i++)
+            convertedVertices.push_back(glm::vec3(vertices[i].x, vertices[i].y, 0.0f));
 
-        // b2Vec2 p1 = vertices[vertexCount - 1];
-        // for (int32 i = 0; i < vertexCount; ++i)
-        // {
-        //     b2Vec2 p2 = vertices[i];
-        //     m_lines->Vertex(p1, color);
-        //     m_lines->Vertex(p2, color);
-        //     p1 = p2;
-        // }
+        Primitive::Quad::Draw(convertedVertices, (int)vertexCount, 0.5f * convertedColor);
     }
     
     
     void Debug2DPhysics::DrawCircle(const b2Vec2& center, float radius, const b2Color& color)
     {
-        // std::cout << "Draw Debug CIRCLE" << std::endl;
-        // Primitive::Circle::Draw();
+        glm::vec3 convertedCenter(center.x, center.y, 0.0f);
+        glm::vec4 convertedColor(color.a, color.b, color.g, 1.0f);
+
+        // Primitive::Circle::Draw(convertedCenter, 0.5f*convertedColor, radius, 0.1);
     }
     
     
     void Debug2DPhysics::DrawSolidCircle(const b2Vec2& center, float radius, const b2Vec2& axis, const b2Color& color)
     {
-        // std::cout << "Draw Debug SOLID CIRCLE" << std::endl;
-        // Primitive::Circle::Draw();
+        glm::vec3 centerPosition(center.x, center.y, 0.0f);
+        glm::vec4 convertedColor(color.a, color.b, color.g, 1.0f);
+
+		glm::vec3 rotation	= { 0.0f, 0.0f, 0.0f };
+		glm::vec3 scale		= { 1.0f, 1.0f, 1.0f };
+
+        glm::mat4 rot = glm::toMat4(glm::quat(rotation));
+
+        glm::mat4 transform = glm::translate(glm::mat4(1.0f), centerPosition)
+            * rot
+            * glm::scale(glm::mat4(1.0f), scale);
+
+        Primitive::Circle::Draw(transform, 0.5f * convertedColor, 1.0f);
     }
 
 
@@ -102,8 +117,7 @@ namespace Cober {
     { 
         glm::vec3 pointA(p1.x, p1.y, 0.0f);
         glm::vec3 pointB(p2.x, p2.y, 0.0f);
-        // glm::vec4 auxColor(color.a, color.b, color.g, color.r);
-        glm::vec4 auxColor(255.0f, 0.0f, 0.0f, 1.0f);
+        glm::vec4 auxColor(color.a, color.b, color.g, color.r);
 
         Primitive::Line::Draw(pointA, pointB, auxColor, -1);
     }
@@ -111,8 +125,6 @@ namespace Cober {
 
     void Debug2DPhysics::DrawTransform(const b2Transform& xf)
     {
-        // std::cout << "Draw Debug TRANSFORM" << std::endl;
-
         b2Vec2 p = xf.p;
         b2Vec2 px = p + (0.5f * xf.q.GetXAxis());
         b2Vec2 py = p + (0.5f * xf.q.GetYAxis());
@@ -122,18 +134,16 @@ namespace Cober {
     }
 
 
-    void Debug2DPhysics::DrawAABB(b2AABB* aabb, const b2Color& color)
-    {
-        // std::cout << "Draw Debug AABBs" << std::endl;
-        
-        // b2Vec2 p1 = aabb->lowerBound;
-        // b2Vec2 p2 = b2Vec2(aabb->upperBound.x, aabb->lowerBound.y);
-        // b2Vec2 p3 = aabb->upperBound;
-        // b2Vec2 p4 = b2Vec2(aabb->lowerBound.x, aabb->upperBound.y);
+    // void Debug2DPhysics::DrawAABB(b2AABB* aabb, const b2Color& color)
+    // {
+    //     b2Vec2 p1 = aabb->lowerBound;
+    //     b2Vec2 p2 = b2Vec2(aabb->upperBound.x, aabb->lowerBound.y);
+    //     b2Vec2 p3 = aabb->upperBound;
+    //     b2Vec2 p4 = b2Vec2(aabb->lowerBound.x, aabb->upperBound.y);
 
-        // s_Instance->DrawSegment(p1, p2, color);
-        // s_Instance->DrawSegment(p2, p3, color);
-        // s_Instance->DrawSegment(p3, p4, color);
-        // s_Instance->DrawSegment(p4, p1, color);
-    }
+    //     s_Instance->DrawSegment(p1, p2, color);
+    //     s_Instance->DrawSegment(p2, p3, color);
+    //     s_Instance->DrawSegment(p3, p4, color);
+    //     s_Instance->DrawSegment(p4, p1, color);
+    // }
 }

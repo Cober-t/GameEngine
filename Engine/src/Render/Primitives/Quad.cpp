@@ -141,6 +141,30 @@ namespace Cober {
             Line::Draw(lineVertices[3], lineVertices[0], color, (int)entity);
         }
 
+		
+		void Quad::Draw(const std::vector<glm::vec3> vertices, int vertexCount, const glm::vec4& color) 
+		{
+			if (data.IndexCount >= Render2D::GetStats().MaxIndices)
+				NextBatch();
+
+			glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+			size_t VertexCount = sizeof(Render2D::GetStats().QuadVertexPositions) / sizeof(Render2D::GetStats().QuadVertexPositions[0]);
+			for (size_t i = 0; i < vertexCount; i++) 
+			{
+				data.VertexBufferPtr->Position = vertices[i];
+				data.VertexBufferPtr->Color = color;
+				data.VertexBufferPtr->TexCoord = textureCoords[i];
+				data.VertexBufferPtr->TexIndex = 0;
+				data.VertexBufferPtr->TilingFactor = 1.0f;
+				data.VertexBufferPtr->EntityID = -1;
+				data.VertexBufferPtr++;
+			}
+
+			data.IndexCount += 6;
+
+			Render2D::GetStats().QuadCount++;
+		}
+
 
 		void Quad::SetAttributes(const glm::mat4& transform, const glm::vec4& color, int textureIndex, const glm::vec2* textureCoords, float tilingFactor, int entityID) 
 		{

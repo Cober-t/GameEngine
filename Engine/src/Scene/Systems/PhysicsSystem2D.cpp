@@ -125,7 +125,9 @@ namespace Cober {
 		}
 
 		if (EngineApp::Get().IsDebugMode())
+		{
 			m_PhysicsWorld->DebugDraw();
+		}
 	}
 
 
@@ -147,14 +149,12 @@ namespace Cober {
 		if ( fixtureA )
 		{
 			uintptr_t index = fixtureA->GetBody()->GetUserData().pointer;
-			LOG_WARNING("BEGIN CONTACT! {0}", reinterpret_cast<Entity*>(index)->GetName());
 		}
 	
 		b2Fixture* fixtureB = contact->GetFixtureB();
 		if ( fixtureB )
 		{
 			uintptr_t index = fixtureB->GetBody()->GetUserData().pointer;
-			LOG_WARNING("BEGIN CONTACT! {0}", reinterpret_cast<Entity*>(index)->GetName());
 		}
 	}
 
@@ -165,14 +165,12 @@ namespace Cober {
 		uintptr_t indexBodyA = fixtureA->GetBody()->GetUserData().pointer;
 		if (indexBodyA)
 		{
-			LOG_WARNING("END CONTACT! {0}", reinterpret_cast<Entity*>(indexBodyA)->GetName());
 		}
 	
 		b2Fixture* fixtureB = contact->GetFixtureB();
 		uintptr_t indexBodyB = fixtureB->GetBody()->GetUserData().pointer;
 		if (indexBodyB)
 		{
-			LOG_WARNING("END CONTACT! {0}", reinterpret_cast<Entity*>(indexBodyB)->GetName());
 		}
 	}
 
