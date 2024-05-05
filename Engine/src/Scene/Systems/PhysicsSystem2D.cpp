@@ -20,13 +20,7 @@ namespace Cober {
 
 	void PhysicsSystem2D::Start()
 	{
-		m_PhysicsWorld = new b2World({ 0.0f, -9.8f });
-		m_PhysicsWorld->SetContactListener(&contactListener);
-
-		if (EngineApp::Get().IsDebugMode())
-		{
-			m_PhysicsWorld->SetDebugDraw(reinterpret_cast<b2Draw*>(&Debug2DPhysics::Get()));
-		}
+		Physics2D::Init();
 
 		for (auto& entity : GetSystemEntities())
 		{
@@ -51,7 +45,7 @@ namespace Cober {
 		*staticRef = entity;
 		bodyDef.userData.pointer = (uintptr_t)staticRef;
 
-		b2Body* body = m_PhysicsWorld->CreateBody(&bodyDef);
+		b2Body* body = Physics2D::CreateBody(bodyDef);
 
 		body->SetFixedRotation(rb2d.fixedRotation);
 		rb2d.runtimeBody = body;
@@ -104,9 +98,11 @@ namespace Cober {
 
 	void PhysicsSystem2D::Update(Unique<Timestep>& ts)
 	{
+		// Export to Settings
 		const int32_t velocityIterations = 8;
 		const int32_t positionIterations = 3;
-		m_PhysicsWorld->Step(ts->GetLimitFPS(), velocityIterations, positionIterations);
+
+		Physics2D::Step(ts->GetLimitFPS(), velocityIterations, positionIterations);
 
 		for (auto& entity : GetSystemEntities()) 
         {
@@ -124,10 +120,8 @@ namespace Cober {
 			}
 		}
 
-		if (EngineApp::Get().IsDebugMode())
-		{
-			m_PhysicsWorld->DebugDraw();
-		}
+		// Send to Render and prepare to Debug on Runtime Editor
+		Physics2D::DebugDraw();
 	}
 
 
@@ -141,48 +135,4 @@ namespace Cober {
 
 		return entities;
 	};
-
-
-	void ContactListener::BeginContact(b2Contact* contact)
-	{
-		b2Fixture* fixtureA = contact->GetFixtureA();
-		if ( fixtureA )
-		{
-			uintptr_t index = fixtureA->GetBody()->GetUserData().pointer;
-		}
-	
-		b2Fixture* fixtureB = contact->GetFixtureB();
-		if ( fixtureB )
-		{
-			uintptr_t index = fixtureB->GetBody()->GetUserData().pointer;
-		}
-	}
-
-
-	void ContactListener::EndContact(b2Contact* contact)
-	{
-		b2Fixture* fixtureA = contact->GetFixtureA();
-		uintptr_t indexBodyA = fixtureA->GetBody()->GetUserData().pointer;
-		if (indexBodyA)
-		{
-		}
-	
-		b2Fixture* fixtureB = contact->GetFixtureB();
-		uintptr_t indexBodyB = fixtureB->GetBody()->GetUserData().pointer;
-		if (indexBodyB)
-		{
-		}
-	}
-
-
-	void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
-	{
-		// TODO: Implement me
-	}
-
-
-	void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
-	{
-		// TODO: Implement me
-	}
 }

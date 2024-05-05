@@ -8,7 +8,8 @@
 #include "Render/Texture.h"
 #include "Render/Camera/Camera.h"
 #include "Render/RenderGlobals.h"
-#include "Render/Debug2DPhysics.h"
+
+#include "Physics/Debug2DPhysics.h"
 
 #include "Scene/ECS.h"
 #include "Core/Settings.h"

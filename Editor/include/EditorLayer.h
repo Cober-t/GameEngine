@@ -14,7 +14,7 @@
 #include "Panels/ContentBrowserPanel.h"
 #include "Panels/MenuPanel.h"
 
-#include "Render/Debug2DPhysics.h"
+#include "Physics/Debug2DPhysics.h"
 
 namespace Cober {
 

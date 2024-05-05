@@ -77,7 +77,8 @@
 //[++++++++++++++++++++++++++]
 //[+++++++++ Debug +++++++++]
 //[++++++++++++++++++++++++++]
-#include "Render/Debug2DPhysics.h"
+#include "Physics/Physics2D.h"
+#include "Physics/Debug2DPhysics.h"
 
 
 //[++++++++++++++++++++++++++++]

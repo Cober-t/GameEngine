@@ -6,31 +6,16 @@
 #include "Scene/Scene.h"
 // #include "Events/Event.h"
 
-#include <b2_world.h>
 #include <b2_body.h>
 #include <b2_fixture.h>
-#include <b2_edge_shape.h>
-#include <b2_circle_shape.h>
-#include <b2_polygon_shape.h>
 #include <b2_draw.h>
-#include <b2_contact.h>
 
 #include <Render/Primitives/Line.h>
-#include <Render/Debug2DPhysics.h>
+#include <Physics/Physics2D.h>
+#include <Physics/Debug2DPhysics.h>
 
 
 namespace Cober {
-
-	class ContactListener : public b2ContactListener
-	{
-	public:
-		void BeginContact(b2Contact* contact) override;
-		void EndContact(b2Contact* contact) override;
-		
-		void PreSolve(b2Contact* contact, const b2Manifold* oldManifold) override;
-		void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) override;
-	};
-
 
 	class PhysicsSystem2D : public System 
     {
@@ -53,8 +38,6 @@ namespace Cober {
 		b2World* m_PhysicsWorld = nullptr;
 		Scene* m_Scene = nullptr;
 	};
-
-	static ContactListener contactListener;
 }
 
 #endif

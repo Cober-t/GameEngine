@@ -6,7 +6,6 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
-struct b2AABB;
 
 #include <Core/Settings.h>
 
@@ -27,7 +26,6 @@ namespace Cober {
         virtual void DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color) override;
         virtual void DrawTransform(const b2Transform& xf) override;
         virtual void DrawPoint(const b2Vec2& p, float size, const b2Color& color) override;
-        // void DrawAABB(b2AABB* aabb, const b2Color& color);
 
         void UpdateFlags();
 

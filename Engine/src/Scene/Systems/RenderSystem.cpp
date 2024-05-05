@@ -1,5 +1,6 @@
 #include <pch.h>
 #include "Scene/Systems/RenderSystem.h"
+#include "Physics/Physics2D.h"
 #include "Scene/Systems/PhysicsSystem2D.h"
 
 namespace Cober {
@@ -40,6 +41,8 @@ namespace Cober {
 				break;
 			}
 		}
+
+		// Physics2D::DebugDraw();
 	}
 
 

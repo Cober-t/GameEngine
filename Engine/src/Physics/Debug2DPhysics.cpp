@@ -1,6 +1,6 @@
 
 #include <pch.h>
-#include "Render/Debug2DPhysics.h"
+#include "Physics/Debug2DPhysics.h"
 #include <Render/Primitives/Line.h>
 #include <Render/Primitives/Quad.h>
 #include <Render/Primitives/Circle.h>
@@ -48,24 +48,12 @@ namespace Cober {
 
     void Debug2DPhysics::DrawPoint(const b2Vec2& p, float size, const b2Color& color)
     {
-        // Primitive::Circle::Draw();
+        // Primitive::Point::Draw();
     }
 
     
     void Debug2DPhysics::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
     {
-        // glm::vec4 convertedColor(color.a, color.b, color.g, color.r);
-        // std::vector<glm::vec3> convertedVertices
-        // {
-        //     {vertices[0].x, vertices[0].y, 0.0f},
-        //     {vertices[0].x, vertices[0].y, 0.0f},
-        //     {vertices[0].x, vertices[0].y, 0.0f},
-        //     {vertices[0].x, vertices[0].y, 0.0f},
-        // };
-
-        // Primitive::Quad::Draw(convertedVertices, vertexCount, convertedColor);
-
-
         s_Instance->DrawSegment(vertices[0], vertices[1], color);
         s_Instance->DrawSegment(vertices[1], vertices[2], color);
         s_Instance->DrawSegment(vertices[2], vertices[3], color);
@@ -132,18 +120,4 @@ namespace Cober {
         DrawSegment(p, px, b2Color(1.0f, 0.0f, 0.0f));
         DrawSegment(p, py, b2Color(1.0f, 1.0f, 0.0f));
     }
-
-
-    // void Debug2DPhysics::DrawAABB(b2AABB* aabb, const b2Color& color)
-    // {
-    //     b2Vec2 p1 = aabb->lowerBound;
-    //     b2Vec2 p2 = b2Vec2(aabb->upperBound.x, aabb->lowerBound.y);
-    //     b2Vec2 p3 = aabb->upperBound;
-    //     b2Vec2 p4 = b2Vec2(aabb->lowerBound.x, aabb->upperBound.y);
-
-    //     s_Instance->DrawSegment(p1, p2, color);
-    //     s_Instance->DrawSegment(p2, p3, color);
-    //     s_Instance->DrawSegment(p3, p4, color);
-    //     s_Instance->DrawSegment(p4, p1, color);
-    // }
 }
