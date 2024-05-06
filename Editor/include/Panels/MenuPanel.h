@@ -26,6 +26,7 @@ namespace Cober {
 
 	private:
 		bool m_Fullscreen   = false;
+		bool m_Vsync   = false;
 		bool m_GridMenuOpen = false;
 		bool m_World2D	   = false;
 		bool m_Snap3D	   = false;

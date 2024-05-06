@@ -38,10 +38,13 @@ namespace Cober {
 		static void DrawQuad(Entity& entity);
 		static void DrawLine(Entity& entity);
 		static void DrawCircle(Entity& entity);
+		static void DrawSprite(Entity& entity);
 
 	public:
 		static void ResetStats();
 		static RenderSettings& GetStats();
+
+	private:
 		static RenderSettings* m_RenderSettings;
 	};
 }

@@ -15,21 +15,18 @@ namespace Cober {
 		class Quad
 		{
 		public:
-			Quad();
-			virtual ~Quad();
-			
 			static void Init();
+			static void CleanVertexBuffer();
 
 			static void Draw(Entity& entity);
 			static void Draw(const std::vector<glm::vec3> vertices, int vertexCount, const glm::vec4& color);
-
 			static void DrawRect(Entity& entity);
+			static void DrawTexture(Entity& entity);
 
 			static void Flush();
 			static void StartBatch();
 			static void NextBatch();
 			static void EndBatch();
-			static uint32_t GetIndexCount();
 
 		public:
 
@@ -63,8 +60,7 @@ namespace Cober {
 			};
 
 		private:
-			static Quad* s_Instance;
-			static void SetAttributes(const glm::mat4& transform, const glm::vec4& color, int textureIndex, const glm::vec2* textureCoords, float tilingFactor, int entityID);
+			static void SetAttributes(const glm::mat4& transform, const glm::vec4& color, float textureIndex, const glm::vec2* textureCoords, float tilingFactor, int entityID);
 		};
 	}
 }

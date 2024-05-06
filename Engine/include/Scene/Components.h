@@ -157,8 +157,6 @@ namespace Cober {
 
 		Render2DComponent() = default;
 		Render2DComponent(const Render2DComponent&) = default;
-		Render2DComponent(const std::string& ID, int width, int height, glm::vec4 tintColor = glm::vec4(1.0f))
-			: assetID(ID), w(width), h(height), color(tintColor) {}
 	};
 
 

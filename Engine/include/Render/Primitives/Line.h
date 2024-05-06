@@ -15,10 +15,8 @@ namespace Cober  {
 		class Line
 		{
 		public:
-			Line();
-			~Line();
-
 			static void Init();
+			static void CleanVertexBuffer();
 
 			static void Draw(Entity& entity);
 			static void Draw(const glm::vec3& p0, glm::vec3& p1, const glm::vec4& color, int entityID);
@@ -50,7 +48,6 @@ namespace Cober  {
 			};
 
 		private:
-			static Line* s_Instance;
 			static void SetAttributes(const glm::vec3& p0, glm::vec3& p1, const glm::vec4& color, int entityID = -1);
 		};
 	}

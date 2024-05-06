@@ -11,10 +11,8 @@ namespace Cober  {
     class Cube
     {
 	public:
-		Cube();
-		~Cube();
-
 		static void Init();
+		static void CleanVertexBuffer();
 
 		static void Draw(Entity& entity);
 		
@@ -36,7 +34,6 @@ namespace Cober  {
 		Attributes* attributes;
 	
 	private:
-		static Cube* s_Instance;
 		static void SetAttributes(const glm::mat4& transform, const glm::vec4& color, int textureIndex, const glm::vec2* textureCoords, float tilingFactor, int entityID);
 	};
 }

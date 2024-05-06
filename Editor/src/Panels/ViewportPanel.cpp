@@ -201,12 +201,13 @@ namespace Cober {
 				LOG_INFO(m_FilePath);
 				
 				//Textures
-				//if (hoveredEntity.GetIndex() != -1 && hoveredEntity.HasComponent<Sprite>()) {
-					//auto lastDot = m_FilePath.find_last_of('.');
-					//std::string format = lastDot != std::string::npos ? m_FilePath.substr(lastDot) : "null";
-					//if (lastDot != std::string::npos && (format == ".png" || format == ".jpg" || format == ".jpeg"))
-						//hoveredEntity.GetComponent<Sprite>().texture = Texture::Create(m_FilePath);
-				//}
+				if (hoveredEntity && hoveredEntity.HasComponent<Render2DComponent>()) 
+				{
+					auto lastDot = m_FilePath.find_last_of('.');
+					std::string format = lastDot != std::string::npos ? m_FilePath.substr(lastDot) : "null";
+					if (lastDot != std::string::npos && (format == ".png" || format == ".jpg" || format == ".jpeg"))
+						hoveredEntity.GetComponent<Render2DComponent>().texture = Texture::Create(m_FilePath);
+				}
 			}
 			ImGui::EndDragDropTarget();
 		}

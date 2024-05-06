@@ -10,14 +10,8 @@ namespace Cober {
 	namespace Primitive {
 
 		static Circle::Data data;
-		Circle* Circle::s_Instance = nullptr;
 
-		Circle::Circle() 
-		{
-			s_Instance = this;
-		}
-
-		Circle::~Circle() 
+		void Circle::CleanVertexBuffer() 
 		{
 			delete[] data.VertexBufferBase;
 		}

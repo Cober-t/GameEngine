@@ -28,7 +28,7 @@ namespace Cober {
 		void StyleCustom();
 
 	private:
-		bool m_BlockEvents = true;
+		bool m_BlockEvents = false;
 		const char* glsl_version;
 	};
 }

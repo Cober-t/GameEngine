@@ -105,6 +105,7 @@ namespace Cober {
 					break;
 				case Shape2D::Sprite:
 					entityToBeSaved["Render2DComponent"]["shape2D"].SetString("Sprite");
+					entityToBeSaved["Render2DComponent"]["texture"].SetString(entity.GetComponent<Render2DComponent>().texture->GetPath());
 					break;
 				}
 			}
@@ -228,7 +229,9 @@ namespace Cober {
 
 						if (shapeType == "Sprite")
 						{
+							std::string texturePath = loader["Render2DComponent"]["texture"].GetString();
 							newEntity.GetComponent<Render2DComponent>().shapeType = Shape2D::Sprite;
+							newEntity.GetComponent<Render2DComponent>().texture = Texture::Create(texturePath);
 						}
 					}
 				}
@@ -237,7 +240,7 @@ namespace Cober {
 			return newScene;
 		}
 		
-		LOG_ERROR(("Cannot read scene with path: {0}{1}",SCENES_DIR, sceneName));
+		LOG_ERROR(("Cannot read scene with path: {0}{1}", SCENES_DIR, sceneName));
 		return nullptr;
     }
 }

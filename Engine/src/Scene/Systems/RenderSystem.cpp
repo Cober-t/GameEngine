@@ -38,6 +38,7 @@ namespace Cober {
 				Render2D::DrawCircle(entity);
 				break;
 			case Shape2D::Sprite:
+				Render2D::DrawSprite(entity);
 				break;
 			}
 		}

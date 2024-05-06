@@ -11,32 +11,10 @@ namespace Cober {
 	namespace Primitive {
 
 		static Quad::Data data;
-		Quad* Quad::s_Instance = nullptr;
 
-		Quad::Quad()
-		{
-			s_Instance = this;
-		}
-
-		Quad::~Quad()
+		void Quad::CleanVertexBuffer()
 		{
 			delete[] data.VertexBufferBase;
-		}
-
-		void Quad::NextBatch()
-		{
-			Quad::Flush();
-			Quad::StartBatch();
-		}
-
-		void Quad::EndBatch()
-		{
-			Flush();
-		}
-
-		uint32_t Quad::GetIndexCount()
-		{
-			return data.IndexCount;
 		}
 
 		void Quad::Init() 
@@ -64,15 +42,17 @@ namespace Cober {
 			// TEXTURE
 			data.WhiteTexture = Texture::Create(1, 1);
 			uint32_t whiteTextureData = 0xffffffff;
-
 			data.WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+			
 
-			int32_t samplers[Data::MaxTextureSlots];
-			for (uint32_t i = 0; i < Data::MaxTextureSlots; i++)
+			int32_t samplers[data.MaxTextureSlots];
+			for (uint32_t i = 0; i < data.MaxTextureSlots; i++)
 				samplers[i] = i;
-
+			
 			// SHADER
 			data.Shader = Shader::Create("Quad.glsl");
+			data.Shader->Bind();
+			data.Shader->SetIntArray("u_Textures", samplers, data.MaxTextureSlots);
 
 			// Set first texture slot to 0
 			data.TextureSlots[0] = data.WhiteTexture;
@@ -88,7 +68,10 @@ namespace Cober {
 
 				// Bind textures
 				for (uint32_t i = 0; i < data.TextureSlotIndex; i++)
+				{
+					// LOG_WARNING("{0} {1} {2}", (float)i, data.TextureSlotIndex, data.TextureSlots[i]->GetName());
 					data.TextureSlots[i]->Bind(i);
+				}
 
 				data.Shader->Bind();
 				RenderGlobals::DrawIndexed(data.VertexArray, data.IndexCount);
@@ -107,10 +90,23 @@ namespace Cober {
 		}
 
 
+		void Quad::NextBatch()
+		{
+			Flush();
+			StartBatch();
+		}
+
+
+		void Quad::EndBatch()
+		{
+			Flush();
+		}
+
+
 		void Quad::Draw(Entity& entity) 
 		{
 			auto& enttTrans = entity.GetComponent<TransformComponent>();
-
+			
 			glm::vec3 position{ enttTrans.position.x, enttTrans.position.y, enttTrans.position.z + 0.001f };
 			glm::vec3 scale{ enttTrans.scale.x, enttTrans.scale.y, 1.0f };
 
@@ -118,10 +114,51 @@ namespace Cober {
 				* glm::toMat4(glm::quat(enttTrans.rotation))
 				* glm::scale(glm::mat4(1.0f), scale);
 
-			float tilingFactor = 1.0f;
-			const int textureIndex = 0; // White Texture
+			constexpr float tilingFactor = 1.0f;
+			float textureIndex = 0.0f; // White Texture
 			glm::vec4 color = entity.GetComponent<Render2DComponent>().color;
 			glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+
+			SetAttributes(transform, color, textureIndex, textureCoords, 1.0f, (int)entity);
+		}
+
+
+		void Quad::DrawTexture(Entity& entity) 
+		{
+			auto& enttTrans = entity.GetComponent<TransformComponent>();
+			
+			glm::vec3 position{ enttTrans.position.x, enttTrans.position.y, enttTrans.position.z + 0.001f };
+			glm::vec3 scale{ enttTrans.scale.x, enttTrans.scale.y, 1.0f };
+
+			glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+				* glm::toMat4(glm::quat(enttTrans.rotation))
+				* glm::scale(glm::mat4(1.0f), scale);
+
+			constexpr float tilingFactor = 1.0f;
+			float textureIndex = 0.0f; // White Texture
+			glm::vec4 color = entity.GetComponent<Render2DComponent>().color;
+			glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+
+				
+			if (entity.GetComponent<Render2DComponent>().texture)
+			{
+				// LOG_WARNING("{0} {1} {2}", data.TextureSlotIndex, entity.GetComponent<Render2DComponent>().texture->GetName(), entity.GetName());
+				for (uint32_t i = 1; i < data.TextureSlotIndex; i++) 
+				{
+					if (*data.TextureSlots[i] == *entity.GetComponent<Render2DComponent>().texture) 
+					{
+						textureIndex = (float)i;
+						break;
+					}
+				}
+
+				if (textureIndex == 0.0f) 
+				{
+					textureIndex = (float)data.TextureSlotIndex;
+					data.TextureSlots[data.TextureSlotIndex] = entity.GetComponent<Render2DComponent>().texture;
+					data.TextureSlotIndex++;
+				}
+			}
 
 			SetAttributes(transform, color, textureIndex, textureCoords, 1.0f, (int)entity);
 		}
@@ -148,7 +185,7 @@ namespace Cober {
 				NextBatch();
 
 			glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
-			size_t VertexCount = sizeof(Render2D::GetStats().QuadVertexPositions) / sizeof(Render2D::GetStats().QuadVertexPositions[0]);
+			
 			for (size_t i = 0; i < vertexCount; i++) 
 			{
 				data.VertexBufferPtr->Position = vertices[i];
@@ -166,20 +203,13 @@ namespace Cober {
 		}
 
 
-		void Quad::SetAttributes(const glm::mat4& transform, const glm::vec4& color, int textureIndex, const glm::vec2* textureCoords, float tilingFactor, int entityID) 
+		void Quad::SetAttributes(const glm::mat4& transform, const glm::vec4& color, float textureIndex, const glm::vec2* textureCoords, float tilingFactor, int entityID) 
 		{
-
-			// int32_t samplers[Data::MaxIndices];
-			// for (uint32_t i = 0; i < Data::MaxIndices; i++)
-			// 	samplers[i] = i;
-
-			// data.Shader->SetIntArray("u_Textures", samplers, Data::MaxTextureSlots);
-			
 			if (data.IndexCount >= Render2D::GetStats().MaxIndices)
 				NextBatch();
 
-			size_t VertexCount = sizeof(Render2D::GetStats().QuadVertexPositions) / sizeof(Render2D::GetStats().QuadVertexPositions[0]);
-			for (size_t i = 0; i < VertexCount; i++) 
+			// size_t VertexCount = sizeof(Render2D::GetStats().QuadVertexPositions) / sizeof(Render2D::GetStats().QuadVertexPositions[0]);
+			for (size_t i = 0; i < 4; i++) 
 			{
 				data.VertexBufferPtr->Position = transform * Render2D::GetStats().QuadVertexPositions[i];
 				data.VertexBufferPtr->Color = color;

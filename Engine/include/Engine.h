@@ -9,7 +9,6 @@
 #include "Core/Core.h"
 #include "Core/EngineApp.h"
 #include "Core/Log.h"
-#include "Core/Timer.h"
 #include "Core/Timestep.h"
 #include "Core/Input.h"
 #include "Core/Layer.h"
@@ -93,15 +92,5 @@
 #include <Platforms/OpenGL/OpenGLShader.h>
 #include <Platforms/OpenGL/OpenGLFramebuffer.h>
 
-
-//[++++++++++++++++++++++++++]
-//[+++++++++ BOX 2D +++++++++]
-//[++++++++++++++++++++++++++]
-// #include <b2World.h>
-// #include <b2Body.h>
-// #include <b2Fixture.h>
-// #include <b2PolygonShape.h>
-// #include <b2Draw.h>
-// class b2World;
 
 #endif

@@ -10,17 +10,12 @@ namespace Cober {
     namespace Primitive {
 
         static Line::Data data;
-    Line* Line::s_Instance = nullptr;
-
-        Line::Line() 
-        {
-            s_Instance = this;
-        }
         
-        Line::~Line() 
+        void Line::CleanVertexBuffer() 
         {
             delete[] data.VertexBufferBase;
         }
+        
 
         void Line::Init() 
         {

@@ -16,6 +16,7 @@ namespace Cober {
 	MenuPanel::MenuPanel() 
 	{
 		s_Instance = this;
+		m_Vsync = EngineApp::Get().GetWindow().GetVsync();
 	}
 
 	MenuPanel::~MenuPanel() 
@@ -54,7 +55,6 @@ namespace Cober {
 					activeScene = editorScene;
 					EngineApp::Get().SetGameState(GameState::EDITOR);
 					SceneHierarchyPanel::Get().SetContext(activeScene);
-					activeScene->OnRuntimeStart();
 				}
 
 				if (ImGui::MenuItem("Exit"))
@@ -68,6 +68,9 @@ namespace Cober {
 
 				if (ImGui::Checkbox("Fullscreen", &m_Fullscreen))
 					EngineApp::Get().GetWindow().ChangeFullScreen();
+				
+				if (ImGui::Checkbox("VSYNC", &m_Vsync))
+					EngineApp::Get().GetWindow().SetVSync(m_Vsync);
 
 
 				if (ImGui::BeginCombo("Build Option", m_CurrentBuildOption)) 

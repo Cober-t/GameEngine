@@ -15,10 +15,8 @@ namespace Cober  {
 		class Circle
 		{
 		public:
-			Circle();
-			~Circle();
-
 			static void Init();
+			static void CleanVertexBuffer();
 
 			static void Draw(Entity& entity);
 			static void Draw(const glm::mat4& transform, const glm::vec4& color, float thickness);
@@ -57,7 +55,6 @@ namespace Cober  {
 			Attributes* attributes;
 
 		private:
-			static Circle* s_Instance;
 			static void Circle::SetAttributes(const glm::mat4& transform, const glm::vec4& color, float thickness, float fade, int entityID);
 		};
 	}

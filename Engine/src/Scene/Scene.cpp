@@ -33,7 +33,10 @@ namespace Cober {
 
 	Ref<Scene> Scene::Load(std::string sceneName) 
 	{
-	    return SceneSerializer::Deserialize(sceneName);
+		Log::ClearLogMessages();
+		Ref<Scene> scene = SceneSerializer::Deserialize(sceneName);
+		scene->OnRuntimeStart();
+	    return scene;
 	}
 
 
@@ -227,6 +230,15 @@ namespace Cober {
 			return { m_EntityMap.at(uuid), this };
 
 		return {};
+	}
+
+
+	Entity Scene::DuplicateEntity(Entity entity)
+	{
+		std::string name = entity.GetName();
+		Entity newEntity = CreateEntity(name);
+		CopyComponentIfExists(AllComponents{}, newEntity, entity);
+		return newEntity;
 	}
 
 

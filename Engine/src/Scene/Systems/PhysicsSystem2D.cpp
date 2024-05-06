@@ -92,7 +92,6 @@ namespace Cober {
 		// 	// Manage physics...
 		// 	//
 		// }
-
 	}
 
 

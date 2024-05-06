@@ -40,6 +40,7 @@ namespace Cober {
 		std::string& GetTitle() { return m_Data.Title; }	
 		uint32_t GetWidth() const { return m_Data.Width; }
 		uint32_t GetHeight() const { return m_Data.Height; }
+		bool GetVsync() const { return m_Data.VSync; }
 
 		void SetEventCallback(const EventCallbackFn& callback) { m_Data.EventCallback = callback; }
 		void SetVSync(bool enabled);

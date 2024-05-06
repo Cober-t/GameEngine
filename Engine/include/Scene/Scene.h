@@ -44,6 +44,7 @@ namespace Cober {
 
 		Entity FindEntityByName(std::string_view name);
 		Entity GetEntityByUUID(UUID uuid);
+		Entity DuplicateEntity(Entity entity);
 
 		static void Save(const Ref<Scene>& scene, std::string sceneName = "Scene1");
 		static Ref<Scene> Load(std::string scenePath);

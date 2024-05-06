@@ -419,22 +419,22 @@ namespace Cober {
 					std::string nameTexture = component.texture == nullptr ? "Texture" : component.texture->GetName();
 					ImGui::Button(nameTexture.c_str(), ImVec2(100.0f, 0.0f));
 
-					// if (ImGui::BeginDragDropTarget()) {
-					// 	if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
-					// 		const wchar_t* path = (const wchar_t*)payload->Data;
-					// 		std::filesystem::path texturePath = std::filesystem::path(ASSETS_DIR) / path;
+					if (ImGui::BeginDragDropTarget())
+					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
+							const wchar_t* path = (const wchar_t*)payload->Data;
+							std::filesystem::path texturePath = std::filesystem::path(ASSETS_DIR) / path;
 
-					// 		std::string format = texturePath.string();
-					// 		auto lastDot = format.find_last_of('.');
-					// 		format = lastDot != std::string::npos ? format.substr(lastDot) : "null";
+							std::string format = texturePath.string();
+							auto lastDot = format.find_last_of('.');
+							format = lastDot != std::string::npos ? format.substr(lastDot) : "null";
 
-					// 		if (lastDot != std::string::npos && (format == ".png" || format == ".jpg" || format == ".jpeg"))
-					// 			component.texture = Texture::Create(texturePath.string());
-					// 	}
-					// 	ImGui::EndDragDropTarget();
-					// }
+							if (lastDot != std::string::npos && (format == ".png" || format == ".jpg" || format == ".jpeg"))
+								component.texture = Texture::Create(texturePath.string());
+						}
+						ImGui::EndDragDropTarget();
+					}
 				}
-
 			});
 	}
 }

@@ -34,7 +34,7 @@ Game Engine (MVP):
  - [X] Capacidad mínima estable de Render 2D mediante API agnostica  
      - [X] Basic Render2D buffers and batching  
      - [X] Shaders  
-     - [ ] Load Textures  
+     - [X] Load Textures  
      - [X] Framebuffer  
      - [X] Game Camera  
      - [X] Editor Camera  
@@ -43,7 +43,7 @@ Game Engine (MVP):
      - [X] Create Entity with unique UUID  
      - [X] TransformComponent  
      - [X] TagComponent  
-     - [ ] Sprite/RenderComponent  
+     - [x] Sprite/RenderComponent  
      - [ ] AnimationComponent (nodos en un futuro)  
      - [X] ColliderComponent (active, gravity, mass, isTrigger, target...)  
      - [ ] ScriptComponent (Lua, C# en un futuro, C++ con dlls)

@@ -179,11 +179,57 @@ namespace Cober {
 		}
 		
 		ViewportPanel::Get().OnEvent(event);
+
+		EventDispatcher dispatcher(event);
+		dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& event) { return OnKeyPressed(event); });
 	}
 
 
 	bool Editor::OnKeyPressed(KeyPressedEvent& event) 
 	{
+		if (Input::IsKeyDown(Key::LeftControl) && !Input::IsMouseButtonDown(MouseButton::Right))
+		{
+			switch (event.GetKeyCode())
+			{
+				case Key::N:
+				{
+					// 	NewScene();
+					break;
+				}
+				case Key::O: 
+				{
+					m_HoveredEntity = Entity();
+					m_EditorScene = Scene::Load("Scene2.lua"); // Test Scene
+					m_ActiveScene = m_EditorScene;
+					EngineApp::Get().SetGameState(GameState::EDITOR);
+					SceneHierarchyPanel::Get().SetContext(m_ActiveScene);
+					break;
+				}
+				case Key::S: 
+				{
+					if (EngineApp::Get().GetGameState() == GameState::EDITOR)
+						Scene::Save(m_ActiveScene, "Scene2.lua");
+					break;
+				}
+				case Key::D:
+				{
+					if (m_HoveredEntity)
+						m_ActiveScene->DuplicateEntity(m_HoveredEntity);
+					break;
+				}
+				case Key::Delete:
+				{
+					if (m_HoveredEntity)
+					{
+						SceneHierarchyPanel::Get().SetNullEntityContext();
+						m_ActiveScene->DestroyEntity(m_HoveredEntity);
+						m_HoveredEntity = Entity();
+					}
+					break;
+				}
+			}
+		}
+
 		return true;
 	}
 }

@@ -68,7 +68,7 @@ namespace Cober {
         std::vector<glm::vec3> convertedVertices;
 
         for (int i = 0; i < vertexCount; i++)
-            convertedVertices.push_back(glm::vec3(vertices[i].x, vertices[i].y, 0.0f));
+            convertedVertices.push_back(glm::vec3(vertices[i].x, vertices[i].y, 0.003f));
 
         Primitive::Quad::Draw(convertedVertices, (int)vertexCount, 0.5f * convertedColor);
     }
@@ -76,16 +76,16 @@ namespace Cober {
     
     void Debug2DPhysics::DrawCircle(const b2Vec2& center, float radius, const b2Color& color)
     {
-        glm::vec3 convertedCenter(center.x, center.y, 0.0f);
+        glm::vec3 convertedCenter(center.x, center.y, 0.003f);
         glm::vec4 convertedColor(color.a, color.b, color.g, 1.0f);
 
-        // Primitive::Circle::Draw(convertedCenter, 0.5f*convertedColor, radius, 0.1);
+        // Primitive::Circle::Draw(convertedCenter, convertedColor, radius, 0.1);
     }
     
     
     void Debug2DPhysics::DrawSolidCircle(const b2Vec2& center, float radius, const b2Vec2& axis, const b2Color& color)
     {
-        glm::vec3 centerPosition(center.x, center.y, 0.0f);
+        glm::vec3 centerPosition(center.x, center.y, 0.003f);
         glm::vec4 convertedColor(color.a, color.b, color.g, 1.0f);
 
 		glm::vec3 rotation	= { 0.0f, 0.0f, 0.0f };
@@ -103,8 +103,8 @@ namespace Cober {
 
     void Debug2DPhysics::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
     { 
-        glm::vec3 pointA(p1.x, p1.y, 0.0f);
-        glm::vec3 pointB(p2.x, p2.y, 0.0f);
+        glm::vec3 pointA(p1.x, p1.y, 0.005f);
+        glm::vec3 pointB(p2.x, p2.y, 0.005f);
         glm::vec4 auxColor(color.a, color.b, color.g, color.r);
 
         Primitive::Line::Draw(pointA, pointB, auxColor, -1);

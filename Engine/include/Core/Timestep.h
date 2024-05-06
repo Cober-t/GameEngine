@@ -24,6 +24,7 @@ namespace Cober {
 		}
 
 		inline double GetDeltaTime() const { return m_DeltaTime; }
+		inline float GetDeltaTimePerSecond() const { return m_DeltaPerSecond; }
 
 		inline void Start()
 		{
@@ -35,7 +36,7 @@ namespace Cober {
 		}
 
 		inline int GetFrames() const { return m_FramesOneSec; }
-		inline double GetLimitFPS() const { return m_LimitFPS; }
+		inline float GetLimitFPS() const { return m_LimitFPS; }
 		inline void SetLimitFPS(int limitFPS = 1) { m_LimitFPS = limitFPS; }
 
 		inline void Update() 
@@ -50,6 +51,7 @@ namespace Cober {
 			{
 				m_FramesOneSec = m_Frames;
 				m_UpdatesOneSec = m_Updates;
+				m_DeltaPerSecond = m_DeltaTime;
 				m_Timer++, m_Updates = 0; m_Frames = 0;
 			}
 		}
@@ -60,8 +62,9 @@ namespace Cober {
 
 	private:
 		double m_DeltaTime, m_NowTime, m_LastFrameTime, m_Timer;
-		double m_LimitFPS;
+		float m_LimitFPS;
 		int m_Frames, m_Updates;
+		float m_DeltaPerSecond;
 		int m_FramesOneSec, m_UpdatesOneSec;
 	};
 }

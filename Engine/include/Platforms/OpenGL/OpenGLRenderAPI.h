@@ -2,25 +2,11 @@
 #define OPENGL_RENDER_API_H
 
 #include "Render/RenderAPI.h"
-#include "Render/RenderGlobals.h"
-
-// #define GLCallV( x ) \
-// 			RenderGlobals::ClearErrors(); \
-// 			x; \
-// 			RenderGlobals::CheckErrors(#x);
-
-// #define GLCall( x ) [&]() { \
-// 			RenderGlobals::ClearErrors(); \
-// 			auto retVal = x; \
-// 			RenderGlobals::CheckErrors(#x); \
-// 			return retVal; \
-// 		}()
 
 namespace Cober {
 
 	class OpenGLRenderAPI : public RenderAPI 
 	{
-
 	public:
 		virtual void Init() override;
 

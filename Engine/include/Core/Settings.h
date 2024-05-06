@@ -48,6 +48,10 @@ namespace Cober {
             Reset();
         }
 
+        ~RenderSettings()
+        {
+        }
+
         void Reset()
         {
             DrawCalls = 0;

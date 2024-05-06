@@ -5,15 +5,9 @@
 
 namespace Cober {
 
-	// static Cube::Data data;
-	Cube* Cube::s_Instance = nullptr;
+	static Cube::Data data;
 
-    Cube::Cube() 
-    {
-        s_Instance = this;
-	}
-
-    Cube::~Cube() 
+    void Cube::CleanVertexBuffer() 
     {
 	}
 

@@ -5,7 +5,6 @@
 
 #include "Window.h"
 #include "Timestep.h"
-#include "Timer.h"
 #include "Layer.h"
 #include "ImGui/ImGuiLayer.h"
 
@@ -41,6 +40,7 @@ namespace Cober {
 		void Close();
 
 		inline int GetFrames() { return m_TimeStep->GetFrames(); }
+		inline Unique<Timestep>& GetTimer() { return m_TimeStep; }
 		inline void SetMinimized(bool min) { m_Minimized = min; }
 		inline void SetGameState(GameState state) { m_GameState = state; }
 

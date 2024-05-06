@@ -92,6 +92,10 @@ namespace Cober {
 
 	void Render2D::Shutdown() 
 	{
+		Primitive::Quad::CleanVertexBuffer();
+		// Primitive::Line::CleanVertexBuffer();
+		// Primitive::Circle::CleanVertexBuffer();
+		// Primitive::Cube::CleanVertexBuffer();
 	}
 
 
@@ -117,5 +121,11 @@ namespace Cober {
 	void Render2D::DrawCircle(Entity& entity) 
 	{
 		Primitive::Circle::Draw(entity);
+	}
+
+
+	void Render2D::DrawSprite(Entity& entity) 
+	{
+		Primitive::Quad::DrawTexture(entity);
 	}
 }
