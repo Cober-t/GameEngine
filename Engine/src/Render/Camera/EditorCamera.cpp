@@ -95,15 +95,6 @@ namespace Cober {
 	}
 
 
-	bool EditorCamera::OnMouseScroll(MouseScrolledEvent& event)
-	{
-		MouseZoom(event.GetYOffset() * 0.1f);
-		UpdateCameraView();
-
-		return true;
-	}
-
-
 	void EditorCamera::MousePan(const glm::vec2& delta)
 	{
 		auto [xSpeed, ySpeed] = PanSpeed();
@@ -235,4 +226,14 @@ namespace Cober {
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<MouseScrolledEvent>([this](MouseScrolledEvent& e) { return OnMouseScroll(e); });
 	}
+
+
+	bool EditorCamera::OnMouseScroll(MouseScrolledEvent& event)
+	{
+		MouseZoom(event.GetYOffset() * 0.1f);
+		UpdateCameraView();
+
+		return true;
+	}
+
 }

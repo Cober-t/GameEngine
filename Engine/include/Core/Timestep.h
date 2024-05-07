@@ -64,8 +64,8 @@ namespace Cober {
 		double m_DeltaTime, m_NowTime, m_LastFrameTime, m_Timer;
 		float m_LimitFPS;
 		int m_Frames, m_Updates;
-		float m_DeltaPerSecond;
-		int m_FramesOneSec, m_UpdatesOneSec;
+		float m_DeltaPerSecond = 0;
+		int m_FramesOneSec = 0, m_UpdatesOneSec = 0;
 	};
 }
 

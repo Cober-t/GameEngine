@@ -105,14 +105,15 @@ namespace Cober {
     {
 		FramebufferSpecification spec = m_Fbo->GetSpecification();
 		if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
-			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
+			(spec.Width != (uint32_t)m_ViewportSize.x || spec.Height != (uint32_t)m_ViewportSize.y))
 		{
-			ResizeFramebufferSpecification(editorCamera, m_ViewportSize.x, m_ViewportSize.y);
+			ResizeFramebufferSpecification(editorCamera, (uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 	}
 
 	void ViewportPanel::ResizeFramebufferSpecification(Ref<EditorCamera> editorCamera, uint32_t width, uint32_t height)
 	{
+		// FIS THIS!! Performance issue
 		m_Fbo->Resize(width, height);
 		editorCamera->SetViewportSize(width, height);
 	}
