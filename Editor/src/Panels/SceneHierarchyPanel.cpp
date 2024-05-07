@@ -15,6 +15,15 @@ namespace Cober {
 	SceneHierarchyPanel::SceneHierarchyPanel()
 	{
 		s_Instance = this;
+
+		m_AssetIconMap["audio"] = EditorResources::AudioIcon;
+		m_AssetIconMap["boxCollider2D"] = EditorResources::BoxCollider2DIcon;
+		m_AssetIconMap["circleCollider2D"] = EditorResources::CircleCollider2DIcon;
+		m_AssetIconMap["rigidbody2D"] = EditorResources::RigidBody2DIcon;
+		m_AssetIconMap["nativeScript"] = EditorResources::NativeScriptIcon;
+		m_AssetIconMap["sprite"] = EditorResources::SpriteIcon;
+		m_AssetIconMap["transform"] = EditorResources::TransformIcon;
+		m_AssetIconMap["remove"] = EditorResources::ClearIcon;
 	}
 
 
@@ -97,7 +106,8 @@ namespace Cober {
 
 		// Delete an Entity
 		bool entityDeleted = false;
-		if (m_SelectionContext == entity && ImGui::BeginPopupContextWindow(0, 1)) {
+		if (m_SelectionContext == entity && ImGui::BeginPopupContextWindow(0, 1)) 
+		{
 			if (ImGui::MenuItem("Delete Entity"))
 				entityDeleted = true;
 
@@ -107,8 +117,10 @@ namespace Cober {
 		if (opened)
 			ImGui::TreePop();
 
-		if (entityDeleted) {
-			if (m_SelectionContext == entity) {
+		if (entityDeleted) 
+		{
+			if (m_SelectionContext == entity) 
+			{
 				m_SelectionContext = m_NullEntityContext;
 				hoveredEntity = m_NullEntityContext;
 			}
@@ -189,36 +201,52 @@ namespace Cober {
 
 		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
 
-		if (entity.HasComponent<T>()) {
-
+		if (entity.HasComponent<T>()) 
+		{
 			auto& component = entity.GetComponent<T>();
 			ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
+			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y;
+
+			// Switch to make icon components
+			Ref<Texture> iconComponent = m_AssetIconMap["transform"];
+
+			if (name == ComponentNames::Transform)
+				iconComponent = m_AssetIconMap["transform"];
+			else if (name == ComponentNames::Rigidbody2D)
+				iconComponent = m_AssetIconMap["rigidbody2D"];
+			else if (name == ComponentNames::Circle2DCollider)
+				iconComponent = m_AssetIconMap["circleCollider2D"];
+			else if (name == ComponentNames::Box2DCollider)
+				iconComponent = m_AssetIconMap["boxCollider2D"];
+			else if (name == ComponentNames::Render2DShape)
+				iconComponent = m_AssetIconMap["sprite"];
+
 
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
-			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
 			ImGui::Separator();
+			// Add icons to a tree with monospace FontAwesome icons (where iconComponent is a 'const char*')
+			// bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), treeNodeFlags, "%s %s", iconComponent, name.c_str());
 			bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), treeNodeFlags, name.c_str());
 			ImGui::PopStyleVar();
-			ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
 
-			if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
-				ImGui::OpenPopup("ComponentSettings");
+			ImGui::SameLine(contentRegionAvailable.x - lineHeight - 5.0f, 0.0f);
 
-			bool removeComponent = false;
-			if (ImGui::BeginPopup("ComponentSettings")) {
-				if (ImGui::MenuItem("Remove Component"))
-					removeComponent = true;
-				ImGui::EndPopup();
+			if (name != ComponentNames::Transform)
+			{
+				if (ImGui::ImageButton((ImTextureID)m_AssetIconMap["remove"]->GetRendererID(), ImVec2{ lineHeight*0.9f, lineHeight*0.9f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 }))
+					entity.RemoveComponent<T>();
 			}
+				
+			ImGui::SameLine(2.0f, 0.0f);
+			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+			// This usless button cover the node tree's ugly arrow
+			ImGui::ImageButton((ImTextureID)iconComponent->GetRendererID(), ImVec2{ lineHeight*0.9f, lineHeight*0.9f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+	        ImGui::PopItemFlag();
 
-			if (open) {
+			if (open) 
+			{
 				uiFunction(component);
 				ImGui::TreePop();
-			}
-
-			if (removeComponent) 
-			{
-				entity.RemoveComponent<T>();
 			}
 		}
 	}
@@ -272,14 +300,14 @@ namespace Cober {
                 {
 					m_SelectionContext.AddComponent<CircleCollider2D>();
 				}
-				else if (!m_SelectionContext.HasComponent<EdgeCollider2D>()) 
-                {
-					m_SelectionContext.AddComponent<EdgeCollider2D>();
-				}
-				else if (!m_SelectionContext.HasComponent<PolygonCollider2D>()) 
-                {
-					m_SelectionContext.AddComponent<PolygonCollider2D>();
-				}
+				// else if (!m_SelectionContext.HasComponent<EdgeCollider2D>()) 
+                // {
+				// 	m_SelectionContext.AddComponent<EdgeCollider2D>();
+				// }
+				// else if (!m_SelectionContext.HasComponent<PolygonCollider2D>()) 
+                // {
+				// 	m_SelectionContext.AddComponent<PolygonCollider2D>();
+				// }
 				else if (!m_SelectionContext.HasComponent<Render2DComponent>()) 
                 {
 					m_SelectionContext.AddComponent<Render2DComponent>();
@@ -297,8 +325,8 @@ namespace Cober {
 			AddIfHasComponent<Rigidbody2D>("Rigidbody 2D Component");
 			AddIfHasComponent<BoxCollider2D>("Box Collider 2D Component");
 			AddIfHasComponent<CircleCollider2D>("Circle Collider 2D Component");
-			AddIfHasComponent<EdgeCollider2D>("Edge Collider 2D Component");
-			AddIfHasComponent<PolygonCollider2D>("Polygon Collider 2D Component");
+			// AddIfHasComponent<EdgeCollider2D>("Edge Collider 2D Component");
+			// AddIfHasComponent<PolygonCollider2D>("Polygon Collider 2D Component");
 			AddIfHasComponent<Render2DComponent>("Render 2D Shape Component");
 			//AddIfHasComponent<Script>("Script Component");
 			// ...
@@ -307,7 +335,7 @@ namespace Cober {
 			ImGui::EndPopup();
 		}
 
-		DrawComponent<TransformComponent>("TransformComponent", entity, [](auto& component)
+		DrawComponent<TransformComponent>((std::string)ComponentNames::Transform, entity, [](auto& component)
 			{
 				DrawVec3Control("Position", component.position);
 				glm::vec3 rotation = glm::degrees(component.rotation);
@@ -317,7 +345,7 @@ namespace Cober {
 			});
 	
 
-		DrawComponent<Rigidbody2D>("Rigidbody 2D", entity, [](auto& component)
+		DrawComponent<Rigidbody2D>((std::string)ComponentNames::Rigidbody2D, entity, [](auto& component)
 			{
 				const char* bodyTypeStrings[] = { "Static", "Kinematic", "Dynamic" };
 				const char* currentBodyTypeString = bodyTypeStrings[(int)component.type];
@@ -338,7 +366,7 @@ namespace Cober {
 				ImGui::Checkbox("Fixed Rotation", &component.fixedRotation);
 			});
 
-		DrawComponent<BoxCollider2D>("Box Collider 2D", entity, [](auto& component)
+		DrawComponent<BoxCollider2D>((std::string)ComponentNames::Box2DCollider, entity, [](auto& component)
 			{
 				ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
 				ImGui::DragFloat2("Size", glm::value_ptr(component.size), 1.0f, 1.0f);
@@ -348,7 +376,7 @@ namespace Cober {
 			});
 
 
-		DrawComponent<CircleCollider2D>("Circle Collider 2D", entity, [](auto& component)
+		DrawComponent<CircleCollider2D>((std::string)ComponentNames::Circle2DCollider, entity, [](auto& component)
 			{
 				ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
 				ImGui::DragFloat("Radius", &component.radius, 0.5f, 0.0f, 100.0f);
@@ -374,7 +402,7 @@ namespace Cober {
 			});
 		
 
-		DrawComponent<Render2DComponent>("Render 2D Shape", entity, [](auto& component)
+		DrawComponent<Render2DComponent>((std::string)ComponentNames::Render2DShape, entity, [](auto& component)
 			{
 				ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
 

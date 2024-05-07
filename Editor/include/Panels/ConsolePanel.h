@@ -3,6 +3,7 @@
 
 #include "Core/Core.h"
 #include "Events/Event.h"
+#include "Theme/EditorResources.h"
 
 #include <string>
 #include <ctime>
@@ -44,10 +45,18 @@ namespace Cober {
 	private:
 		const char* GetMessageType(const ConsoleMessage& message) const;
 		const ImVec4& GetMessageColor(const ConsoleMessage& message) const;
+		void ToggleConsoleButton(const std::string iconKey, bool& isActive);
 
 	private:
 		static ConsolePanel* s_Instance;
-		bool m_ClearOnPlay = true;
+		bool m_DebugEngine = false;
+		bool m_DebugApp = false;
+		bool m_TraceMessages = false;
+		bool m_InfoMessages = false;
+		bool m_WarningMessages = false;
+		bool m_ErrorMessages = false;
+
+		std::map<std::string, Ref<Texture>> m_AssetIconMap;
 
 		int16_t m_MessageFilters = (int16_t)ConsoleMessageFlags::All;
 	};

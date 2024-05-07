@@ -48,8 +48,6 @@ namespace Cober {
 
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-		LOG_CORE_TRACE("Render Texture Loaded");
 	}
 
 
@@ -61,7 +59,7 @@ namespace Cober {
 		stbi_set_flip_vertically_on_load(1);
 
 		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
-			
+		
 		if (data)
 		{
 			m_IsLoaded = true;
@@ -99,8 +97,6 @@ namespace Cober {
 			glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
 
 			stbi_image_free(data);
-			
-			LOG_CORE_TRACE("Texture {0} loaded", GetName());
 		}
 	}
 
@@ -108,7 +104,6 @@ namespace Cober {
 	OpenGLTexture::~OpenGLTexture()
 	{
 		glDeleteTextures(1, &m_RendererID);
-		LOG_CORE_TRACE("Texture {0} cleaned up", GetName());
 	}
 
 
@@ -116,12 +111,12 @@ namespace Cober {
 	{
 		auto lastSlash = m_Path.find_last_of("/\\");
 		
-        // LOG_CORE_ASSERT(lastSlash != std::string::npos, "Texture Path is invalid or does not exist!");
+        LOG_CORE_ASSERT(lastSlash != std::string::npos, "Texture Path is invalid or does not exist!");
 		
 		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
 		auto lastDot = m_Path.rfind('.');
 		
-        // LOG_CORE_ASSERT(lastDot != std::string::npos, "Texture Name is invalid or does not exist!");
+        LOG_CORE_ASSERT(lastDot != std::string::npos, "Texture Name is invalid or does not exist!");
 		
 		auto count = lastDot == std::string::npos ? m_Path.size() - lastSlash : lastDot - lastSlash;
 		std::string name = m_Path.substr(lastSlash, count);
@@ -132,6 +127,7 @@ namespace Cober {
 	std::string OpenGLTexture::GetFormat() const 
 	{
 		auto lastDot = m_Path.rfind('.');
+		// auto count = lastDot != std::string::npos ? m_Path.size() - lastDot : m_Path.size();
 		std::string format = lastDot != std::string::npos ? m_Path.substr(lastDot) : "null";
 		return format;
 	}

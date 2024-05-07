@@ -19,6 +19,9 @@ namespace Cober {
 	ViewportPanel::ViewportPanel() 
 	{
 		m_Instance = this;
+
+		m_AssetIconMap["play"] = EditorResources::PlayIcon;
+		m_AssetIconMap["stop"] = EditorResources::StopIcon;
 	}
 
 
@@ -148,38 +151,45 @@ namespace Cober {
 		m_ViewportHovered = ImGui::IsWindowHovered();
 		EngineApp::Get().GetImGuiLayer()->BlockEvents(!m_ViewportHovered);
 
+		// Enable for GameCamera
 		// START CONSTRAIN VIEWPORT SCENE
-		EngineApp& app = EngineApp::Get();
-		float screenWidth  = app.GetWindow().GetWidth();
-		float screenHeight = app.GetWindow().GetHeight();
+		// EngineApp& app = EngineApp::Get();
+		// float screenWidth  = app.GetWindow().GetWidth();
+		// float screenHeight = app.GetWindow().GetHeight();
 		
-		if (viewportPanelSize.x >= viewportPanelSize.y)
-			m_ViewportSize = { m_ViewportSize.y * screenWidth / screenHeight  , m_ViewportSize.y };
-		else if (viewportPanelSize.x < viewportPanelSize.y)
-			m_ViewportSize = { m_ViewportSize.x, m_ViewportSize.x * screenHeight / screenWidth };
+		// if (viewportPanelSize.x >= viewportPanelSize.y)
+		// 	m_ViewportSize = { m_ViewportSize.y * screenWidth / screenHeight  , m_ViewportSize.y };
+		// else if (viewportPanelSize.x < viewportPanelSize.y)
+		// 	m_ViewportSize = { m_ViewportSize.x, m_ViewportSize.x * screenHeight / screenWidth };
 		
-		if (m_ViewportSize.x >= viewportPanelSize.x) 
-		{
-			m_ViewportSize.x = viewportPanelSize.x;
-			m_ViewportSize.y = m_ViewportSize.x * screenHeight / screenWidth;
-			m_ViewportMargin.y = (viewportPanelSize.y - m_ViewportSize.y) / 2;
-			m_ViewportMargin.x = 0.0f;
-		}
+		// if (m_ViewportSize.x >= viewportPanelSize.x) 
+		// {
+		// 	m_ViewportSize.x = viewportPanelSize.x;
+		// 	m_ViewportSize.y = m_ViewportSize.x * screenHeight / screenWidth;
+		// 	m_ViewportMargin.y = (viewportPanelSize.y - m_ViewportSize.y) / 2;
+		// 	m_ViewportMargin.x = 0.0f;
+		// }
 
-		if (m_ViewportSize.y >= viewportPanelSize.y) 
-		{
-			m_ViewportSize.y = viewportPanelSize.y;
-			m_ViewportSize.x = m_ViewportSize.y * screenWidth / screenHeight;
-			m_ViewportMargin.x = (viewportPanelSize.x - m_ViewportSize.x) / 2;
-			m_ViewportMargin.y = 0.0f;
-		}
+		// if (m_ViewportSize.y >= viewportPanelSize.y) 
+		// {
+		// 	m_ViewportSize.y = viewportPanelSize.y;
+		// 	m_ViewportSize.x = m_ViewportSize.y * screenWidth / screenHeight;
+		// 	m_ViewportMargin.x = (viewportPanelSize.x - m_ViewportSize.x) / 2;
+		// 	m_ViewportMargin.y = 0.0f;
+		// }
 		// END CONSTRAIN VIEWPORT SCENE
 
+		/////////////////////////
 		// Center Viewport Image
 		ImVec2 contentRegionSize{ (viewportPanelSize.x - m_ViewportSize.x) * 0.5f,
 								  (viewportPanelSize.y - m_ViewportSize.y) * 0.5f };
 		ImGui::SetCursorPos(contentRegionSize);
 
+		uint32_t textureID = m_Fbo->GetColorAttachmentRenderID();
+		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+		/////////////////////////
+		// Enable Camera Controls
 		m_AllowViewportCameraEvents = (ImGui::IsMouseHoveringRect(m_MinViewportBound, m_MaxViewportBound) && m_ViewportFocused) || m_StartedCameraClickInViewport;
 
 		if (((Input::IsKeyDown(KeyCode::LeftAlt) && (Input::IsMouseButtonDown(MouseButton::Left) || (Input::IsMouseButtonDown(MouseButton::Middle)))) || Input::IsMouseButtonDown(MouseButton::Right)) && !m_StartedCameraClickInViewport && m_ViewportFocused && m_ViewportHovered)
@@ -188,8 +198,6 @@ namespace Cober {
 		if (!Input::IsMouseButtonDown(MouseButton::Right) && !(Input::IsKeyDown(KeyCode::LeftAlt) && (Input::IsMouseButtonDown(MouseButton::Left) || (Input::IsMouseButtonDown(MouseButton::Middle)))))
 			m_StartedCameraClickInViewport = false;
 
-		uint32_t textureID = m_Fbo->GetColorAttachmentRenderID();
-		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		///////////////////////////////////
 		// Export to DragDropViewportTarget
@@ -241,7 +249,7 @@ namespace Cober {
 			float snapValues[3] = { snapValue, snapValue, snapValue };
 
 			ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection),
-				(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::LOCAL, glm::value_ptr(transform),
+				(ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::WORLD, glm::value_ptr(transform),
 				nullptr, snap ? snapValues : nullptr);
 
 			
@@ -280,10 +288,11 @@ namespace Cober {
 		ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
 		float size = ImGui::GetWindowHeight() - 4.0f;
-		const char* icon = gameState == GameState::EDITOR ? "I>" : "||";
+
+		Ref<Texture> icon = gameState == GameState::EDITOR ? m_AssetIconMap["play"] : m_AssetIconMap["stop"];
 		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 
-		if (ImGui::Button(icon, ImVec2(size, size))) 
+		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), { 0, 1 }, { 1, 0 })) 
         {
 			m_GizmoType = -1;
 			if (gameState == GameState::EDITOR) 

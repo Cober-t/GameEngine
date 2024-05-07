@@ -1,9 +1,10 @@
 #ifndef VIEWPORT_PANEL_H
 #define VIEWPORT_PANEL_H
 
+#include "Theme/EditorResources.h"
+
 #include <Engine.h>
 #include <imgui/imgui.h>
-
 
 namespace Cober {
 
@@ -35,6 +36,7 @@ namespace Cober {
 	private:
 		Ref<Framebuffer> m_Fbo;
 		Ref<EditorCamera> m_CameraAux;
+		std::map<std::string, Ref<Texture>> m_AssetIconMap;
 		static ViewportPanel* m_Instance;
 
 		glm::vec2 m_ViewportMargin = { 0.0f, 0.0f };

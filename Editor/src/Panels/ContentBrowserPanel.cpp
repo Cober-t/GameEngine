@@ -14,9 +14,15 @@ namespace Cober {
 	{
 		s_Instance = this;
 		m_CurrentDirectory = m_AssetPath;
-		//m_DirectoryIcon = Texture2D::Create("Assets/Icons/DirectoryIcon.png");
-		//m_FileIcon = Texture2D::Create("Assets/Icons/FileIcon.png");
+
+		m_AssetIconMap[".png"] = EditorResources::PNGFileIcon;
+		m_AssetIconMap[".jpg"] = EditorResources::JPGFileIcon;
+
+		m_AssetIconMap["folder"] = EditorResources::FolderIcon;
+		m_AssetIconMap["file"] = EditorResources::FileIcon;
+		m_AssetIconMap["backwards"] = EditorResources::BackwardsIcon;
 	}
+
 
 	ContentBrowserPanel::~ContentBrowserPanel() 
 	{
@@ -24,13 +30,25 @@ namespace Cober {
 		s_Instance = nullptr;
 	}
 
+
 	void ContentBrowserPanel::OnGuiRender()
 	{
 		ImGui::Begin("Content Browser");
 
-		if (m_CurrentDirectory != std::filesystem::path(ASSETS_DIR))
-			if (ImGui::Button("<-"))
-				m_CurrentDirectory = m_CurrentDirectory.parent_path();
+		if (m_CurrentDirectory != m_AssetPath)
+		{
+			if (ImGui::ImageButton((ImTextureID)m_AssetIconMap["backwards"]->GetRendererID(), ImVec2(18.0f, 18.0f), { 0, 1 }, { 1, 0 }))
+			{
+				m_CurrentDirectory = m_CurrentDirectory.parent_path().string() + "\\";
+				m_TextureFolderContentHolder.clear();
+			}
+		}
+		else
+		{
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f)); // Export global colors
+			ImGui::Image((ImTextureID)m_AssetIconMap["backwards"]->GetRendererID(), ImVec2(18.0f, 18.0f), { 0, 1 }, { 1, 0 });
+			ImGui::PopStyleColor();
+		}
 
 		static float padding = 10.0f;
 		static float thumbnailSize = 64.0f;
@@ -42,25 +60,46 @@ namespace Cober {
 		if (columnCount < 1)
 			columnCount = 1;
 
-		ImGui::Columns(1);
-		ImGui::SliderFloat("Thumbnail Size", &thumbnailSize, 16, 85);
-		ImGui::SliderFloat("Padding", &padding, 0, 32);
+		ImGui::PushItemWidth(100.0f);
+		ImGui::SameLine();
+		ImGui::SliderFloat("Thumbnail Size", &thumbnailSize, 16, 85, "%.0f"); // Export to Settings
+		ImGui::SameLine();
+		ImGui::SliderFloat("Padding", &padding, 0, 32, "%.0f"); // Export to Settings
+		ImGui::PopItemWidth();
+
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 10 });
 
 		ImGui::Columns(columnCount, 0, false);
 
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory)) 
         {
 			const auto& path = directoryEntry.path();
-			auto relativePath = std::filesystem::relative(path, m_AssetPath);
+			std::filesystem::path relativePath = std::filesystem::relative(path, m_AssetPath);
 			std::string filenameString = relativePath.filename().string();
+
 			ImGui::PushID(filenameString.c_str());
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f)); // Export global colors
 
-			//Ref<Texture2D> icon = directoryEntry.is_directory() ? m_DirectoryIcon : m_FileIcon;
-
-			// EXPORT UNIVERSAL COLORS
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.78f, 0.31f, 0.078f, 1.0f));
-			ImGui::Button(filenameString.c_str(), {thumbnailSize, thumbnailSize});
-			//ImGui::ImageButton((ImTextureID)icon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+			if (directoryEntry.is_directory())
+			{
+				ImGui::ImageButton((ImTextureID)m_AssetIconMap["folder"]->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+			}
+			else
+			{
+				// Thumnails (Make an enum for file types)
+				if (relativePath.extension() == ".png" || relativePath.extension() == ".jpg")
+				{
+					std::filesystem::path texturePath = m_CurrentDirectory / filenameString;
+					if (m_TextureFolderContentHolder.find(texturePath.string()) == m_TextureFolderContentHolder.end())
+					{
+						m_TextureFolderContentHolder[texturePath.string()] = Texture::Create(texturePath.string());
+					}
+					ImGui::ImageButton((ImTextureID)m_TextureFolderContentHolder[texturePath.string()]->GetRendererID(), 
+						{ thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+				}
+				else
+					ImGui::ImageButton((ImTextureID)m_AssetIconMap["file"]->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+			}
 
 			// Drag and Drop
 			if (ImGui::BeginDragDropSource()) 
@@ -77,10 +116,12 @@ namespace Cober {
 					m_CurrentDirectory /= path.filename();
             }
 
-			//ImGui::TextWrapped(filenameString.c_str());
+			ImGui::TextWrapped(filenameString.c_str());
 			ImGui::NextColumn();
 			ImGui::PopID();
 		}
+
+		ImGui::PopStyleVar();
 
 		ImGui::End();
 	}

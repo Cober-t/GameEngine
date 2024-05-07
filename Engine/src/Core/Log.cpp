@@ -60,6 +60,9 @@ namespace Cober {
 			logMessage.line = rawMsg.source.line;
 			logMessage.level = rawMsg.level;
 
+			std::string loggerName(rawMsg.logger_name.data(), rawMsg.logger_name.size());
+			logMessage.loggerName = loggerName;
+
 			s_LogMessages.push_back(logMessage);
 		}
 	}

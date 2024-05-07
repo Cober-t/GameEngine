@@ -21,6 +21,14 @@ namespace Cober {
 	{
 		LOG_CORE_ASSERT(s_Instance == nullptr, "Console Panel instance is null");
 		s_Instance = this;
+
+		m_AssetIconMap["appFilter"] = EditorResources::AppMessagesIcon;
+		m_AssetIconMap["engineFilter"] = EditorResources::EngineMessagesIcon;
+		m_AssetIconMap["clear"] = EditorResources::ClearIcon;
+		m_AssetIconMap["trace"] = EditorResources::TraceMessagesIcon;
+		m_AssetIconMap["info"] = EditorResources::InfoMessagesIcon;
+		m_AssetIconMap["warning"] = EditorResources::WarningMessagesIcon;
+		m_AssetIconMap["error"] = EditorResources::ErrorMessagesIcon;
 	}
 
 
@@ -47,13 +55,60 @@ namespace Cober {
 		return s_InfoTint;
 	}
 
+	void ConsolePanel::ToggleConsoleButton(const std::string iconKey, bool& isActive)
+	{
+		float buttonOpacity = 255.0f;
+
+		if (isActive)
+			buttonOpacity = 0.0f;
+		
+		ImGuiStyle& style = ImGui::GetStyle();
+		auto buttonStyle = style.Colors[ImGuiCol_Button];
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(buttonStyle.x, buttonStyle.y, buttonStyle.z, buttonOpacity));
+
+		if (ImGui::ImageButton((ImTextureID)m_AssetIconMap[iconKey]->GetRendererID(), ImVec2(18.0f, 18.0f), { 0, 1 }, { 1, 0 }))
+			isActive = isActive == true ? false : true;
+
+		ImGui::PopStyleColor();
+	}
+
     
 	void ConsolePanel::OnImGuiRender()
 	{
 		ImGui::Begin("Console");
-        
+
+		if (ImGui::ImageButton((ImTextureID)m_AssetIconMap["clear"]->GetRendererID(), ImVec2(18.0f, 18.0f), { 0, 1 }, { 1, 0 }))
+			Log::ClearLogMessages();
+
+		ImGui::SameLine();
+		ToggleConsoleButton("appFilter", m_DebugApp);
+		ImGui::SameLine();
+		ToggleConsoleButton("engineFilter", m_DebugEngine);
+		ImGui::SameLine();
+		ToggleConsoleButton("trace", m_TraceMessages);
+		ImGui::SameLine();
+		ToggleConsoleButton("info", m_InfoMessages);
+		ImGui::SameLine();
+		ToggleConsoleButton("warning", m_WarningMessages);
+		ImGui::SameLine();
+		ToggleConsoleButton("error", m_ErrorMessages);
+
+
         for (auto msg : Log::GetMessages())
         {
+			if (m_DebugEngine && msg.loggerName != "ENGINE")
+				continue;
+			if (m_DebugApp && msg.loggerName != "APP")
+				continue;
+			if (m_TraceMessages && msg.level != Log::LOG_LEVELS::TRACE)
+				continue;
+			if (m_InfoMessages && msg.level != Log::LOG_LEVELS::INFO)
+				continue;
+			if (m_WarningMessages && msg.level != Log::LOG_LEVELS::WARN)
+				continue;
+			if (m_ErrorMessages && msg.level != Log::LOG_LEVELS::ERR)
+				continue;
+			
 			ImVec4 color;
 			switch (msg.level)
 			{
@@ -69,7 +124,10 @@ namespace Cober {
 					color = ImVec4(1, 0, 1, 1);	break;
 			}
 
+			ImGui::Separator();
+			
 			ImGui::PushStyleColor(ImGuiCol_Text, color);
+
 			if (EngineApp::Get().IsDebugMode())
 			{
 				ImGui::TextWrapped("[");	

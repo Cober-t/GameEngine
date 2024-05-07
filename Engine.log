@@ -1,289 +1,64 @@
-[2024-05-07 07:36:16.363] [APP] [info] [EditorApp.cpp:26] Editor Constructor!
-[2024-05-07 07:36:16.364] [ENGINE] [info] [EngineApp.cpp:11] EngineApp Constructor!
-[2024-05-07 07:36:16.364] [ENGINE] [info] [Window.cpp:40] Creating window Engine Editor (1280, 720)
-[2024-05-07 07:36:16.640] [ENGINE] [info] [OpenGLContext.cpp:11] Window Context Created!!
-[2024-05-07 07:36:16.646] [ENGINE] [info] [OpenGLContext.cpp:26] OpenGL Info:
-[2024-05-07 07:36:16.646] [ENGINE] [info] [OpenGLContext.cpp:27]   Vendor: NVIDIA Corporation
-[2024-05-07 07:36:16.646] [ENGINE] [info] [OpenGLContext.cpp:28]   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
-[2024-05-07 07:36:16.646] [ENGINE] [info] [OpenGLContext.cpp:29]   Version: 4.6.0 NVIDIA 551.86
-[2024-05-07 07:36:16.647] [ENGINE] [info] [Timestep.h:18] Created Timer
-[2024-05-07 07:36:16.647] [ENGINE] [trace] [OpenGLRenderAPI.cpp:45] Render API init
-[2024-05-07 07:36:16.647] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-05-07 07:36:16.648] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-05-07 07:36:16.649] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2024-05-07 07:36:16.650] [ENGINE] [trace] [OpenGLTexture.cpp:52] Render Texture Loaded
-[2024-05-07 07:36:16.651] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Quad.glsl success
-[2024-05-07 07:36:16.651] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-05-07 07:36:16.651] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-05-07 07:36:16.652] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Line.glsl success
-[2024-05-07 07:36:16.652] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-05-07 07:36:16.653] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-05-07 07:36:16.655] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2024-05-07 07:36:16.655] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Circle.glsl success
-[2024-05-07 07:36:16.656] [ENGINE] [trace] [OpenGLBuffer.cpp:94] Render UniformBuffer success
-[2024-05-07 07:36:16.656] [APP] [info] [EditorCamera.cpp:39] Editor Camera Created!!
-[2024-05-07 07:36:16.657] [ENGINE] [info] [Debug2DPhysics.cpp:19] Debug 2D Physics Constructor!
-[2024-05-07 07:36:16.660] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-07 07:36:16.661] [APP] [info] [Scene.cpp:131] Created entity with ID 12634413077097282231 and name Entity
-[2024-05-07 07:36:16.666] [ENGINE] [trace] [OpenGLTexture.cpp:103] Texture test loaded
-[2024-05-07 07:36:16.667] [APP] [info] [Scene.cpp:131] Created entity with ID 13626953396206822921 and name Entity3
-[2024-05-07 07:36:16.668] [APP] [info] [Scene.cpp:131] Created entity with ID 10967166716647677795 and name Entity4
-[2024-05-07 07:36:16.668] [APP] [info] [Scene.cpp:131] Created entity with ID 9236465625048454307 and name Entity1
-[2024-05-07 07:36:16.669] [APP] [info] [Scene.cpp:131] Created entity with ID 16822306336771744483 and name Entity2
-[2024-05-07 07:36:16.669] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-07 07:36:16.670] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-07 07:36:16.670] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-07 07:36:16.670] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-07 07:36:16.670] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-07 07:36:16.670] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-05-07 07:36:16.671] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-05-07 07:36:16.672] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2024-05-07 07:36:16.673] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Grid.glsl success
-[2024-05-07 07:36:17.478] [APP] [warning] [Timestep.h:53] 129
-[2024-05-07 07:36:18.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:19.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:20.479] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:21.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:22.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:23.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:36:24.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:25.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:26.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:27.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:28.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:29.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:30.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:31.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:32.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:33.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:34.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:35.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:36.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:37.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:38.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:39.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:40.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:36:41.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:42.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:43.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:36:44.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:45.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:46.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:47.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:48.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:49.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:50.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:51.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:52.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:53.478] [APP] [warning] [Timestep.h:53] 89
-[2024-05-07 07:36:54.709] [APP] [warning] [Timestep.h:53] 120
-[2024-05-07 07:36:55.478] [APP] [warning] [Timestep.h:53] 127
-[2024-05-07 07:36:56.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:36:57.721] [APP] [warning] [Timestep.h:53] 160
-[2024-05-07 07:36:58.478] [APP] [warning] [Timestep.h:53] 125
-[2024-05-07 07:36:59.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:00.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:01.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:37:02.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:03.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:04.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:05.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:06.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:07.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:08.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:09.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:10.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:11.479] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:12.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:13.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:14.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:37:15.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:16.478] [APP] [warning] [Timestep.h:53] 163
-[2024-05-07 07:37:17.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:37:18.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:19.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:20.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:21.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:22.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:37:23.478] [APP] [warning] [Timestep.h:53] 155
-[2024-05-07 07:37:24.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:37:25.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:26.478] [APP] [warning] [Timestep.h:53] 156
-[2024-05-07 07:37:27.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:37:28.478] [APP] [warning] [Timestep.h:53] 161
-[2024-05-07 07:37:29.478] [APP] [warning] [Timestep.h:53] 152
-[2024-05-07 07:37:30.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:37:31.478] [APP] [warning] [Timestep.h:53] 151
-[2024-05-07 07:37:32.478] [APP] [warning] [Timestep.h:53] 162
-[2024-05-07 07:37:33.484] [APP] [warning] [Timestep.h:53] 152
-[2024-05-07 07:37:34.484] [APP] [warning] [Timestep.h:53] 144
-[2024-05-07 07:37:35.478] [APP] [warning] [Timestep.h:53] 152
-[2024-05-07 07:37:36.478] [APP] [warning] [Timestep.h:53] 160
-[2024-05-07 07:37:37.484] [APP] [warning] [Timestep.h:53] 131
-[2024-05-07 07:37:38.478] [APP] [warning] [Timestep.h:53] 139
-[2024-05-07 07:37:39.484] [APP] [warning] [Timestep.h:53] 124
-[2024-05-07 07:37:40.478] [APP] [warning] [Timestep.h:53] 147
-[2024-05-07 07:37:41.478] [APP] [warning] [Timestep.h:53] 113
-[2024-05-07 07:37:42.478] [APP] [warning] [Timestep.h:53] 113
-[2024-05-07 07:37:43.478] [APP] [warning] [Timestep.h:53] 120
-[2024-05-07 07:37:44.478] [APP] [warning] [Timestep.h:53] 121
-[2024-05-07 07:37:45.478] [APP] [warning] [Timestep.h:53] 143
-[2024-05-07 07:37:46.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:37:47.478] [APP] [warning] [Timestep.h:53] 157
-[2024-05-07 07:37:48.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:37:49.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:50.478] [APP] [warning] [Timestep.h:53] 155
-[2024-05-07 07:37:51.478] [APP] [warning] [Timestep.h:53] 163
-[2024-05-07 07:37:52.478] [APP] [warning] [Timestep.h:53] 154
-[2024-05-07 07:37:53.478] [APP] [warning] [Timestep.h:53] 162
-[2024-05-07 07:37:54.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:37:55.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:37:56.478] [APP] [warning] [Timestep.h:53] 161
-[2024-05-07 07:37:57.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:37:58.478] [APP] [warning] [Timestep.h:53] 155
-[2024-05-07 07:37:59.478] [APP] [warning] [Timestep.h:53] 152
-[2024-05-07 07:38:00.478] [APP] [warning] [Timestep.h:53] 162
-[2024-05-07 07:38:01.478] [APP] [warning] [Timestep.h:53] 162
-[2024-05-07 07:38:02.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:38:03.478] [APP] [warning] [Timestep.h:53] 154
-[2024-05-07 07:38:04.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:38:05.478] [APP] [warning] [Timestep.h:53] 162
-[2024-05-07 07:38:06.478] [APP] [warning] [Timestep.h:53] 161
-[2024-05-07 07:38:07.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:38:08.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:38:09.478] [APP] [warning] [Timestep.h:53] 145
-[2024-05-07 07:38:10.478] [APP] [warning] [Timestep.h:53] 154
-[2024-05-07 07:38:11.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:38:12.478] [APP] [warning] [Timestep.h:53] 158
-[2024-05-07 07:38:13.478] [APP] [warning] [Timestep.h:53] 154
-[2024-05-07 07:38:14.478] [APP] [warning] [Timestep.h:53] 158
-[2024-05-07 07:38:15.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:38:16.478] [APP] [warning] [Timestep.h:53] 154
-[2024-05-07 07:38:17.478] [APP] [warning] [Timestep.h:53] 158
-[2024-05-07 07:38:18.478] [APP] [warning] [Timestep.h:53] 163
-[2024-05-07 07:38:19.478] [APP] [warning] [Timestep.h:53] 161
-[2024-05-07 07:38:20.478] [APP] [warning] [Timestep.h:53] 147
-[2024-05-07 07:38:21.479] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:38:22.478] [APP] [warning] [Timestep.h:53] 154
-[2024-05-07 07:38:23.478] [APP] [warning] [Timestep.h:53] 144
-[2024-05-07 07:38:24.478] [APP] [warning] [Timestep.h:53] 154
-[2024-05-07 07:38:25.478] [APP] [warning] [Timestep.h:53] 138
-[2024-05-07 07:38:26.478] [APP] [warning] [Timestep.h:53] 161
-[2024-05-07 07:38:27.478] [APP] [warning] [Timestep.h:53] 154
-[2024-05-07 07:38:28.478] [APP] [warning] [Timestep.h:53] 155
-[2024-05-07 07:38:29.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:38:30.478] [APP] [warning] [Timestep.h:53] 158
-[2024-05-07 07:38:31.478] [APP] [warning] [Timestep.h:53] 156
-[2024-05-07 07:38:32.478] [APP] [warning] [Timestep.h:53] 143
-[2024-05-07 07:38:33.478] [APP] [warning] [Timestep.h:53] 130
-[2024-05-07 07:38:34.478] [APP] [warning] [Timestep.h:53] 161
-[2024-05-07 07:38:35.478] [APP] [warning] [Timestep.h:53] 162
-[2024-05-07 07:38:36.478] [APP] [warning] [Timestep.h:53] 161
-[2024-05-07 07:38:37.478] [APP] [warning] [Timestep.h:53] 129
-[2024-05-07 07:38:38.478] [APP] [warning] [Timestep.h:53] 161
-[2024-05-07 07:38:39.478] [APP] [warning] [Timestep.h:53] 155
-[2024-05-07 07:38:40.478] [APP] [warning] [Timestep.h:53] 160
-[2024-05-07 07:38:41.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:38:42.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:38:43.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:38:44.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:38:45.478] [APP] [warning] [Timestep.h:53] 118
-[2024-05-07 07:38:46.478] [APP] [warning] [Timestep.h:53] 151
-[2024-05-07 07:38:47.478] [APP] [warning] [Timestep.h:53] 151
-[2024-05-07 07:38:48.478] [APP] [warning] [Timestep.h:53] 137
-[2024-05-07 07:38:49.484] [APP] [warning] [Timestep.h:53] 142
-[2024-05-07 07:38:50.478] [APP] [warning] [Timestep.h:53] 132
-[2024-05-07 07:38:51.478] [APP] [warning] [Timestep.h:53] 114
-[2024-05-07 07:38:52.478] [APP] [warning] [Timestep.h:53] 110
-[2024-05-07 07:38:53.478] [APP] [warning] [Timestep.h:53] 139
-[2024-05-07 07:38:54.478] [APP] [warning] [Timestep.h:53] 140
-[2024-05-07 07:38:55.478] [APP] [warning] [Timestep.h:53] 135
-[2024-05-07 07:38:56.478] [APP] [warning] [Timestep.h:53] 127
-[2024-05-07 07:38:57.478] [APP] [warning] [Timestep.h:53] 123
-[2024-05-07 07:38:58.478] [APP] [warning] [Timestep.h:53] 143
-[2024-05-07 07:38:59.478] [APP] [warning] [Timestep.h:53] 151
-[2024-05-07 07:39:00.478] [APP] [warning] [Timestep.h:53] 158
-[2024-05-07 07:39:01.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:39:02.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:39:03.478] [APP] [warning] [Timestep.h:53] 155
-[2024-05-07 07:39:04.478] [APP] [warning] [Timestep.h:53] 158
-[2024-05-07 07:39:04.785] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-07 07:39:04.785] [APP] [info] [Scene.cpp:131] Created entity with ID 9643654215064920064 and name Entity2
-[2024-05-07 07:39:04.786] [APP] [info] [Scene.cpp:131] Created entity with ID 17731108172934002688 and name Entity1
-[2024-05-07 07:39:04.786] [APP] [info] [Scene.cpp:131] Created entity with ID 10064499163424993280 and name Entity4
-[2024-05-07 07:39:04.786] [APP] [info] [Scene.cpp:131] Created entity with ID 6042340447828528128 and name Entity3
-[2024-05-07 07:39:04.787] [APP] [info] [Scene.cpp:131] Created entity with ID 15790550996833163264 and name Entity
-[2024-05-07 07:39:04.787] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-07 07:39:04.788] [APP] [info] [PhysicsSystem2D.cpp:9] Physics System Added to Registry!!
-[2024-05-07 07:39:04.788] [APP] [info] [ScriptSystem.cpp:11] Script System Added to Registry!!
-[2024-05-07 07:39:04.788] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-07 07:39:04.789] [APP] [info] [PhysicsSystem2D.cpp:30] Physics System Started!!
-[2024-05-07 07:39:04.789] [APP] [info] [ScriptSystem.cpp:23] Script System Started!!
-[2024-05-07 07:39:05.478] [APP] [warning] [Timestep.h:53] 151
-[2024-05-07 07:39:06.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:39:07.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:39:08.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:39:09.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:39:10.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:39:11.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:39:12.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:39:13.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:39:14.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:39:15.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:39:16.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:39:17.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:39:18.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:39:19.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:39:20.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:39:21.478] [APP] [warning] [Timestep.h:53] 163
-[2024-05-07 07:39:22.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:39:23.478] [APP] [warning] [Timestep.h:53] 155
-[2024-05-07 07:39:24.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:39:25.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:39:26.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:39:27.479] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:39:28.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:39:29.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:39:30.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:39:31.479] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:39:32.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:39:33.479] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:39:34.479] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:39:35.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:39:36.479] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:39:37.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:39:38.479] [APP] [warning] [Timestep.h:53] 155
-[2024-05-07 07:39:39.479] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:39:40.479] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:39:41.354] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-07 07:39:41.354] [APP] [info] [PhysicsSystem2D.cpp:17] Physics System Removed from Registry
-[2024-05-07 07:39:41.354] [APP] [info] [ScriptSystem.cpp:17] Script System Removed from Registry
-[2024-05-07 07:39:41.355] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-05-07 07:39:41.478] [APP] [warning] [Timestep.h:53] 165
-[2024-05-07 07:39:42.478] [APP] [warning] [Timestep.h:53] 164
-[2024-05-07 07:39:43.479] [APP] [warning] [Timestep.h:53] 156
-[2024-05-07 07:39:43.684] [APP] [info] [EditorApp.cpp:20] Editor Destructor!
-[2024-05-07 07:39:43.685] [ENGINE] [info] [EngineApp.cpp:32] EngineApp Destructor!
-[2024-05-07 07:39:43.685] [ENGINE] [info] [Timestep.h:23] Destroyed Timer
-[2024-05-07 07:39:43.686] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-07 07:39:43.686] [APP] [info] [EditorCamera.cpp:45] Editor Camera Destroyed!!
-[2024-05-07 07:39:43.686] [APP] [info] [EditorLayer.cpp:45] Detached Editor Layer!
-[2024-05-07 07:39:43.687] [ENGINE] [info] [Window.cpp:27] Window Destroyed
-[2024-05-07 07:39:43.699] [ENGINE] [info] [OpenGLContext.cpp:16] Window Context Destroyed!!
-[2024-05-07 07:39:43.699] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
-[2024-05-07 07:39:43.700] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
-[2024-05-07 07:39:43.700] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
-[2024-05-07 07:39:43.700] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
-[2024-05-07 07:39:43.700] [ENGINE] [trace] [OpenGLTexture.cpp:111] Texture  cleaned up
-[2024-05-07 07:39:43.701] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
-[2024-05-07 07:39:43.701] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
-[2024-05-07 07:39:43.701] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
-[2024-05-07 07:39:43.701] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
-[2024-05-07 07:39:43.702] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
-[2024-05-07 07:39:43.702] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
-[2024-05-07 07:39:43.702] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
-[2024-05-07 07:39:43.702] [ENGINE] [trace] [OpenGLBuffer.cpp:100] Render UniformBuffer cleaned up
-[2024-05-07 07:39:43.703] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
-[2024-05-07 07:39:43.703] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
-[2024-05-07 07:39:43.703] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
-[2024-05-07 07:39:43.703] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
+[2024-05-07 20:28:51.361] [APP] [info] [EditorApp.cpp:26] Editor Constructor!
+[2024-05-07 20:28:51.362] [ENGINE] [info] [EngineApp.cpp:11] EngineApp Constructor!
+[2024-05-07 20:28:51.362] [ENGINE] [info] [Window.cpp:40] Creating window Engine Editor (1280, 720)
+[2024-05-07 20:28:51.615] [ENGINE] [info] [OpenGLContext.cpp:11] Window Context Created!!
+[2024-05-07 20:28:51.621] [ENGINE] [info] [OpenGLContext.cpp:26] OpenGL Info:
+[2024-05-07 20:28:51.621] [ENGINE] [info] [OpenGLContext.cpp:27]   Vendor: NVIDIA Corporation
+[2024-05-07 20:28:51.621] [ENGINE] [info] [OpenGLContext.cpp:28]   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+[2024-05-07 20:28:51.622] [ENGINE] [info] [OpenGLContext.cpp:29]   Version: 4.6.0 NVIDIA 551.86
+[2024-05-07 20:28:51.622] [ENGINE] [info] [Timestep.h:18] Created Timer
+[2024-05-07 20:28:51.623] [ENGINE] [trace] [OpenGLRenderAPI.cpp:45] Render API init
+[2024-05-07 20:28:51.623] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-05-07 20:28:51.623] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-05-07 20:28:51.625] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
+[2024-05-07 20:28:51.626] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Quad.glsl success
+[2024-05-07 20:28:51.626] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-05-07 20:28:51.627] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-05-07 20:28:51.627] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Line.glsl success
+[2024-05-07 20:28:51.628] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-05-07 20:28:51.628] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-05-07 20:28:51.629] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
+[2024-05-07 20:28:51.630] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Circle.glsl success
+[2024-05-07 20:28:51.630] [ENGINE] [trace] [OpenGLBuffer.cpp:94] Render UniformBuffer success
+[2024-05-07 20:28:51.630] [APP] [info] [EditorCamera.cpp:39] Editor Camera Created!!
+[2024-05-07 20:28:51.640] [ENGINE] [error] [EditorResources.h:201] Failed to load icon C:\Users\Jorge\Documents\GameEngine\Editor\icons\SceneComponents\entity.png. The file doesn't exist.
+[2024-05-07 20:28:51.642] [ENGINE] [info] [Debug2DPhysics.cpp:19] Debug 2D Physics Constructor!
+[2024-05-07 20:28:51.646] [APP] [info] [Scene.cpp:18] Scene Created!!
+[2024-05-07 20:28:51.647] [APP] [info] [Scene.cpp:131] Created entity with ID 2128950329801064287 and name Entity
+[2024-05-07 20:28:51.654] [APP] [info] [Scene.cpp:131] Created entity with ID 16002961115912515503 and name Entity3
+[2024-05-07 20:28:51.655] [APP] [info] [Scene.cpp:131] Created entity with ID 2083197294602945576 and name Entity4
+[2024-05-07 20:28:51.655] [APP] [info] [Scene.cpp:131] Created entity with ID 16173083595443694984 and name Entity1
+[2024-05-07 20:28:51.656] [APP] [info] [Scene.cpp:131] Created entity with ID 17473910966060633941 and name Entity2
+[2024-05-07 20:28:51.657] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
+[2024-05-07 20:28:51.657] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
+[2024-05-07 20:28:51.657] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
+[2024-05-07 20:28:51.657] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
+[2024-05-07 20:28:51.658] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
+[2024-05-07 20:28:51.658] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-05-07 20:28:51.658] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-05-07 20:28:51.660] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
+[2024-05-07 20:28:51.661] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Grid.glsl success
+[2024-05-07 20:28:54.066] [APP] [info] [EditorApp.cpp:20] Editor Destructor!
+[2024-05-07 20:28:54.066] [ENGINE] [info] [EngineApp.cpp:32] EngineApp Destructor!
+[2024-05-07 20:28:54.067] [ENGINE] [info] [Timestep.h:23] Destroyed Timer
+[2024-05-07 20:28:54.067] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
+[2024-05-07 20:28:54.067] [APP] [info] [EditorCamera.cpp:45] Editor Camera Destroyed!!
+[2024-05-07 20:28:54.067] [APP] [info] [EditorLayer.cpp:49] Detached Editor Layer!
+[2024-05-07 20:28:54.069] [ENGINE] [info] [Window.cpp:27] Window Destroyed
+[2024-05-07 20:28:54.085] [ENGINE] [info] [OpenGLContext.cpp:16] Window Context Destroyed!!
+[2024-05-07 20:28:54.086] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
+[2024-05-07 20:28:54.086] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
+[2024-05-07 20:28:54.086] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
+[2024-05-07 20:28:54.086] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
+[2024-05-07 20:28:54.087] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
+[2024-05-07 20:28:54.087] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
+[2024-05-07 20:28:54.087] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
+[2024-05-07 20:28:54.087] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
+[2024-05-07 20:28:54.088] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
+[2024-05-07 20:28:54.088] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
+[2024-05-07 20:28:54.088] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
+[2024-05-07 20:28:54.088] [ENGINE] [trace] [OpenGLBuffer.cpp:100] Render UniformBuffer cleaned up
+[2024-05-07 20:28:54.089] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
+[2024-05-07 20:28:54.089] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
+[2024-05-07 20:28:54.089] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
+[2024-05-07 20:28:54.089] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up

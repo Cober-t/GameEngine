@@ -11,43 +11,43 @@
 
 namespace Cober {
 
-	//uint32_t _width, _height;
-	//std::string _fontsPath = SOLUTION_DIR + (std::string)"assets/fonts/";
-
 	ImGuiLayer::ImGuiLayer(const char* glVersion)
 		: glsl_version(glVersion)
 	{
-
 	}
 
 
 	ImGuiLayer::~ImGuiLayer() 
 	{
-
 	}
 
 
 	void ImGuiLayer::OnAttach() 
 	{
-
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
-		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
-		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
+		ImFontConfig config;
+		config.MergeMode = true;
+		config.GlyphMinAdvanceX = 13.0f;
+
+		// Export to Settings
 		float fontSize = 18.0f;// *2.0f;
+		static const ImWchar icons_ranges[] = { 0xf000, 0xf2e0, 0 };
 
-		std::string fontPath = (std::string)ASSETS_DIR + "fonts\\opensans\\";
-		std::string fontFile = fontPath + "OpenSans-Bold.ttf";
-		io.Fonts->AddFontFromFileTTF(fontFile.c_str(), fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
-		fontFile = fontPath + "OpenSans-Regular.ttf";
-		io.FontDefault = io.Fonts->AddFontFromFileTTF(fontFile.c_str(), fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
+		std::string openSansFont = (std::string)ASSETS_DIR + "fonts\\opensans\\OpenSans-Regular.ttf";
+		io.Fonts->AddFontFromFileTTF(openSansFont.c_str(), fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
+
+		std::string awesomeFont = (std::string)ASSETS_DIR + "fonts\\FontAwesome\\fontawesome-webfont.ttf";
+		io.Fonts->AddFontFromFileTTF(awesomeFont.c_str(), fontSize, &config, icons_ranges);
+
+		io.Fonts->Build();
 
 		// Setup Dear ImGui style, Move to Editor Side
 		// StyleDefault();
@@ -203,14 +203,14 @@ namespace Cober {
 		/// Colours
 
 		// Headers
-		colors[ImGuiCol_Header]				= ImGui::ColorConvertU32ToFloat4(Colors::Theme::groupHeader);
+		colors[ImGuiCol_Header]				= ImColor(56, 56, 56, 255); // The same as buttons to integrate them
 		colors[ImGuiCol_HeaderHovered]		= ImGui::ColorConvertU32ToFloat4(Colors::Theme::groupHeader);
 		colors[ImGuiCol_HeaderActive]		= ImGui::ColorConvertU32ToFloat4(Colors::Theme::groupHeader);
 
 		// Buttons
-		colors[ImGuiCol_Button]				= ImColor(56, 56, 56, 200);
+		colors[ImGuiCol_Button]				= ImColor(56, 56, 56, 255);
 		colors[ImGuiCol_ButtonHovered]		= ImColor(70, 70, 70, 255);
-		colors[ImGuiCol_ButtonActive]		= ImColor(56, 56, 56, 150);
+		colors[ImGuiCol_ButtonActive]		= ImColor(56, 56, 56, 255);
 
 		// Frame BG
 		colors[ImGuiCol_FrameBg]			= ImGui::ColorConvertU32ToFloat4(Colors::Theme::propertyField);
@@ -263,7 +263,8 @@ namespace Cober {
 		colors[ImGuiCol_WindowBg]			= ImGui::ColorConvertU32ToFloat4(Colors::Theme::titlebar);
 		colors[ImGuiCol_ChildBg]			= ImGui::ColorConvertU32ToFloat4(Colors::Theme::background);
 		colors[ImGuiCol_PopupBg]			= ImGui::ColorConvertU32ToFloat4(Colors::Theme::backgroundPopup);
-		colors[ImGuiCol_Border]				= ImGui::ColorConvertU32ToFloat4(Colors::Theme::backgroundDark);
+		colors[ImGuiCol_Border]				= ImColor(0, 0, 0, 0);
+		// colors[ImGuiCol_Border]				= ImGui::ColorConvertU32ToFloat4(Colors::Theme::backgroundDark);
 
 		// Tables
 		colors[ImGuiCol_TableHeaderBg]		= ImGui::ColorConvertU32ToFloat4(Colors::Theme::groupHeader);

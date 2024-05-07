@@ -70,6 +70,7 @@ project "Editor"
 		'SHADERS_DIR=R"($(SolutionDir)assets\\shaders\\)"',
 		'SCRIPTS_DIR=R"($(SolutionDir)assets\\scripts\\)"',
 		'ASSETS_DIR=R"($(SolutionDir)assets\\)"',
+        'EDITOR_ICONS_DIR=R"($(SolutionDir)Editor\\icons\\)"',
     }
 
     filter { "system:windows", "configurations:Debug" }

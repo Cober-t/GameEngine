@@ -40,15 +40,15 @@ namespace Cober {
 
 		if (ImGui::BeginMenuBar()) 
 		{
-			if (ImGui::BeginMenu("File")) 
+			if (ImGui::BeginMenu(ICON_FA_FILE  "  File")) 
 			{
 				// if(ImGui::MenuItem("Open File Explorer"))
 				// 	m_FileBrowser.Open();
 
-				if (ImGui::MenuItem("Save Scene"))
+				if (ImGui::MenuItem(ICON_FA_DOWNLOAD "  Save Scene"))
 					Scene::Save(activeScene, "Scene2.lua");	 // Test Scene
 
-				if (ImGui::MenuItem("Load Scene")) 
+				if (ImGui::MenuItem(ICON_FA_UPLOAD "  Load Scene")) 
 				{
 					hoveredEntity = Entity();
 					editorScene = Scene::Load("Scene2.lua"); // Test Scene
@@ -57,7 +57,7 @@ namespace Cober {
 					SceneHierarchyPanel::Get().SetContext(activeScene);
 				}
 
-				if (ImGui::MenuItem("Exit"))
+				if (ImGui::MenuItem(ICON_FA_TIMES "  Exit"))
 					EngineApp::Get().Close();
 
 				if (ImGui::Checkbox("2D", &editorCamera->IsPerspective()))
@@ -73,7 +73,7 @@ namespace Cober {
 					EngineApp::Get().GetWindow().SetVSync(m_Vsync);
 
 
-				if (ImGui::BeginCombo("Build Option", m_CurrentBuildOption)) 
+				if (ImGui::BeginCombo(ICON_FA_BOOK  "  Build Option", m_CurrentBuildOption)) 
 				{
 					for (int n = 0; n < IM_ARRAYSIZE(m_BuildValues); n++) 
 					{
@@ -94,14 +94,14 @@ namespace Cober {
 				ImGui::EndMenu();
 			}
 
-			if (ImGui::BeginMenu("Options")) 
+			if (ImGui::BeginMenu(ICON_FA_COG "  Options")) 
             {
 				if (ImGui::InputFloat("Line Thickness", &Render2D::GetStats().LineThickness))
 				{
 					RenderGlobals::SetLineWidth(Render2D::GetStats().LineThickness);
 				}
 
-				if (ImGui::BeginCombo("Resolution", m_CurrentScreenSize)) 
+				if (ImGui::BeginCombo(ICON_FA_TELEVISION  "  Resolution", m_CurrentScreenSize)) 
                 {
 					for (int i = 0; i < SCREEN_SIZE::N_RESOLUTIONS; i++) 
                     {
@@ -116,7 +116,7 @@ namespace Cober {
 					ImGui::EndCombo();
 				}
 
-				if (ImGui::Checkbox("Debug Mode", &EngineApp::Get().IsDebugMode()))
+				if (ImGui::Checkbox(ICON_FA_CODE  "  Debug Mode", &EngineApp::Get().IsDebugMode()))
 				{
 					Debug2DPhysics::Get().UpdateFlags();
 				}

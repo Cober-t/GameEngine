@@ -9,6 +9,8 @@ namespace Cober {
 		m_EditorCamera = CreateUnique<EditorCamera>(45.0f, EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight(), 0.01f, 1000.0f);
 		m_EditorCamera->SetActive(true);
 
+		EditorResources::Init();
+
 		new ViewportPanel();
 		new DataPanel();
 		new ConsolePanel();
@@ -41,6 +43,8 @@ namespace Cober {
 		m_ActiveScene  = nullptr;
 		m_EditorScene  = nullptr;
 		m_EditorCamera = nullptr;
+
+		EditorResources::Shutdown();
 
  		LOG_INFO("Detached Editor Layer!");
 	}
