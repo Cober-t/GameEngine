@@ -20,23 +20,18 @@ namespace Cober {
 	class PhysicsSystem2D : public System 
     {
 	public:
-		PhysicsSystem2D() = default;
-		PhysicsSystem2D(Scene* scene);
+		PhysicsSystem2D();
 		~PhysicsSystem2D();
 
-		void Start();
+		void Start(Scene* scene);
+		void Update(Unique<Timestep>& ts, Scene* scene);
 
 		void InitEntityPhysics(Entity entity);
-
-		void Update(Unique<Timestep>& ts);
         
-        virtual std::vector<Entity> GetSystemEntities() const override;
-
 		//void OnEvent(Event& event);
 	
 	private:
 		b2World* m_PhysicsWorld = nullptr;
-		Scene* m_Scene = nullptr;
 	};
 }
 

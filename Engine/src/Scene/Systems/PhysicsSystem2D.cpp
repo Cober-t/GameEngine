@@ -4,7 +4,7 @@
 
 namespace Cober {
 
-	PhysicsSystem2D::PhysicsSystem2D(Scene* scene) : m_Scene(scene)
+	PhysicsSystem2D::PhysicsSystem2D()
 	{
 		LOG_INFO("Physics System Added to Registry!!");
 	}
@@ -18,12 +18,13 @@ namespace Cober {
 	}
 
 
-	void PhysicsSystem2D::Start()
+	void PhysicsSystem2D::Start(Scene* scene)
 	{
 		Physics2D::Init();
 
-		for (auto& entity : GetSystemEntities())
+		for (auto entt : scene->GetAllEntitiesWith<TransformComponent, Rigidbody2D>())
 		{
+			Entity entity = { entt, scene };
 			InitEntityPhysics(entity);
 		}
 
@@ -95,16 +96,19 @@ namespace Cober {
 	}
 
 
-	void PhysicsSystem2D::Update(Unique<Timestep>& ts)
+	void PhysicsSystem2D::Update(Unique<Timestep>& ts, Scene* scene)
 	{
 		// Export to Settings
-		const int32_t velocityIterations = 8;
-		const int32_t positionIterations = 3;
+		const int32_t velocityIterations = 6;
+		const int32_t positionIterations = 2;
 
-		Physics2D::Step(ts->GetLimitFPS(), velocityIterations, positionIterations);
+		Physics2D::Step(1/60.0f, velocityIterations, positionIterations);
 
-		for (auto& entity : GetSystemEntities()) 
+		auto view = scene->GetAllEntitiesWith<TransformComponent, Rigidbody2D>();
+
+		for (auto entt : view) 
         {
+			Entity entity = Entity((entt::entity)entt, scene );
 			auto& transform = entity.GetComponent<TransformComponent>();
 			auto& rb2d = entity.GetComponent<Rigidbody2D>();
 			
@@ -118,20 +122,5 @@ namespace Cober {
 				transform.rotation.z = rb2d.fixedRotation ? 0.0f : body->GetAngle();
 			}
 		}
-
-		// Send to Render and prepare to Debug on Runtime Editor
-		Physics2D::DebugDraw();
 	}
-
-
-	std::vector<Entity> PhysicsSystem2D::GetSystemEntities() const
-	{
-		std::vector<Entity> entities;
-		auto entitiesView = m_Scene->GetAllEntitiesWith<TransformComponent, Rigidbody2D>();
-
-		for (auto entity : entitiesView)
-			entities.emplace_back( Entity{ entity, m_Scene } );
-
-		return entities;
-	};
 }

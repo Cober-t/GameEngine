@@ -88,7 +88,6 @@ namespace Cober {
 		System() = default;
 		~System() = default;
 
-		virtual std::vector<Entity> GetSystemEntities() const = 0;
 	};
 }
 

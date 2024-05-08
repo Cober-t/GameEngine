@@ -143,27 +143,27 @@ namespace Cober {
 
 	void Scene::OnSimulationStart()
 	{
-		AddSystem<RenderSystem>(this);
-		AddSystem<PhysicsSystem2D>(this);
-		AddSystem<ScriptSystem>(this);
+		AddSystem<RenderSystem>();
+		AddSystem<PhysicsSystem2D>();
+		AddSystem<ScriptSystem>();
 
         GetSystem<RenderSystem>().Start();
-		GetSystem<PhysicsSystem2D>().Start();
+		GetSystem<PhysicsSystem2D>().Start(this);
 		GetSystem<ScriptSystem>().Start();
 	}
 
 
     void Scene::OnSimulationStop()
 	{
-		RemoveSystem<RenderSystem>();
 		RemoveSystem<PhysicsSystem2D>();
+		RemoveSystem<RenderSystem>();
 		RemoveSystem<ScriptSystem>();
 	}
 
 
 	void Scene::OnRuntimeStart()
 	{
-		AddSystem<RenderSystem>(this);
+		AddSystem<RenderSystem>();
 
         GetSystem<RenderSystem>().Start();
 	}
@@ -177,25 +177,18 @@ namespace Cober {
 
 	void Scene::OnUpdateSimulation(Unique<Timestep>& ts, const Ref<Camera>& camera)
 	{
-		Render2D::ResetStats();
-		Render2D::BeginScene(camera);
+		GetSystem<RenderSystem>().Update(ts, camera, this);
 
-        GetSystem<RenderSystem>().Update(ts, camera);
-		GetSystem<PhysicsSystem2D>().Update(ts);
-		GetSystem<ScriptSystem>().Update();
+		if (m_IsPaused || m_StepFrames-- > 0.0f)
+			GetSystem<PhysicsSystem2D>().Update(ts, this);
 
-		Render2D::EndScene();
+		GetSystem<ScriptSystem>().Update(this);
 	}
 
 
 	void Scene::OnUpdateRuntime(Unique<Timestep>& ts, const Ref<Camera>& camera)
 	{	
-		Render2D::ResetStats();
-		Render2D::BeginScene(camera);
-        
-		GetSystem<RenderSystem>().Update(ts, camera);
-
-		Render2D::EndScene();
+		GetSystem<RenderSystem>().Update(ts, camera, this);
 	}
 
 

@@ -4,7 +4,7 @@
 namespace Cober {
 
 
-    ScriptSystem::ScriptSystem(Scene* scene) : m_Scene(scene)
+    ScriptSystem::ScriptSystem()
 	{
 		lua.open_libraries(sol::lib::base, sol::lib::math);
 
@@ -24,10 +24,12 @@ namespace Cober {
     }
 
 
-    void ScriptSystem::Update()
+    void ScriptSystem::Update(Scene* scene)
     {
-		for (auto& entity : GetSystemEntities()) 
+		auto view = scene->GetAllEntitiesWith<ScriptComponent>();
+		for (auto entt : view) 
         {
+			Entity entity = Entity((entt::entity)entt, scene );
 			// std::vector<sol::function> scriptsList = entity.GetComponent<ScriptComponent>().scripts;
 
 			// for (sol::function script : scriptsList) 
@@ -42,16 +44,4 @@ namespace Cober {
 			std::cout << "Result: " << sum << std::endl;
 		}
     }
-
-
-	std::vector<Entity> ScriptSystem::GetSystemEntities() const
-	{
-		std::vector<Entity> entities;
-		auto entitiesView = m_Scene->GetAllEntitiesWith<ScriptComponent>();
-
-		for (auto entity : entitiesView)
-			entities.emplace_back( Entity{ entity, m_Scene });
-
-		return entities;
-	};
 }

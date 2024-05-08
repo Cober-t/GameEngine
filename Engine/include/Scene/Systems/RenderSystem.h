@@ -16,20 +16,16 @@ namespace Cober {
 	class RenderSystem : public System
 	{
 	public:
-		RenderSystem() = default;
-		RenderSystem(Scene* scene);
+		RenderSystem();
 		~RenderSystem();
 
 		void Start();
 
-		void Update(Unique<Timestep>& ts, const Ref<Camera>& camera);
-
-		virtual std::vector<Entity> GetSystemEntities() const override;
+		void Update(Unique<Timestep>& ts, const Ref<Camera>& camera, Scene* scene);
 
 		//void OnEvent(Unique<EventHandler>& eventHandler);
 		
 	private:
-		Scene* m_Scene = nullptr;
 	};	
 }
 

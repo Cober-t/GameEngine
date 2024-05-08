@@ -12,14 +12,11 @@ namespace Cober {
 	class ScriptSystem : public System 
     {
 	public:
-		ScriptSystem() = default;
-		ScriptSystem(Scene* scene);
+		ScriptSystem();
 		~ScriptSystem();
 
         void Start();
-		void Update();
-
-		virtual std::vector<Entity> GetSystemEntities() const override;
+		void Update(Scene* scene);
 
     private:
 		sol::state lua;

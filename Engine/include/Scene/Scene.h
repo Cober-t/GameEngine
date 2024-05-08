@@ -34,6 +34,7 @@ namespace Cober {
 		void OnSimulationStart();
 		void OnSimulationStop();
 
+
 		void OnUpdateRuntime(Unique<Timestep>& ts, const Ref<Camera>& camera);
 		void OnUpdateSimulation(Unique<Timestep>& ts, const Ref<Camera>& camera);
 
@@ -46,6 +47,8 @@ namespace Cober {
 		Entity GetEntityByUUID(UUID uuid);
 		Entity DuplicateEntity(Entity entity);
 
+		void Step(int step = 1) { m_StepFrames = step; };
+		void Pause() { m_IsPaused == m_IsPaused == true ? false : true; };
 		static void Save(const Ref<Scene>& scene, std::string sceneName = "Scene1");
 		static Ref<Scene> Load(std::string scenePath);
 		static Ref<Scene> Copy(Ref<Scene> scene);
@@ -75,6 +78,9 @@ namespace Cober {
 
         std::map<std::type_index, Ref<System>> m_Systems;
 		std::unordered_map<UUID, Entity> m_EntityMap;
+
+		int m_StepFrames;
+		bool m_IsPaused;
 
 		friend class Entity;
 		friend class System;

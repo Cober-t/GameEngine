@@ -124,7 +124,7 @@ namespace Cober {
             // RestoreIcon = LoadTexture("RelativeFolder/iconName.png", "PlaceholderTextureName");
 
             // Content Browser
-            EntityIcon = LoadTexture("SceneComponents\\entity.png", "Entity");
+            EntityIcon = LoadTexture("ContentBrowser\\entity.png", "Entity");
             FolderIcon = LoadTexture("ContentBrowser\\folder.png", "Folder");
             FileIcon = LoadTexture("ContentBrowser\\file.png", "File");
             BackwardsIcon = LoadTexture("ContentBrowser\\backwards.png", "Backwards");

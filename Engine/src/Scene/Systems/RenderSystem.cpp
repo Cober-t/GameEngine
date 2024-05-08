@@ -5,7 +5,7 @@
 
 namespace Cober {
 
-	RenderSystem::RenderSystem(Scene* scene) : m_Scene(scene)
+	RenderSystem::RenderSystem()
     {
 		LOG_INFO("Render System Added to Registry!!");
 	}
@@ -22,10 +22,17 @@ namespace Cober {
 	}
 
 
-	void RenderSystem::Update(Unique<Timestep>& ts, const Ref<Camera>& camera)
+	void RenderSystem::Update(Unique<Timestep>& ts, const Ref<Camera>& camera, Scene* scene)
 	{
-		for (auto entity : GetSystemEntities())
+		Render2D::ResetStats();
+		Render2D::BeginScene(camera);
+
+		auto view = scene->GetAllEntitiesWith<TransformComponent, TagComponent, Render2DComponent>();
+
+		for (auto& entt : view)
         {
+			Entity entity = Entity((entt::entity)entt, scene );
+			
 			switch (entity.GetComponent<Render2DComponent>().shapeType)
 			{
 			case Shape2D::Line:
@@ -43,20 +50,9 @@ namespace Cober {
 			}
 		}
 
-		// Physics2D::DebugDraw();
+		if (EngineApp::Get().GetGameState() == GameState::RUNTIME_EDITOR)
+			Physics2D::DebugDraw();
+
+		Render2D::EndScene();
 	}
-
-
-	std::vector<Entity> RenderSystem::GetSystemEntities() const
-	{
-		std::vector<Entity> entities;
-		auto entitiesView = m_Scene->GetAllEntitiesWith<TransformComponent, TagComponent, Render2DComponent>();
-
-		for (auto entity : entitiesView)
-		{
-			entities.emplace_back( Entity((entt::entity)entity, m_Scene ));
-		}
-
-		return entities;
-	};
 }
