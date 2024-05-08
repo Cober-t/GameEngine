@@ -22,7 +22,6 @@ namespace Cober {
     class Physics2D
     {
     public:
-
         static void Init();
         static void DebugDraw();
         static void Step(float timeStep, int velocityIterations, int positionIterations);

@@ -28,7 +28,7 @@ namespace Cober {
 		m_ActiveScene->OnRuntimeStart();
 		m_EditorScene = m_ActiveScene;
 
-		Primitive::Grid::Init();
+		// Primitive::Grid::Init();
 
 		ViewportPanel::Get().CreateFramebuffer(m_EditorCamera->m_ViewportWidth, m_EditorCamera->m_ViewportHeight);
 		SceneHierarchyPanel::Get().SetContext(m_ActiveScene);

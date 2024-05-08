@@ -180,7 +180,13 @@ namespace Cober {
 		GetSystem<RenderSystem>().Update(ts, camera, this);
 
 		if (m_IsPaused || m_StepFrames-- > 0.0f)
-			GetSystem<PhysicsSystem2D>().Update(ts, this);
+		{
+			while(ts->GetDeltaTime() >= 1.0f)
+            {
+				GetSystem<PhysicsSystem2D>().Update(ts, this);
+                ts->Update();
+            }
+		}
 
 		GetSystem<ScriptSystem>().Update(this);
 	}

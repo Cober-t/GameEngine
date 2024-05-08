@@ -54,9 +54,6 @@ namespace Cober {
 				m_UpdatesOneSec = m_Updates;
 				m_DeltaPerSecond = m_DeltaTime;
 				m_Timer++, m_Updates = 0; m_Frames = 0;
-
-				LOG_INFO(m_FramesOneSec);
-				LOG_INFO(m_UpdatesOneSec);
 			}
 		}
 
