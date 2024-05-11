@@ -65,10 +65,10 @@ namespace Cober {
 
             Run(m_TimeStep);
 
-            // while(m_TimeStep->GetDeltaTime() >= 1.0f)
-            // {
-            //     m_TimeStep->Update();
-            // }
+            while(m_TimeStep->GetDeltaTime() >= 1.0f)
+            {
+                m_TimeStep->Update();
+            }
 
             m_TimeStep->ResetAfterOneSecond();
         }
