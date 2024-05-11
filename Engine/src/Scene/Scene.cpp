@@ -25,9 +25,15 @@ namespace Cober {
 	}
 
 
-	void Scene::Save(const Ref<Scene>& scene, std::string sceneName) 
+	bool Scene::Save(const Ref<Scene>& scene, std::string sceneName) 
 	{
-	    SceneSerializer::Serialize(scene, sceneName);
+		if (SceneSerializer::Serialize(scene, sceneName) == false)
+		{
+			LOG_ERROR("Scene {0} could not be serialize", sceneName)
+			return false;
+		}
+
+		return true;
 	}
 
 
@@ -35,8 +41,10 @@ namespace Cober {
 	{
 		Log::ClearLogMessages();
 		Ref<Scene> scene = SceneSerializer::Deserialize(sceneName);
-		scene->OnRuntimeStart();
-	    return scene;
+		if (scene)
+			scene->OnRuntimeStart();
+			
+		return scene;
 	}
 
 

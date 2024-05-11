@@ -17,6 +17,7 @@ namespace Cober {
 	{
 		s_Instance = this;
 		m_Vsync = EngineApp::Get().GetWindow().GetVsync();
+		m_FileBrowser = new ImGui::FileBrowser();
 	}
 
 	MenuPanel::~MenuPanel() 
@@ -28,33 +29,64 @@ namespace Cober {
 
 	void MenuPanel::OnGuiRender(Ref<EditorCamera>& editorCamera, Ref<Scene>& activeScene, Ref<Scene>& editorScene, Entity& hoveredEntity) 
 	{
-		m_FileBrowser.Display();
-		if (m_FileBrowser.HasSelected()) {
-			auto file_path = m_FileBrowser.GetSelected().string();
-			m_FilePath = file_path;
-			//_currentFile = file_path.substr(file_path.find_last_of("/\\") + 1);
-			OpenFileDialog(activeScene, m_FilePath);
+		m_FileBrowser->Display();
 
-			m_FileBrowser.ClearSelected();
+		if (m_FileBrowser->HasSelected()) 
+		{
+			switch(m_MenuFileOption)
+			{
+				case MenuOptions::SAVE:
+					m_SaveFile = m_FileBrowser->GetSelected();
+					LOG_INFO(m_SaveFile.filename().string());
+					if (Scene::Save(activeScene, m_SaveFile.filename().string()) == false)
+						m_SaveFile.clear();
+					break;
+				case MenuOptions::LOAD:
+					m_LoadFile = m_FileBrowser->GetSelected();
+
+					if (m_LoadFile.string().rfind(".lua") != std::string::npos)
+					{
+						editorScene = Scene::Load(m_LoadFile.filename().string());
+						if (editorScene)
+						{
+							m_SaveFile = m_LoadFile;
+							hoveredEntity = Entity();
+							activeScene = editorScene;
+							EngineApp::Get().SetGameState(GameState::EDITOR);
+							SceneHierarchyPanel::Get().SetContext(activeScene);
+						}
+					}
+					break;
+				case MenuOptions::COMPILE:
+					m_OutputCompilePath = m_FileBrowser->GetSelected();
+					break;
+			}
+			m_FileBrowser->ClearSelected();
 		}
 
 		if (ImGui::BeginMenuBar()) 
 		{
 			if (ImGui::BeginMenu(ICON_FA_FILE  "  File")) 
 			{
-				// if(ImGui::MenuItem("Open File Explorer"))
-				// 	m_FileBrowser.Open();
-
+				if (ImGui::MenuItem(ICON_FA_DOWNLOAD "  Save Scene As..."))
+				{
+					m_MenuFileOption = MenuOptions::SAVE;
+					m_FileBrowser = new ImGui::FileBrowser(ImGuiFileBrowserFlags_EnterNewFilename);
+					m_FileBrowser->Open();
+				}
 				if (ImGui::MenuItem(ICON_FA_DOWNLOAD "  Save Scene"))
-					Scene::Save(activeScene, "Scene2.lua");	 // Test Scene
-
+				{
+					m_MenuFileOption = MenuOptions::SAVE;
+					if (m_SaveFile.empty())
+					{
+						m_FileBrowser = new ImGui::FileBrowser(ImGuiFileBrowserFlags_EnterNewFilename);
+						m_FileBrowser->Open();
+					}
+				}
 				if (ImGui::MenuItem(ICON_FA_UPLOAD "  Load Scene")) 
 				{
-					hoveredEntity = Entity();
-					editorScene = Scene::Load("Scene2.lua"); // Test Scene
-					activeScene = editorScene;
-					EngineApp::Get().SetGameState(GameState::EDITOR);
-					SceneHierarchyPanel::Get().SetContext(activeScene);
+					m_FileBrowser->Open();
+					m_MenuFileOption = MenuOptions::LOAD;
 				}
 
 				if (ImGui::MenuItem(ICON_FA_TIMES "  Exit"))
@@ -73,22 +105,29 @@ namespace Cober {
 					EngineApp::Get().GetWindow().SetVSync(m_Vsync);
 
 
-				if (ImGui::BeginCombo(ICON_FA_BOOK  "  Build Option", m_CurrentBuildOption)) 
+				ImGui::SetNextItemWidth(120.0f);
+				if (ImGui::BeginCombo("##", m_CurrentBuildOption)) 
 				{
 					for (int n = 0; n < IM_ARRAYSIZE(m_BuildValues); n++) 
 					{
 						bool selected = (m_CurrentBuildOption == m_BuildValues[n]);
 						if (ImGui::Selectable(m_BuildValues[n], selected)) 
 						{
+							m_FileBrowser = new ImGui::FileBrowser(ImGuiFileBrowserFlags_SelectDirectory);
+							m_FileBrowser->Open();
 							m_CurrentBuildOption = m_BuildValues[n];
-							switch (n) {
-							case BUILD_OPTION::WINDOWS:	/*Lod makefile path*/ break;
-							case BUILD_OPTION::LINUX:	/*Lod makefile path*/ break;
-							case BUILD_OPTION::WEB:		/*Lod makefile path*/ break;
-							}
+							m_MenuFileOption = MenuOptions::COMPILE;
 						}
 					}
 					ImGui::EndCombo();
+				}
+				ImGui::SameLine();
+
+				if (ImGui::MenuItem("Compile"))
+				{
+					if (!m_OutputCompilePath.empty())
+						LOG_INFO(m_OutputCompilePath)
+					// Compile Command
 				}
 
 				ImGui::EndMenu();
@@ -96,11 +135,13 @@ namespace Cober {
 
 			if (ImGui::BeginMenu(ICON_FA_COG "  Options")) 
             {
+				ImGui::SetNextItemWidth(120.0f);
 				if (ImGui::InputFloat("Line Thickness", &Render2D::GetStats().LineThickness))
 				{
 					RenderGlobals::SetLineWidth(Render2D::GetStats().LineThickness);
 				}
 
+				ImGui::SetNextItemWidth(120.0f);
 				if (ImGui::BeginCombo(ICON_FA_TELEVISION  "  Resolution", m_CurrentScreenSize)) 
                 {
 					for (int i = 0; i < SCREEN_SIZE::N_RESOLUTIONS; i++) 

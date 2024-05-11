@@ -87,7 +87,7 @@ namespace Cober {
         uint32_t MaxLines = 20000;
         uint32_t MaxLineVertices = MaxLines * 2;
 
-        float LineThickness = 2.0f;
+        float LineThickness = 1.0f;
 
         glm::vec4 QuadVertexPositions[4] 
         {

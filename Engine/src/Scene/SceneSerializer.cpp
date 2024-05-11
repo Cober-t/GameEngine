@@ -4,10 +4,14 @@
 namespace Cober {
 
 
-    void SceneSerializer::Serialize(const Ref<Scene>& scene, const std::string& sceneName)
+    bool SceneSerializer::Serialize(const Ref<Scene>& scene, const std::string& sceneName)
     {
         Utils::DataFile sceneSaver;
 		std::string name;
+
+		if (sceneName.rfind(".lua") == std::string::npos)
+			return false;
+
 		if (sceneName.find_last_of('.') != std::string::npos)
 			name = sceneName.substr(0, sceneName.find_last_of('.'));
 		else
@@ -112,7 +116,7 @@ namespace Cober {
 
 		}
 		
-		Utils::DataFile::Write(sceneSaver, sceneName);
+		return Utils::DataFile::Write(sceneSaver, sceneName);
     }
 
 

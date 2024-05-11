@@ -58,9 +58,12 @@ namespace Cober {
             {2560, 1440} 
         };
 
-		ImGui::FileBrowser m_FileBrowser;
+		ImGui::FileBrowser* m_FileBrowser;
 		std::string m_FilePath;
-		enum MenuOptions { OPEN = 0, SAVE_AS };
+		std::filesystem::path m_OutputCompilePath;
+		std::filesystem::path m_SaveFile;
+		std::filesystem::path m_LoadFile;
+		enum MenuOptions { SAVE = 0, LOAD, COMPILE };
 		MenuOptions m_MenuFileOption;
         
 	private:

@@ -49,7 +49,7 @@ namespace Cober {
 
 		void Step(int step = 1) { m_StepFrames = step; };
 		void Pause() { m_IsPaused == m_IsPaused == true ? false : true; };
-		static void Save(const Ref<Scene>& scene, std::string sceneName = "Scene1");
+		static bool Save(const Ref<Scene>& scene, std::string sceneName = "Scene1");
 		static Ref<Scene> Load(std::string scenePath);
 		static Ref<Scene> Copy(Ref<Scene> scene);
 

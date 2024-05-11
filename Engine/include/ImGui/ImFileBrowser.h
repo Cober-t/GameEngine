@@ -154,7 +154,7 @@ inline ImGui::FileBrowser::FileBrowser(ImGuiFileBrowserFlags flags)
         newDirNameBuf_ = std::make_unique<std::array<char, INPUT_NAME_BUF_SIZE>>();
 
     inputNameBuf_->at(0) = '\0';
-    SetTitle("file browser");
+    SetTitle("File Browser");
     SetOkText("OK");
     SetCancelText("Cancel");
     SetPwd(std::filesystem::current_path());

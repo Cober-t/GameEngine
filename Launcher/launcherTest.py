@@ -240,9 +240,11 @@ class LauncherWindow(QtWidgets.QDialog):
         self.createProjectButton = QtWidgets.QPushButton("CREATE PROJECT")
         self.createProjectButton.setFont(QtGui.QFont("Consolas", 11))
         self.createProjectButton.setMaximumWidth(400)
+        self.createProjectButton.setFocusPolicy(QtCore.Qt.NoFocus)
         self.loadProjectButton = QtWidgets.QPushButton("LOAD NEW PROJECT")
         self.loadProjectButton.setFont(QtGui.QFont("Consolas", 11))
         self.loadProjectButton.setMaximumWidth(400)
+        self.loadProjectButton.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.projectList = QtWidgets.QListWidget(self)
         self.projectList.setSpacing(10)
