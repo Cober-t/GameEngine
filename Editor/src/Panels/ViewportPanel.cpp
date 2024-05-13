@@ -1,6 +1,7 @@
 #include "Panels/ViewportPanel.h"
 #include "Panels/DataPanel.h"
 #include "Panels/SceneHierarchyPanel.h"
+#include "EditorLayer.h"
 #include "Core/Utils.h"
 // #include "MenuPanel.h"
 
@@ -56,7 +57,7 @@ namespace Cober {
 	}
 
 
-	void ViewportPanel::SetCursorEntity(Ref<Scene>& activeScene, Entity& hoveredEntity) 
+	void ViewportPanel::SetCursorEntity() 
     {
 		auto [mx, my] = ImGui::GetMousePos();
 		mx -= m_MinViewportBound.x;
@@ -75,12 +76,15 @@ namespace Cober {
 
 			if (ImGui::IsMouseClicked(0) && !ImGuizmo::IsUsing())
 			{
-				hoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, activeScene.get());
+				if (pixelData == -1)
+					Editor::SetSelectedEntity();
+				else
+					Editor::SetSelectedEntity(Entity((entt::entity)pixelData, Editor::GetActiveScene().get()));
 
 				if (!Input::IsKeyDown(KeyCode::LeftAlt))
 				{
 					m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;	
-					SceneHierarchyPanel::Get().SetSelectedEntity(hoveredEntity);
+					SceneHierarchyPanel::Get().SetSelectedEntity(Editor::SelectedEntity());
 				}
 			}
 		}
@@ -122,7 +126,7 @@ namespace Cober {
 	}
 
 
-	void ViewportPanel::OnGuiRender(Ref<EditorCamera> editorCamera, Ref<Scene>& scene, Entity& hoveredEntity) 
+	void ViewportPanel::OnGuiRender(Ref<EditorCamera> editorCamera) 
     {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
@@ -210,12 +214,12 @@ namespace Cober {
 				LOG_INFO(m_FilePath);
 				
 				//Textures
-				if (hoveredEntity && hoveredEntity.HasComponent<Render2DComponent>()) 
+				if (Editor::SelectedEntity() && Editor::SelectedEntity().HasComponent<Render2DComponent>()) 
 				{
 					auto lastDot = m_FilePath.find_last_of('.');
 					std::string format = lastDot != std::string::npos ? m_FilePath.substr(lastDot) : "null";
 					if (lastDot != std::string::npos && (format == ".png" || format == ".jpg" || format == ".jpeg"))
-						hoveredEntity.GetComponent<Render2DComponent>().texture = Texture::Create(m_FilePath);
+						Editor::SelectedEntity().GetComponent<Render2DComponent>().texture = Texture::Create(m_FilePath);
 				}
 			}
 			ImGui::EndDragDropTarget();
@@ -223,7 +227,7 @@ namespace Cober {
 
 		///////////////////////////////
 		//Gizmos
-		if (hoveredEntity && m_GizmoType != -1)
+		if (Editor::SelectedEntity() && m_GizmoType != -1)
 		{
 			ImGuizmo::SetOrthographic(false);
 			ImGuizmo::SetDrawlist();
@@ -235,11 +239,11 @@ namespace Cober {
 			glm::mat4 cameraView = editorCamera->GetViewMatrix();
 			const glm::mat4& cameraProjection = editorCamera->GetProjectionMatrix();
 
-			auto& tc = hoveredEntity.GetComponent<TransformComponent>();
+			auto& tc = Editor::SelectedEntity().GetComponent<TransformComponent>();
 			glm::mat4 transform = tc.GetTransform();
 
-			// bool snap = MenuPanel::Get().MustSnap();
-			// float snapValue = MenuPanel::Get().SnapValue() / 10; // Snap to 0.5m for translation/scale
+			// bool snap = MenuPanel::Get().Snap();
+			// float snapValue = MenuPanel::Get().GetSnapValue() / 10; // Snap to 0.5m for translation/scale
 			bool snap = false;
 			float snapValue = 0.5f;
 			// Snap to 45 degrees for rotation
@@ -274,7 +278,7 @@ namespace Cober {
 	}
 
 
-	void ViewportPanel::PlayButtonBar(Ref<Scene>& editorScene, Ref<Scene>& activeScene, GameState gameState, Entity& hoveredEntity) 
+	void ViewportPanel::PlayButtonBar(GameState gameState) 
     {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
@@ -300,20 +304,20 @@ namespace Cober {
 				Log::ClearLogMessages();	
 				EngineApp::Get().SetGameState(GameState::RUNTIME_EDITOR);
 
-				activeScene = Scene::Copy(editorScene);
-				activeScene->OnSimulationStart();
-				SceneHierarchyPanel::Get().SetContext(activeScene);
+				Editor::SetActiveScene(Scene::Copy(Editor::GetEditorScene()));
+				Editor::GetActiveScene()->OnSimulationStart();
+				SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
 			}
 			else if (gameState == GameState::RUNTIME_EDITOR) 
             {
 				EngineApp::Get().SetGameState(GameState::EDITOR);
 
-				activeScene->OnSimulationStop();
-				activeScene = editorScene;
-				SceneHierarchyPanel::Get().SetContext(activeScene);
+				Editor::GetActiveScene()->OnSimulationStop();
+				Editor::SetActiveScene(Editor::GetEditorScene());
+				SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
 
 				// Provisional fix to avoid crash
-				hoveredEntity = Entity();
+				Editor::SetSelectedEntity();
 			}
 		}
 

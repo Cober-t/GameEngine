@@ -1,216 +1,71 @@
-[2024-05-11 21:03:22.457] [APP] [info] [EditorApp.cpp:26] Editor Constructor!
-[2024-05-11 21:03:22.458] [ENGINE] [info] [EngineApp.cpp:11] EngineApp Constructor!
-[2024-05-11 21:03:22.458] [ENGINE] [info] [Window.cpp:40] Creating window Engine Editor (1280, 720)
-[2024-05-11 21:03:22.727] [ENGINE] [info] [OpenGLContext.cpp:11] Window Context Created!!
-[2024-05-11 21:03:22.733] [ENGINE] [info] [OpenGLContext.cpp:26] OpenGL Info:
-[2024-05-11 21:03:22.733] [ENGINE] [info] [OpenGLContext.cpp:27]   Vendor: NVIDIA Corporation
-[2024-05-11 21:03:22.734] [ENGINE] [info] [OpenGLContext.cpp:28]   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
-[2024-05-11 21:03:22.734] [ENGINE] [info] [OpenGLContext.cpp:29]   Version: 4.6.0 NVIDIA 551.86
-[2024-05-11 21:03:22.734] [ENGINE] [info] [Timestep.h:18] Created Timer
-[2024-05-11 21:03:22.735] [ENGINE] [trace] [OpenGLRenderAPI.cpp:45] Render API init
-[2024-05-11 21:03:22.735] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-05-11 21:03:22.735] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-05-11 21:03:22.737] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2024-05-11 21:03:22.738] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Quad.glsl success
-[2024-05-11 21:03:22.739] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-05-11 21:03:22.739] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-05-11 21:03:22.740] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Line.glsl success
-[2024-05-11 21:03:22.740] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-05-11 21:03:22.740] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-05-11 21:03:22.741] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2024-05-11 21:03:22.742] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Circle.glsl success
-[2024-05-11 21:03:22.742] [ENGINE] [trace] [OpenGLBuffer.cpp:94] Render UniformBuffer success
-[2024-05-11 21:03:22.743] [APP] [info] [EditorCamera.cpp:39] Editor Camera Created!!
-[2024-05-11 21:03:22.756] [ENGINE] [info] [Debug2DPhysics.cpp:19] Debug 2D Physics Constructor!
-[2024-05-11 21:03:22.760] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-11 21:03:22.761] [APP] [info] [Scene.cpp:139] Created entity with ID 222087832002629310 and name Entity
-[2024-05-11 21:03:22.767] [APP] [info] [Scene.cpp:139] Created entity with ID 11441304807685642566 and name Entity3
-[2024-05-11 21:03:22.768] [APP] [info] [Scene.cpp:139] Created entity with ID 10302907440313589936 and name Entity4
-[2024-05-11 21:03:22.768] [APP] [info] [Scene.cpp:139] Created entity with ID 12554643046868746645 and name Entity1
-[2024-05-11 21:03:22.769] [APP] [info] [Scene.cpp:139] Created entity with ID 11013360842047063135 and name Entity2
-[2024-05-11 21:03:22.770] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-11 21:03:22.770] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-11 21:03:22.770] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-11 21:03:22.771] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-11 21:03:22.771] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-11 21:03:29.747] [APP] [info] [MenuPanel.cpp:40] file.txt
-[2024-05-11 21:03:29.748] [APP] [error] [Scene.cpp:32] Scene file.txt could not be serialize
-[2024-05-11 21:03:38.887] [APP] [info] [MenuPanel.cpp:40] Scene2.lua
-[2024-05-11 21:03:55.317] [APP] [info] [MenuPanel.cpp:40] file.txt
-[2024-05-11 21:03:55.317] [APP] [error] [Scene.cpp:32] Scene file.txt could not be serialize
-[2024-05-11 21:04:00.832] [APP] [info] [MenuPanel.cpp:40] file.txt
-[2024-05-11 21:04:00.832] [APP] [error] [Scene.cpp:32] Scene file.txt could not be serialize
-[2024-05-11 21:04:18.414] [APP] [info] [MenuPanel.cpp:40] file.txt
-[2024-05-11 21:04:18.414] [APP] [error] [Scene.cpp:32] Scene file.txt could not be serialize
-[2024-05-11 21:04:33.160] [APP] [info] [MenuPanel.cpp:40] Scene3.lua
-[2024-05-11 21:04:44.437] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-11 21:04:44.438] [APP] [info] [Scene.cpp:139] Created entity with ID 5706430241775569503 and name Entity2
-[2024-05-11 21:04:44.439] [APP] [info] [Scene.cpp:139] Created entity with ID 8324839533170110102 and name Entity1
-[2024-05-11 21:04:44.440] [APP] [info] [Scene.cpp:139] Created entity with ID 5612389530550822720 and name Entity4
-[2024-05-11 21:04:44.440] [APP] [info] [Scene.cpp:139] Created entity with ID 18169926399426688905 and name Entity3
-[2024-05-11 21:04:44.441] [APP] [info] [Scene.cpp:139] Created entity with ID 13732693791833444787 and name Entity
-[2024-05-11 21:04:44.445] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-11 21:04:44.445] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-11 21:04:44.446] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-05-11 21:04:44.446] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-11 21:04:53.611] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-11 21:04:53.612] [APP] [info] [Scene.cpp:139] Created entity with ID 4517553001806032879 and name Entity2
-[2024-05-11 21:04:53.613] [APP] [info] [Scene.cpp:139] Created entity with ID 15231373837870684345 and name Entity1
-[2024-05-11 21:04:53.613] [APP] [info] [Scene.cpp:139] Created entity with ID 17845845582058451575 and name Entity4
-[2024-05-11 21:04:53.614] [APP] [info] [Scene.cpp:139] Created entity with ID 3311596444745523557 and name Entity3
-[2024-05-11 21:04:53.614] [APP] [info] [Scene.cpp:139] Created entity with ID 10529550783808663558 and name Entity
-[2024-05-11 21:04:53.619] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-11 21:04:53.619] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-11 21:04:53.619] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-05-11 21:04:53.619] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-11 21:04:58.350] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-11 21:04:58.351] [APP] [info] [Scene.cpp:139] Created entity with ID 18297834653315312983 and name Entity2
-[2024-05-11 21:04:58.352] [APP] [info] [Scene.cpp:139] Created entity with ID 9645770845133220515 and name Entity1
-[2024-05-11 21:04:58.352] [APP] [info] [Scene.cpp:139] Created entity with ID 5185956892854486343 and name Entity4
-[2024-05-11 21:04:58.353] [APP] [info] [Scene.cpp:139] Created entity with ID 16031993083840709981 and name Entity3
-[2024-05-11 21:04:58.353] [APP] [info] [Scene.cpp:139] Created entity with ID 4998495872660515661 and name Entity
-[2024-05-11 21:04:58.359] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-11 21:04:58.359] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-11 21:04:58.359] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-05-11 21:04:58.359] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-11 21:05:04.399] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-11 21:05:04.400] [APP] [info] [Scene.cpp:139] Created entity with ID 13056412912164839136 and name Entity2
-[2024-05-11 21:05:04.401] [APP] [info] [Scene.cpp:139] Created entity with ID 7102163350477562152 and name Entity1
-[2024-05-11 21:05:04.401] [APP] [info] [Scene.cpp:139] Created entity with ID 11665312816985295228 and name Entity4
-[2024-05-11 21:05:04.402] [APP] [info] [Scene.cpp:139] Created entity with ID 1345686301101622112 and name Entity3
-[2024-05-11 21:05:04.402] [APP] [info] [Scene.cpp:139] Created entity with ID 3248314789518345776 and name Entity
-[2024-05-11 21:05:04.407] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-11 21:05:04.407] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-11 21:05:04.407] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-05-11 21:05:04.408] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-11 21:05:07.235] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-11 21:05:07.236] [APP] [info] [Scene.cpp:139] Created entity with ID 10075004088876246443 and name Entity2
-[2024-05-11 21:05:07.237] [APP] [info] [Scene.cpp:139] Created entity with ID 1870189294486545204 and name Entity1
-[2024-05-11 21:05:07.238] [APP] [info] [Scene.cpp:139] Created entity with ID 7747744885043880475 and name Entity4
-[2024-05-11 21:05:07.238] [APP] [info] [Scene.cpp:139] Created entity with ID 10710827871426091954 and name Entity3
-[2024-05-11 21:05:07.239] [APP] [info] [Scene.cpp:139] Created entity with ID 1279491613699274899 and name Entity
-[2024-05-11 21:05:07.244] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-11 21:05:07.244] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-11 21:05:07.244] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-05-11 21:05:07.244] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-11 21:05:18.251] [APP] [info] [MenuPanel.cpp:40] Scene3.lua
-[2024-05-11 21:05:22.181] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-11 21:05:22.182] [APP] [info] [Scene.cpp:139] Created entity with ID 6183221400249819599 and name Entity
-[2024-05-11 21:05:22.187] [APP] [info] [Scene.cpp:139] Created entity with ID 18362318808744273025 and name Entity3
-[2024-05-11 21:05:22.187] [APP] [info] [Scene.cpp:139] Created entity with ID 5578956345684641576 and name Entity4
-[2024-05-11 21:05:22.188] [APP] [info] [Scene.cpp:139] Created entity with ID 15444423537947470450 and name Entity1
-[2024-05-11 21:05:22.188] [APP] [info] [Scene.cpp:139] Created entity with ID 6204704691312540068 and name Entity2
-[2024-05-11 21:05:22.189] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-11 21:05:22.189] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-11 21:05:22.190] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-05-11 21:05:22.190] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-11 21:05:24.345] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-11 21:05:24.346] [APP] [info] [Scene.cpp:139] Created entity with ID 2657083964941091440 and name Entity2
-[2024-05-11 21:05:24.347] [APP] [info] [Scene.cpp:139] Created entity with ID 2790172197415822836 and name Entity1
-[2024-05-11 21:05:24.348] [APP] [info] [Scene.cpp:139] Created entity with ID 2343924634094471832 and name Entity4
-[2024-05-11 21:05:24.348] [APP] [info] [Scene.cpp:139] Created entity with ID 7642623324137478682 and name Entity3
-[2024-05-11 21:05:24.349] [APP] [info] [Scene.cpp:139] Created entity with ID 5699147302655642728 and name Entity
-[2024-05-11 21:05:24.353] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-11 21:05:24.353] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-11 21:05:24.354] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-05-11 21:05:24.354] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-11 21:05:32.466] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-11 21:05:32.467] [APP] [info] [Scene.cpp:139] Created entity with ID 14054114489542167890 and name Entity
-[2024-05-11 21:05:32.472] [APP] [info] [Scene.cpp:139] Created entity with ID 8197751389889998444 and name Entity3
-[2024-05-11 21:05:32.472] [APP] [info] [Scene.cpp:139] Created entity with ID 2674930780319187710 and name Entity4
-[2024-05-11 21:05:32.473] [APP] [info] [Scene.cpp:139] Created entity with ID 13268554645399973454 and name Entity1
-[2024-05-11 21:05:32.473] [APP] [info] [Scene.cpp:139] Created entity with ID 4647548679094851831 and name Entity2
-[2024-05-11 21:05:32.474] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-11 21:05:32.474] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-11 21:05:32.475] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-05-11 21:05:32.475] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-11 21:05:36.479] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-11 21:05:36.480] [APP] [info] [Scene.cpp:139] Created entity with ID 5397281873528086101 and name Entity2
-[2024-05-11 21:05:36.481] [APP] [info] [Scene.cpp:139] Created entity with ID 8644018669527572217 and name Entity1
-[2024-05-11 21:05:36.481] [APP] [info] [Scene.cpp:139] Created entity with ID 7967964247693932001 and name Entity4
-[2024-05-11 21:05:36.482] [APP] [info] [Scene.cpp:139] Created entity with ID 10093868396613135663 and name Entity3
-[2024-05-11 21:05:36.482] [APP] [info] [Scene.cpp:139] Created entity with ID 866906293214216502 and name Entity
-[2024-05-11 21:05:36.487] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-11 21:05:36.487] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-11 21:05:36.488] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-05-11 21:05:36.488] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-11 21:05:38.496] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-11 21:05:38.497] [APP] [info] [Scene.cpp:139] Created entity with ID 16894847934384868938 and name Entity
-[2024-05-11 21:05:38.502] [APP] [info] [Scene.cpp:139] Created entity with ID 7058019040564143133 and name Entity3
-[2024-05-11 21:05:38.502] [APP] [info] [Scene.cpp:139] Created entity with ID 18186629450967343633 and name Entity4
-[2024-05-11 21:05:38.503] [APP] [info] [Scene.cpp:139] Created entity with ID 17065261433512850260 and name Entity1
-[2024-05-11 21:05:38.503] [APP] [info] [Scene.cpp:139] Created entity with ID 15029461054512058546 and name Entity2
-[2024-05-11 21:05:38.504] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-11 21:05:38.504] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-11 21:05:38.504] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-05-11 21:05:38.505] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-11 21:05:43.660] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-11 21:05:43.661] [APP] [info] [Scene.cpp:139] Created entity with ID 3361570838368878734 and name Entity2
-[2024-05-11 21:05:43.661] [APP] [info] [Scene.cpp:139] Created entity with ID 8082927928221144124 and name Entity1
-[2024-05-11 21:05:43.662] [APP] [info] [Scene.cpp:139] Created entity with ID 4929276442810292457 and name Entity4
-[2024-05-11 21:05:43.662] [APP] [info] [Scene.cpp:139] Created entity with ID 12766447960580626867 and name Entity3
-[2024-05-11 21:05:43.663] [APP] [info] [Scene.cpp:139] Created entity with ID 4773943399278672737 and name Entity
-[2024-05-11 21:05:43.667] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-11 21:05:43.667] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-11 21:05:43.668] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-05-11 21:05:43.668] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-11 21:05:45.884] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-11 21:05:45.885] [APP] [info] [Scene.cpp:139] Created entity with ID 15150246049493476865 and name Entity
-[2024-05-11 21:05:45.890] [APP] [info] [Scene.cpp:139] Created entity with ID 9193350829389198288 and name Entity3
-[2024-05-11 21:05:45.890] [APP] [info] [Scene.cpp:139] Created entity with ID 16040728176681579119 and name Entity4
-[2024-05-11 21:05:45.891] [APP] [info] [Scene.cpp:139] Created entity with ID 16291296369877725451 and name Entity1
-[2024-05-11 21:05:45.891] [APP] [info] [Scene.cpp:139] Created entity with ID 5650041436728692830 and name Entity2
-[2024-05-11 21:05:45.892] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-11 21:05:45.892] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-11 21:05:45.892] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-05-11 21:05:45.893] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-11 21:05:53.702] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-11 21:05:53.703] [APP] [info] [Scene.cpp:139] Created entity with ID 6952877493029733226 and name Entity
-[2024-05-11 21:05:53.709] [APP] [info] [Scene.cpp:139] Created entity with ID 8579933471165023057 and name Entity3
-[2024-05-11 21:05:53.709] [APP] [info] [Scene.cpp:139] Created entity with ID 244939285128310602 and name Entity4
-[2024-05-11 21:05:53.710] [APP] [info] [Scene.cpp:139] Created entity with ID 13329816426770728711 and name Entity1
-[2024-05-11 21:05:53.710] [APP] [info] [Scene.cpp:139] Created entity with ID 16554666821396662226 and name Entity2
-[2024-05-11 21:05:53.711] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-11 21:05:53.711] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-11 21:05:53.712] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-05-11 21:05:53.712] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-11 21:05:58.235] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-11 21:05:58.236] [APP] [info] [Scene.cpp:139] Created entity with ID 3309009214189713941 and name Entity2
-[2024-05-11 21:05:58.237] [APP] [info] [Scene.cpp:139] Created entity with ID 4876213204923989768 and name Entity1
-[2024-05-11 21:05:58.238] [APP] [info] [Scene.cpp:139] Created entity with ID 11298442167743985255 and name Entity4
-[2024-05-11 21:05:58.238] [APP] [info] [Scene.cpp:139] Created entity with ID 357564670770480680 and name Entity3
-[2024-05-11 21:05:58.239] [APP] [info] [Scene.cpp:139] Created entity with ID 16311093465704334844 and name Entity
-[2024-05-11 21:05:58.244] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-11 21:05:58.244] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-11 21:05:58.244] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-05-11 21:05:58.244] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-11 21:06:02.708] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-11 21:06:02.709] [APP] [info] [Scene.cpp:139] Created entity with ID 2766656767217908889 and name Entity2
-[2024-05-11 21:06:02.710] [APP] [info] [Scene.cpp:139] Created entity with ID 8203960771687463388 and name Entity1
-[2024-05-11 21:06:02.710] [APP] [info] [Scene.cpp:139] Created entity with ID 9883188111202394931 and name Entity4
-[2024-05-11 21:06:02.711] [APP] [info] [Scene.cpp:139] Created entity with ID 12063780636755163064 and name Entity3
-[2024-05-11 21:06:02.711] [APP] [info] [Scene.cpp:139] Created entity with ID 11087829509606892392 and name Entity
-[2024-05-11 21:06:02.716] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-11 21:06:02.716] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-11 21:06:02.716] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
-[2024-05-11 21:06:02.716] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-11 21:06:10.345] [APP] [info] [EditorApp.cpp:20] Editor Destructor!
-[2024-05-11 21:06:10.346] [ENGINE] [info] [EngineApp.cpp:32] EngineApp Destructor!
-[2024-05-11 21:06:10.346] [ENGINE] [info] [Timestep.h:23] Destroyed Timer
-[2024-05-11 21:06:10.346] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-11 21:06:10.347] [APP] [info] [EditorCamera.cpp:45] Editor Camera Destroyed!!
-[2024-05-11 21:06:10.347] [APP] [info] [EditorLayer.cpp:49] Detached Editor Layer!
-[2024-05-11 21:06:10.349] [ENGINE] [info] [Window.cpp:27] Window Destroyed
-[2024-05-11 21:06:10.368] [ENGINE] [info] [OpenGLContext.cpp:16] Window Context Destroyed!!
-[2024-05-11 21:06:10.368] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
-[2024-05-11 21:06:10.368] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
-[2024-05-11 21:06:10.369] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
-[2024-05-11 21:06:10.369] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
-[2024-05-11 21:06:10.369] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
-[2024-05-11 21:06:10.369] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
-[2024-05-11 21:06:10.370] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
-[2024-05-11 21:06:10.370] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
-[2024-05-11 21:06:10.370] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
-[2024-05-11 21:06:10.370] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
-[2024-05-11 21:06:10.371] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
-[2024-05-11 21:06:10.371] [ENGINE] [trace] [OpenGLBuffer.cpp:100] Render UniformBuffer cleaned up
+[2024-05-13 11:59:22.312] [APP] [info] [EditorApp.cpp:26] Editor Constructor!
+[2024-05-13 11:59:22.313] [ENGINE] [info] [EngineApp.cpp:11] EngineApp Constructor!
+[2024-05-13 11:59:22.314] [ENGINE] [info] [Window.cpp:40] Creating window Engine Editor (1280, 720)
+[2024-05-13 11:59:22.565] [ENGINE] [info] [OpenGLContext.cpp:11] Window Context Created!!
+[2024-05-13 11:59:22.571] [ENGINE] [info] [OpenGLContext.cpp:26] OpenGL Info:
+[2024-05-13 11:59:22.572] [ENGINE] [info] [OpenGLContext.cpp:27]   Vendor: NVIDIA Corporation
+[2024-05-13 11:59:22.572] [ENGINE] [info] [OpenGLContext.cpp:28]   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+[2024-05-13 11:59:22.572] [ENGINE] [info] [OpenGLContext.cpp:29]   Version: 4.6.0 NVIDIA 551.86
+[2024-05-13 11:59:22.572] [ENGINE] [info] [Timestep.h:18] Created Timer
+[2024-05-13 11:59:22.573] [ENGINE] [trace] [OpenGLRenderAPI.cpp:45] Render API init
+[2024-05-13 11:59:22.573] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-05-13 11:59:22.573] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-05-13 11:59:22.575] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
+[2024-05-13 11:59:22.576] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Quad.glsl success
+[2024-05-13 11:59:22.576] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-05-13 11:59:22.577] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-05-13 11:59:22.578] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Line.glsl success
+[2024-05-13 11:59:22.578] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-05-13 11:59:22.578] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-05-13 11:59:22.580] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
+[2024-05-13 11:59:22.581] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Circle.glsl success
+[2024-05-13 11:59:22.582] [ENGINE] [trace] [OpenGLBuffer.cpp:94] Render UniformBuffer success
+[2024-05-13 11:59:22.582] [APP] [info] [EditorCamera.cpp:39] Editor Camera Created!!
+[2024-05-13 11:59:22.599] [ENGINE] [info] [Debug2DPhysics.cpp:19] Debug 2D Physics Constructor!
+[2024-05-13 11:59:22.604] [APP] [info] [Scene.cpp:18] Scene Created!!
+[2024-05-13 11:59:22.605] [APP] [info] [Scene.cpp:139] Created entity with ID 2814857005023138338 and name Entity2
+[2024-05-13 11:59:22.606] [APP] [info] [Scene.cpp:139] Created entity with ID 18335861463167339339 and name Entity1
+[2024-05-13 11:59:22.606] [APP] [info] [Scene.cpp:139] Created entity with ID 6188701561252649633 and name Entity4
+[2024-05-13 11:59:22.607] [APP] [info] [Scene.cpp:139] Created entity with ID 8496357308672038962 and name Entity3
+[2024-05-13 11:59:22.608] [APP] [info] [Scene.cpp:139] Created entity with ID 7247571784037854229 and name Entity
+[2024-05-13 11:59:22.613] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
+[2024-05-13 11:59:22.614] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
+[2024-05-13 11:59:22.614] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
+[2024-05-13 11:59:22.614] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
+[2024-05-13 11:59:22.615] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
+[2024-05-13 11:59:24.514] [APP] [info] [Scene.cpp:18] Scene Created!!
+[2024-05-13 11:59:24.514] [APP] [info] [Scene.cpp:139] Created entity with ID 15790550996833163264 and name Entity
+[2024-05-13 11:59:24.515] [APP] [info] [Scene.cpp:139] Created entity with ID 6042340447828528128 and name Entity3
+[2024-05-13 11:59:24.515] [APP] [info] [Scene.cpp:139] Created entity with ID 10064499163424993280 and name Entity4
+[2024-05-13 11:59:24.515] [APP] [info] [Scene.cpp:139] Created entity with ID 17731108172934002688 and name Entity1
+[2024-05-13 11:59:24.515] [APP] [info] [Scene.cpp:139] Created entity with ID 9643654215064920064 and name Entity2
+[2024-05-13 11:59:24.516] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
+[2024-05-13 11:59:24.517] [APP] [info] [PhysicsSystem2D.cpp:9] Physics System Added to Registry!!
+[2024-05-13 11:59:24.517] [APP] [info] [ScriptSystem.cpp:11] Script System Added to Registry!!
+[2024-05-13 11:59:24.517] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
+[2024-05-13 11:59:24.518] [APP] [info] [PhysicsSystem2D.cpp:31] Physics System Started!!
+[2024-05-13 11:59:24.518] [APP] [info] [ScriptSystem.cpp:23] Script System Started!!
+[2024-05-13 11:59:25.131] [APP] [info] [PhysicsSystem2D.cpp:17] Physics System Removed from Registry
+[2024-05-13 11:59:25.132] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
+[2024-05-13 11:59:25.132] [APP] [info] [ScriptSystem.cpp:17] Script System Removed from Registry
+[2024-05-13 11:59:25.132] [APP] [info] [Scene.cpp:24] Scene Destroyed!!
+[2024-05-13 11:59:26.317] [APP] [info] [EditorApp.cpp:20] Editor Destructor!
+[2024-05-13 11:59:26.318] [ENGINE] [info] [EngineApp.cpp:32] EngineApp Destructor!
+[2024-05-13 11:59:26.318] [ENGINE] [info] [Timestep.h:23] Destroyed Timer
+[2024-05-13 11:59:26.318] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
+[2024-05-13 11:59:26.319] [APP] [info] [EditorCamera.cpp:45] Editor Camera Destroyed!!
+[2024-05-13 11:59:26.319] [APP] [info] [EditorLayer.cpp:52] Detached Editor Layer!
+[2024-05-13 11:59:26.321] [ENGINE] [info] [Window.cpp:27] Window Destroyed
+[2024-05-13 11:59:26.337] [ENGINE] [info] [OpenGLContext.cpp:16] Window Context Destroyed!!
+[2024-05-13 11:59:26.338] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
+[2024-05-13 11:59:26.338] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
+[2024-05-13 11:59:26.338] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
+[2024-05-13 11:59:26.338] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
+[2024-05-13 11:59:26.339] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
+[2024-05-13 11:59:26.339] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
+[2024-05-13 11:59:26.339] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
+[2024-05-13 11:59:26.339] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
+[2024-05-13 11:59:26.340] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
+[2024-05-13 11:59:26.340] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
+[2024-05-13 11:59:26.340] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
+[2024-05-13 11:59:26.340] [ENGINE] [trace] [OpenGLBuffer.cpp:100] Render UniformBuffer cleaned up

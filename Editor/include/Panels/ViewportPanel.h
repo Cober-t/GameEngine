@@ -27,10 +27,10 @@ namespace Cober {
 		void ResizeViewport(Ref<EditorCamera> editorCamera, bool& game2D);
 		void ResizeFramebufferSpecification(Ref<EditorCamera> editorCamera, uint32_t width, uint32_t height);
 
-		void OnGuiRender(Ref<EditorCamera> editorCamera, Ref<Scene>& scene, Entity& hoveredEntity);
+		void OnGuiRender(Ref<EditorCamera> editorCamera);
 
-		void SetCursorEntity(Ref<Scene>& activeScene, Entity& hoveredEntity);
-		void PlayButtonBar(Ref<Scene>& editorScene, Ref<Scene>& activeScene, GameState gameState, Entity& hoveredEntity);
+		void SetCursorEntity();
+		void PlayButtonBar(GameState gameState);
 		inline bool AllowViewportCameraEvents() { return m_AllowViewportCameraEvents; }
 
 	private:

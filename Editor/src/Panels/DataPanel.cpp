@@ -1,5 +1,5 @@
 #include "Panels/DataPanel.h"
-// #include "Panels/SceneHierarchyPanel.h"
+#include "EditorLayer.h"
 
 #include <imgui/imgui.h>
 
@@ -21,7 +21,7 @@ namespace Cober {
 	}
 
 
-	void DataPanel::OnGuiRender(Entity& hoveredEntity) 
+	void DataPanel::OnGuiRender() 
     {
 		// Data
 		ImGui::Begin("Data");
@@ -38,8 +38,9 @@ namespace Cober {
 		ImGui::Text("Mouse Coords:\nX: %i Y: %i", mouseX, mouseY);
 
 		std::string name = "None";
-        if ((bool)hoveredEntity)
-            name =  hoveredEntity.GetName().c_str();
+        if ((bool)Editor::SelectedEntity())
+            name =  Editor::SelectedEntity().GetName().c_str();
+			
 		ImGui::Text("Hovered Entity: %s", name.c_str());
 
 		ImGui::End();

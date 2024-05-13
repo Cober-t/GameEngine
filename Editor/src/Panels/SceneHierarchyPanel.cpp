@@ -1,3 +1,5 @@
+#include "Theme/EditorResources.h"
+
 #include "EditorLayer.h"
 #include "Panels/SceneHierarchyPanel.h"
 //#include "Cober/Scene/Components.h"
@@ -27,8 +29,8 @@ namespace Cober {
 	}
 
 
-	SceneHierarchyPanel::~SceneHierarchyPanel() {
-
+	SceneHierarchyPanel::~SceneHierarchyPanel() 
+	{
 		delete s_Instance;
 		s_Instance = nullptr;
 	}
@@ -54,20 +56,20 @@ namespace Cober {
 	}
 
 
-	void SceneHierarchyPanel::OnGuiRender(Entity& hoveredEntity) 
+	void SceneHierarchyPanel::OnGuiRender() 
     {
 
 		ImGui::Begin("Scene Hierarchy");
 
 		for (auto& entity : m_SceneContext->GetSceneEntities()) 
 		{
-			DrawEntityNode(entity, hoveredEntity);
+			DrawEntityNode(entity);
 		}
 
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) 
 		{
 			m_SelectionContext = m_NullEntityContext;
-			hoveredEntity = m_SelectionContext;
+			Editor::SetSelectedEntity(m_SelectionContext);
 		}
 
 		if (ImGui::BeginPopupContextWindow(0, 1)) 
@@ -75,7 +77,7 @@ namespace Cober {
 			if (m_SelectionContext == m_NullEntityContext && ImGui::Selectable("Empty Entity")) 
 			{
 				m_SelectionContext = m_SceneContext->CreateEntity();
-				hoveredEntity = m_SelectionContext;
+				Editor::SetSelectedEntity(m_SelectionContext);
 			}
 				
 			ImGui::EndPopup();
@@ -90,7 +92,7 @@ namespace Cober {
 	}
 
 
-	void SceneHierarchyPanel::DrawEntityNode(Entity entity, Entity& hoveredEntity) 
+	void SceneHierarchyPanel::DrawEntityNode(Entity entity) 
     {
 
 		auto& tag = entity.GetComponent<TagComponent>().tag;
@@ -101,7 +103,7 @@ namespace Cober {
 		if (ImGui::IsItemClicked()) 
         {
 			m_SelectionContext = entity;
-			hoveredEntity = m_SelectionContext;
+			Editor::SetSelectedEntity(m_SelectionContext);
 		}
 
 		// Delete an Entity
@@ -122,7 +124,7 @@ namespace Cober {
 			if (m_SelectionContext == entity) 
 			{
 				m_SelectionContext = m_NullEntityContext;
-				hoveredEntity = m_NullEntityContext;
+				Editor::SetSelectedEntity();
 			}
 			m_SceneContext->DestroyEntity(entity);
 		}

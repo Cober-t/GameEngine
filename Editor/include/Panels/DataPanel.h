@@ -18,7 +18,7 @@ namespace Cober {
 		void SetMouseX(int x) { mouseX = x; }
 		void SetMouseY(int y) { mouseY = y; }
 
-		void OnGuiRender(Entity& hoveredEntity);
+		void OnGuiRender();
 		//void OnGuiRender(Unique<DataManager> dataManager);
 
 	private:

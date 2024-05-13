@@ -31,6 +31,13 @@ namespace Cober {
 		virtual void OnImGuiRender() override;
 		virtual void OnEvent(Event& event) override;
 
+		static Ref<Scene> GetActiveScene();
+		static Ref<Scene> GetEditorScene();
+		static Entity& SelectedEntity();
+		static void SetActiveScene(Ref<Scene> scene);
+		static void SetEditorScene(Ref<Scene> scene);
+		static void SetSelectedEntity(Entity& entity = Entity());
+
 	private:
 		void InitDockspace();
 		void EndDockspace();
@@ -38,9 +45,7 @@ namespace Cober {
 
 	private:
 		Ref<EditorCamera> m_EditorCamera;
-		Ref<Scene> m_ActiveScene, m_EditorScene;
 		Ref<Framebuffer> m_Fbo;
-		Entity m_HoveredEntity;
 		bool m_AllowViewportCameraEvents;
 
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };

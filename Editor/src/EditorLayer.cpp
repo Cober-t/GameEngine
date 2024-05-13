@@ -3,7 +3,10 @@
 
 namespace Cober {
 
-	// extern const std::filesystem::path _AssetPath;
+	static Ref<Scene> m_ActiveScene;
+	static Ref<Scene> m_EditorScene;
+	static Entity m_SelectedEntity;
+
 	Editor::Editor() : Layer("Editor")
 	{
 		m_EditorCamera = CreateUnique<EditorCamera>(45.0f, EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight(), 0.01f, 1000.0f);
@@ -85,7 +88,7 @@ namespace Cober {
 			}
 		}
 
-		ViewportPanel::Get().SetCursorEntity(m_ActiveScene, m_HoveredEntity);
+		ViewportPanel::Get().SetCursorEntity();
 
 		ViewportPanel::Get().UnbindFramebuffer();
 	}
@@ -95,15 +98,15 @@ namespace Cober {
 	{
 		InitDockspace();
 
-		ViewportPanel::Get().OnGuiRender(m_EditorCamera, m_ActiveScene, m_HoveredEntity);
-		DataPanel::Get().OnGuiRender(m_HoveredEntity);
+		ViewportPanel::Get().OnGuiRender(m_EditorCamera);
+		DataPanel::Get().OnGuiRender();
 		ConsolePanel::Get().OnImGuiRender();
-		SceneHierarchyPanel::Get().OnGuiRender(m_HoveredEntity);
+		SceneHierarchyPanel::Get().OnGuiRender();
 		ContentBrowserPanel::Get().OnGuiRender();
 		
-		MenuPanel::Get().OnGuiRender(m_EditorCamera, m_ActiveScene, m_EditorScene, m_HoveredEntity);
+		MenuPanel::Get().OnGuiRender(m_EditorCamera);
 
-		ViewportPanel::Get().PlayButtonBar(m_EditorScene, m_ActiveScene, EngineApp::Get().GetGameState(), m_HoveredEntity);
+		ViewportPanel::Get().PlayButtonBar(EngineApp::Get().GetGameState());
 
 		EndDockspace();
 	}
@@ -202,7 +205,7 @@ namespace Cober {
 				}
 				case Key::O: 
 				{
-					m_HoveredEntity = Entity();
+					m_SelectedEntity = Entity();
 					m_EditorScene = Scene::Load("Scene2.lua"); // Test Scene
 					m_ActiveScene = m_EditorScene;
 					EngineApp::Get().SetGameState(GameState::EDITOR);
@@ -217,17 +220,17 @@ namespace Cober {
 				}
 				case Key::D:
 				{
-					if (m_HoveredEntity)
-						m_ActiveScene->DuplicateEntity(m_HoveredEntity);
+					if (m_SelectedEntity)
+						m_ActiveScene->DuplicateEntity(m_SelectedEntity);
 					break;
 				}
 				case Key::Delete:
 				{
-					if (m_HoveredEntity)
+					if (m_SelectedEntity)
 					{
 						SceneHierarchyPanel::Get().SetNullEntityContext();
-						m_ActiveScene->DestroyEntity(m_HoveredEntity);
-						m_HoveredEntity = Entity();
+						m_ActiveScene->DestroyEntity(m_SelectedEntity);
+						m_SelectedEntity = Entity();
 					}
 					break;
 				}
@@ -235,5 +238,41 @@ namespace Cober {
 		}
 
 		return true;
+	}
+
+
+	Ref<Scene> Editor::GetActiveScene()
+	{
+		return m_ActiveScene;
+	}
+
+
+	Ref<Scene> Editor::GetEditorScene()
+	{
+		return m_EditorScene;
+	}
+
+
+	Entity& Editor::SelectedEntity()
+	{
+		return m_SelectedEntity;
+	}
+
+
+	void Editor::SetActiveScene(Ref<Scene> scene)
+	{
+		m_ActiveScene = scene;
+	}
+
+
+	void Editor::SetEditorScene(Ref<Scene> scene)
+	{
+		m_EditorScene = scene;
+	}
+
+
+	void Editor::SetSelectedEntity(Entity& entity)
+	{
+		m_SelectedEntity = entity;
 	}
 }
