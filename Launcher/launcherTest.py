@@ -12,8 +12,30 @@ THUMBNAIL_NAME = "thumbnail"
 PROJECT_PATH = "projectPath"
 PROJECT_DESCRTIPTION = "description"
 PROJECT_GALLERY_PATH = "C:\\Users\\Jorge\\Desktop\\Launcher\\projectGallery.json"
+THUMBNAIL_SIZE = (260, 200)
 
-STYLESHEET = """\
+STYLESHEET_MAIN_WINDOW = """
+        #Container {
+            background: qlineargradient(x1:0 y1:0, x2:1 y2:1, stop:0 rgba(15, 15, 15, 235) stop:1 rgba(0, 0, 0, 235));
+            border-radius: 20px;
+            border-color: transparent;
+        }"""
+
+STYLESHEET = """
+        QTextEdit {
+            border: 0px;
+            background: rgba(30, 30, 30, 200);
+            color: rgba(255, 116, 0, 180);
+            padding: 10px;
+            border-radius: 15px;
+        }
+        QLineEdit {
+            border: 0px;
+            background: rgba(30, 30, 30, 200);
+            color: rgba(255, 116, 0, 180);
+            padding: 10px;
+            border-radius: 15px;
+        }
         QPushButton {
             border: 0px;
             background: rgba(30, 30, 30, 200);
@@ -50,8 +72,7 @@ STYLESHEET = """\
         }
         QScrollBar {
             width: 0px;
-        }
-        """
+        }"""
 
 
 class ProjectAPI():
@@ -65,15 +86,21 @@ class ProjectAPI():
         path = item.data(role=QtCore.Qt.ToolTipRole)
         print(path)
 
-    def loadNewProject(self):
-        '''Load new project and add it to project gallery'''
-        print("Load new project")
-
 
     def createNewProject(self):
         '''Create new project and add an entry for his settings in the project gallery'''
-        print("Create new project")
+        # Create assets
 
+        # Create hardcoded premake
+
+        # Create projetSettings.lua
+
+        # Create hardcoded GameApp code
+
+        # Launch Editor with projectSettings.json
+        
+
+        return
 
 
 class CustomTitleBar(QtWidgets.QWidget):
@@ -90,7 +117,7 @@ class CustomTitleBar(QtWidgets.QWidget):
         self.title = QtWidgets.QLabel(f"{self.__class__.__name__}", self)
         self.title.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.title.setStyleSheet("""
-            QLabel { 
+            QLabel {
                 text-transform: uppercase; 
                 font: Consolas;
                 font-size: 12pt; 
@@ -153,7 +180,141 @@ class CustomTitleBar(QtWidgets.QWidget):
             self.normalButton.setVisible(False)
             self.maxButton.setVisible(True)
 
+    def changeEvent(self, event):
+        if event.type() == QtCore.QEvent.Type.WindowStateChange:
+            self.titleBar.windowStateChanged(self.windowState())
+        super().changeEvent(event)
+        event.accept()
+        
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.MouseButton.LeftButton:
+            self.initialPos = event.position().toPoint()
+        super().mousePressEvent(event)
+        event.accept()
 
+    def mouseMoveEvent(self, event):
+        if self.initialPos is not None:
+            delta = event.position().toPoint() - self.initialPos
+            self.window().move(
+                self.window().x() + delta.x(), 
+                self.window().y() + delta.y(),
+            )
+        super().mouseMoveEvent(event)
+        event.accept()
+
+    def mouseReleaseEvent(self, event):
+        self.initialPos = None
+        super().mouseReleaseEvent(event)
+        event.accept()
+
+
+class CreateProjectWindow(QtWidgets.QMainWindow):
+    def __init__(self, windowTitle):
+        super().__init__()
+
+        self.setWindowTitle(windowTitle)
+
+        self.project = ProjectAPI()
+        self.titleBar = CustomTitleBar(self)
+        self.correctThumbnailPath = False
+        self.correctProjectPath = False
+           
+        self.setWindowFlags(QtCore.Qt.WindowType.FramelessWindowHint)
+        self.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
+    
+        self.centralWidget = QtWidgets.QWidget()
+
+        # This container holds the window contents, so we can style it.
+        self.centralWidget.setObjectName("Container")
+        self.centralWidget.setStyleSheet(STYLESHEET_MAIN_WINDOW)
+
+        self.titleBar = CustomTitleBar(self)
+
+        # Widgets
+        self.nameLabel = QtWidgets.QLineEdit(self,)
+        self.nameLabel.setPlaceholderText("Name")
+
+        self.descriptionLabel = QtWidgets.QTextEdit(self)
+        self.descriptionLabel.setPlaceholderText("Description")
+        self.descriptionLabel.setMinimumHeight(100)
+        self.descriptionLabel.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
+
+        self.projectPathLabel = QtWidgets.QLineEdit(self)
+        self.projectPathLabel.setPlaceholderText("Project Path")
+
+        self.thumbnailNameLabel = QtWidgets.QLineEdit(self)
+        self.thumbnailNameLabel.setPlaceholderText("Thumbnail name")
+
+        self.thumbnailImage = QtWidgets.QLabel(self)
+        self.thumbnailImage.setScaledContents(True)
+
+        self.runButton = QtWidgets.QPushButton(self)
+        self.runButton.setMaximumWidth(80)
+        self.runButton.setText(windowTitle[:windowTitle.find(" ")])
+
+        # Layouts
+        self.formLayout = QtWidgets.QVBoxLayout()
+        self.formLayout.setContentsMargins(11, 11, 11, 11)
+        self.formLayout.addWidget(self.nameLabel)
+        self.formLayout.addWidget(self.descriptionLabel)
+        self.formLayout.addWidget(self.projectPathLabel)
+        self.formLayout.addWidget(self.thumbnailNameLabel)
+
+        self.imageLayout = QtWidgets.QVBoxLayout()
+        self.imageLayout.addWidget(self.thumbnailImage)
+        self.imageLayout.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
+
+
+        self.runLayout = QtWidgets.QHBoxLayout()
+        self.runLayout.addWidget(self.runButton)
+        self.runLayout.setAlignment(QtCore.Qt.AlignmentFlag.AlignHCenter)
+
+        self.mainLayout = QtWidgets.QVBoxLayout()
+        self.mainLayout.setAlignment(QtCore.Qt.AlignmentFlag.AlignTop)
+        self.mainLayout.addWidget(self.titleBar)
+        self.mainLayout.addLayout(self.formLayout)
+        self.mainLayout.addLayout(self.imageLayout)
+        self.mainLayout.addLayout(self.runLayout)
+
+        self.centralWidget.setLayout(self.mainLayout)
+        self.setCentralWidget(self.centralWidget)
+
+        # Connections
+        self.projectPathLabel.textEdited.connect(self.checkProjectPath)
+        self.thumbnailNameLabel.textEdited.connect(self.checkThumbnailPath)
+        self.runButton.clicked.connect(self.createProject)
+
+
+    def createProject(self):
+        """Create or load the project"""
+        self.project.createNewProject()
+        self.close()
+
+
+    def checkProjectPath(self, path):
+        """Check if the path exist to create projectSettings.lua"""
+        if (os.path.exists(path) == False):
+            self.correctProjectPath = False
+            self.projectPathLabel.setStyleSheet("QLineEdit {color:red}")
+        else:
+            self.correctProjectPath = True
+            self.projectPathLabel.setStyleSheet("QTextEdit {color:green}")
+        
+    def checkThumbnailPath(self, path):
+        """Check if the thumbnail image is in the resources folder"""
+     
+        if (os.path.exists(os.path.join(THUMBNAIL_PATH, path)) == False):
+            self.correctThumbnailPath = False
+            self.thumbnailNameLabel.setStyleSheet("QLineEdit {color:red}")
+            self.thumbnailImage.setPixmap(QtGui.QPixmap())
+            self.thumbnailImage.setFixedSize(0, 0)
+        else:
+            self.correctThumbnailPath = True
+            self.thumbnailNameLabel.setStyleSheet("QTextEdit {color:green}")
+            self.thumbnailImage.setPixmap(QtGui.QPixmap(os.path.join(THUMBNAIL_PATH, path)))
+            self.thumbnailImage.setFixedSize(THUMBNAIL_SIZE[0], THUMBNAIL_SIZE[1])
+
+    
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
@@ -171,11 +332,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # This container holds the window contents, so we can style it.
         self.centralWidget.setObjectName("Container")
-        self.centralWidget.setStyleSheet("""#Container {
-            background: qlineargradient(x1:0 y1:0, x2:1 y2:1, stop:0 rgba(15, 15, 15, 235) stop:1 rgba(0, 0, 0, 235));
-            border-radius: 20px;
-            border-color: transparent;
-        }""")
+        self.centralWidget.setStyleSheet(STYLESHEET_MAIN_WINDOW)
 
         self.titleBar = CustomTitleBar(self)
 
@@ -227,24 +384,18 @@ class LauncherWindow(QtWidgets.QDialog):
     def __init__(self, parent=None):
         super(LauncherWindow, self).__init__(parent)
 
-        self.project = ProjectAPI()
-
         QtWidgets.QApplication.setOverrideCursor(QtCore.Qt.WaitCursor)
         self.defaultThumbnail = QtGui.QIcon(DEFAULT_BUILD_ICON)
 
-        self.setMinimumHeight(800)
-        self.setMinimumWidth(600)
         self.setContentsMargins(11, 11, 11, 11)
   
         # Widgets
-        self.createProjectButton = QtWidgets.QPushButton("CREATE PROJECT")
+        self.createProjectWindow = None
+
+        self.createProjectButton = QtWidgets.QPushButton("CREATE NEW PROJECT")
         self.createProjectButton.setFont(QtGui.QFont("Consolas", 11))
         self.createProjectButton.setMaximumWidth(400)
         self.createProjectButton.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.loadProjectButton = QtWidgets.QPushButton("LOAD NEW PROJECT")
-        self.loadProjectButton.setFont(QtGui.QFont("Consolas", 11))
-        self.loadProjectButton.setMaximumWidth(400)
-        self.loadProjectButton.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.projectList = QtWidgets.QListWidget(self)
         self.projectList.setSpacing(10)
@@ -265,18 +416,28 @@ class LauncherWindow(QtWidgets.QDialog):
         self.runButtonsLayout = QtWidgets.QHBoxLayout(self)
         self.runButtonsLayout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.runButtonsLayout.addWidget(self.createProjectButton)
-        self.runButtonsLayout.addSpacing(50)
-        self.runButtonsLayout.addWidget(self.loadProjectButton)
         self.mainLayout.addLayout(self.runButtonsLayout)
 
         # Connections
-        self.projectList.doubleClicked.connect(self.project.loadProject)
-        self.createProjectButton.clicked.connect(self.project.createNewProject)
-        self.loadProjectButton.clicked.connect(self.project.loadNewProject)
+        self.projectList.doubleClicked.connect(self.loadProject)
+        self.createProjectButton.clicked.connect(self.createNewProject)
 
         self.generateProjectsList()
 
         QtWidgets.QApplication.restoreOverrideCursor()
+
+    def loadProject(self, item):
+        if (self.createProjectWindow):
+            self.createProjectWindow.close()
+        project = ProjectAPI()
+        project.loadProject(item)
+        self.window().close()
+    
+    def createNewProject(self):
+        self.createProjectWindow = CreateProjectWindow("Create New Project")
+        self.createProjectWindow.setStyleSheet(STYLESHEET)
+        self.createProjectWindow.show()
+
 
     def resizeEvent(self, event):
         constant = 50
@@ -302,7 +463,6 @@ class LauncherWindow(QtWidgets.QDialog):
             thumbnail.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignCenter)
 
             self.projectList.addItem(thumbnail)
-
 
 
 if __name__ == "__main__":
