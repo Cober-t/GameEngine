@@ -42,7 +42,7 @@ Scene3
 		{
 			color = 1.000000, 1.000000, 1.000000, 1.000000
 			shape2D = Sprite
-			texture = C:\Users\Jorge\Documents\GameEngine\assets\images\test.jpg
+			texture = C:\Users\Jorge\Desktop\MVP Engine Test\assets\images\test.jpg
 		}
 	}
 
@@ -83,7 +83,7 @@ Scene3
 
 		Render2DComponent
 		{
-			color = 0.822394, 0.295300, 0.783727, 1.000000
+			color = 1.000000, 1.000000, 1.000000, 1.000000
 			shape2D = Circle
 			thickness = 1.000000
 			fade = 0.005000
@@ -127,7 +127,7 @@ Scene3
 
 		Render2DComponent
 		{
-			color = 0.329974, 0.378361, 0.899614, 1.000000
+			color = 1.000000, 1.000000, 1.000000, 1.000000
 			shape2D = Circle
 			thickness = 1.000000
 			fade = 0.005000
@@ -171,7 +171,7 @@ Scene3
 
 		Render2DComponent
 		{
-			color = 0.934363, 0.000000, 0.000000, 1.000000
+			color = 1.000000, 1.000000, 1.000000, 1.000000
 			shape2D = Circle
 			thickness = 1.000000
 			fade = 0.005000
@@ -215,7 +215,7 @@ Scene3
 
 		Render2DComponent
 		{
-			color = 0.470911, 0.969112, 0.351724, 1.000000
+			color = 1.000000, 1.000000, 1.000000, 1.000000
 			shape2D = Circle
 			thickness = 1.000000
 			fade = 0.005000

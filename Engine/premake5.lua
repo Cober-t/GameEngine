@@ -32,10 +32,11 @@ project "Engine"
 	{
         "_CRT_SECURE_NO_WARNINGS",
         "GLFW_INCLUDE_NONE",
-		'SCENES_DIR=R"($(SolutionDir)assets\\scenes\\)"',
-		'SHADERS_DIR=R"($(SolutionDir)assets\\shaders\\)"',
-		'SCRIPTS_DIR=R"($(SolutionDir)assets\\scripts\\)"',
-		'ASSETS_DIR=R"($(SolutionDir)assets\\)"',
+		'SCENES_DIR=' .. '"' .. assetsDir .. "" .. "/assets/scenes/" .. '"',
+		'IMAGES_DIR=' .. '"' .. assetsDir .. "" .. "/assets/scenes/" .. '"',
+		'SHADERS_DIR=' .. '"' .. assetsDir .. "" .. "/assets/shaders/" .. '"',
+		'SCRIPTS_DIR=' ..'"' .. assetsDir .. "" .. "/assets/scripts/" .. '"',
+		'ASSETS_DIR=' .. '"' .. assetsDir .. "" .. "/assets/" .. '"',
 	}
 
 	includedirs 

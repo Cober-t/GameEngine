@@ -14,8 +14,32 @@ workspace "Cober"
 	}
 
 
+function inArray(list, item)
+    for key, value in pairs(list) do
+        if value == item then return true end
+    end
+    return false
+end
+
 -- This is a helper variable, to concatenate the sys-arch
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+
+-- Get values from projectSettings.json
+if inArray(_ARGS, "gameDir") then
+    gameDir = "C:/Users/Jorge/Desktop/MVP Engine Test"
+else
+    gameDir = "C:/Users/Jorge/Documents/GameEngine/Game"
+end
+
+if inArray(_ARGS, "assetDir") then
+    assetsDir = "C:/Users/Jorge/Desktop/MVP Engine Test"
+else
+    assetsDir = "C:/Users/Jorge/Documents/GameEngine"
+end
+
+
+
+
 
 IncludeDir = {}
 IncludeDir["GLFW"]          = "%{wks.location}/libraries/glfw/include"
@@ -34,7 +58,7 @@ IncludeDir["sol"]           = "%{wks.location}/libraries/sol"
 
 
 group "Dependencies"
-	include "libraries/premake"
+	-- include "libraries/premake"
     include "libraries/glfw"
     include "libraries/glad"
     include "libraries/imgui"
@@ -45,14 +69,22 @@ group "Dependencies"
     include "libraries/entt"
 group ""
 
+
 group "Core"
     include "Engine"
 group ""
 
-group "Tools"
-    include "Editor"
-group ""
+if inArray(_ARGS, "editor") then
+    group "Tools"
+        include "Editor"
+    group ""
+end
 
-group "Application"
-	include "Game"
-group ""
+
+if inArray(_ARGS, "game") then
+    group "Application"
+        include ("" .. gameDir .. "")
+    group ""
+end
+
+

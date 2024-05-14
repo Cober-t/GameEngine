@@ -40,7 +40,7 @@ Scene2
 
 		Render2DComponent
 		{
-			color = 0.470911, 0.969112, 0.351724, 1.000000
+			color = 1.000000, 0.000000, 0.925490, 1.000000
 			shape2D = Circle
 			thickness = 1.000000
 			fade = 0.005000
@@ -62,7 +62,7 @@ Scene2
 
 		TransformComponent
 		{
-			position = -2.771886, 2.000000, 0.000000
+			position = -2.300409, 2.000000, 0.000000
 			rotation = 0.000000, 0.000000, 0.000000
 			scale = 1.000000, 1.000000, 1.000000
 		}
@@ -128,7 +128,7 @@ Scene2
 
 		Render2DComponent
 		{
-			color = 0.329974, 0.378361, 0.899614, 1.000000
+			color = 1.000000, 0.000000, 0.000000, 1.000000
 			shape2D = Circle
 			thickness = 1.000000
 			fade = 0.005000
@@ -172,7 +172,7 @@ Scene2
 
 		Render2DComponent
 		{
-			color = 0.822394, 0.295300, 0.783727, 1.000000
+			color = 1.000000, 0.000000, 0.926641, 1.000000
 			shape2D = Circle
 			thickness = 1.000000
 			fade = 0.005000

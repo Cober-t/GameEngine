@@ -41,12 +41,6 @@ project "Game"
 	defines 
     {
         "_CRT_SECURE_NO_WARNINGS",
-        "__EDITOR__",
-        'SCENES_DIR=R"($(SolutionDir)assets\\scenes\\)"',
-		'IMAGES_DIR=R"($(SolutionDir)assets\\images\\)"',
-		'SHADERS_DIR=R"($(SolutionDir)assets\\shaders\\)"',
-		'SCRIPTS_DIR=R"($(SolutionDir)assets\\scripts\\)"',
-		'ASSETS_DIR=R"($(SolutionDir)assets\\)"',
     }
 
 	filter { "system:windows", "configurations:Debug" }

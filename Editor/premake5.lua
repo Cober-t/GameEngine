@@ -65,11 +65,7 @@ project "Editor"
     {
         "_CRT_SECURE_NO_WARNINGS",
         "__EDITOR__",
-        'SCENES_DIR=R"($(SolutionDir)assets\\scenes\\)"',
-        'IMAGES_DIR=R"($(SolutionDir)assets\\images\\)"',
-		'SHADERS_DIR=R"($(SolutionDir)assets\\shaders\\)"',
-		'SCRIPTS_DIR=R"($(SolutionDir)assets\\scripts\\)"',
-		'ASSETS_DIR=R"($(SolutionDir)assets\\)"',
+        'ASSETS_DIR=' .. '"' .. assetsDir .. "" .. "/assets/" .. '"',
         'EDITOR_ICONS_DIR=R"($(SolutionDir)Editor\\icons\\)"',
     }
 
