@@ -6,12 +6,33 @@ import json
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
-DEFAULT_BUILD_ICON = "thumbnails\\default.jpg"
-THUMBNAIL_PATH = "C:\\Users\\Jorge\\Desktop\\Launcher\\thumbnails"
+from template_gameApp import GameAppTemplate
+from template_projectSettings import ProjectSettingsTemplate
+from template_premake5 import Premake5Template
+from template_sceneDefault import SceneDefaultTemplate
+
+
+ASSETS_FOLDER = "assets"
+AUDIO_FOLDER = "audio"
+FILES_FOLDER = "files"
+FONTS_FOLDER = "fonts"
+IMAGES_FOLDER = "images"
+MODELS_FOLDER = "models"
+SCENES_FOLDER = "scenes"
+SCRIPTS_FOLDER = "scripts"
+SHADERS_FOLDER = "shaders"
+ALL_ASSETS_FOLDERS = [AUDIO_FOLDER, FILES_FOLDER, FONTS_FOLDER, IMAGES_FOLDER,
+                      MODELS_FOLDER, SCENES_FOLDER, SCRIPTS_FOLDER, SHADERS_FOLDER]
+
+DEFAULT_BUILD_ICON = ".\\thumbnails\\default.jpg"
+THUMBNAIL_PATH = ".\\thumbnails"
 THUMBNAIL_NAME = "thumbnail"
 PROJECT_PATH = "projectPath"
+PROJECT_SETTINGS = "projectSettings.lua"
+PREMAKE5 = "premake5.lua"
+SCENE_DEFAULT_PATH = "assets\\scenes\\SceneDefault.lua"
 PROJECT_DESCRTIPTION = "description"
-PROJECT_GALLERY_PATH = "C:\\Users\\Jorge\\Desktop\\Launcher\\projectGallery.json"
+PROJECT_GALLERY_PATH = ".\\projectGallery.json"
 THUMBNAIL_SIZE = (260, 200)
 
 STYLESHEET_MAIN_WINDOW = """
@@ -27,12 +48,14 @@ STYLESHEET = """
             background: rgba(30, 30, 30, 200);
             color: rgba(255, 116, 0, 180);
             padding: 10px;
+            margin-top:10px;
             border-radius: 15px;
         }
         QLineEdit {
             border: 0px;
             background: rgba(30, 30, 30, 200);
             color: rgba(255, 116, 0, 180);
+            margin-top:10px;
             padding: 10px;
             border-radius: 15px;
         }
@@ -81,26 +104,72 @@ class ProjectAPI():
     def __init__(self):
         self.projectPath = PROJECT_GALLERY_PATH
 
+
     def loadProject(self, item):
         '''Load project from a project gallery item'''
         path = item.data(role=QtCore.Qt.ToolTipRole)
+        self.load(path)
         print(path)
 
 
-    def createNewProject(self):
+    def createNewProject(self, name, description, projectPath, thumbnail):
         '''Create new project and add an entry for his settings in the project gallery'''
-        # Create assets
+        
+        # Add project to projectGallery
+        projectGallery = []
+        if os.path.isfile(PROJECT_GALLERY_PATH) is False:
+            raise Exception("File not found")
+        
+        with open(PROJECT_GALLERY_PATH) as fp:
+            projectGallery = json.load(fp)
+
+        projectGallery.update({ name: {
+            PROJECT_PATH: os.path.normpath(projectPath),
+            PROJECT_DESCRTIPTION: description,
+            THUMBNAIL_NAME: thumbnail
+        }})
+
+        with open(PROJECT_GALLERY_PATH, 'w') as file:
+            json.dump(projectGallery, file,  indent=4, separators=(',',': '))
+
+        # Create assets folders
+        if (len(os.listdir(projectPath)) > 0):
+            raise Exception("Game folder is not empty")
+        
+        # Create projetSettings.lua
+        file = open(os.path.join(projectPath, PROJECT_SETTINGS), 'w')
+        projecSettinsTemplate = ProjectSettingsTemplate(name, projectPath)
+        file.write(projecSettinsTemplate.template)
+        file.close()
+        
+        os.mkdir(os.path.join(projectPath, ASSETS_FOLDER))
+        for assetFolder in ALL_ASSETS_FOLDERS:
+            os.mkdir(os.path.join(projectPath, ASSETS_FOLDER, assetFolder))
+
 
         # Create hardcoded premake
+        file = open(os.path.join(projectPath, PREMAKE5), 'w')
+        premakeTemplate = Premake5Template(name)
+        file.write(premakeTemplate.template)
+        file.close()
 
-        # Create projetSettings.lua
+        # Create hardcoded scene default
+        file = open(os.path.join(projectPath, SCENE_DEFAULT_PATH), 'w')
+        sceneDefaultTemplate = SceneDefaultTemplate()
+        file.write(sceneDefaultTemplate.template)
+        file.close()
 
         # Create hardcoded GameApp code
+        gameCodeTemplate = GameAppTemplate(name, projectPath)
+        gameCodeTemplate.GenerateTemplateCodes()
 
         # Launch Editor with projectSettings.json
-        
+        self.load(projectPath)
 
+
+    def load(self, path):
         return
+
 
 
 class CustomTitleBar(QtWidgets.QWidget):
@@ -216,8 +285,8 @@ class CreateProjectWindow(QtWidgets.QMainWindow):
 
         self.project = ProjectAPI()
         self.titleBar = CustomTitleBar(self)
-        self.correctThumbnailPath = False
         self.correctProjectPath = False
+        self.correctProjectName = False
            
         self.setWindowFlags(QtCore.Qt.WindowType.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
@@ -231,7 +300,7 @@ class CreateProjectWindow(QtWidgets.QMainWindow):
         self.titleBar = CustomTitleBar(self)
 
         # Widgets
-        self.nameLabel = QtWidgets.QLineEdit(self,)
+        self.nameLabel = QtWidgets.QLineEdit(self)
         self.nameLabel.setPlaceholderText("Name")
 
         self.descriptionLabel = QtWidgets.QTextEdit(self)
@@ -246,11 +315,13 @@ class CreateProjectWindow(QtWidgets.QMainWindow):
         self.thumbnailNameLabel.setPlaceholderText("Thumbnail name")
 
         self.thumbnailImage = QtWidgets.QLabel(self)
+        self.thumbnailImage.setFixedSize(THUMBNAIL_SIZE[0], THUMBNAIL_SIZE[1])
         self.thumbnailImage.setScaledContents(True)
+        self.thumbnailImage.setFixedSize(0, 0)
 
         self.runButton = QtWidgets.QPushButton(self)
-        self.runButton.setMaximumWidth(80)
-        self.runButton.setText(windowTitle[:windowTitle.find(" ")])
+        self.runButton.setText(windowTitle[:windowTitle.find(" ")].upper())
+        self.runButton.setMinimumWidth(65)
 
         # Layouts
         self.formLayout = QtWidgets.QVBoxLayout()
@@ -280,15 +351,39 @@ class CreateProjectWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self.centralWidget)
 
         # Connections
+        self.nameLabel.textEdited.connect(self.checkProjectName)
         self.projectPathLabel.textEdited.connect(self.checkProjectPath)
         self.thumbnailNameLabel.textEdited.connect(self.checkThumbnailPath)
         self.runButton.clicked.connect(self.createProject)
 
 
+    def checkProjectName(self):
+        """Check if the name of the project is not repeated"""
+        projectGallery = []
+        if os.path.isfile(PROJECT_GALLERY_PATH) is False:
+            raise Exception("File not found")
+        
+        with open(PROJECT_GALLERY_PATH) as file:
+            projectGallery = json.load(file)
+
+        if (self.nameLabel.text() in projectGallery.keys()):
+            self.correctProjectName = False
+            self.nameLabel.setStyleSheet("QLineEdit {color:red}")
+        else:
+            self.correctProjectName = True
+            self.nameLabel.setStyleSheet("QLineEdit {color:green}")
+    
+
     def createProject(self):
         """Create or load the project"""
-        self.project.createNewProject()
-        self.close()
+        name = self.nameLabel.text()
+        description = self.descriptionLabel.toPlainText()
+        thumbnail = self.thumbnailNameLabel.text()
+        projectPath = self.projectPathLabel.text()
+
+        if (self.correctProjectPath and self.correctProjectName and name != "" and description != ""):
+            self.project.createNewProject(name, description, projectPath , thumbnail)
+            self.close()
 
 
     def checkProjectPath(self, path):
@@ -296,23 +391,19 @@ class CreateProjectWindow(QtWidgets.QMainWindow):
         if (os.path.exists(path) == False):
             self.correctProjectPath = False
             self.projectPathLabel.setStyleSheet("QLineEdit {color:red}")
-        else:
+        elif (os.path.exists(path) == True and path != ""):
+            self.projectPathLabel.setStyleSheet("QLineEdit {color:green}")
             self.correctProjectPath = True
-            self.projectPathLabel.setStyleSheet("QTextEdit {color:green}")
         
     def checkThumbnailPath(self, path):
         """Check if the thumbnail image is in the resources folder"""
-     
         if (os.path.exists(os.path.join(THUMBNAIL_PATH, path)) == False):
-            self.correctThumbnailPath = False
             self.thumbnailNameLabel.setStyleSheet("QLineEdit {color:red}")
-            self.thumbnailImage.setPixmap(QtGui.QPixmap())
             self.thumbnailImage.setFixedSize(0, 0)
-        else:
-            self.correctThumbnailPath = True
-            self.thumbnailNameLabel.setStyleSheet("QTextEdit {color:green}")
+        elif (os.path.exists(os.path.join(THUMBNAIL_PATH, path)) == True and path != ""):
+            self.thumbnailNameLabel.setStyleSheet("QLineEdit {color:green}")
             self.thumbnailImage.setPixmap(QtGui.QPixmap(os.path.join(THUMBNAIL_PATH, path)))
-            self.thumbnailImage.setFixedSize(THUMBNAIL_SIZE[0], THUMBNAIL_SIZE[1])
+            self.thumbnailImage.setFixedSize(THUMBNAIL_SIZE[0],THUMBNAIL_SIZE[1])
 
     
 class MainWindow(QtWidgets.QMainWindow):
@@ -438,7 +529,6 @@ class LauncherWindow(QtWidgets.QDialog):
         self.createProjectWindow.setStyleSheet(STYLESHEET)
         self.createProjectWindow.show()
 
-
     def resizeEvent(self, event):
         constant = 50
         newSize = QtCore.QSize(event.size().width()/2 - constant-20, event.size().height() - constant)
@@ -456,7 +546,7 @@ class LauncherWindow(QtWidgets.QDialog):
             thumbnail.setToolTip(projectSettings[PROJECT_PATH])
 
             thumbnailPath = os.path.join(THUMBNAIL_PATH, projectSettings[THUMBNAIL_NAME])
-            if not os.path.exists(thumbnailPath):
+            if not os.path.exists(thumbnailPath) or projectSettings[THUMBNAIL_NAME] == "":
                 thumbnailPath = self.defaultThumbnail
 
             thumbnail.setIcon(QtGui.QIcon(thumbnailPath))

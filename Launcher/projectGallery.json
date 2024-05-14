@@ -1,68 +1,62 @@
 {
-    "Pong":
-    {
+    "Pong": {
         "projectPath": "C:/Users/Jorge/Desktop/MVP Engine Test/",
         "description": "description",
         "thumbnail": "pong.png"
     },
-    "Flappy Bird":
-    {
+    "Flappy Bird": {
         "projectPath": "project",
         "description": "description",
         "thumbnail": "flappyBird.jpg"
     },
-    "Breakout":
-    {
+    "Breakout": {
         "projectPath": "project",
         "description": "description",
         "thumbnail": "breakut.png"
     },
-    "Match3":
-    {
+    "Match3": {
         "projectPath": "project",
         "description": "description",
         "thumbnail": "match3.png"
     },
-    "Super Mario Bros":
-    {
+    "Super Mario Bros": {
         "projectPath": "project",
         "description": "description",
         "thumbnail": "superMarioBros.jpg"
     },
-    "The Legend of Zelda":
-    {
+    "The Legend of Zelda": {
         "projectPath": "project",
         "description": "description",
         "thumbnail": "theLegendOfZelda.jpg"
     },
-    "Angry Birds":
-    {
+    "Angry Birds": {
         "projectPath": "project",
         "description": "description",
         "thumbnail": "angryBirds.png"
     },
-    "Pokemon":
-    {
+    "Pokemon": {
         "projectPath": "project",
         "description": "description",
         "thumbnail": "pokemon.jpg"
     },
-    "3D Helcopter Game":
-    {
+    "3D Helcopter Game": {
         "projectPath": "project",
         "description": "description",
         "thumbnail": "3dHelicopterGame.png"
     },
-    "Dreadhalls":
-    {
+    "Dreadhalls": {
         "projectPath": "project",
         "description": "description",
         "thumbnail": "dreadHalls.jpg"
     },
-    "Portal":
-    {
+    "Portal": {
         "projectPath": "project",
         "description": "description",
         "thumbnail": "portal.jpg"
+    },
+    "Test": {
+        "projectPath": "C:\\Users\\Jorge\\Desktop\\FirstGame",
+        "description": "Esto es una prueba.\nPrueba definitiva que se va a intentar compilar",
+        "thumbnail": "pokemon.jpg"
     }
 }

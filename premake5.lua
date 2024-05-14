@@ -1,3 +1,24 @@
+function inArray(list, item)
+    for key, value in pairs(list) do
+        if value == item then return true end
+    end
+    return false
+end
+
+
+function fileExists(file)
+      local f = io.open(file, "rb")
+      if f then
+        f:close()
+    end
+      return f ~= nil
+end
+
+if fileExists("projectSettings.lua") then
+    local settings = require "projectSettings"
+    buildPath = settings.buildPath
+end
+
 workspace "Cober"
     architecture "x64"
     startproject "Editor"
@@ -14,12 +35,6 @@ workspace "Cober"
 	}
 
 
-function inArray(list, item)
-    for key, value in pairs(list) do
-        if value == item then return true end
-    end
-    return false
-end
 
 -- This is a helper variable, to concatenate the sys-arch
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
