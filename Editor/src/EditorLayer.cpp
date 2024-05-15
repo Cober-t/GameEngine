@@ -27,18 +27,7 @@ namespace Cober {
 
 	void Editor::OnAttach() 
 	{
-		auto commandLineArgs = EngineApp::Get().GetSpecification().CommandLineArgs;
-		if (commandLineArgs.Count > 1)
-		{
-			auto projectFilePath = commandLineArgs[1];
-			m_ActiveScene = Scene::Load(projectFilePath);
-		}
-		else
-		{
-			// NewProject();
-			// if (!OpenProject())
-			m_ActiveScene = Scene::Load();
-		}
+		m_ActiveScene = Scene::Load(EngineApp::Get().GetSpecification().LastScene);
 
 		m_ActiveScene->OnRuntimeStart();
 		m_EditorScene = m_ActiveScene;

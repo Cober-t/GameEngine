@@ -24,11 +24,15 @@ namespace Cober {
 	EngineApp* CreateApplication(AppCommandLineArgs args)
 	{
 		AppSpecification spec;
-		spec.Name = "EDITOR";
-		spec.WorkingDirectory = "./";
-		spec.Width = 1280;
-		spec.Height = 720;
-		spec.CommandLineArgs = args;
+		if (args.Count >= 5)
+		{
+			spec.Name = args[1];
+			spec.WorkingDirectory = (std::string)args[2];
+			spec.LastScene = args[3];
+			spec.Width = atoi(args[4]);
+			spec.Height = atoi(args[5]);
+			spec.CommandLineArgs = args;
+		}
 
 		LOG_INFO("Editor Constructor!");
 		return new EditorApp(spec);

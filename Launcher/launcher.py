@@ -29,7 +29,7 @@ DEFAULT_BUILD_ICON = ".\\thumbnails\\default.jpg"
 THUMBNAIL_PATH = ".\\thumbnails"
 THUMBNAIL_NAME = "thumbnail"
 PROJECT_PATH = "projectPath"
-PROJECT_SETTINGS = "projectSettings.lua"
+PROJECT_SETTINGS = "projectSettings.json"
 PREMAKE5 = "premake5.lua"
 SCENE_DEFAULT_PATH = "assets\\scenes\\SceneDefault.lua"
 PROJECT_DESCRTIPTION = "description"
@@ -168,7 +168,17 @@ class ProjectAPI():
 
     def load(self, path):
         # Read projectSettings from path and pass through command args
-        subprocess.Popen("..\\bin\\Debug-windows-x86_64\\Editor\\Editor.exe Scene2.lua")
+
+        if (os.path.exists(os.path.join(path, PROJECT_SETTINGS)) == False):
+            print(f"There is not {PROJECT_SETTINGS} in the project path")
+            return
+        
+        settings = []
+        with open(os.path.join(path, PROJECT_SETTINGS)) as file:
+            settings = json.load(file)
+        
+        subprocess.Popen(f"..\\bin\\Debug-windows-x86_64\\Editor\\Editor.exe \
+            {settings["name"]} {settings["assetsPath"]} {settings["lastScene"]} {settings["screenWidth"]} {settings["screenHeight"]}")
         return
 
 

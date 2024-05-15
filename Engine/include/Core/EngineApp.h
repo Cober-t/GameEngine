@@ -34,9 +34,10 @@ namespace Cober {
 	struct AppSpecification
 	{
 		std::string Name = "Cober Engine Application";
-		std::string WorkingDirectory;
-		uint32_t Width;
-		uint32_t Height;
+		std::string LastScene = "SceneDefault.lua";
+		std::string WorkingDirectory = "./";
+		uint32_t Width = 1280;
+		uint32_t Height = 720;
 		AppCommandLineArgs CommandLineArgs;
 	};
 
