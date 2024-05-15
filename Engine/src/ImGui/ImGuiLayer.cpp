@@ -1,6 +1,7 @@
 #include <pch.h>
 #include "ImGui/ImGuiLayer.h"
 #include "ImGui/Colors.h"
+#include "Core/EngineApp.h"
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>

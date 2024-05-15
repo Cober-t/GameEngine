@@ -9,10 +9,10 @@ namespace Cober {
 
 	public:
 	
-		EditorApp() : EngineApp("Engine Editor", 1280, 720)
+		EditorApp(const AppSpecification& specification) : EngineApp(specification)
 		{
-			PushLayer(new Editor());
 			EngineApp::Get().SetGameState(GameState::EDITOR);
+			PushLayer(new Editor());
 		}
 
 		~EditorApp() {
@@ -21,9 +21,16 @@ namespace Cober {
 		}
 	};
 
-	EngineApp* CreateApplication()
+	EngineApp* CreateApplication(AppCommandLineArgs args)
 	{
+		AppSpecification spec;
+		spec.Name = "EDITOR";
+		spec.WorkingDirectory = "./";
+		spec.Width = 1280;
+		spec.Height = 720;
+		spec.CommandLineArgs = args;
+
 		LOG_INFO("Editor Constructor!");
-		return new EditorApp();
+		return new EditorApp(spec);
 	}
 }

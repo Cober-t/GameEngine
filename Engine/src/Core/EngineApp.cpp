@@ -6,14 +6,19 @@ namespace Cober {
 
     EngineApp* EngineApp::s_Instance = nullptr;
     
-    EngineApp::EngineApp(const std::string& name, uint32_t width, uint32_t height, bool vsync)
+    EngineApp::EngineApp(const AppSpecification& specification)
+        : m_Specification(specification)
     {
         LOG_CORE_INFO("EngineApp Constructor!");
 
         LOG_CORE_ASSERT(!s_Instance, "Application already exists!");
         s_Instance = this;
 
-        m_Window = CreateUnique<Window>(WindowProps(name, width, height, vsync));
+        // Set working directory here
+		if (!m_Specification.WorkingDirectory.empty())
+			std::filesystem::current_path(m_Specification.WorkingDirectory);
+
+        m_Window = CreateUnique<Window>(WindowProps(m_Specification.Name, m_Specification.Width, m_Specification.Height));
         m_Window->SetEventCallback([this](Event& e) { OnEvent(e); });
         m_TimeStep = CreateUnique<Timestep>();
 

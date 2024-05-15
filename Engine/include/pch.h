@@ -10,6 +10,7 @@
 #include <string>
 #include <string.h>	// For memset and memcpy Linux
 #include <sstream>
+#include <filesystem>
 #include <array>
 #include <stack>
 #include <cstdint>

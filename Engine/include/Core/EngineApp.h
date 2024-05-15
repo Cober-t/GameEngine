@@ -11,23 +11,45 @@
 #include "Events/ApplicationEvents.h"
 #include "Events/Event.h"
 #include "Render/Render2D.h"
+#include "Log.h"
 
 
 int main(int argc, char** argv);
 
-class ImGuiLayer;
-
 namespace Cober {
+
+	
+	struct AppCommandLineArgs
+	{
+		int Count = 0;
+		char** Args = nullptr;
+
+		const char* operator[](int index) const
+		{
+			LOG_CORE_ASSERT(index < Count, "There is no command line arguments to return");
+			return Args[index];
+		}
+	};
+
+	struct AppSpecification
+	{
+		std::string Name = "Cober Engine Application";
+		std::string WorkingDirectory;
+		uint32_t Width;
+		uint32_t Height;
+		AppCommandLineArgs CommandLineArgs;
+	};
 
 	enum class GameState { PLAY, EDITOR, RUNTIME_EDITOR, EXIT };
 
 	class EngineApp
 	{
 	public:
-		EngineApp(const std::string& name = "", uint32_t width = 1280, uint32_t height = 720, bool vsync = true);
+		EngineApp(const AppSpecification& specification);
 		virtual ~EngineApp();
 
 		inline static EngineApp& Get() { return *s_Instance; }
+		const AppSpecification& GetSpecification() const { return m_Specification; }
 
 		void Start();
 		void Update();
@@ -57,6 +79,7 @@ namespace Cober {
 		bool OnWindowResize(WindowResizeEvent& e);
 
 	private:
+		AppSpecification m_Specification;
 		GameState m_GameState;
 		Unique<Window> m_Window;
 		ImGuiLayer* m_GuiLayer;
@@ -72,7 +95,7 @@ namespace Cober {
 		friend int ::main(int argc, char** argv);
 	};
 
-	EngineApp* CreateApplication();
+	EngineApp* CreateApplication(AppCommandLineArgs args);
 }
 
 #endif

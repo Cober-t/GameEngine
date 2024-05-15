@@ -27,12 +27,27 @@ namespace Cober {
 
 	void Editor::OnAttach() 
 	{
-		m_ActiveScene = Scene::Load("Scene2.lua");
-		m_ActiveScene->OnRuntimeStart();
-		m_EditorScene = m_ActiveScene;
+		auto commandLineArgs = EngineApp::Get().GetSpecification().CommandLineArgs;
+		if (commandLineArgs.Count > 1)
+		{
+			auto projectFilePath = commandLineArgs[1];
+			m_ActiveScene = Scene::Load(projectFilePath);
+			m_ActiveScene->OnRuntimeStart();
+			m_EditorScene = m_ActiveScene;
+		}
+		else
+		{
+			// TODO(Yan): prompt the user to select a directory
+			// NewProject();
+
+			// If no project is opened, close Hazelnut
+			// NOTE: this is while we don't have a new project path
+			// if (!OpenProject())
+			LOG_ERROR("Not enough arguments")
+			EngineApp::Get().Close();
+		}
 
 		// Primitive::Grid::Init();
-
 		ViewportPanel::Get().CreateFramebuffer(m_EditorCamera->m_ViewportWidth, m_EditorCamera->m_ViewportHeight);
 		SceneHierarchyPanel::Get().SetContext(m_ActiveScene);
 	}

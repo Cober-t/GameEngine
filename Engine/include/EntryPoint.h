@@ -5,13 +5,13 @@
 #include "Core/EngineApp.h"
 
 
-extern Cober::EngineApp* Cober::CreateApplication();
+extern Cober::EngineApp* Cober::CreateApplication(AppCommandLineArgs args);
 
 int main(int argc, char** argv)
 {
 	Cober::Log::Init();
 
-	auto app = Cober::CreateApplication();
+	auto app = Cober::CreateApplication({ argc, argv });
 
 	app->Start();
 

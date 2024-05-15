@@ -2,7 +2,6 @@
 #define IMGUI_LAYER_H
 
 #include "Core/Layer.h"
-#include "Core/EngineApp.h"
 
 namespace Cober {
 

@@ -16,7 +16,7 @@ end
 
 if fileExists("projectSettings.lua") then
     local settings = require "projectSettings"
-    buildPath = settings.buildPath
+    -- buildPath = settings.buildPath
 end
 
 workspace "Cober"
@@ -51,9 +51,7 @@ if inArray(_ARGS, "assetDir") then
 else
     assetsDir = "C:/Users/Jorge/Documents/GameEngine"
 end
-
-
-
+buildPath = "%{prj.name}/build"
 
 
 IncludeDir = {}
