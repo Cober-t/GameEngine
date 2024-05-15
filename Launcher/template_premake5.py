@@ -4,14 +4,14 @@ class Premake5Template():
         self.template = """\
 -- 'name' and 'buildPath' comes from main premake, 
 -- that received this commands as arguments from projectSettings.lua
-project {0}
+project "{0}"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "off"
 
 	targetdir (buildPath)
-	objdir (buildPath)
+	objdir (buildPath .. "/obj")
 
 	files
 	{{
@@ -49,7 +49,7 @@ project {0}
     }}
 
 	filter {{ "system:windows", "configurations:Debug" }}
-	buildoptions "/MDd"       
+	buildoptions "/MDd"
 
 	filter {{ "system:windows", "configurations:Release" }}
 		buildoptions "/MD"

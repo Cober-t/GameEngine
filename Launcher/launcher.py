@@ -4,6 +4,7 @@ import os
 import sys
 import json
 import subprocess
+import shutil
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
@@ -25,6 +26,7 @@ SHADERS_FOLDER = "shaders"
 ALL_ASSETS_FOLDERS = [AUDIO_FOLDER, FILES_FOLDER, FONTS_FOLDER, IMAGES_FOLDER,
                       MODELS_FOLDER, SCENES_FOLDER, SCRIPTS_FOLDER, SHADERS_FOLDER]
 
+ENGINE_ASSETS_FOLDER = "C:\\Users\\Jorge\\Documents\\GameEngine\\assets"
 DEFAULT_BUILD_ICON = ".\\thumbnails\\default.jpg"
 THUMBNAIL_PATH = ".\\thumbnails"
 THUMBNAIL_NAME = "thumbnail"
@@ -132,19 +134,19 @@ class ProjectAPI():
         with open(PROJECT_GALLERY_PATH, 'w') as file:
             json.dump(projectGallery, file,  indent=4, separators=(',',': '))
 
-        # Create assets folders
+        # Check if project folder is empty
         if (len(os.listdir(projectPath)) > 0):
             raise Exception("Game folder is not empty")
         
-        # Create projetSettings.lua
+        # Copy assets folders
+        projectAssetsFolder = os.path.join(projectPath, ASSETS_FOLDER)
+        shutil.copytree(ENGINE_ASSETS_FOLDER, projectAssetsFolder)
+
+        # Create projetSettings.json
         file = open(os.path.join(projectPath, PROJECT_SETTINGS), 'w')
-        projecSettinsTemplate = ProjectSettingsTemplate(name, projectPath)
+        projecSettinsTemplate = ProjectSettingsTemplate(name, projectPath.replace("\\", "/"))
         file.write(projecSettinsTemplate.template)
         file.close()
-        
-        os.mkdir(os.path.join(projectPath, ASSETS_FOLDER))
-        for assetFolder in ALL_ASSETS_FOLDERS:
-            os.mkdir(os.path.join(projectPath, ASSETS_FOLDER, assetFolder))
 
         # Create hardcoded premake
         file = open(os.path.join(projectPath, PREMAKE5), 'w')
@@ -159,8 +161,14 @@ class ProjectAPI():
         file.close()
 
         # Create hardcoded GameApp code
-        gameCodeTemplate = GameAppTemplate(name, projectPath)
+        settings = []
+        with open(os.path.join(projectPath, PROJECT_SETTINGS)) as file:
+            settings = json.load(file)
+        gameCodeTemplate = GameAppTemplate(name, projectPath.replace("\\", "/"), settings["screenWidth"], settings["screenHeight"])
         gameCodeTemplate.GenerateTemplateCodes()
+
+        # Editor layout
+        shutil.move(os.path.join(projectAssetsFolder, "imgui.ini"), projectPath)
 
         # Launch Editor with projectSettings.json
         self.load(projectPath)
@@ -398,7 +406,7 @@ class CreateProjectWindow(QtWidgets.QMainWindow):
 
 
     def checkProjectPath(self, path):
-        """Check if the path exist to create projectSettings.lua"""
+        """Check if the path exist to create projectSettings.json"""
         if (os.path.exists(path) == False):
             self.correctProjectPath = False
             self.projectPathLabel.setStyleSheet("QLineEdit {color:red}")

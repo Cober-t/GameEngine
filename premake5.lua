@@ -20,7 +20,6 @@ workspace "Cober"
 		"MultiProcessorCompile"
 	}
 
-
 -- This is a helper variable, to concatenate the sys-arch
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- Overwritte with command arg from editor when compile
@@ -59,14 +58,13 @@ group "Core"
     include "Engine"
 group ""
 
-if inArray(_ARGS, "game") == false then
-    group "Tools"
-        include "Editor"
-    group ""
-end
 
 if inArray(_ARGS, "game") then
     group "Application"
         include ("" .. _ARGS[4] .. "")
+    group ""
+else
+    group "Tools"
+        include "Editor"
     group ""
 end

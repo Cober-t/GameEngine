@@ -1,6 +1,6 @@
 /.vs
 /.vscode
-# /assets
+/assets
 bin/
 bin-int/
 .idea/
@@ -11,4 +11,3 @@ __pycache__/
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
-imgui.ini

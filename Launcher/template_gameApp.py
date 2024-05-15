@@ -5,11 +5,12 @@ GAME_CODE_SRC_PATH = "..\\Game\\src"
 
 class GameAppTemplate():
     
-    def __init__(self, name, projectPath):
-        
-        os.mkdir(os.path.join(projectPath, name))
+    def __init__(self, name, projectPath, screenWidth, screenHeight):
+        os.mkdir(os.path.normpath(os.path.join(projectPath, name)))
         self.projectPath = projectPath
         self.projectName = name
+        self.screenWidth = screenWidth
+        self.screenHeight = screenHeight
         
         self.mainAppTemplate = self.MainAppTemplate()
         self.gameHeaderTemplate = self.GameHeaderTemplate()
@@ -18,7 +19,7 @@ class GameAppTemplate():
     
     def GenerateTemplateCodes(self):
         # C:\\Users\\Jorge\\Desktop\\FirstGame\\Game\\GameApp.h
-        file = open(os.path.join(self.projectPath, self.projectName, self.projectName + "App.h"), 'w')
+        file = open(os.path.join(self.projectPath, self.projectName, self.projectName + "App.cpp"), 'w')
         file.write(self.mainAppTemplate)
         file.close()
         # C:\\Users\\Jorge\\Desktop\\FirstGame\\Game\\Game.h
@@ -32,112 +33,113 @@ class GameAppTemplate():
 
 
     def MainAppTemplate(self):
-        return """\
+        return f"""\
 #include <Engine.h>
 #include <EntryPoint.h>
 
-#include "{1}.h"
+#include "{self.projectName}.h"
 
-namespace Cober {{
+using namespace Cober;
 
-	class {0}: public EngineApp 
+
+class {self.projectName}App: public EngineApp
+{{
+public:
+
+	{self.projectName}App(const AppSpecification& specification) : EngineApp(specification) 
 	{{
-	public:
-
-        // Change constructor in the near future to accept specification,
-        // arguments send from launcher load project
-		{0}() : EngineApp("{1} Application!!", 400, 200) 
-		{{
-			PushLayer(new {1}());
-			EngineApp::Get().SetGameState(GameState::PLAY);
-		}}
-
-		~{0}() 
-		{{
-            LOG_INFO("{1} application Destructor!");
-		}}
-	}};
-
-
-	EngineApp* CreateApplication() 
-	{{
-        LOG_INFO("{1} application Constructor!");
-		return new {0}();
+		PushLayer(new {self.projectName}());
+		EngineApp::Get().SetGameState(GameState::PLAY);
 	}}
-}}
-""".format(self.projectName + "App", self.projectName)
+
+	~{self.projectName}App() 
+	{{
+		LOG_INFO("{self.projectName} Destructor!");
+	}}
+}};
+
+Cober::EngineApp* Cober::CreateApplication(Cober::AppCommandLineArgs args)
+{{
+	AppSpecification spec;
+	spec.Name = "{self.projectName}";
+	spec.WorkingDirectory = "{self.projectPath}";
+	spec.Width = {self.screenWidth};
+	spec.Height = {self.screenHeight};
+	spec.CommandLineArgs = args;
+
+	LOG_INFO("{self.projectName} Constructor!");
+	return new {self.projectName}App(spec);
+}}"""
 
 
     def GameHeaderTemplate(self):
-        return """\
-#ifndef {0}_H
-#define {0}_H
+        return f"""\
+#ifndef {self.projectName}_H
+#define {self.projectName}_H
 
 #include <Engine.h>
 
-namespace Cober {{
+using namespace Cober;
 
-	class {0} : public Layer 
-	{{
-	public:
-		{0}();
-		virtual ~{0}() = default;
 
-		virtual void OnAttach() override;
-		virtual void OnDetach() override;
+class {self.projectName} : public Layer 
+{{
+public:
+	{self.projectName}();
+	virtual ~{self.projectName}() = default;
 
-		void OnUpdate(Unique<Timestep>& ts) override;
-		void OnEvent(Event& event) override;
-	private:
-		Ref<Scene> m_ActiveScene;
-		Ref<GameCamera> m_Camera;
-	}};
-}}
+	virtual void OnAttach() override;
+	virtual void OnDetach() override;
+
+	void OnUpdate(Unique<Timestep>& ts) override;
+	void OnEvent(Event& event) override;
+private:
+	Ref<Scene> m_ActiveScene;
+	Ref<GameCamera> m_Camera;
+}};
 
 #endif
-""".format(self.projectName)
+"""
 
 
     def GameSourceTemplate(self):
-        return """\
-#include "{0}.h"
-
-namespace Cober {{
-
-	{0}::{0}() : Layer("{0} application") 
-	{{
-		m_Camera = CreateRef<GameCamera>(45.0f, EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight(), 0.01f, 1000.0f);
-	}}
+        return f"""\
+#include "{self.projectName}.h"
 
 
-	void {0}::OnAttach() 
-	{{
-		m_ActiveScene = Scene::Load("SceneDefault.lua");
-		m_ActiveScene->OnSimulationStart();
-	}}
-
-
-	void {0}::OnDetach() 
-	{{
-		m_ActiveScene->OnSimulationStop();
-		m_ActiveScene = nullptr;
-		m_Camera = nullptr;
- 		LOG_INFO("Detached {0} application Layer!");
-	}}
-
-
-	void {0}::OnUpdate(Unique<Timestep>& ts) 
-	{{
-		RenderGlobals::SetClearColor(46, 47, 52);
-		RenderGlobals::Clear();
-		m_Camera->OnUpdate(ts);
-		m_ActiveScene->OnUpdateSimulation(ts, m_Camera);
-	}}
-
-
-	void {0}::OnEvent(Event& event) 
-	{{
-		m_Camera->OnEvent(event);
-	}}
+{self.projectName}::{self.projectName}() : Layer("{self.projectName} application") 
+{{
+	m_Camera = CreateRef<GameCamera>(45.0f, EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight(), 0.01f, 1000.0f);
 }}
-""".format(self.projectName)
+
+
+void {self.projectName}::OnAttach() 
+{{
+	m_ActiveScene = Scene::Load("SceneDefault.lua");
+	m_ActiveScene->OnSimulationStart();
+}}
+
+
+void {self.projectName}::OnDetach() 
+{{
+	m_ActiveScene->OnSimulationStop();
+	m_ActiveScene = nullptr;
+	m_Camera = nullptr;
+	LOG_INFO("Detached {self.projectName} application Layer!");
+}}
+
+
+void {self.projectName}::OnUpdate(Unique<Timestep>& ts) 
+{{
+	RenderGlobals::SetClearColor(46, 47, 52);
+	RenderGlobals::Clear();
+	m_Camera->OnUpdate(ts);
+	m_ActiveScene->OnUpdateSimulation(ts, m_Camera);
+}}
+
+
+void {self.projectName}::OnEvent(Event& event) 
+{{
+	m_Camera->OnEvent(event);
+}}
+"""
