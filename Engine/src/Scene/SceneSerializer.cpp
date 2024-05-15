@@ -125,7 +125,9 @@ namespace Cober {
 		Utils::DataFile sceneLoader;
 		std::string name;
 
-		if (!std::filesystem::exists(SCENES_DIR + sceneName))
+		std::filesystem::path scenesPath = std::filesystem::current_path() / "assets/scenes" / sceneName;
+
+		if (!std::filesystem::exists(scenesPath))
 		{
 			sceneName = "SceneDefault.lua";
 		}
@@ -251,7 +253,7 @@ namespace Cober {
 			return newScene;
 		}
 		
-		LOG_ERROR(("Cannot read scene with path: {0}{1}", SCENES_DIR, sceneName));
+		LOG_ERROR(("Cannot read scene with path: {0}", std::filesystem::current_path().string() + "assets/scenes/" + sceneName));
 		return nullptr;
     }
 }

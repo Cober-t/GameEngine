@@ -24,13 +24,12 @@ namespace Cober {
 	EngineApp* CreateApplication(AppCommandLineArgs args)
 	{
 		AppSpecification spec;
-		if (args.Count >= 5)
+		if (args.Count >= 4)
 		{
 			spec.Name = args[1];
 			spec.WorkingDirectory = (std::string)args[2];
-			spec.LastScene = args[3];
-			spec.Width = atoi(args[4]);
-			spec.Height = atoi(args[5]);
+			spec.Width = atoi(args[3]);
+			spec.Height = atoi(args[4]);
 			spec.CommandLineArgs = args;
 		}
 

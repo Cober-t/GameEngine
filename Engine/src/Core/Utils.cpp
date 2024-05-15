@@ -254,7 +254,9 @@ namespace Cober::Utils {
 		};
 
 		// Start here!, open the file for writing
-		std::ofstream file(SCENES_DIR + fileName);
+		// Receive a path on the future
+		std::filesystem::path filePath = std::filesystem::current_path() / "assets/scenes" / fileName;
+		std::ofstream file(filePath);
 
 		if (file.is_open())
 		{
@@ -268,7 +270,7 @@ namespace Cober::Utils {
 
 	bool DataFile::Read(DataFile& dataFile, std::string& fileName, const char listStep) 
     {
-		std::ifstream file(SCENES_DIR + fileName);
+		std::ifstream file(std::filesystem::current_path() / "assets/scenes" / fileName);
 
 		//Open the file!
 		if (file.is_open()) {

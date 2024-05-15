@@ -65,7 +65,6 @@ project "Editor"
     {
         "_CRT_SECURE_NO_WARNINGS",
         "__EDITOR__",
-        'ASSETS_DIR=' .. '"' .. assetsDir .. "" .. "/assets/" .. '"',
         'EDITOR_ICONS_DIR=R"($(SolutionDir)Editor\\icons\\)"',
     }
 

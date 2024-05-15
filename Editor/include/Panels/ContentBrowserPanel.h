@@ -18,6 +18,7 @@ namespace Cober {
         
 	private:
 		static ContentBrowserPanel* s_Instance;
+		std::filesystem::path m_AssetsPath;
 		std::filesystem::path m_CurrentDirectory;
 		std::map<std::string, Ref<Texture>> m_AssetIconMap;
 		std::map<std::string, Ref<Texture>> m_TextureFolderContentHolder;

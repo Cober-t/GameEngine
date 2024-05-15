@@ -67,6 +67,10 @@ namespace Cober {
 					m_FileBrowser = new ImGui::FileBrowser(ImGuiFileBrowserFlags_EnterNewFilename);
 					m_FileBrowser->Open();
 				}
+				else
+				{
+					Scene::Save(Editor::GetActiveScene(), m_SaveFile.filename().string());
+				}
 			}
 			if (ImGui::MenuItem(ICON_FA_UPLOAD "  Load Scene")) 
 			{

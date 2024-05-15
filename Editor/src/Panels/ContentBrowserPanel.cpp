@@ -7,13 +7,12 @@
 namespace Cober {
 
 	ContentBrowserPanel* ContentBrowserPanel::s_Instance = nullptr;
-	// Once we have projects, change this
-	extern const std::filesystem::path m_AssetPath = ASSETS_DIR;
 
 	ContentBrowserPanel::ContentBrowserPanel()
 	{
 		s_Instance = this;
-		m_CurrentDirectory = m_AssetPath;
+		m_AssetsPath = std::filesystem::current_path() /  "assets";
+		m_CurrentDirectory = m_AssetsPath;
 
 		m_AssetIconMap[".png"] = EditorResources::PNGFileIcon;
 		m_AssetIconMap[".jpg"] = EditorResources::JPGFileIcon;
@@ -35,7 +34,7 @@ namespace Cober {
 	{
 		ImGui::Begin("Content Browser");
 
-		if (m_CurrentDirectory != m_AssetPath)
+		if (m_CurrentDirectory != m_AssetsPath)
 		{
 			if (ImGui::ImageButton((ImTextureID)m_AssetIconMap["backwards"]->GetRendererID(), ImVec2(18.0f, 18.0f), { 0, 1 }, { 1, 0 }))
 			{
@@ -74,7 +73,7 @@ namespace Cober {
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory)) 
         {
 			const auto& path = directoryEntry.path();
-			std::filesystem::path relativePath = std::filesystem::relative(path, m_AssetPath);
+			std::filesystem::path relativePath = std::filesystem::relative(path, m_AssetsPath);
 			std::string filenameString = relativePath.filename().string();
 
 			ImGui::PushID(filenameString.c_str());

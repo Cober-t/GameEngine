@@ -14,10 +14,6 @@ function fileExists(file)
       return f ~= nil
 end
 
-if fileExists("projectSettings.lua") then
-    local settings = require "projectSettings"
-    -- buildPath = settings.buildPath
-end
 
 workspace "Cober"
     architecture "x64"
@@ -38,21 +34,8 @@ workspace "Cober"
 
 -- This is a helper variable, to concatenate the sys-arch
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
-
--- Get values from projectSettings.json
-if inArray(_ARGS, "gameDir") then
-    gameDir = "C:/Users/Jorge/Desktop/MVP Engine Test"
-else
-    gameDir = "C:/Users/Jorge/Documents/GameEngine/Game"
-end
-
-if inArray(_ARGS, "assetDir") then
-    assetsDir = "C:/Users/Jorge/Desktop/MVP Engine Test"
-else
-    assetsDir = "C:/Users/Jorge/Documents/GameEngine"
-end
-buildPath = "%{prj.name}/build"
-
+-- Overwritte with command arg from editor when compile
+buildPath = "%{prj.location}/build"
 
 IncludeDir = {}
 IncludeDir["GLFW"]          = "%{wks.location}/libraries/glfw/include"
@@ -96,7 +79,7 @@ end
 
 if inArray(_ARGS, "game") then
     group "Application"
-        include ("" .. gameDir .. "")
+        include "C:/Users/Jorge/Desktop/MVP Engine Test"
     group ""
 end
 

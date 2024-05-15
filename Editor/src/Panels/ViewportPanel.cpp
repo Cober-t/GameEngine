@@ -51,7 +51,7 @@ namespace Cober {
 	}
 
 
-	void ViewportPanel::UnbindFramebuffer() 
+	void ViewportPanel::UnbindFramebuffer()
     {
 		m_Fbo->Unbind();
 	}
@@ -210,7 +210,7 @@ namespace Cober {
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) 
 			{
 				const wchar_t* path = (const wchar_t*)payload->Data;
-				m_FilePath = (std::filesystem::path(ASSETS_DIR) / path).string();
+				m_FilePath = (std::filesystem::current_path() / "assets" / path).string();
 				LOG_INFO(m_FilePath);
 				
 				//Textures

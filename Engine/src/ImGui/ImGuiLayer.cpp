@@ -42,10 +42,11 @@ namespace Cober {
 		float fontSize = 18.0f;// *2.0f;
 		static const ImWchar icons_ranges[] = { 0xf000, 0xf2e0, 0 };
 
-		std::string openSansFont = (std::string)ASSETS_DIR + "fonts\\opensans\\OpenSans-Regular.ttf";
+		std::filesystem::path fontPath = std::filesystem::current_path() / "assets/fonts/";
+		std::string openSansFont = fontPath.string() + "opensans/OpenSans-Regular.ttf";
 		io.Fonts->AddFontFromFileTTF(openSansFont.c_str(), fontSize, NULL, io.Fonts->GetGlyphRangesDefault());
 
-		std::string awesomeFont = (std::string)ASSETS_DIR + "fonts\\FontAwesome\\fontawesome-webfont.ttf";
+		std::string awesomeFont = fontPath.string() + "FontAwesome/fontawesome-webfont.ttf";
 		io.Fonts->AddFontFromFileTTF(awesomeFont.c_str(), fontSize, &config, icons_ranges);
 
 		io.Fonts->Build();

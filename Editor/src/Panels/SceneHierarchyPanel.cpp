@@ -453,7 +453,7 @@ namespace Cober {
 					{
 						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
 							const wchar_t* path = (const wchar_t*)payload->Data;
-							std::filesystem::path texturePath = std::filesystem::path(ASSETS_DIR) / path;
+							std::filesystem::path texturePath = std::filesystem::current_path() / "assets" / path;
 
 							std::string format = texturePath.string();
 							auto lastDot = format.find_last_of('.');

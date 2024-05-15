@@ -32,11 +32,6 @@ project "Engine"
 	{
         "_CRT_SECURE_NO_WARNINGS",
         "GLFW_INCLUDE_NONE",
-		'SCENES_DIR=' .. '"' .. assetsDir .. "" .. "/assets/scenes/" .. '"',
-		'IMAGES_DIR=' .. '"' .. assetsDir .. "" .. "/assets/scenes/" .. '"',
-		'SHADERS_DIR=' .. '"' .. assetsDir .. "" .. "/assets/shaders/" .. '"',
-		'SCRIPTS_DIR=' ..'"' .. assetsDir .. "" .. "/assets/scripts/" .. '"',
-		'ASSETS_DIR=' .. '"' .. assetsDir .. "" .. "/assets/" .. '"',
 	}
 
 	includedirs 
