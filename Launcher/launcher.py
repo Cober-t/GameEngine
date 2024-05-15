@@ -500,6 +500,7 @@ class LauncherWindow(QtWidgets.QDialog):
         self.createProjectButton.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.projectList = QtWidgets.QListWidget(self)
+        self.projectList.setWordWrap(True)
         self.projectList.setSpacing(10)
         self.projectList.setFont(QtGui.QFont("Consolas", 10))
         self.projectList.setViewMode(QtWidgets.QListView.ListMode)
@@ -561,6 +562,7 @@ class LauncherWindow(QtWidgets.QDialog):
                 thumbnailPath = self.defaultThumbnail
 
             thumbnail.setIcon(QtGui.QIcon(thumbnailPath))
+            
             thumbnail.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignLeft | QtCore.Qt.AlignmentFlag.AlignCenter)
 
             self.projectList.addItem(thumbnail)
