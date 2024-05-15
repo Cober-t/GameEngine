@@ -4,7 +4,7 @@ class Premake5Template():
         self.template = """\
 -- 'name' and 'buildPath' comes from main premake, 
 -- that received this commands as arguments from projectSettings.lua
-project name
+project {0}
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"

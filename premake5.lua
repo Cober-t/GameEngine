@@ -5,16 +5,6 @@ function inArray(list, item)
     return false
 end
 
-
-function fileExists(file)
-      local f = io.open(file, "rb")
-      if f then
-        f:close()
-    end
-      return f ~= nil
-end
-
-
 workspace "Cober"
     architecture "x64"
     startproject "Editor"
@@ -29,7 +19,6 @@ workspace "Cober"
 	{
 		"MultiProcessorCompile"
 	}
-
 
 
 -- This is a helper variable, to concatenate the sys-arch
@@ -70,17 +59,14 @@ group "Core"
     include "Engine"
 group ""
 
-if inArray(_ARGS, "editor") then
+if inArray(_ARGS, "game") == false then
     group "Tools"
         include "Editor"
     group ""
 end
 
-
 if inArray(_ARGS, "game") then
     group "Application"
-        include "C:/Users/Jorge/Desktop/MVP Engine Test"
+        include ("" .. _ARGS[4] .. "")
     group ""
 end
-
-

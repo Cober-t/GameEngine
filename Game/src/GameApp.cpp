@@ -3,8 +3,8 @@
 
 #include "GameLayer.h"
 
-using namespace Cober;
 
+using namespace Cober;
 
 class GameApp: public EngineApp 
 {
@@ -23,15 +23,18 @@ public:
 };
 
 
-EngineApp* CreateApplication(AppCommandLineArgs args) 
+Cober::EngineApp* Cober::CreateApplication(Cober::AppCommandLineArgs args)
 {
 	AppSpecification spec;
-	spec.Name = "Game Application";
-	spec.WorkingDirectory = "./";
-	spec.Width = 1280;
-	spec.Height = 720;
-	spec.CommandLineArgs = args;
+	if (args.Count >= 4)
+	{
+		spec.Name = args[1];
+		spec.WorkingDirectory = (std::string)args[2];
+		spec.Width = atoi(args[3]);
+		spec.Height = atoi(args[4]);
+		spec.CommandLineArgs = args;
+	}
 
+	LOG_INFO("Editor Constructor!");
 	return new GameApp(spec);
-	LOG_INFO("Game Constructor!");
 }

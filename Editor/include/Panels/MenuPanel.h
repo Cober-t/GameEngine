@@ -66,7 +66,6 @@ namespace Cober {
 	private:
 		ImGui::FileBrowser* m_FileBrowser;
 		std::string m_FilePath;
-		std::filesystem::path m_OutputCompilePath;
 		std::filesystem::path m_SaveFile;
 		std::filesystem::path m_LoadFile;
 

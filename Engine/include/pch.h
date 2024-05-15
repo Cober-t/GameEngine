@@ -14,6 +14,7 @@
 #include <array>
 #include <stack>
 #include <cstdint>
+#include <cstdlib>
 #include <iomanip>
 #include <vector>
 #include <map>

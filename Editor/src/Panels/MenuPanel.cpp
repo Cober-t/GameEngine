@@ -93,30 +93,13 @@ namespace Cober {
 			if (ImGui::Checkbox("VSYNC", &m_Settings.Vsync))
 				EngineApp::Get().GetWindow().SetVSync(m_Settings.Vsync);
 
-
-			ImGui::SetNextItemWidth(120.0f);
-			if (ImGui::BeginCombo("##", m_Settings.CurrentBuildOption)) 
-			{
-				for (int n = 0; n < IM_ARRAYSIZE(m_Settings.BuildValues); n++) 
-				{
-					bool selected = (m_Settings.CurrentBuildOption == m_Settings.BuildValues[n]);
-					if (ImGui::Selectable(m_Settings.BuildValues[n], selected)) 
-					{
-						m_FileBrowser = new ImGui::FileBrowser(ImGuiFileBrowserFlags_SelectDirectory);
-						m_FileBrowser->Open();
-						m_Settings.CurrentBuildOption = m_Settings.BuildValues[n];
-						m_MenuFileOption = MenuOptions::COMPILE;
-					}
-				}
-				ImGui::EndCombo();
-			}
-			ImGui::SameLine();
-
 			if (ImGui::MenuItem("Compile"))
 			{
-				if (!m_OutputCompilePath.empty())
-					LOG_INFO(m_OutputCompilePath)
-				// Compile Command
+				std::filesystem::path solutionDirPath = SOLUTION_DIR;
+				std::filesystem::path compileCommand = solutionDirPath / "setup" / "Compile.bat";
+				std::string command = compileCommand.string() + " game " + "\"" + std::filesystem::current_path().string() + "\"";
+				system(command.c_str());
+				LOG_CORE_INFO("Build command: {0}", command.c_str());
 			}
 
 			ImGui::EndMenu();
@@ -198,10 +181,6 @@ namespace Cober {
 						SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
 					}
 				}
-				break;
-
-			case MenuOptions::COMPILE:
-				m_OutputCompilePath = m_FileBrowser->GetSelected();
 				break;
 		}
 		m_FileBrowser->ClearSelected();

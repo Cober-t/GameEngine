@@ -1,53 +1,34 @@
-[2024-05-15 12:33:47.605] [APP] [info] [EditorApp.cpp:37] Editor Constructor!
-[2024-05-15 12:33:47.607] [ENGINE] [info] [EngineApp.cpp:12] EngineApp Constructor!
-[2024-05-15 12:33:47.607] [ENGINE] [info] [Window.cpp:40] Creating window Cober Engine Application (1280, 720)
-[2024-05-15 12:33:47.872] [ENGINE] [info] [OpenGLContext.cpp:11] Window Context Created!!
-[2024-05-15 12:33:47.878] [ENGINE] [info] [OpenGLContext.cpp:26] OpenGL Info:
-[2024-05-15 12:33:47.878] [ENGINE] [info] [OpenGLContext.cpp:27]   Vendor: NVIDIA Corporation
-[2024-05-15 12:33:47.879] [ENGINE] [info] [OpenGLContext.cpp:28]   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
-[2024-05-15 12:33:47.879] [ENGINE] [info] [OpenGLContext.cpp:29]   Version: 4.6.0 NVIDIA 551.86
-[2024-05-15 12:33:47.879] [ENGINE] [info] [Timestep.h:18] Created Timer
-[2024-05-15 12:33:47.879] [ENGINE] [trace] [OpenGLRenderAPI.cpp:45] Render API init
-[2024-05-15 12:33:47.880] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-05-15 12:33:47.880] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-05-15 12:33:47.881] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2024-05-15 12:33:47.883] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Quad.glsl success
-[2024-05-15 12:33:47.883] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-05-15 12:33:47.883] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-05-15 12:33:47.884] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Line.glsl success
-[2024-05-15 12:33:47.885] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-05-15 12:33:47.885] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-05-15 12:33:47.886] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2024-05-15 12:33:47.887] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Circle.glsl success
-[2024-05-15 12:33:47.887] [ENGINE] [trace] [OpenGLBuffer.cpp:94] Render UniformBuffer success
-[2024-05-15 12:33:47.887] [APP] [info] [EditorCamera.cpp:39] Editor Camera Created!!
-[2024-05-15 12:33:47.900] [ENGINE] [info] [Debug2DPhysics.cpp:19] Debug 2D Physics Constructor!
-[2024-05-15 12:33:47.900] [APP] [error] [Utils.cpp:271] "C:\\Users\\Jorge\\Documents\\GameEngine"
-[2024-05-15 12:33:47.902] [APP] [info] [Scene.cpp:18] Scene Created!!
-[2024-05-15 12:33:47.903] [APP] [info] [Scene.cpp:139] Created entity with ID 7310971608807553578 and name Entity1
-[2024-05-15 12:33:47.904] [APP] [info] [Scene.cpp:139] Created entity with ID 16773112571435317115 and name Entity0
-[2024-05-15 12:33:47.905] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-15 12:33:47.905] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-15 12:33:47.905] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-15 12:33:47.906] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-15 12:33:47.906] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-15 12:33:49.991] [APP] [info] [EditorApp.cpp:20] Editor Destructor!
-[2024-05-15 12:33:49.992] [ENGINE] [info] [EngineApp.cpp:37] EngineApp Destructor!
-[2024-05-15 12:33:49.992] [ENGINE] [info] [Timestep.h:23] Destroyed Timer
-[2024-05-15 12:33:49.992] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-15 12:33:49.993] [APP] [info] [EditorCamera.cpp:45] Editor Camera Destroyed!!
-[2024-05-15 12:33:49.993] [APP] [info] [EditorLayer.cpp:52] Detached Editor Layer!
-[2024-05-15 12:33:49.995] [ENGINE] [info] [Window.cpp:27] Window Destroyed
-[2024-05-15 12:33:50.014] [ENGINE] [info] [OpenGLContext.cpp:16] Window Context Destroyed!!
-[2024-05-15 12:33:50.014] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
-[2024-05-15 12:33:50.015] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
-[2024-05-15 12:33:50.015] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
-[2024-05-15 12:33:50.015] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
-[2024-05-15 12:33:50.016] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
-[2024-05-15 12:33:50.016] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
-[2024-05-15 12:33:50.016] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
-[2024-05-15 12:33:50.016] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
-[2024-05-15 12:33:50.017] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
-[2024-05-15 12:33:50.017] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
-[2024-05-15 12:33:50.017] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
-[2024-05-15 12:33:50.017] [ENGINE] [trace] [OpenGLBuffer.cpp:100] Render UniformBuffer cleaned up
+[2024-05-15 17:40:16.804] [APP] [info] [EditorApp.cpp:36] Editor Constructor!
+[2024-05-15 17:40:16.805] [ENGINE] [info] [EngineApp.cpp:12] EngineApp Constructor!
+[2024-05-15 17:40:16.807] [ENGINE] [info] [EngineApp.cpp:21] Current Working Path: ./
+[2024-05-15 17:40:16.807] [ENGINE] [info] [Window.cpp:40] Creating window Cober Engine Application (1280, 720)
+[2024-05-15 17:40:17.077] [ENGINE] [info] [OpenGLContext.cpp:11] Window Context Created!!
+[2024-05-15 17:40:17.083] [ENGINE] [info] [OpenGLContext.cpp:26] OpenGL Info:
+[2024-05-15 17:40:17.083] [ENGINE] [info] [OpenGLContext.cpp:27]   Vendor: NVIDIA Corporation
+[2024-05-15 17:40:17.083] [ENGINE] [info] [OpenGLContext.cpp:28]   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+[2024-05-15 17:40:17.084] [ENGINE] [info] [OpenGLContext.cpp:29]   Version: 4.6.0 NVIDIA 551.86
+[2024-05-15 17:40:17.084] [ENGINE] [info] [Timestep.h:18] Created Timer
+[2024-05-15 17:40:17.084] [ENGINE] [trace] [OpenGLRenderAPI.cpp:45] Render API init
+[2024-05-15 17:40:17.084] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-05-15 17:40:17.084] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-05-15 17:40:17.086] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
+[2024-05-15 17:40:17.087] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Quad.glsl success
+[2024-05-15 17:40:17.088] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-05-15 17:40:17.088] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-05-15 17:40:17.089] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Line.glsl success
+[2024-05-15 17:40:17.089] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-05-15 17:40:17.089] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-05-15 17:40:17.091] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
+[2024-05-15 17:40:17.091] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Circle.glsl success
+[2024-05-15 17:40:17.091] [ENGINE] [trace] [OpenGLBuffer.cpp:94] Render UniformBuffer success
+[2024-05-15 17:40:17.092] [APP] [info] [EditorCamera.cpp:39] Editor Camera Created!!
+[2024-05-15 17:40:17.104] [ENGINE] [info] [Debug2DPhysics.cpp:19] Debug 2D Physics Constructor!
+[2024-05-15 17:40:17.106] [APP] [info] [Scene.cpp:18] Scene Created!!
+[2024-05-15 17:40:17.107] [APP] [info] [Scene.cpp:139] Created entity with ID 487495768412460957 and name Entity1
+[2024-05-15 17:40:17.107] [APP] [info] [Scene.cpp:139] Created entity with ID 15580878090453559769 and name Entity0
+[2024-05-15 17:40:17.108] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
+[2024-05-15 17:40:17.108] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
+[2024-05-15 17:40:17.108] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
+[2024-05-15 17:40:17.109] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
+[2024-05-15 17:40:17.109] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
+[2024-05-15 17:40:25.022] [ENGINE] [info] [MenuPanel.cpp:102] Build command: C:\Users\Jorge\Documents\GameEngine\setup\Compile.bat game "C:\Users\Jorge\Documents\GameEngine"

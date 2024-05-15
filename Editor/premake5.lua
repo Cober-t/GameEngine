@@ -3,7 +3,7 @@ project "Editor"
     language "C++"
     cppdialect "C++17"	
     staticruntime "off"
-    
+
     -- fullOutputDir = "%{wks.location}/bin/" .. outputdir .. "/%{prj.name}"
     targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
     objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
@@ -65,6 +65,7 @@ project "Editor"
     {
         "_CRT_SECURE_NO_WARNINGS",
         "__EDITOR__",
+        'SOLUTION_DIR=R"($(SolutionDir))"',
         'EDITOR_ICONS_DIR=R"($(SolutionDir)Editor\\icons\\)"',
     }
 

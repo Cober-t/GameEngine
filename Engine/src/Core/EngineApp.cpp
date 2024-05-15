@@ -18,6 +18,8 @@ namespace Cober {
 		if (!m_Specification.WorkingDirectory.empty())
 			std::filesystem::current_path(m_Specification.WorkingDirectory);
 
+        LOG_CORE_INFO("Current Working Path: {0}", m_Specification.WorkingDirectory);
+
         m_Window = CreateUnique<Window>(WindowProps(m_Specification.Name, m_Specification.Width, m_Specification.Height));
         m_Window->SetEventCallback([this](Event& e) { OnEvent(e); });
         m_TimeStep = CreateUnique<Timestep>();

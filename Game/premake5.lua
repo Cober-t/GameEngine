@@ -44,8 +44,8 @@ project "Game"
     }
 
 	filter { "system:windows", "configurations:Debug" }
-	buildoptions "/MDd"       
-	defines { "COBER_TEST" }
+		buildoptions "/MDd"
+		defines { "COBER_TEST" }
 
 	filter { "system:windows", "configurations:Release" }
 		buildoptions "/MD"
