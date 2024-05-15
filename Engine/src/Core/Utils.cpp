@@ -11,7 +11,6 @@ namespace Cober::Utils {
 	bool DecomposeTransform(const glm::mat4& transform, glm::vec3& translation, glm::vec3& rotation, glm::vec3& scale)
 	{
 		// From glm::decompose in matrix_decompose.inl
-
 		using namespace glm;
 		using T = float;
 
@@ -267,7 +266,7 @@ namespace Cober::Utils {
 	}
 
 
-	bool DataFile::Read(DataFile& dataFile, const std::string& fileName, const char listStep) 
+	bool DataFile::Read(DataFile& dataFile, std::string& fileName, const char listStep) 
     {
 		std::ifstream file(SCENES_DIR + fileName);
 

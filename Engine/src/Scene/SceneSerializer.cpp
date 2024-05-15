@@ -120,18 +120,25 @@ namespace Cober {
     }
 
 
-    Ref<Scene> SceneSerializer::Deserialize(const std::string& sceneName)
+    Ref<Scene> SceneSerializer::Deserialize(std::string& sceneName)
     {
 		Utils::DataFile sceneLoader;
 		std::string name;
+
+		if (!std::filesystem::exists(SCENES_DIR + sceneName))
+		{
+			sceneName = "SceneDefault.lua";
+		}
+
 		if (sceneName.find_last_of('.') != std::string::npos)
 			name = sceneName.substr(0, sceneName.find_last_of('.'));
 		else
 			name = sceneName;
 
+
+
 		if (Utils::DataFile::Read(sceneLoader, sceneName)) 
 		{
-
 			Ref<Scene> newScene = CreateRef<Scene>();
 			// newScene->_world2D = sceneLoader[name]["world2D"].GetInt();
 

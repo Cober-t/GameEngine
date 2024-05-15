@@ -17,8 +17,8 @@ namespace Cober {
 		static bool Serialize(const Ref<Scene>& scene, const std::string& sceneName = "Scene1");
 		// static bool SerializeRuntime(const std::string& sceneName = "Scene1");
 
-		static Ref<Scene> Deserialize(const std::string& sceneName);
-		// Ref<Scene> DeserializeRuntime(const std::string& sceneName);
+		static Ref<Scene> Deserialize(std::string& sceneName);
+		// Ref<Scene> DeserializeRuntime(std::string& sceneName);
 	};
 }
 

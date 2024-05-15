@@ -3,6 +3,7 @@
 import os
 import sys
 import json
+import subprocess
 
 from PySide6 import QtCore, QtGui, QtWidgets
 
@@ -109,7 +110,6 @@ class ProjectAPI():
         '''Load project from a project gallery item'''
         path = item.data(role=QtCore.Qt.ToolTipRole)
         self.load(path)
-        print(path)
 
 
     def createNewProject(self, name, description, projectPath, thumbnail):
@@ -146,7 +146,6 @@ class ProjectAPI():
         for assetFolder in ALL_ASSETS_FOLDERS:
             os.mkdir(os.path.join(projectPath, ASSETS_FOLDER, assetFolder))
 
-
         # Create hardcoded premake
         file = open(os.path.join(projectPath, PREMAKE5), 'w')
         premakeTemplate = Premake5Template(name)
@@ -168,6 +167,8 @@ class ProjectAPI():
 
 
     def load(self, path):
+        # Read projectSettings from path and pass through command args
+        subprocess.Popen("..\\bin\\Debug-windows-x86_64\\Editor\\Editor.exe Scene2.lua")
         return
 
 
