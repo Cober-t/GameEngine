@@ -7,7 +7,12 @@ end
 
 workspace "Cober"
     architecture "x64"
-    startproject "Editor"
+
+    if inArray(_ARGS, "game") then
+        startproject ("" .. _ARGS[4] .. "")
+    else
+        startproject "Editor"
+    end
 
     configurations {
         "Debug",

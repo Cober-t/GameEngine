@@ -13,3 +13,4 @@ Game/build/
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
+*.vs

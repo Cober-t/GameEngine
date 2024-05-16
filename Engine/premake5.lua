@@ -22,7 +22,8 @@ project "Engine"
 		"%{wks.location}/libraries/glm/glm/**.inl",
 	}
 
-    disablewarnings { 
+    disablewarnings 
+	{
         "4251",
 		"4131",
 		"4267"
@@ -60,7 +61,7 @@ project "Engine"
         "%{IncludeDir.sol}",
 	}
 
-	links 
+	links
 	{
 		"GLFW",
         "opengl32.lib",
