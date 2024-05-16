@@ -48,7 +48,7 @@ namespace Cober {
 		Entity DuplicateEntity(Entity entity);
 
 		void Step(int step = 1) { m_StepFrames = step; };
-		void Pause() { m_IsPaused == m_IsPaused == true ? false : true; };
+		void Pause() { m_IsPaused = m_IsPaused == true ? false : true; };
 		static bool Save(const Ref<Scene>& scene, std::string sceneName = "Scene1");
 		static Ref<Scene> Load(std::string scenePath = "SceneDefault.lua");
 		static Ref<Scene> Copy(Ref<Scene> scene);
@@ -80,7 +80,7 @@ namespace Cober {
 		std::unordered_map<UUID, Entity> m_EntityMap;
 
 		int m_StepFrames;
-		bool m_IsPaused;
+		bool m_IsPaused = false;
 
 		friend class Entity;
 		friend class System;

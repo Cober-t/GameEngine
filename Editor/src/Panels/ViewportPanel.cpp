@@ -291,12 +291,11 @@ namespace Cober {
 
 		ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
+		auto icon = gameState == GameState::EDITOR ? ICON_FA_PLAY : ICON_FA_STOP;
 		float size = ImGui::GetWindowHeight() - 4.0f;
-
-		Ref<Texture> icon = gameState == GameState::EDITOR ? m_AssetIconMap["play"] : m_AssetIconMap["stop"];
 		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 
-		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), { 0, 1 }, { 1, 0 })) 
+		if (ImGui::Button(icon)) 
         {
 			m_GizmoType = -1;
 			if (gameState == GameState::EDITOR) 
@@ -319,6 +318,19 @@ namespace Cober {
 				// Provisional fix to avoid crash
 				Editor::SetSelectedEntity();
 			}
+		}
+
+		if (gameState == GameState::RUNTIME_EDITOR)
+		{
+			ImGui::SameLine();
+
+			if (ImGui::Button(ICON_FA_PAUSE))
+				Editor::GetActiveScene()->Pause();
+
+			ImGui::SameLine();
+
+			if (ImGui::Button(ICON_FA_STEP_FORWARD))
+				Editor::GetActiveScene()->Step(2);
 		}
 
 		ImGui::PopStyleVar(2);

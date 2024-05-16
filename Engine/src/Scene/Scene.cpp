@@ -187,7 +187,7 @@ namespace Cober {
 	{
 		GetSystem<RenderSystem>().Update(ts, camera, this);
 
-		if (m_IsPaused || m_StepFrames-- > 0.0f)
+		if (!m_IsPaused || m_StepFrames-- > 0.0f)
 		{
 			while(ts->GetDeltaTime() >= 1.0f)
             {
