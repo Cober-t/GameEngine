@@ -20,13 +20,13 @@ premakeInstalled = PremakeRequirements.Validate()
 if (premakeInstalled):
     if platform.system() == "Windows":
         print("\nRunning premake...")
+        commands = []
+        commands.append(os.path.dirname(__file__) + "\\Win-GenProjects.bat")
+        commands.append("nopause")
         if (len(sys.argv) > 1): # First argument is 'Setup.py'
-            commands = []
-            commands.append(os.path.dirname(__file__) + "\\Win-GenProjects.bat")
-            commands.append("nopause")
             for command in sys.argv:
                 commands.append(command)
-            subprocess.call(commands)
+        subprocess.call(commands)
 
     print("\nSetup completed!")
 else:

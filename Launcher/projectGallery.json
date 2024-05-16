@@ -4,9 +4,9 @@
         "description": "description",
         "thumbnail": "pong.png"
     },
-    "FirstGame": {
+    "Test": {
         "projectPath": "C:\\Users\\Jorge\\Desktop\\FirstGame",
-        "description": "A ver si compila la cosa esta",
-        "thumbnail": "pokemon.jpg"
+        "description": "asdas",
+        "thumbnail": "portal.jpg"
     }
 }

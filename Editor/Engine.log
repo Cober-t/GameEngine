@@ -1,14 +1,15 @@
-[2024-05-15 17:23:02.013] [APP] [info] [EditorApp.cpp:36] Editor Constructor!
-[2024-05-15 17:23:02.014] [ENGINE] [info] [EngineApp.cpp:12] EngineApp Constructor!
-[2024-05-15 17:23:02.014] [ENGINE] [info] [Window.cpp:40] Creating window Cober Engine Application (1280, 720)
-[2024-05-15 17:23:02.320] [ENGINE] [info] [OpenGLContext.cpp:11] Window Context Created!!
-[2024-05-15 17:23:02.326] [ENGINE] [info] [OpenGLContext.cpp:26] OpenGL Info:
-[2024-05-15 17:23:02.326] [ENGINE] [info] [OpenGLContext.cpp:27]   Vendor: NVIDIA Corporation
-[2024-05-15 17:23:02.326] [ENGINE] [info] [OpenGLContext.cpp:28]   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
-[2024-05-15 17:23:02.327] [ENGINE] [info] [OpenGLContext.cpp:29]   Version: 4.6.0 NVIDIA 551.86
-[2024-05-15 17:23:02.327] [ENGINE] [info] [Timestep.h:18] Created Timer
-[2024-05-15 17:23:02.327] [ENGINE] [trace] [OpenGLRenderAPI.cpp:45] Render API init
-[2024-05-15 17:23:02.327] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-05-15 17:23:02.327] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-05-15 17:23:02.329] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2024-05-15 17:23:02.330] [ENGINE] [warning] [OpenGLShader.cpp:68] Could not open file Quad.glsl
+[2024-05-16 09:09:11.208] [APP] [info] [EditorApp.cpp:36] Editor Constructor!
+[2024-05-16 09:09:11.210] [ENGINE] [info] [EngineApp.cpp:12] EngineApp Constructor!
+[2024-05-16 09:09:11.210] [ENGINE] [info] [EngineApp.cpp:21] Current Working Path: ./
+[2024-05-16 09:09:11.210] [ENGINE] [info] [Window.cpp:40] Creating window Cober Engine Application (1280, 720)
+[2024-05-16 09:09:11.501] [ENGINE] [info] [OpenGLContext.cpp:11] Window Context Created!!
+[2024-05-16 09:09:11.506] [ENGINE] [info] [OpenGLContext.cpp:26] OpenGL Info:
+[2024-05-16 09:09:11.507] [ENGINE] [info] [OpenGLContext.cpp:27]   Vendor: NVIDIA Corporation
+[2024-05-16 09:09:11.507] [ENGINE] [info] [OpenGLContext.cpp:28]   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+[2024-05-16 09:09:11.507] [ENGINE] [info] [OpenGLContext.cpp:29]   Version: 4.6.0 NVIDIA 551.86
+[2024-05-16 09:09:11.507] [ENGINE] [info] [Timestep.h:18] Created Timer
+[2024-05-16 09:09:11.507] [ENGINE] [trace] [OpenGLRenderAPI.cpp:45] Render API init
+[2024-05-16 09:09:11.508] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-05-16 09:09:11.508] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-05-16 09:09:11.509] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
+[2024-05-16 09:09:11.510] [ENGINE] [warning] [OpenGLShader.cpp:68] Could not open file Quad.glsl

@@ -4,8 +4,8 @@
 #include "Render/Texture.h"
 #include "Platforms/OpenGL/OpenGLRenderAPI.h"
 
-#include <glad/glad.h>
 #include <stb_image.h>
+typedef unsigned int GLenum;
 
 namespace Cober {
 

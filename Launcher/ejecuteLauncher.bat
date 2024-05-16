@@ -1,1 +1,1 @@
-start pythonw launcherTest.py
+start pythonw launcher.py

@@ -253,7 +253,7 @@ namespace Cober {
 			return newScene;
 		}
 		
-		LOG_ERROR(("Cannot read scene with path: {0}", std::filesystem::current_path().string() + "assets/scenes/" + sceneName));
+		LOG_ERROR(("Cannot read scene with path: {0}", std::filesystem::current_path().string() + "\\assets\\scenes\\" + sceneName));
 		return nullptr;
     }
 }

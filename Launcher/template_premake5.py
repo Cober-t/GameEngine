@@ -10,8 +10,8 @@ project "{0}"
 	cppdialect "C++17"
 	staticruntime "off"
 
-	targetdir (buildPath)
-	objdir (buildPath .. "/obj")
+	targetdir (buildPath .. "/" .. outputdir)
+	objdir (buildPath .. "/" .. outputdir .. "/obj")
 
 	files
 	{{
@@ -58,19 +58,17 @@ project "{0}"
 		systemversion "latest"
 
 	filter "configurations:Debug"
-		defines {{
-			"GLFW_INCLUDE_NONE",
-		}}
+		defines {{ "GLFW_INCLUDE_NONE" }}
 		runtime "Debug"
 		symbols "on"
 
 	filter "configurations:Release"
-		defines "COBER_RELEASE"
+		defines {{ "GLFW_INCLUDE_NONE" }}
 		runtime "Release"
 		optimize "on"
 
 	filter "configurations:Dist"
-		defines "COBER_DIST"
+		defines {{ "GLFW_INCLUDE_NONE" }}
 		runtime "Release"
 		optimize "on"\
 """.format(name)

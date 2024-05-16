@@ -9,8 +9,8 @@ workspace "Cober"
     architecture "x64"
     startproject "Editor"
 
-    configurations { 
-        "Debug", 
+    configurations {
+        "Debug",
         "Release",
         "Dist"
     }
