@@ -1,4 +1,4 @@
 @echo off
-pushd %~dp0\..\
-call bin\Debug-windows-x86_64\Editor\Editor.exe %*
+pushd %~dp0\..\Launcher
+call "ejecuteLauncher.bat"
 popd

@@ -22,7 +22,6 @@ workspace "Cober"
 
 -- This is a helper variable, to concatenate the sys-arch
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
--- Overwritte with command arg from editor when compile
 buildPath = "%{prj.location}/build"
 
 IncludeDir = {}
@@ -66,5 +65,9 @@ if inArray(_ARGS, "game") then
 else
     group "Tools"
         include "Editor"
+    group ""
+
+    group "Application"
+        include "Game"
     group ""
 end

@@ -186,7 +186,7 @@ class ProjectAPI():
             settings = json.load(file)
         
         subprocess.Popen(f"..\\bin\\Debug-windows-x86_64\\Editor\\Editor.exe \
-            {settings["name"]} {settings["assetsPath"]} {settings["screenWidth"]} {settings["screenHeight"]}")
+            {settings["name"]} {settings["assetsPath"]} 1920 1080")
         return
 
 
