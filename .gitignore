@@ -5,6 +5,8 @@ bin/
 bin-int/
 .idea/
 __pycache__/
+Game/assets/
+Game/build/
 
 *.log
 *.sln

@@ -1,0 +1,8 @@
+{
+    "name": "\"Game\"",
+    "assetsPath": "\"C:/Users/Jorge/Documents/GameEngine/Game\"",
+    "buildPath": "%{prj.name/build}",
+    "lastScene": "SceneDefault.lua",
+    "screenWidth": 1280,
+    "screenHeight": 720
+}

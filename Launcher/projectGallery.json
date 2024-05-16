@@ -1,7 +1,7 @@
 {
-    "Pong": {
-        "projectPath": "C:/Users/Jorge/Desktop/MVP Engine Test/",
-        "description": "description",
-        "thumbnail": "pong.png"
+    "Game": {
+        "projectPath": "C:\\Users\\Jorge\\Documents\\GameEngine\\Game",
+        "description": "Sandbox app inside engine folder",
+        "thumbnail": "sandbox.png"
     }
 }

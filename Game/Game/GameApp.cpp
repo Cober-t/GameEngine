@@ -1,12 +1,12 @@
 #include <Engine.h>
 #include <EntryPoint.h>
 
-#include "GameLayer.h"
-
+#include "Game.h"
 
 using namespace Cober;
 
-class GameApp: public EngineApp 
+
+class GameApp: public EngineApp
 {
 public:
 
@@ -22,19 +22,15 @@ public:
 	}
 };
 
-
 Cober::EngineApp* Cober::CreateApplication(Cober::AppCommandLineArgs args)
 {
 	AppSpecification spec;
-	if (args.Count >= 4)
-	{
-		spec.Name = args[1];
-		spec.WorkingDirectory = (std::string)args[2];
-		spec.Width = atoi(args[3]);
-		spec.Height = atoi(args[4]);
-		spec.CommandLineArgs = args;
-	}
+	spec.Name = "Game";
+	spec.WorkingDirectory = "C:/Users/Jorge/Documents/GameEngine/Game";
+	spec.Width = 1280;
+	spec.Height = 720;
+	spec.CommandLineArgs = args;
 
-	LOG_INFO("Editor Constructor!");
+	LOG_INFO("Game Constructor!");
 	return new GameApp(spec);
 }

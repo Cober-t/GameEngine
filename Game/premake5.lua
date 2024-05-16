@@ -1,23 +1,24 @@
+-- 'name' and 'buildPath' comes from main premake, 
+-- that received this commands as arguments from projectSettings.lua
 project "Game"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
 	staticruntime "off"
 
-	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
+	targetdir (buildPath .. "/" .. outputdir)
+	objdir (buildPath .. "/" .. outputdir .. "/obj")
 
 	files
 	{
-		"include/**.h",
-		"src/**.cpp",
+		"%{prj.name}/**.h",
+		"%{prj.name}/**.cpp",
 	}
 
 	includedirs
 	{
 		"include",
 		"%{wks.location}/libraries",
-		"%{wks.location}/libraries/spdlog/include",
 		"%{wks.location}/Engine",
         "%{wks.location}/Engine/include",
 		"%{IncludeDir.glm}",
@@ -44,33 +45,25 @@ project "Game"
     }
 
 	filter { "system:windows", "configurations:Debug" }
-		buildoptions "/MDd"
-		defines { "COBER_TEST" }
+	buildoptions "/MDd"
 
 	filter { "system:windows", "configurations:Release" }
 		buildoptions "/MD"
 
 	filter "system:windows"
-		systemversion "latest"		
-
+		systemversion "latest"
 
 	filter "configurations:Debug"
-		defines {
-			"GLFW_INCLUDE_NONE",
-			"COBER_DEBUG",
-			"COBER_ENABLE_ASSERTS"
-		}
+		defines { "GLFW_INCLUDE_NONE" }
 		runtime "Debug"
 		symbols "on"
 
-
 	filter "configurations:Release"
-		defines "COBER_RELEASE"
+		defines { "GLFW_INCLUDE_NONE" }
 		runtime "Release"
 		optimize "on"
 
-
 	filter "configurations:Dist"
-		defines "COBER_DIST"
+		defines { "GLFW_INCLUDE_NONE" }
 		runtime "Release"
 		optimize "on"
