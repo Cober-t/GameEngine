@@ -20,7 +20,7 @@ namespace Cober {
 
 		extern "C" __declspec(dllexport) void UpdateScripts()
 		{
-			std::cout  << "Hello from the dll" << std::endl;
+			// std::cout  << "Hello from the dll" << std::endl;
 		}
 
 
@@ -29,6 +29,14 @@ namespace Cober {
 			auto colorAux = entityA->GetComponent<Render2DComponent>().color;
 			entityA->GetComponent<Render2DComponent>().color = entityB->GetComponent<Render2DComponent>().color;
 			entityB->GetComponent<Render2DComponent>().color = colorAux;
+		}
+
+
+		extern "C" __declspec(dllexport) bool IsKeyDown(KeyCode key)
+		{
+			// if (key == Key::A)
+			std::cout << key << " PRESSED!" << std::endl;
+			return true;
 		}
 	}
 }

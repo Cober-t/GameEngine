@@ -2,6 +2,7 @@
 #define INPUT_H
 
 #include "Events/KeyCodes.h"
+#include "Scene/Systems/ScriptSystem.h"
 
 #include <glm/glm.hpp>
 

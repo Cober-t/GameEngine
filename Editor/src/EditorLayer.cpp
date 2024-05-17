@@ -187,8 +187,9 @@ namespace Cober {
 		
 		ViewportPanel::Get().OnEvent(event);
 
-		EventDispatcher dispatcher(event);
+		EventDispatcher dispatcher(event);\
 		dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& event) { return OnKeyPressed(event); });
+		dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& event) { return Script::isKeyDown(event.GetKeyCode()); });
 	}
 
 

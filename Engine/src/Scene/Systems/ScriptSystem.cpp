@@ -12,6 +12,7 @@ namespace Cober {
 		static InitScriptsFn m_InitScripts = nullptr;
 		static UpdateScriptFn m_UpdateScripts = nullptr;
 		static NotifyBeginContactFn m_NotifyBeginContact = nullptr;
+		static IsKeyDownFn m_IsKeyDown = nullptr;
 
 		static bool m_IsLoaded = false;
 		static HMODULE m_Module;
@@ -20,6 +21,7 @@ namespace Cober {
 		static void InitScriptsStub() {}
 		static void UpdateScriptStub() {}
 		static void NotifyBeginContactStub(Entity* a, Entity* b) {}
+		static bool IsKeyDownStub(KeyCode key) { return true; }
 
 		static FARPROC __stdcall TryLoadFunction(HMODULE module, const char* functionName)
 		{
@@ -53,6 +55,16 @@ namespace Cober {
 			}
 		}
 
+		bool isKeyDown(KeyCode key)
+		{
+			if (m_IsKeyDown)
+			{
+				return m_IsKeyDown(key);
+			}
+
+			return false;
+		}
+
 		void reload()
 		{
 			if (m_IsLoaded)
@@ -66,6 +78,7 @@ namespace Cober {
 				m_InitScripts = (InitScriptsFn)TryLoadFunction(m_Module, "InitScripts");
 				m_UpdateScripts = (UpdateScriptFn)TryLoadFunction(m_Module, "UpdateScripts");
 				m_NotifyBeginContact = (NotifyBeginContactFn)TryLoadFunction(m_Module, "NotifyBeginContact");
+				m_IsKeyDown = (IsKeyDownFn)TryLoadFunction(m_Module, "IsKeyDown");
 				m_IsLoaded = true;
 
 				if (m_InitScripts)
@@ -88,6 +101,7 @@ namespace Cober {
 			m_InitScripts = InitScriptsStub;
 			m_UpdateScripts = UpdateScriptStub;
 			m_NotifyBeginContact = NotifyBeginContactStub;
+			m_IsKeyDown = IsKeyDownStub;
 
 			if (!FreeLibrary(m_Module))
 			{
