@@ -1,6 +1,7 @@
 #include <pch.h>
 
 #include "Physics/Physics2D.h"
+#include "Scene/Systems/ScriptSystem.h"
 #include "Core/EngineApp.h"
 
 namespace Cober {
@@ -53,7 +54,6 @@ namespace Cober {
     }
 
 
-
     void ContactListener::BeginContact(b2Contact* contact)
 	{
 		b2Fixture* fixtureA = contact->GetFixtureA();
@@ -69,6 +69,8 @@ namespace Cober {
 		{
             // LOG_WARNING("BEGIN CONTACT: {0}", reinterpret_cast<Entity*>(indexBodyB)->GetName());
 		}
+
+        Script::notifyBeginContact(reinterpret_cast<Entity*>(indexBodyA), reinterpret_cast<Entity*>(indexBodyB));
 	}
 
 

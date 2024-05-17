@@ -50,7 +50,7 @@ project "Editor"
         "%{IncludeDir.spdlog}",
     }
 
-    links 
+    links
     {
         "Engine",
         "ImGui",

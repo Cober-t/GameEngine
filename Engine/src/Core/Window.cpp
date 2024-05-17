@@ -19,6 +19,7 @@ namespace Cober {
 
 	Window::Window(const WindowProps& props)
 	{
+		LOG_CORE_INFO("Window Created");
 		Init(props);
 	}
 

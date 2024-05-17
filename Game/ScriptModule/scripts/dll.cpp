@@ -1,15 +1,41 @@
 #include <Windows.h>
 #include <iostream>
-#include "common.h"
-#include <iostream>
+#include <cstdlib>
+#include <Engine.h>
 
-extern "C" __declspec(dllexport) void foo()
-{
-	std::cout << "hello from the dll!\n";
+#include "common.h"
+
+namespace Cober {
+
+	namespace Script {
+
+		extern "C" __declspec(dllexport) void InitScripts()
+		{
+			// if  (Input::IsKeyPressed(Key::A))
+			// {
+			std::cout  << "Init dlls!" << std::endl;
+			// }
+		}
+
+
+		extern "C" __declspec(dllexport) void UpdateScripts()
+		{
+			std::cout  << "Hello from the dll" << std::endl;
+		}
+
+
+		extern "C" __declspec(dllexport) void NotifyBeginContact(Entity* entityA, Entity* entityB)
+		{
+			auto colorAux = entityA->GetComponent<Render2DComponent>().color;
+			entityA->GetComponent<Render2DComponent>().color = entityB->GetComponent<Render2DComponent>().color;
+			entityB->GetComponent<Render2DComponent>().color = colorAux;
+		}
+	}
 }
 
 
-#include <Windows.h>
+
+// #include <Windows.h>
 //https://learn.microsoft.com/en-us/windows/win32/dlls/dllmain
 BOOL WINAPI DllMain(
 	HINSTANCE hinstDLL,  // handle to DLL module

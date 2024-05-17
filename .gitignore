@@ -6,6 +6,7 @@ bin-int/
 .idea/
 __pycache__/
 Game/assets/
+Editor/assets/
 Game/build/
 
 *.log

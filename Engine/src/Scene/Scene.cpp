@@ -10,14 +10,6 @@
 
 #include <glm/glm.hpp>
 
-///////////////////////////////////////////
-//  TEST TO LAOD DLLs  ////////////////////
-#include <Window.h>
-
-extern "C" __declspec(dllexport) void foo();
-typedef void foo_t();
-///////////////////////////////////////////
-
 namespace Cober {
 
 	Scene::Scene()
@@ -99,7 +91,6 @@ namespace Cober {
 
 	Ref<Scene> Scene::Copy(Ref<Scene> baseScene) 
 	{
-
 		Ref<Scene> newScene = CreateRef<Scene>();
 
 		newScene->m_ViewportWidth = baseScene->m_ViewportWidth;
@@ -210,32 +201,6 @@ namespace Cober {
 	void Scene::OnUpdateRuntime(Unique<Timestep>& ts, const Ref<Camera>& camera)
 	{	
 		GetSystem<RenderSystem>().Update(ts, camera, this);
-
-		///////////////////////////////////////////
-		//  TEST TO LAOD DLLs  ////////////////////
-		HMODULE dll = LoadLibraryA("ScriptModule.dll");
-
-		if (dll)
-		{
-			//you can also do: decltype(foo) *fooPointer  = ...;
-			foo_t *fooPointer = (foo_t *)GetProcAddress(dll, "foo");
-
-			if (fooPointer)
-			{
-				fooPointer();
-			}
-			else
-			{
-				std::cout << "Error loading the function\n";
-			}
-
-			FreeLibrary(dll); //unload the DLL.
-		}
-		else
-		{
-			std::cout << "Error loading DLL\n";
-		}
-		///////////////////////////////////////////
 	}
 
 

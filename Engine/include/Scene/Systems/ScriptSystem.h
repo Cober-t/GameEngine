@@ -7,7 +7,22 @@
 
 #include <sol/sol.hpp>
 
+
 namespace Cober {
+
+ 	typedef void (*InitScriptsFn)();
+	typedef void (*UpdateScriptFn)();
+  	typedef void (*NotifyBeginContactFn)(Entity* entityA, Entity* entityB);
+
+	namespace Script 
+	{
+		void init();
+        void update();
+		void notifyBeginContact(Entity* entityA, Entity* entityB);
+		void reload();
+		bool freeScriptLibrary();
+	}
+	
 
 	class ScriptSystem : public System 
     {
