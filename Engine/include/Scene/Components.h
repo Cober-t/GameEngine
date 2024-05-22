@@ -173,6 +173,16 @@ namespace Cober {
 		// ScriptComponent(sol::function funcs = sol::lua_nil) : script(funcs) {}
 	};
 
+	class Entity;
+	class Scene;
+	struct NativeScriptComponent
+	{
+		std::string className;
+
+		NativeScriptComponent() = default;
+		NativeScriptComponent(const NativeScriptComponent&) = default;
+	};
+
 
 	/*
 	struct Animation2D {
@@ -189,13 +199,12 @@ namespace Cober {
 	};
 	*/
 
-
    	template<typename... Component>
 	struct ComponentGroup
 	{
 	};
 
-	using AllComponents = ComponentGroup<TransformComponent, TagComponent, ScriptComponent, Render2DComponent,
+	using AllComponents = ComponentGroup<TransformComponent, TagComponent, ScriptComponent, Render2DComponent, NativeScriptComponent,
 				Rigidbody2D, BoxCollider2D, CircleCollider2D, EdgeCollider2D, PolygonCollider2D>;
 }
 

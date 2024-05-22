@@ -12,6 +12,9 @@
 
 namespace Cober {
 
+	bool m_LoadScripts = true;
+	const char* m_CurrentScript = "None";
+	std::vector<std::string> m_ScriptList;
 	SceneHierarchyPanel* SceneHierarchyPanel::s_Instance = nullptr;
 	
 	SceneHierarchyPanel::SceneHierarchyPanel()
@@ -26,6 +29,7 @@ namespace Cober {
 		m_AssetIconMap["sprite"] = EditorResources::SpriteIcon;
 		m_AssetIconMap["transform"] = EditorResources::TransformIcon;
 		m_AssetIconMap["remove"] = EditorResources::ClearIcon;
+
 	}
 
 
@@ -314,9 +318,10 @@ namespace Cober {
                 {
 					m_SelectionContext.AddComponent<Render2DComponent>();
 				}
-				//else if (!m_SelectionContext.HasComponent<Script>()) {
-				//	m_SelectionContext.AddComponent<Script>();
-				//}
+				else if (!m_SelectionContext.HasComponent<NativeScriptComponent>())
+				{
+					m_SelectionContext.AddComponent<NativeScriptComponent>();
+				}
 			}
 			else
 				ImGui::OpenPopup("AddComponent");
@@ -330,7 +335,7 @@ namespace Cober {
 			// AddIfHasComponent<EdgeCollider2D>("Edge Collider 2D Component");
 			// AddIfHasComponent<PolygonCollider2D>("Polygon Collider 2D Component");
 			AddIfHasComponent<Render2DComponent>("Render 2D Shape Component");
-			//AddIfHasComponent<Script>("Script Component");
+			AddIfHasComponent<NativeScriptComponent>("Native Script Component");
 			// ...
 			// ...
 
@@ -464,6 +469,51 @@ namespace Cober {
 						}
 						ImGui::EndDragDropTarget();
 					}
+				}
+			});
+
+		DrawComponent<NativeScriptComponent>("Native Script Component", entity, [](auto& component)
+			{
+				if (m_LoadScripts)
+				{
+					// File watcher in the future
+					m_ScriptList.erase(m_ScriptList.begin(), m_ScriptList.end());
+					std::filesystem::path scriptPath = std::filesystem::current_path() / "ScriptModule" / "scripts";
+					for (const auto & entry : std::filesystem::directory_iterator(scriptPath))
+					{
+						std::string stringPath = entry.path().string();
+						if (!std::filesystem::is_directory(entry.path()) && 
+							stringPath.substr(stringPath.find_last_of(".")) == ".h")
+						{
+							std::string fileName = entry.path().filename().string();
+							fileName = fileName.substr(0, fileName.find_last_of("."));
+							m_ScriptList.push_back(fileName);
+						}
+					}
+
+					m_LoadScripts = false;
+				}
+
+				if (ImGui::Button(ICON_FA_REFRESH)) 
+					m_LoadScripts = true;
+
+				ImGui::SameLine();
+
+				if (ImGui::BeginCombo("2D Shape", m_CurrentScript)) 
+				{
+					for (int i = 0; i < m_ScriptList.size(); i++) 
+					{
+						bool isSelected = m_CurrentScript == m_ScriptList[i].c_str();
+						if (ImGui::Selectable(m_ScriptList[i].c_str(), isSelected)) 
+						{
+							m_CurrentScript = m_ScriptList[i].c_str();
+							component.className = m_ScriptList[i];
+						}
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+
+					ImGui::EndCombo();
 				}
 			});
 	}

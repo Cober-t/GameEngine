@@ -34,12 +34,12 @@ namespace Cober {
 		void OnSimulationStart();
 		void OnSimulationStop();
 
-
 		void OnUpdateRuntime(Unique<Timestep>& ts, const Ref<Camera>& camera);
 		void OnUpdateSimulation(Unique<Timestep>& ts, const Ref<Camera>& camera);
 
 		template<typename... Components>
 		inline auto GetAllEntitiesWith() { return m_Registry.view<Components...>(); }
+		inline entt::registry* GetRegistry() { return &m_Registry; }
 		
 		std::vector<Entity> GetSceneEntities();
 
@@ -54,10 +54,6 @@ namespace Cober {
 		static Ref<Scene> Copy(Ref<Scene> scene);
 
 	private:
-		template<typename T>
-		void OnComponentAdded(Entity entity, T& component);
-
-        // System management
 		template<typename T, typename ...TArgs> 			
         void AddSystem(TArgs&& ...args);
 
@@ -84,7 +80,6 @@ namespace Cober {
 
 		friend class Entity;
 		friend class System;
-		//friend class SceneHierarchyPanel;
 	};
 }
 

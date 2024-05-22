@@ -10,19 +10,20 @@
 
 namespace Cober {
 
- 	typedef void (*InitScriptsFn)();
-	typedef void (*UpdateScriptFn)();
+ 	typedef void (*InitScriptsFn)(Entity* entity);
+	typedef void (*UpdateScriptFn)(float dt);
   	typedef void (*NotifyBeginContactFn)(Entity* entityA, Entity* entityB);
 	typedef bool (*IsKeyDownFn)(KeyCode key);
+	typedef void (*DeleteScriptsFn)();
 
-	namespace Script 
+	namespace ScriptFn
 	{
-		void init();
-        void update();
+		void init(Entity* entity);
+        void update(float dt);
 		void notifyBeginContact(Entity* entityA, Entity* entityB);
 		bool isKeyDown(KeyCode Key);
+		void deleteScripts();
 
-		void reload();
 		bool freeScriptLibrary();
 	}
 	
@@ -33,12 +34,12 @@ namespace Cober {
 		ScriptSystem();
 		~ScriptSystem();
 
-        void Start();
-		void Update(Scene* scene);
+        void Start(Scene* scene);
+		void Update(float dt);
 
     private:
 		sol::state lua;
-		Scene* m_Scene = nullptr;
+		Scene* m_Scene;
 	};
 }
 

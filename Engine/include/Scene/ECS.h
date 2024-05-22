@@ -20,10 +20,8 @@ namespace Cober {
 		template<typename TComponent, typename... Args>
 		TComponent& AddComponent(Args&&... args)
 		{
-			LOG_CORE_ASSERT(!HasComponent<TComponent>(), "Entity already has component!");
+			//LOG_CORE_ASSERT(!HasComponent<TComponent>(), "Entity already has component!");
 			TComponent& component = m_Scene->m_Registry.emplace<TComponent>(m_EntityHandle, std::forward<Args>(args)...);
-			m_Scene->OnComponentAdded<TComponent>(*this, component);
-
 			m_Scene->m_EntityMap[GetUUID()] = *this;
 
 			return component;
@@ -34,7 +32,6 @@ namespace Cober {
 		TComponent& AddOrReplaceComponent(Args&&... args)
 		{
 			TComponent& component = m_Scene->m_Registry.emplace_or_replace<TComponent>(m_EntityHandle, std::forward<Args>(args)...);
-			m_Scene->OnComponentAdded<TComponent>(*this, component);
 			return component;
 		}
 
@@ -42,7 +39,7 @@ namespace Cober {
 		template<typename TComponent>
 		TComponent& GetComponent()
 		{
-			LOG_CORE_ASSERT(HasComponent<TComponent>(), "Entity does not have component!");
+			//LOG_CORE_ASSERT(HasComponent<TComponent>(), "Entity does not have component!");
 			return m_Scene->m_Registry.get<TComponent>(m_EntityHandle);
 		}
 
@@ -67,7 +64,9 @@ namespace Cober {
 		operator uint32_t() const { return (uint32_t)m_EntityHandle; }
 
 		UUID GetUUID() { return GetComponent<IDComponent>().ID; }
+		Scene* GetScene() { return m_Scene; }
 		const std::string& GetName() { return GetComponent<TagComponent>().tag; }
+		const entt::entity GetHandle() { return m_EntityHandle; }
 
 		bool operator==(const Entity& other) const
 		{

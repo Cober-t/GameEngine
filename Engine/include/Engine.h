@@ -42,6 +42,7 @@
 #include "Scene/ECS.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneSerializer.h"
+#include "Scene/Script.h"
 
 
 //[++++++++++++++++++++++++++]

@@ -20,7 +20,7 @@ namespace Cober {
 
 	Scene::~Scene()
 	{
-       LOG_INFO("Scene Destroyed!!");
+       	LOG_INFO("Scene Destroyed!!");
 	}
 
 
@@ -155,7 +155,7 @@ namespace Cober {
 
         GetSystem<RenderSystem>().Start();
 		GetSystem<PhysicsSystem2D>().Start(this);
-		GetSystem<ScriptSystem>().Start();
+		GetSystem<ScriptSystem>().Start(this);
 	}
 
 
@@ -194,7 +194,7 @@ namespace Cober {
             }
 		}
 
-		GetSystem<ScriptSystem>().Update(this);
+		GetSystem<ScriptSystem>().Update(ts->GetDeltaTime());
 	}
 
 
@@ -276,62 +276,5 @@ namespace Cober {
 		LOG_ASSERT(HasSystem<TSystem>(), "System is not added!");
 		auto system = m_Systems.find(std::type_index(typeid(TSystem)));
 		return *(std::static_pointer_cast<TSystem>(system->second));
-	}
-
-
-    template<typename T>
-	void Scene::OnComponentAdded(Entity entity, T& component)
-	{
-		static_assert(sizeof(T) == 0);
-	}
-
-	template<>
-	void Scene::OnComponentAdded<IDComponent>(Entity entity, IDComponent& component)
-	{
-	}
-
-	template<>
-	void Scene::OnComponentAdded<TransformComponent>(Entity entity, TransformComponent& component)
-	{
-	}
-
-	template<>
-	void Scene::OnComponentAdded<TagComponent>(Entity entity, TagComponent& component)
-	{
-	}
-
-	template<>
-	void Scene::OnComponentAdded<Rigidbody2D>(Entity entity, Rigidbody2D& component)
-	{
-	}
-
-	template<>
-	void Scene::OnComponentAdded<BoxCollider2D>(Entity entity, BoxCollider2D& component)
-	{
-	}
-
-	template<>
-	void Scene::OnComponentAdded<CircleCollider2D>(Entity entity, CircleCollider2D& component)
-	{
-	}
-
-	template<>
-	void Scene::OnComponentAdded<EdgeCollider2D>(Entity entity, EdgeCollider2D& component)
-	{
-	}
-
-	template<>
-	void Scene::OnComponentAdded<PolygonCollider2D>(Entity entity, PolygonCollider2D& component)
-	{
-	}
-
-	template<>
-	void Scene::OnComponentAdded<Render2DComponent>(Entity entity, Render2DComponent& component)
-	{
-	}
-
-	template<>
-	void Scene::OnComponentAdded<ScriptComponent>(Entity entity, ScriptComponent& component)
-	{
 	}
 }

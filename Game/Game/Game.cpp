@@ -9,7 +9,7 @@ Game::Game() : Layer("Game application")
 
 void Game::OnAttach() 
 {
-	m_ActiveScene = Scene::Load("SceneDefault.lua");
+	m_ActiveScene = Scene::Load("Pong.lua");
 	m_ActiveScene->OnSimulationStart();
 }
 
@@ -25,7 +25,7 @@ void Game::OnDetach()
 
 void Game::OnUpdate(Unique<Timestep>& ts) 
 {
-	RenderGlobals::SetClearColor(46, 47, 52);
+	RenderGlobals::SetClearColor(0, 0, 0);
 	RenderGlobals::Clear();
 	m_Camera->OnUpdate(ts);
 	m_ActiveScene->OnUpdateSimulation(ts, m_Camera);
@@ -35,4 +35,7 @@ void Game::OnUpdate(Unique<Timestep>& ts)
 void Game::OnEvent(Event& event) 
 {
 	m_Camera->OnEvent(event);
+
+	EventDispatcher dispatcher(event);
+	dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& event) { return ScriptFn::isKeyDown(event.GetKeyCode()); });
 }
