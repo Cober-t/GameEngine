@@ -42,6 +42,7 @@ project "Game"
 	defines 
     {
         "_CRT_SECURE_NO_WARNINGS",
+		"_WIN32"
     }
 
 	filter { "system:windows", "configurations:Debug" }

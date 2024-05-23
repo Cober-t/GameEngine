@@ -7,6 +7,8 @@ namespace Cober {
 
 	void RenderGlobals::Init() 
 	{
+		// RenderGlobals::m_Api->SetAPI(RenderAPI::API::OpenGL);
+		// RenderGlobals::m_Api = RenderAPI::Create();
 		RenderGlobals::m_Api->Init();
 	}
 

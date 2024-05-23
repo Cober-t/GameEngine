@@ -70,7 +70,7 @@ namespace Cober {
 
 		switch (EngineApp::Get().GetGameState()) 
 		{
-			case GameState::EDITOR:
+			case EngineApp::GameState::EDITOR:
 			{
 				colors[ImGuiCol_WindowBg] = ImGui::ColorConvertU32ToFloat4(Colors::Theme::titlebar);
 				m_EditorCamera->SetActive(ViewportPanel::Get().AllowViewportCameraEvents());
@@ -80,7 +80,7 @@ namespace Cober {
 				// Primitive::Grid::Draw(m_EditorCamera);
 				break;
 			}
-			case GameState::RUNTIME_EDITOR: 
+			case EngineApp::GameState::RUNTIME_EDITOR: 
 			{
 				colors[ImGuiCol_WindowBg] = ImVec4(0, 0.0, 0.0, 0.268f);
 				m_ActiveScene->OnUpdateSimulation(ts, m_EditorCamera);
@@ -179,7 +179,7 @@ namespace Cober {
 	{
 		auto gameState = EngineApp::Get().GetGameState();
 
-		if (gameState == GameState::EDITOR || gameState == GameState::RUNTIME_EDITOR)
+		if (gameState == EngineApp::GameState::EDITOR || gameState == EngineApp::GameState::RUNTIME_EDITOR)
 		{
 			if (m_AllowViewportCameraEvents)
 				m_EditorCamera->OnEvent(event);
@@ -189,7 +189,7 @@ namespace Cober {
 
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& event) { return OnKeyPressed(event); });
-		dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& event) { return ScriptFn::isKeyDown(event.GetKeyCode()); });
+		// dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& event) { return ScriptFn::isKeyDown(event.GetKeyCode()); });
 	}
 
 
@@ -209,13 +209,13 @@ namespace Cober {
 					m_SelectedEntity = Entity();
 					m_EditorScene = Scene::Load("Scene2.lua"); // Test Scene
 					m_ActiveScene = m_EditorScene;
-					EngineApp::Get().SetGameState(GameState::EDITOR);
+					EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
 					SceneHierarchyPanel::Get().SetContext(m_ActiveScene);
 					break;
 				}
 				case Key::S: 
 				{
-					if (EngineApp::Get().GetGameState() == GameState::EDITOR)
+					if (EngineApp::Get().GetGameState() == EngineApp::GameState::EDITOR)
 						Scene::Save(m_ActiveScene, "Scene2.lua");
 					break;
 				}

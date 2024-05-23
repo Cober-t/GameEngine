@@ -11,7 +11,7 @@ namespace Cober {
 	
 		EditorApp(const AppSpecification& specification) : EngineApp(specification)
 		{
-			EngineApp::Get().SetGameState(GameState::EDITOR);
+			EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
 			PushLayer(new Editor());
 		}
 

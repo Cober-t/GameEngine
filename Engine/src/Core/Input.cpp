@@ -74,25 +74,23 @@ namespace Cober {
 	
 	// #else
 
-		//Window* window = static_cast<Window*>(EngineApp::Get().GetWindow());
-		//GLFWwindow* nativeWindow = reinterpret_cast<GLFWwindow*>(window->GetNativeWindow());
-		//bool pressed = false;
-		//for (ImGuiViewport* viewport : ImGui::GetCurrentContext()->Viewports)
-		//{
-		//	if (!viewport->PlatformUserData)
-		//		continue;
+		// bool pressed = false;
+		// for (ImGuiViewport* viewport : ImGui::GetCurrentContext()->Viewports)
+		// {
+		// 	if (!viewport->PlatformUserData)
+		// 		continue;
 
-		//	GLFWwindow* windowHandle = *(GLFWwindow**)viewport->PlatformUserData; // First member is GLFWwindow
-		//	if (!windowHandle)
-		//		continue;
-		//	auto state = glfwGetKey(windowHandle, static_cast<int32_t>(keycode));
-		//	if (state == GLFW_PRESS || state == GLFW_REPEAT)
-		//	{
-		//		pressed = true;
-		//		break;
-		//	}
-		//}
-		//return pressed;
+		// 	GLFWwindow* windowHandle = *(GLFWwindow**)viewport->PlatformUserData; // First member is GLFWwindow
+		// 	if (!windowHandle)
+		// 		continue;
+		// 	auto state = glfwGetKey(windowHandle, static_cast<int32_t>(keycode));
+		// 	if (state == GLFW_PRESS || state == GLFW_REPEAT)
+		// 	{
+		// 		pressed = true;
+		// 		break;
+		// 	}
+		// }
+		// return pressed;
 
 	// #endif
 	}

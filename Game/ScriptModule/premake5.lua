@@ -12,7 +12,7 @@ workspace "ScriptingWorkspace"
 		kind "SharedLib"
 		language "C++"
 		cppdialect "C++17"
-		staticruntime "off"
+		staticruntime "on"
 
 		targetdir("bin/%{prj.name}")
 		objdir("bin-int/%{prj.name}")
@@ -72,7 +72,7 @@ workspace "ScriptingWorkspace"
 
 		defines
 		{
-			"_COBER_SCRIPT_DLL"
+			"_CB_SCRIPT_DLL"
 		}
 
 		-- buildcommands 

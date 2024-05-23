@@ -1,7 +1,7 @@
 project "Editor"
     kind "ConsoleApp"
     language "C++"
-    cppdialect "C++17"	
+    cppdialect "C++17"
     staticruntime "off"
 
     -- fullOutputDir = "%{wks.location}/bin/" .. outputdir .. "/%{prj.name}"
@@ -71,13 +71,13 @@ project "Editor"
 
     filter { "system:windows", "configurations:Debug" }
         buildoptions "/MDd"       
-        defines { "COBER_TEST" }
 
     filter { "system:windows", "configurations:Release" }
         buildoptions "/MD"
 
+
     filter "system:windows"
-        systemversion "latest"		
+        systemversion "latest"
 
 
     filter "configurations:Debug"

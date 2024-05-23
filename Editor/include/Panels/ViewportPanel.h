@@ -30,7 +30,7 @@ namespace Cober {
 		void OnGuiRender(Ref<EditorCamera> editorCamera);
 
 		void SetCursorEntity();
-		void PlayButtonBar(GameState gameState);
+		void PlayButtonBar(EngineApp::GameState gameState);
 		inline bool AllowViewportCameraEvents() { return m_AllowViewportCameraEvents; }
 
 	private:

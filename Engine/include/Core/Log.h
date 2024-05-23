@@ -12,6 +12,7 @@
 #define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
+#include <spdlog/sinks/ringbuffer_sink.h>
 #pragma warning(pop)
 
 namespace Cober {
@@ -43,18 +44,12 @@ namespace Cober {
 	public:
 		static void Init();
 
-		static Ref<spdlog::logger>& GetCoreLogger() { return s_CoreLogger; }
-		static Ref<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
+		static Ref<spdlog::logger>& GetCoreLogger();
+		static Ref<spdlog::logger>& GetClientLogger();
 		
-		static void Log::ClearLogMessages() { s_LogMessages.clear(); }
-		static std::vector<Log::LogMessage> Log::GetMessages() { return s_LogMessages; }
+		static void ClearLogMessages();
+		static std::vector<Log::LogMessage> GetMessages();
 		static void FormatMessages();
-
-
-	private:
-		static Ref<spdlog::logger> s_CoreLogger;
-		static Ref<spdlog::logger> s_ClientLogger;
-		static std::vector<LogMessage> s_LogMessages;
 	};
 }
 

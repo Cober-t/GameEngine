@@ -4,12 +4,10 @@
 
 namespace Cober {
 
-//#ifdef __OPENGL__
 	RenderAPI::API RenderAPI::m_Api = RenderAPI::API::OpenGL;
-//#endif
-
-	Unique<RenderAPI> RenderAPI::Create() {
-
+	
+	Unique<RenderAPI> RenderAPI::Create() 
+	{
 		switch (m_Api) 
 		{
 			case RenderAPI::API::None:		LOG_CORE_INFO("RenderAPI::None means there is not render defined!!"); return nullptr;
@@ -18,5 +16,16 @@ namespace Cober {
 		}
 
 		return nullptr;
+	}
+
+
+	RenderAPI::API RenderAPI::GetAPI()
+	{
+		return m_Api;
+	}
+
+	void RenderAPI::SetAPI(API api)
+	{
+		m_Api = api;
 	}
 }

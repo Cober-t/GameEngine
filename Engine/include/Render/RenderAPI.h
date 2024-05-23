@@ -34,7 +34,8 @@ namespace Cober {
 		virtual void ClearErrors() = 0;
 		virtual void CheckErrors(const char* function) = 0;
 
-		static API GetAPI() { return m_Api; }
+		static API GetAPI();
+		static void SetAPI(API api = API::OpenGL);
 		static Unique<RenderAPI> Create();
 
 	private:

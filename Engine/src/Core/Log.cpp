@@ -1,7 +1,6 @@
 #include <pch.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/basic_file_sink.h>
-#include <spdlog/sinks/ringbuffer_sink.h>
 #include <spdlog/sinks/stdout_sinks.h>
 #include <spdlog/sinks/dup_filter_sink.h>
 #include <iostream>
@@ -11,9 +10,9 @@
 
 namespace Cober {
 
-	Ref<spdlog::logger> Log::s_CoreLogger;
-	Ref<spdlog::logger> Log::s_ClientLogger;
-	std::vector<Log::LogMessage> Log::s_LogMessages;
+	Ref<spdlog::logger> s_CoreLogger;
+	Ref<spdlog::logger> s_ClientLogger;
+	std::vector<Log::LogMessage> s_LogMessages;
 	Ref<spdlog::sinks::ringbuffer_sink_mt> s_BufferMessages;
 
 	void Log::Init()
@@ -65,5 +64,26 @@ namespace Cober {
 
 			s_LogMessages.push_back(logMessage);
 		}
+	}
+
+
+	Ref<spdlog::logger>& Log::GetCoreLogger() 
+	{
+		return s_CoreLogger; 
+	}
+
+	Ref<spdlog::logger>& Log::GetClientLogger() 
+	{
+		return s_ClientLogger; 
+	}
+		
+	void Log::ClearLogMessages() 
+	{ 
+		s_LogMessages.clear(); 
+	}
+
+	std::vector<Log::LogMessage> Log::GetMessages() 
+	{
+		return s_LogMessages; 
 	}
 }

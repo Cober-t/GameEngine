@@ -22,7 +22,7 @@ namespace Cober {
 	RenderSettings* Render2D::m_RenderSettings = nullptr;
 
 
-	void Render2D::Start() 
+	void Render2D::Start()
 	{
 		m_RenderSettings = new RenderSettings();
 		Primitive::Quad::Init();

@@ -50,7 +50,7 @@ namespace Cober {
 			}
 		}
 
-		if (EngineApp::Get().GetGameState() == GameState::RUNTIME_EDITOR)
+		if (EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR)
 			Physics2D::DebugDraw();
 
 		Render2D::EndScene();

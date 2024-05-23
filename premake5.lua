@@ -68,11 +68,11 @@ if inArray(_ARGS, "game") then
         include ("" .. _ARGS[4] .. "")
     group ""
 else
-    group "Tools"
-        include "Editor"
-    group ""
+    -- group "Tools"
+    --     include "Editor"
+    -- group ""
 
-    group "Application"
-        include "Game"
-    group ""
+    -- group "Application"
+    --     include "Game"
+    -- group ""
 end

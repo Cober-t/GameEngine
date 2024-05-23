@@ -14,7 +14,7 @@ public:
 	GameApp(const AppSpecification& specification) : EngineApp(specification) 
 	{
 		PushLayer(new Game());
-		EngineApp::Get().SetGameState(GameState::PLAY);
+		EngineApp::Get().SetGameState(EngineApp::GameState::PLAY);
 	}
 
 	~GameApp() 

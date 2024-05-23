@@ -49,7 +49,7 @@ public:
 	{self.projectName}App(const AppSpecification& specification) : EngineApp(specification) 
 	{{
 		PushLayer(new {self.projectName}());
-		EngineApp::Get().SetGameState(GameState::PLAY);
+		EngineApp::Get().SetGameState(EngineApp::GameState::PLAY);
 	}}
 
 	~{self.projectName}App() 

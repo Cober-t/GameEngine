@@ -1,5 +1,5 @@
 project "Engine"
-    kind "StaticLib"
+    kind "SharedLib"
     language "C++"
     cppdialect "C++17"
     staticruntime "off"
@@ -32,7 +32,8 @@ project "Engine"
 	defines 
 	{
         "_CRT_SECURE_NO_WARNINGS",
-        "GLFW_INCLUDE_NONE",
+		"GLFW_INCLUDE_NONE",
+		"_WIN32",
 	}
 
 	includedirs 
@@ -71,21 +72,16 @@ project "Engine"
 		"Lua",
 	}
 
+	postbuildcommands
+	{
+		("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Editor/\""),
+	}
+
     filter "files:libraries/ImGuizmo/**.cpp"
 	flags { "NoPCH" }
 
-    filter { "system:windows", "configurations:Debug" }
-        buildoptions "/MDd"        
-
-    filter { "system:windows", "configurations:Release" }
-        buildoptions "/MD"
-
 	filter "system:windows"
 		systemversion "latest"
-
-		defines {
-			"GLFW_INCLUDE_NONE",
-		}
 
 	filter "configurations:Debug"
 		defines {

@@ -69,7 +69,7 @@ namespace Cober {
 
 		uint32_t m_ViewportWidth{ 1280 }, m_ViewportHeight{ 720 };
 
-		constexpr static float MIN_SPEED{ 0.0005f }, MAX_SPEED{ 2.0f };
+		float MIN_SPEED{ 0.0005f }, MAX_SPEED{ 2.0f };
 		friend class Editor;
 	};
 }

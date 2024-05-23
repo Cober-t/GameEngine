@@ -4,15 +4,13 @@
 
 namespace Cober {
 
-    EngineApp* EngineApp::s_Instance = nullptr;
-    
     EngineApp::EngineApp(const AppSpecification& specification)
         : m_Specification(specification)
     {
         LOG_CORE_INFO("EngineApp Constructor!");
 
-        LOG_CORE_ASSERT(!s_Instance, "Application already exists!");
-        s_Instance = this;
+        // LOG_CORE_ASSERT(!s_Instance, "Application already exists!");
+        // s_Instance = EngineApp::Get();
 
         // Set working directory here
 		if (!m_Specification.WorkingDirectory.empty())
@@ -27,7 +25,7 @@ namespace Cober {
         RenderGlobals::Init();
 		Render2D::Start();
 
-        m_GameState = GameState::PLAY;
+        m_GameState = EngineApp::GameState::PLAY;
     }
 
 
@@ -37,6 +35,13 @@ namespace Cober {
 
         Render2D::Shutdown();   // Abstract in a global Render api class in the future
         LOG_CORE_INFO("EngineApp Destructor!");
+    }
+
+
+    EngineApp& EngineApp::Get() 
+    {
+        static EngineApp* s_Instance;
+		return *s_Instance;
     }
 
 
@@ -57,7 +62,7 @@ namespace Cober {
     void EngineApp::Start()
     {
 
-        if (m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR) 
+        if (m_GameState == EngineApp::GameState::EDITOR || m_GameState == EngineApp::GameState::RUNTIME_EDITOR) 
         {
             m_GuiLayer = new ImGuiLayer("#version 460");
             PushOverlay(m_GuiLayer);
@@ -66,7 +71,9 @@ namespace Cober {
 
     void EngineApp::Update() 
     {
-        while (m_GameState == GameState::PLAY || m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR)
+        while ( m_GameState == EngineApp::GameState::PLAY || 
+                m_GameState == EngineApp::GameState::EDITOR || 
+                m_GameState == EngineApp::GameState::RUNTIME_EDITOR)
         {
             m_TimeStep->Start();
 
@@ -89,7 +96,7 @@ namespace Cober {
                 layer->OnUpdate(ts);
         }
 
-        if (m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR) 
+        if (m_GameState == EngineApp::GameState::EDITOR || m_GameState == EngineApp::GameState::RUNTIME_EDITOR) 
         {
             m_GuiLayer->Begin();
 
@@ -105,7 +112,7 @@ namespace Cober {
 
     void EngineApp::Close()
     {
-        m_GameState = GameState::EXIT;
+        m_GameState = EngineApp::GameState::EXIT;
     }
 
 
@@ -128,9 +135,14 @@ namespace Cober {
 
     bool EngineApp::OnWindowClose(WindowCloseEvent& event)
 	{
-		m_GameState = GameState::EXIT;
+		m_GameState = EngineApp::GameState::EXIT;
 		return true;
 	}
+
+    EngineApp::GameState EngineApp::GetGameState()
+    { 
+        return m_GameState; 
+    }
 
 
 	bool EngineApp::OnWindowResize(WindowResizeEvent& event)

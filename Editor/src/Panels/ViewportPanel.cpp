@@ -1,12 +1,10 @@
+#include "EditorLayer.h"
 #include "Panels/ViewportPanel.h"
 #include "Panels/DataPanel.h"
 #include "Panels/SceneHierarchyPanel.h"
-#include "EditorLayer.h"
 #include "Core/Utils.h"
-// #include "MenuPanel.h"
 
 #include "ImGuizmo/ImGuizmo.h"
-// #include "Core/Utils.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -278,7 +276,7 @@ namespace Cober {
 	}
 
 
-	void ViewportPanel::PlayButtonBar(GameState gameState) 
+	void ViewportPanel::PlayButtonBar(EngineApp::GameState gameState) 
     {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
@@ -291,25 +289,25 @@ namespace Cober {
 
 		ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
-		auto icon = gameState == GameState::EDITOR ? ICON_FA_PLAY : ICON_FA_STOP;
+		auto icon = gameState == EngineApp::GameState::EDITOR ? ICON_FA_PLAY : ICON_FA_STOP;
 		float size = ImGui::GetWindowHeight() - 4.0f;
 		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 
 		if (ImGui::Button(icon)) 
         {
 			m_GizmoType = -1;
-			if (gameState == GameState::EDITOR) 
+			if (gameState == EngineApp::GameState::EDITOR) 
             {
 				Log::ClearLogMessages();	
-				EngineApp::Get().SetGameState(GameState::RUNTIME_EDITOR);
+				EngineApp::Get().SetGameState(EngineApp::GameState::RUNTIME_EDITOR);
 
 				Editor::SetActiveScene(Scene::Copy(Editor::GetEditorScene()));
 				Editor::GetActiveScene()->OnSimulationStart();
 				SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
 			}
-			else if (gameState == GameState::RUNTIME_EDITOR) 
+			else if (gameState == EngineApp::GameState::RUNTIME_EDITOR) 
             {
-				EngineApp::Get().SetGameState(GameState::EDITOR);
+				EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
 
 				Editor::GetActiveScene()->OnSimulationStop();
 				Editor::SetActiveScene(Editor::GetEditorScene());
@@ -320,7 +318,7 @@ namespace Cober {
 			}
 		}
 
-		if (gameState == GameState::RUNTIME_EDITOR)
+		if (gameState == EngineApp::GameState::RUNTIME_EDITOR)
 		{
 			ImGui::SameLine();
 

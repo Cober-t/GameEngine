@@ -177,7 +177,7 @@ namespace Cober {
 						m_SaveFile = m_LoadFile;
 						Editor::SelectedEntity();
 						Editor::SetActiveScene(Editor::GetEditorScene());
-						EngineApp::Get().SetGameState(GameState::EDITOR);
+						EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
 						SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
 					}
 				}

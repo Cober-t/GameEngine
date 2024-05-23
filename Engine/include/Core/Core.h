@@ -13,6 +13,17 @@
 #endif
 
 
+#ifdef _WIN32
+    #ifdef _CB_SCRIPT_DLL
+        #define CB_API __declspec(dllexport)
+    #else 
+        #define CB_API __declspec(dllimport)
+    #endif
+#else 
+    #define CB_API
+#endif
+
+
 #define LOG_ASSERT(x, ...) { if(!(x)) { LOG_ERROR("Assertion Failed: {0}", __VA_ARGS__); LOG_DEBUGBREAK(); } }
 #define LOG_CORE_ASSERT(x, ...) { if(!(x)) { LOG_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); LOG_DEBUGBREAK(); } }
 
