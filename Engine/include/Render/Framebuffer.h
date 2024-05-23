@@ -51,7 +51,7 @@ namespace Cober {
 	};
 
 
-	class Framebuffer 
+	class CB_API Framebuffer 
     {
 	public:
 		virtual ~Framebuffer() = default;

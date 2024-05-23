@@ -33,7 +33,7 @@ namespace Cober {
 	};
 
 
-	class Camera
+	class CB_API Camera
 	{
 	public:
 		Camera() = default;

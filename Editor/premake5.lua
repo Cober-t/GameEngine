@@ -61,7 +61,7 @@ project "Editor"
         "Box2D",
     }
 
-    defines 
+    defines
     {
         "_CRT_SECURE_NO_WARNINGS",
         "__EDITOR__",

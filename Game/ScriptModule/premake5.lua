@@ -12,7 +12,7 @@ workspace "ScriptingWorkspace"
 		kind "SharedLib"
 		language "C++"
 		cppdialect "C++17"
-		staticruntime "on"
+		staticruntime "off"
 
 		targetdir("bin/%{prj.name}")
 		objdir("bin-int/%{prj.name}")
@@ -56,6 +56,14 @@ workspace "ScriptingWorkspace"
 			"C:/Users/Jorge/Documents/GameEngine/libraries/spdlog/include"
 		}
 
+		defines
+		{
+			"_WIN32",
+			"_CB_SCRIPT_DLL",
+			"CB_SCRIPT",
+		}
+
+
 		symbolspath 'C:/Users/Jorge/Documents/GameEngine/bin/Debug-windows-x86_64/Engine/Engine.pdb'
 		-- symbolspath '$(OutDir)$(TargetName)-$([System.DateTime]::Now.ToString(\"HH_mm_ss_fff\")).pdb'
 
@@ -69,11 +77,6 @@ workspace "ScriptingWorkspace"
 		}
 
 		filter "system:windows"
-
-		defines
-		{
-			"_CB_SCRIPT_DLL"
-		}
 
 		-- buildcommands 
 		-- {

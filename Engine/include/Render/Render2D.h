@@ -20,7 +20,7 @@
 
 namespace Cober {
 
-	class Render2D 
+	class CB_API Render2D 
 	{
 	public:
 		static void Start();

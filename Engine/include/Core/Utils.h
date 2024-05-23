@@ -6,7 +6,7 @@
 
 namespace Cober::Utils {
 
-	bool DecomposeTransform(const glm::mat4& transform, glm::vec3& translation, glm::vec3& rotation, glm::vec3& scale);
+	CB_API bool DecomposeTransform(const glm::mat4& transform, glm::vec3& translation, glm::vec3& rotation, glm::vec3& scale);
 
 	// Thanks javidx9!
 	class DataFile {

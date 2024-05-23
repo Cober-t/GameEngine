@@ -12,23 +12,23 @@ namespace Cober {
 
  	typedef void (*InitScriptsFn)(Entity* entity);
 	typedef void (*UpdateScriptFn)(float dt);
-  	typedef void (*NotifyBeginContactFn)(Entity* entityA, Entity* entityB);
+  	// typedef void (*NotifyBeginContactFn)(Entity* entityA, Entity* entityB);
 	typedef bool (*IsKeyDownFn)(KeyCode key);
-	typedef void (*DeleteScriptsFn)();
+	// typedef void (*DeleteScriptsFn)();
 
 	namespace ScriptFn
 	{
-		void init(Entity* entity);
-        void update(float dt);
-		void notifyBeginContact(Entity* entityA, Entity* entityB);
-		bool isKeyDown(KeyCode Key);
-		void deleteScripts();
+		CB_API void init(Entity* entity);
+        CB_API void update(float dt);
+		// CB_API void notifyBeginContact(Entity* entityA, Entity* entityB);
+		CB_API bool isKeyDown(KeyCode Key);
+		// CB_API void deleteScripts();
 
-		bool freeScriptLibrary();
+		CB_API bool freeScriptLibrary();
 	}
 	
 
-	class ScriptSystem : public System 
+	class CB_API ScriptSystem : public System 
     {
 	public:
 		ScriptSystem();

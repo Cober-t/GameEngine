@@ -4,13 +4,15 @@
 
 namespace Cober {
 
+    EngineApp* EngineApp::s_Instance = nullptr;
+
     EngineApp::EngineApp(const AppSpecification& specification)
         : m_Specification(specification)
     {
         LOG_CORE_INFO("EngineApp Constructor!");
 
-        // LOG_CORE_ASSERT(!s_Instance, "Application already exists!");
-        // s_Instance = EngineApp::Get();
+        LOG_CORE_ASSERT(!s_Instance, "Application already exists!");
+        s_Instance = this;
 
         // Set working directory here
 		if (!m_Specification.WorkingDirectory.empty())
@@ -40,7 +42,6 @@ namespace Cober {
 
     EngineApp& EngineApp::Get() 
     {
-        static EngineApp* s_Instance;
 		return *s_Instance;
     }
 

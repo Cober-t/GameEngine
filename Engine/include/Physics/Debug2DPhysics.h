@@ -11,7 +11,7 @@
 
 namespace Cober {
 
-    class Debug2DPhysics : b2Draw
+    class CB_API Debug2DPhysics : b2Draw
     {
     public:
         Debug2DPhysics();

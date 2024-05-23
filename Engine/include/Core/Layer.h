@@ -12,7 +12,7 @@
 
 namespace Cober {
 
-	class Layer 
+	class CB_API Layer 
 	{
 	public:
 		Layer(const std::string& debugName = "No Assigned");

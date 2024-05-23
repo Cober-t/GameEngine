@@ -22,7 +22,7 @@ project "Engine"
 		"%{wks.location}/libraries/glm/glm/**.inl",
 	}
 
-    disablewarnings 
+    disablewarnings
 	{
         "4251",
 		"4131",
@@ -33,7 +33,7 @@ project "Engine"
 	{
         "_CRT_SECURE_NO_WARNINGS",
 		"GLFW_INCLUDE_NONE",
-		"_WIN32",
+		"_CB_BUILD_DLL",
 	}
 
 	includedirs 
@@ -79,6 +79,7 @@ project "Engine"
 
     filter "files:libraries/ImGuizmo/**.cpp"
 	flags { "NoPCH" }
+
 
 	filter "system:windows"
 		systemversion "latest"

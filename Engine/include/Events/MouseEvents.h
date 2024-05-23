@@ -9,7 +9,7 @@
 
 namespace Cober {
 
-	class MouseMovedEvent : public Event
+	class CB_API MouseMovedEvent : public Event
 	{
 	public:
 		MouseMovedEvent(const float x, const float y)
@@ -33,7 +33,7 @@ namespace Cober {
 	};
 
 
-	class MouseScrolledEvent : public Event
+	class CB_API MouseScrolledEvent : public Event
 	{
 	public:
 		MouseScrolledEvent(const float xOffset, const float yOffset)
@@ -57,7 +57,7 @@ namespace Cober {
 	};
 
 
-	class MouseButtonEvent : public Event
+	class CB_API MouseButtonEvent : public Event
 	{
 	public:
 		MouseButton GetMouseButton() const { return m_Button; }
@@ -72,7 +72,7 @@ namespace Cober {
 	};
 
 
-	class MouseButtonPressedEvent : public MouseButtonEvent
+	class CB_API MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonPressedEvent(const MouseButton button)
@@ -89,7 +89,7 @@ namespace Cober {
 	};
 
 
-	class MouseButtonReleasedEvent : public MouseButtonEvent
+	class CB_API MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonReleasedEvent(const MouseButton button)

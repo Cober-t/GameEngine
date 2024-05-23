@@ -6,7 +6,7 @@
 
 namespace Cober {
 
-	class RenderGlobals 
+	class CB_API RenderGlobals 
 	{
 	public:
 		static void Clear();

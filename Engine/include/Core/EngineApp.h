@@ -42,7 +42,7 @@ namespace Cober {
 	};
 
 
-	class EngineApp
+	class CB_API EngineApp
 	{
 	public:
 		enum class GameState { PLAY, EDITOR, RUNTIME_EDITOR, EXIT };
@@ -96,7 +96,7 @@ namespace Cober {
 		
 
 	private:
-		// static EngineApp* s_Instance;
+		static EngineApp* s_Instance;
 		friend int ::main(int argc, char** argv);
 	};
 

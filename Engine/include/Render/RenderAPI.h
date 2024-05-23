@@ -8,7 +8,7 @@
 
 namespace Cober {
 
-	class RenderAPI 
+	class CB_API RenderAPI 
 	{
 	public:
 		enum class API 

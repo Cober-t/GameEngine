@@ -10,7 +10,7 @@
 
 namespace Cober {
 
-	class Entity
+	class CB_API Entity
 	{
 	public:
 		Entity() = default;
@@ -20,7 +20,7 @@ namespace Cober {
 		template<typename TComponent, typename... Args>
 		TComponent& AddComponent(Args&&... args)
 		{
-			//LOG_CORE_ASSERT(!HasComponent<TComponent>(), "Entity already has component!");
+			LOG_CORE_ASSERT(!HasComponent<TComponent>(), "Entity already has component!");
 			TComponent& component = m_Scene->m_Registry.emplace<TComponent>(m_EntityHandle, std::forward<Args>(args)...);
 			m_Scene->m_EntityMap[GetUUID()] = *this;
 
@@ -39,7 +39,7 @@ namespace Cober {
 		template<typename TComponent>
 		TComponent& GetComponent()
 		{
-			//LOG_CORE_ASSERT(HasComponent<TComponent>(), "Entity does not have component!");
+			LOG_CORE_ASSERT(HasComponent<TComponent>(), "Entity does not have component!");
 			return m_Scene->m_Registry.get<TComponent>(m_EntityHandle);
 		}
 
@@ -81,7 +81,7 @@ namespace Cober {
 	};
 
 
-	class System
+	class CB_API System
 	{
 	public:
 		System() = default;

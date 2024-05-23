@@ -2,12 +2,12 @@
 #define INIT_SCRIPTS_H
 
 #include <Engine.h>
-#include <Windows.h>
+// #include <Windows.h>
 #include <iostream>
 #include <cstdlib>
 
 #include "Core/Core.h"
-#include "Scene/ECS.h"
+// #include "Scene/ECS.h"
 
 #include "TestScript_generated.h"
 
@@ -15,47 +15,48 @@
 #include <entt/entt.hpp>
 
 
+
+
 namespace Cober {
 
-	entt::registry registry = entt::registry();
-
-	extern "C" CB_API void InitScripts(Entity* entity)
+	extern "C" CB_SCRIPT void InitScripts(Entity* entity)
 	{
-		if (entity->GetComponent<NativeScriptComponent>().className == "TestScript")
-		{
-			registry.emplace<TestScript>(entity->GetHandle());
-			auto scriptHandle = registry.get<TestScript>(entity->GetHandle());
-			scriptHandle.OnStart();
-		}
+		// if (entity->GetComponent<NativeScriptComponent>().className == "TestScript")
+		// {
+			// registry.emplace<TestScript>(entity->GetHandle());
+			// auto scriptHandle = registry.get<TestScript>(entity->GetHandle());
+			// scriptHandle.OnStart();
+		// }
 	}
 
-	extern "C" CB_API void UpdateScripts(float dt)
+	extern "C" CB_SCRIPT void UpdateScripts(float dt)
 	{
-		auto view = registry.view<TestScript>();
+		// auto view = registry.view<TestScript>();
 
-		for (auto entt : view)
-		{
-			auto enttScriptHandle = registry.get<TestScript>(entt);
-			enttScriptHandle.OnUpdate(dt);
-		}
+		// for (auto entt : view)
+		// {
+		// 	auto enttScriptHandle = registry.get<TestScript>(entt);
+		// 	enttScriptHandle.OnUpdate(dt);
+		// }
 	}
 
-	extern "C" CB_API void NotifyBeginContact(Entity* entityA, Entity* entityB)
-	{
-		// std::cout << entityB->GetName() << " BEGIN CONTACT" << std::endl;
-	}
+	// extern "C" CB_API void NotifyBeginContact(Entity* entityA, Entity* entityB)
+	// {
+	// 	// std::cout << entityB->GetName() << " BEGIN CONTACT" << std::endl;
+	// }
 
-	extern "C" CB_API void NotifyEndContact(Entity* entityA, Entity* entityB)
-	{
-	}
+	// extern "C" CB_API void NotifyEndContact(Entity* entityA, Entity* entityB)
+	// {
+	// }
 
-	extern "C" CB_API bool IsKeyDown(KeyCode key)
+	extern "C" CB_SCRIPT bool IsKeyDown(KeyCode key)
 	{
 		if (Input::IsKeyDown(Key::A))
 		{
 			std::cout << "A PRESSED" << std::endl;
 		}
 		else
+		
 		{
 			std::cout << "----" << std::endl;
 		}
@@ -69,10 +70,9 @@ namespace Cober {
 		return true;
 	}
 
-	extern "C" CB_API void DeleteScripts()
-	{
-		registry.clear<TestScript>();
-	}
+	// extern "C" CB_API void DeleteScripts()
+	// {
+	// }
 
 
 	// extern "C" CB_SCRIPT void EditorUpdateScripts(entt::registry& registryRef, float dt)

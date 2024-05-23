@@ -6,7 +6,7 @@
 namespace Cober {
 
 
-	class GameCamera : public Camera
+	class CB_API GameCamera : public Camera
 	{
 
 	public:

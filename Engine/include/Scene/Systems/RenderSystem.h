@@ -13,7 +13,7 @@
 
 namespace Cober {
 
-	class RenderSystem : public System
+	class CB_API RenderSystem : public System
 	{
 	public:
 		RenderSystem();

@@ -6,7 +6,7 @@
 
 namespace Cober {
 
-	class WindowResizeEvent : public Event
+	class CB_API WindowResizeEvent : public Event
 	{
 	public:
 		WindowResizeEvent(unsigned int width, unsigned int height)
@@ -30,7 +30,7 @@ namespace Cober {
 	};
 
 
-	class WindowCloseEvent : public Event
+	class CB_API WindowCloseEvent : public Event
 	{
 	public:
 		WindowCloseEvent() = default;

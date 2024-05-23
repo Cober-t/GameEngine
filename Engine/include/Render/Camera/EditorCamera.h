@@ -9,7 +9,7 @@
 
 namespace Cober {
 
-	class EditorCamera : public Camera
+	class CB_API EditorCamera : public Camera
 	{
 
 	public:

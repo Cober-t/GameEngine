@@ -17,7 +17,7 @@
 
 namespace Cober {
 
-	class PhysicsSystem2D : public System 
+	class CB_API PhysicsSystem2D : public System 
     {
 	public:
 		PhysicsSystem2D();

@@ -18,7 +18,7 @@ namespace Cober {
 	class Entity;
 	class System;
 
-	class Scene
+	class CB_API Scene
 	{
 	public:
 		Scene();

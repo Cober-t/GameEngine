@@ -19,7 +19,7 @@ namespace Cober {
 	};
 
 
-    class Physics2D
+    class CB_API Physics2D
     {
     public:
         static void Init();

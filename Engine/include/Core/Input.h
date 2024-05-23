@@ -47,7 +47,7 @@ namespace Cober {
 	};
 
 
-	class Input
+	class CB_API Input
 	{
 	public:
 		static void Update();

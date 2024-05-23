@@ -11,9 +11,9 @@ namespace Cober {
 		// Internal variables
 		static InitScriptsFn m_InitScripts = nullptr;
 		static UpdateScriptFn m_UpdateScripts = nullptr;
-		static NotifyBeginContactFn m_NotifyBeginContact = nullptr;
+		// static NotifyBeginContactFn m_NotifyBeginContact = nullptr;
 		static IsKeyDownFn m_IsKeyDown = nullptr;
-		static DeleteScriptsFn m_DeleteScripts = nullptr;
+		// static DeleteScriptsFn m_DeleteScripts = nullptr;
 
 		static bool m_IsLoaded = false;
 		static HMODULE m_Module;
@@ -21,9 +21,9 @@ namespace Cober {
 		// Forward Declarations
 		static void InitScriptsStub(Entity* entity) {}
 		static void UpdateScriptStub(float dt) {}
-		static void NotifyBeginContactStub(Entity* a, Entity* b) {}
+		// static void NotifyBeginContactStub(Entity* a, Entity* b) {}
 		static bool IsKeyDownStub(KeyCode key) { return true; }
-		static void DeleteScriptsStub() { }
+		// static void DeleteScriptsStub() { }
 
 		static FARPROC __stdcall TryLoadFunction(HMODULE module, const char* functionName)
 		{
@@ -48,9 +48,9 @@ namespace Cober {
 			{
 				m_InitScripts = (InitScriptsFn)TryLoadFunction(m_Module, "InitScripts");
 				m_UpdateScripts = (UpdateScriptFn)TryLoadFunction(m_Module, "UpdateScripts");
-				m_NotifyBeginContact = (NotifyBeginContactFn)TryLoadFunction(m_Module, "NotifyBeginContact");
+				// m_NotifyBeginContact = (NotifyBeginContactFn)TryLoadFunction(m_Module, "NotifyBeginContact");
 				m_IsKeyDown = (IsKeyDownFn)TryLoadFunction(m_Module, "IsKeyDown");
-				m_DeleteScripts = (DeleteScriptsFn)TryLoadFunction(m_Module, "DeleteScripts");
+				// m_DeleteScripts = (DeleteScriptsFn)TryLoadFunction(m_Module, "DeleteScripts");
 				m_IsLoaded = true;
 
 				if (m_InitScripts)
@@ -68,13 +68,13 @@ namespace Cober {
 			}
 		}
 
-		void notifyBeginContact(Entity* entityA, Entity* entityB)
-		{
-			if (m_NotifyBeginContact)
-			{
-				m_NotifyBeginContact(entityA, entityB);
-			}
-		}
+		// void notifyBeginContact(Entity* entityA, Entity* entityB)
+		// {
+		// 	if (m_NotifyBeginContact)
+		// 	{
+		// 		m_NotifyBeginContact(entityA, entityB);
+		// 	}
+		// }
 
 		bool isKeyDown(KeyCode key)
 		{
@@ -86,13 +86,13 @@ namespace Cober {
 			return false;
 		}
 
-		void deleteScripts()
-		{
-			if (m_DeleteScripts)
-			{
-				m_DeleteScripts();
-			}
-		}
+		// void deleteScripts()
+		// {
+		// 	if (m_DeleteScripts)
+		// 	{
+		// 		m_DeleteScripts();
+		// 	}
+		// }
 
 
 		bool freeScriptLibrary()
@@ -104,9 +104,9 @@ namespace Cober {
 
 			m_InitScripts = InitScriptsStub;
 			m_UpdateScripts = UpdateScriptStub;
-			m_NotifyBeginContact = NotifyBeginContactStub;
+			// m_NotifyBeginContact = NotifyBeginContactStub;
 			m_IsKeyDown = IsKeyDownStub;
-			m_DeleteScripts = DeleteScriptsStub;
+			// m_DeleteScripts = DeleteScriptsStub;
 
 			if (!FreeLibrary(m_Module))
 			{
@@ -129,7 +129,7 @@ namespace Cober {
 
 	ScriptSystem::~ScriptSystem()
 	{
-		ScriptFn::deleteScripts();
+		// ScriptFn::deleteScripts();
 		ScriptFn::freeScriptLibrary();
         LOG_INFO("Script System Removed from Registry");
 	}
@@ -137,7 +137,7 @@ namespace Cober {
 
     void ScriptSystem::Start(Scene* scene)
     {
-		auto view = scene->GetAllEntitiesWith<NativeScriptComponent>();
+		auto view = scene->GetAllEntitiesWith<TransformComponent>();
 		for (auto entt : view) 
         {
 			Entity entity = Entity((entt::entity)entt, scene );

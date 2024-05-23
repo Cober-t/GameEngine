@@ -8,8 +8,8 @@
 
 namespace Cober {
 
-	class Timestep {
-		
+	class CB_API Timestep 
+	{
 	public:
 		Timestep() 
 		 : m_DeltaTime(0), m_NowTime(0), m_LastFrameTime(glfwGetTime()), m_Timer(0),

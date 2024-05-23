@@ -6,7 +6,7 @@
 
 namespace Cober {
 
-	class KeyEvent : public Event
+	class CB_API KeyEvent : public Event
 	{
 	public:
 		KeyCode GetKeyCode() const { return m_KeyCode; }
@@ -21,7 +21,7 @@ namespace Cober {
 	};
 
 
-	class KeyPressedEvent : public KeyEvent
+	class CB_API KeyPressedEvent : public KeyEvent
 	{
 	public:
 		KeyPressedEvent(const KeyCode keycode, bool isRepeat = false)
@@ -43,7 +43,7 @@ namespace Cober {
 	};
 
 
-	class KeyReleasedEvent : public KeyEvent
+	class CB_API KeyReleasedEvent : public KeyEvent
 	{
 	public:
 		KeyReleasedEvent(const KeyCode keycode)
@@ -60,7 +60,7 @@ namespace Cober {
 	};
 
 
-	class KeyTypedEvent : public KeyEvent
+	class CB_API KeyTypedEvent : public KeyEvent
 	{
 	public:
 		KeyTypedEvent(const KeyCode keycode)

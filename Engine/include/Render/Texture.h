@@ -17,7 +17,7 @@ namespace Cober {
 		RGBA32F
 	};
 
-	class Texture
+	class CB_API Texture
 	{
 	public:
 		virtual ~Texture() = default;

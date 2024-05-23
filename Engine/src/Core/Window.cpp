@@ -74,6 +74,19 @@ namespace Cober {
 			glfwTerminate();
 	}
 
+	// void Window::SetEventCallback(const EventCallbackFn& callback)
+	// { 
+	// 	m_Data.EventCallback = callback; 
+	// }
+
+	// void* Window::GetNativeWindow() const
+	// {
+	// 	return m_Window;
+	// }
+
+	// uint32_t Window::GetWidth() const { return m_Data.Width; }
+	// uint32_t Window::GetHeight() const { return m_Data.Height; }
+
 	void Window::SetWindowCallbacks()
 	{
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)

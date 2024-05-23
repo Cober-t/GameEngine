@@ -17,7 +17,7 @@
 
 namespace Cober {
 
-	class Log
+	class CB_API Log
 	{
 	public:
 		static enum LOG_LEVELS { TRACE = 0, DEBUG, INFO, WARN, ERR, CRITICAL };

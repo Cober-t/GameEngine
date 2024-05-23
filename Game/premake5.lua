@@ -39,32 +39,22 @@ project "Game"
 		"Engine",
 	}
 
-	defines 
+	defines
     {
         "_CRT_SECURE_NO_WARNINGS",
-		"_WIN32"
+		"_WIN32",
     }
 
-	filter { "system:windows", "configurations:Debug" }
-	buildoptions "/MDd"
-
-	filter { "system:windows", "configurations:Release" }
-		buildoptions "/MD"
-
-	filter "system:windows"
-		systemversion "latest"
-
 	filter "configurations:Debug"
-		defines { "GLFW_INCLUDE_NONE" }
 		runtime "Debug"
 		symbols "on"
 
+
 	filter "configurations:Release"
-		defines { "GLFW_INCLUDE_NONE" }
 		runtime "Release"
 		optimize "on"
 
+
 	filter "configurations:Dist"
-		defines { "GLFW_INCLUDE_NONE" }
 		runtime "Release"
 		optimize "on"
