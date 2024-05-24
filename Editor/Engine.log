@@ -1,56 +1,34 @@
-[2024-05-23 12:03:56.947] [APP] [info] [EditorApp.cpp:36] Editor Constructor!
-[2024-05-23 12:03:56.949] [ENGINE] [info] [EngineApp.cpp:12] EngineApp Constructor!
-[2024-05-23 12:03:56.949] [ENGINE] [info] [EngineApp.cpp:21] Current Working Path: ./
-[2024-05-23 12:03:56.949] [ENGINE] [info] [Window.cpp:22] Window Created
-[2024-05-23 12:03:56.950] [ENGINE] [info] [Window.cpp:41] Creating window Cober Engine Application (1280, 720)
-[2024-05-23 12:03:57.299] [ENGINE] [info] [OpenGLContext.cpp:11] Window Context Created!!
-[2024-05-23 12:03:57.305] [ENGINE] [info] [OpenGLContext.cpp:26] OpenGL Info:
-[2024-05-23 12:03:57.306] [ENGINE] [info] [OpenGLContext.cpp:27]   Vendor: NVIDIA Corporation
-[2024-05-23 12:03:57.306] [ENGINE] [info] [OpenGLContext.cpp:28]   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
-[2024-05-23 12:03:57.306] [ENGINE] [info] [OpenGLContext.cpp:29]   Version: 4.6.0 NVIDIA 551.86
-[2024-05-23 12:03:57.306] [ENGINE] [info] [Timestep.h:18] Created Timer
-[2024-05-23 12:03:57.307] [ENGINE] [trace] [OpenGLRenderAPI.cpp:45] Render API init
-[2024-05-23 12:03:57.307] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-05-23 12:03:57.308] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-05-23 12:03:57.309] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2024-05-23 12:03:57.310] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Quad.glsl success
-[2024-05-23 12:03:57.311] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-05-23 12:03:57.311] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-05-23 12:03:57.312] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Line.glsl success
-[2024-05-23 12:03:57.312] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-05-23 12:03:57.312] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-05-23 12:03:57.313] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2024-05-23 12:03:57.314] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Circle.glsl success
-[2024-05-23 12:03:57.314] [ENGINE] [trace] [OpenGLBuffer.cpp:94] Render UniformBuffer success
-[2024-05-23 12:03:57.314] [APP] [info] [EditorCamera.cpp:39] Editor Camera Created!!
-[2024-05-23 12:03:57.325] [ENGINE] [info] [Debug2DPhysics.cpp:19] Debug 2D Physics Constructor!
-[2024-05-23 12:03:57.327] [APP] [info] [Scene.cpp:17] Scene Created!!
-[2024-05-23 12:03:57.328] [APP] [info] [Scene.cpp:137] Created entity with ID 1167047115691238134 and name Entity1
-[2024-05-23 12:03:57.328] [APP] [info] [Scene.cpp:137] Created entity with ID 10285213255253873479 and name Entity0
-[2024-05-23 12:03:57.329] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-23 12:03:57.329] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-23 12:03:57.330] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-23 12:03:57.330] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-23 12:03:57.331] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-23 12:04:02.152] [APP] [info] [Scene.cpp:17] Scene Created!!
-[2024-05-23 12:04:02.153] [APP] [info] [Scene.cpp:137] Created entity with ID 15790550996833163264 and name Entity0
-[2024-05-23 12:04:02.153] [APP] [info] [Scene.cpp:137] Created entity with ID 17731108172934002688 and name Entity1
-[2024-05-23 12:04:02.154] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-23 12:04:02.154] [APP] [info] [PhysicsSystem2D.cpp:9] Physics System Added to Registry!!
-[2024-05-23 12:04:02.154] [APP] [info] [ScriptSystem.cpp:126] Script System Added to Registry!!
-[2024-05-23 12:04:02.155] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-23 12:04:02.155] [APP] [info] [PhysicsSystem2D.cpp:31] Physics System Started!!
-[2024-05-23 12:04:02.160] [APP] [info] [ScriptSystem.cpp:148] Script System Started!!
-[2024-05-23 12:04:02.557] [APP] [info] [PhysicsSystem2D.cpp:17] Physics System Removed from Registry
-[2024-05-23 12:04:02.558] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
-[2024-05-23 12:04:02.559] [APP] [info] [ScriptSystem.cpp:134] Script System Removed from Registry
-[2024-05-23 12:04:02.559] [APP] [info] [Scene.cpp:23] Scene Destroyed!!
-[2024-05-23 12:04:02.951] [APP] [info] [Scene.cpp:17] Scene Created!!
-[2024-05-23 12:04:02.952] [APP] [info] [Scene.cpp:137] Created entity with ID 15790550996833163264 and name Entity0
-[2024-05-23 12:04:02.952] [APP] [info] [Scene.cpp:137] Created entity with ID 17731108172934002688 and name Entity1
-[2024-05-23 12:04:02.953] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
-[2024-05-23 12:04:02.954] [APP] [info] [PhysicsSystem2D.cpp:9] Physics System Added to Registry!!
-[2024-05-23 12:04:02.954] [APP] [info] [ScriptSystem.cpp:126] Script System Added to Registry!!
-[2024-05-23 12:04:02.954] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
-[2024-05-23 12:04:02.955] [APP] [info] [PhysicsSystem2D.cpp:31] Physics System Started!!
-[2024-05-23 12:04:02.957] [APP] [info] [ScriptSystem.cpp:148] Script System Started!!
+[2024-05-24 08:50:43.980] [APP] [info] [EditorApp.cpp:36] Editor Constructor!
+[2024-05-24 08:50:43.982] [ENGINE] [info] [EngineApp.cpp:12] EngineApp Constructor!
+[2024-05-24 08:50:43.982] [ENGINE] [info] [EngineApp.cpp:21] Current Working Path: ./
+[2024-05-24 08:50:43.982] [ENGINE] [info] [Window.cpp:22] Window Created
+[2024-05-24 08:50:43.983] [ENGINE] [info] [Window.cpp:41] Creating window Cober Engine Application (1280, 720)
+[2024-05-24 08:50:44.249] [ENGINE] [info] [OpenGLContext.cpp:11] Window Context Created!!
+[2024-05-24 08:50:44.255] [ENGINE] [info] [OpenGLContext.cpp:26] OpenGL Info:
+[2024-05-24 08:50:44.255] [ENGINE] [info] [OpenGLContext.cpp:27]   Vendor: NVIDIA Corporation
+[2024-05-24 08:50:44.255] [ENGINE] [info] [OpenGLContext.cpp:28]   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+[2024-05-24 08:50:44.256] [ENGINE] [info] [OpenGLContext.cpp:29]   Version: 4.6.0 NVIDIA 551.86
+[2024-05-24 08:50:44.256] [ENGINE] [info] [Timestep.h:18] Created Timer
+[2024-05-24 08:50:44.256] [ENGINE] [trace] [OpenGLRenderAPI.cpp:45] Render API init
+[2024-05-24 08:50:44.256] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-05-24 08:50:44.256] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-05-24 08:50:44.258] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
+[2024-05-24 08:50:44.266] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Quad.glsl success
+[2024-05-24 08:50:44.266] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-05-24 08:50:44.266] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-05-24 08:50:44.271] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Line.glsl success
+[2024-05-24 08:50:44.271] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-05-24 08:50:44.272] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-05-24 08:50:44.273] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
+[2024-05-24 08:50:44.278] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Circle.glsl success
+[2024-05-24 08:50:44.278] [ENGINE] [trace] [OpenGLBuffer.cpp:94] Render UniformBuffer success
+[2024-05-24 08:50:44.278] [APP] [info] [EditorCamera.cpp:39] Editor Camera Created!!
+[2024-05-24 08:50:44.290] [ENGINE] [info] [Debug2DPhysics.cpp:19] Debug 2D Physics Constructor!
+[2024-05-24 08:50:44.297] [APP] [info] [Scene.cpp:17] Scene Created!!
+[2024-05-24 08:50:44.298] [APP] [info] [Scene.cpp:137] Created entity with ID 15896199658740236946 and name Entity1
+[2024-05-24 08:50:44.298] [APP] [info] [Scene.cpp:137] Created entity with ID 4523297471922754712 and name Entity0
+[2024-05-24 08:50:44.299] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
+[2024-05-24 08:50:44.299] [APP] [info] [RenderSystem.cpp:21] Render System Started!!
+[2024-05-24 08:50:44.300] [APP] [info] [RenderSystem.cpp:10] Render System Added to Registry!!
+[2024-05-24 08:50:44.300] [APP] [info] [RenderSystem.cpp:15] Render System Removed from Registry
+[2024-05-24 08:50:44.300] [APP] [info] [RenderSystem.cpp:21] Render System Started!!

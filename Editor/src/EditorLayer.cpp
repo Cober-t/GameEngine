@@ -66,6 +66,7 @@ namespace Cober {
 		
 		ViewportPanel::Get().FBOClearAttachments(1, -1);
 
+		ImGui::SetCurrentContext(ImGuiLayer::GetContext());
 		auto& colors = ImGui::GetStyle().Colors;
 
 		switch (EngineApp::Get().GetGameState()) 

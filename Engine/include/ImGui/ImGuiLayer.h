@@ -3,9 +3,13 @@
 
 #include "Core/Layer.h"
 
+#include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
+
+
 namespace Cober {
 
-	class ImGuiLayer : public Layer 
+	class CB_API ImGuiLayer : public Layer 
 	{
 	public:
 
@@ -26,9 +30,13 @@ namespace Cober {
 		void StyleDefault();
 		void StyleCustom();
 
+		static ImGuiContext* GetContext() { return m_ImGuiContext; }
+
 	private:
 		bool m_BlockEvents = false;
 		const char* glsl_version;
+
+		static ImGuiContext* m_ImGuiContext;
 	};
 }
 

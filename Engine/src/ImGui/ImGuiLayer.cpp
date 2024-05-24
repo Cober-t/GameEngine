@@ -3,14 +3,13 @@
 #include "ImGui/Colors.h"
 #include "Core/EngineApp.h"
 
-#include <imgui/imgui.h>
-#include <imgui/imgui_internal.h>
-
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
 
 namespace Cober {
+
+	ImGuiContext* ImGuiLayer::m_ImGuiContext = nullptr;
 
 	ImGuiLayer::ImGuiLayer(const char* glVersion)
 		: glsl_version(glVersion)
@@ -27,10 +26,10 @@ namespace Cober {
 	{
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
-		ImGui::CreateContext();
+		m_ImGuiContext = ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      	// Enable Gamepad Controls
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 
