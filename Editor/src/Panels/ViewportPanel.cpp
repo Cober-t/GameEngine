@@ -302,16 +302,16 @@ namespace Cober {
 				EngineApp::Get().SetGameState(EngineApp::GameState::RUNTIME_EDITOR);
 
 				Editor::SetActiveScene(Scene::Copy(Editor::GetEditorScene()));
-				Editor::GetActiveScene()->OnSimulationStart();
+				Editor::GetActiveScene()->OnSimulationStart(Editor::GetActiveScene());
 				SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
 			}
 			else if (gameState == EngineApp::GameState::RUNTIME_EDITOR) 
             {
 				EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
 
-				Editor::GetActiveScene()->OnSimulationStop();
 				Editor::SetActiveScene(Editor::GetEditorScene());
-				SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
+				SceneHierarchyPanel::Get().SetContext(Editor::GetEditorScene());
+				Editor::GetActiveScene()->OnSimulationStop(Editor::GetActiveScene());
 
 				// Provisional fix to avoid crash
 				Editor::SetSelectedEntity();

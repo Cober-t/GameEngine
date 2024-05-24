@@ -75,6 +75,8 @@ project "Engine"
 	postbuildcommands
 	{
 		("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Editor/\""),
+		-- Copy to the project game folder with ARGS in the future
+		("{COPY} %{cfg.buildtarget.relpath} \"../Game/build/" .. outputdir .. "\""),
 	}
 
     filter "files:libraries/ImGuizmo/**.cpp"

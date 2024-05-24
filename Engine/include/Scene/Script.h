@@ -17,6 +17,9 @@ namespace Cober {
 		// virtual void OnBeginContact(Entity other) = 0;
 		// virtual void OnEndContact(Entity other) = 0;
         virtual bool IsKeyDown(KeyCode key) = 0;
+	
+	public:
+		Entity* entity;
 	};
 }
 

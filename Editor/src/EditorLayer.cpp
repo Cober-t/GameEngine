@@ -84,7 +84,7 @@ namespace Cober {
 			case EngineApp::GameState::RUNTIME_EDITOR: 
 			{
 				colors[ImGuiCol_WindowBg] = ImVec4(0, 0.0, 0.0, 0.268f);
-				m_ActiveScene->OnUpdateSimulation(ts, m_EditorCamera);
+				m_ActiveScene->OnUpdateSimulation(m_ActiveScene, ts, m_EditorCamera);
 				break;
 			}
 		}
@@ -190,7 +190,7 @@ namespace Cober {
 
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& event) { return OnKeyPressed(event); });
-		// dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& event) { return ScriptFn::isKeyDown(event.GetKeyCode()); });
+		dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& event) { return ScriptFn::isKeyDown(event.GetKeyCode()); });
 	}
 
 

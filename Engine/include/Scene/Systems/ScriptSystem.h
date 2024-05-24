@@ -10,19 +10,19 @@
 
 namespace Cober {
 
- 	typedef void (*InitScriptsFn)(Entity* entity);
-	typedef void (*UpdateScriptFn)(float dt);
-  	// typedef void (*NotifyBeginContactFn)(Entity* entityA, Entity* entityB);
+ 	typedef void (*InitScriptsFn)(Ref<Scene> scene, Entity* entity);
+	typedef void (*UpdateScriptFn)(Ref<Scene> scene, float dt);
+  	typedef void (*NotifyBeginContactFn)(Entity* entityA, Entity* entityB);
 	typedef bool (*IsKeyDownFn)(KeyCode key);
-	// typedef void (*DeleteScriptsFn)();
+	typedef void (*DeleteScriptsFn)(Ref<Scene> scene);
 
 	namespace ScriptFn
 	{
-		CB_API void init(Entity* entity);
-        CB_API void update(float dt);
-		// CB_API void notifyBeginContact(Entity* entityA, Entity* entityB);
+		CB_API void init(Ref<Scene> scene, Entity* entity);
+        CB_API void update(Ref<Scene> scene, float dt);
+		CB_API void notifyBeginContact(Entity* entityA, Entity* entityB);
 		CB_API bool isKeyDown(KeyCode Key);
-		// CB_API void deleteScripts();
+		CB_API void deleteScripts(Ref<Scene> scene);
 
 		CB_API bool freeScriptLibrary();
 	}
@@ -34,12 +34,12 @@ namespace Cober {
 		ScriptSystem();
 		~ScriptSystem();
 
-        void Start(Scene* scene);
-		void Update(float dt);
+        void Start(Ref<Scene> scene);
+		void Update(Ref<Scene> scene, float dt);
+		void FreeScripts(Ref<Scene> scene);
 
     private:
 		sol::state lua;
-		Scene* m_Scene;
 	};
 }
 

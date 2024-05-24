@@ -472,7 +472,7 @@ namespace Cober {
 				}
 			});
 
-		DrawComponent<NativeScriptComponent>("Native Script Component", entity, [](auto& component)
+		DrawComponent<NativeScriptComponent>((std::string)ComponentNames::NativeScript, entity, [](auto& component)
 			{
 				if (m_LoadScripts)
 				{
@@ -499,7 +499,7 @@ namespace Cober {
 
 				ImGui::SameLine();
 
-				if (ImGui::BeginCombo("2D Shape", m_CurrentScript)) 
+				if (ImGui::BeginCombo("NativeScript", component.className.c_str())) 
 				{
 					for (int i = 0; i < m_ScriptList.size(); i++) 
 					{
@@ -507,7 +507,7 @@ namespace Cober {
 						if (ImGui::Selectable(m_ScriptList[i].c_str(), isSelected)) 
 						{
 							m_CurrentScript = m_ScriptList[i].c_str();
-							component.className = m_ScriptList[i];
+							component.className = m_CurrentScript;
 						}
 						if (isSelected)
 							ImGui::SetItemDefaultFocus();

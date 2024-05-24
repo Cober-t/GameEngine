@@ -42,7 +42,6 @@ project "Game"
 	defines
     {
         "_CRT_SECURE_NO_WARNINGS",
-		"_WIN32",
     }
 
 	filter "configurations:Debug"
@@ -53,7 +52,6 @@ project "Game"
 	filter "configurations:Release"
 		runtime "Release"
 		optimize "on"
-
 
 	filter "configurations:Dist"
 		runtime "Release"

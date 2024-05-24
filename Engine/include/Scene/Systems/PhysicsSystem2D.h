@@ -23,8 +23,8 @@ namespace Cober {
 		PhysicsSystem2D();
 		~PhysicsSystem2D();
 
-		void Start(Scene* scene);
-		void Update(Unique<Timestep>& ts, Scene* scene);
+		void Start(Ref<Scene> scene);
+		void Update(Ref<Scene> scene, Unique<Timestep>& ts);
 
 		void InitEntityPhysics(Entity entity);
         

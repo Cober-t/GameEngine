@@ -10,13 +10,13 @@ Game::Game() : Layer("Game application")
 void Game::OnAttach() 
 {
 	m_ActiveScene = Scene::Load("Pong.lua");
-	m_ActiveScene->OnSimulationStart();
+	m_ActiveScene->OnSimulationStart(m_ActiveScene);
 }
 
 
 void Game::OnDetach() 
 {
-	m_ActiveScene->OnSimulationStop();
+	m_ActiveScene->OnSimulationStop(m_ActiveScene);
 	m_ActiveScene = nullptr;
 	m_Camera = nullptr;
 	LOG_INFO("Detached Game application Layer!");
@@ -28,7 +28,7 @@ void Game::OnUpdate(Unique<Timestep>& ts)
 	RenderGlobals::SetClearColor(0, 0, 0);
 	RenderGlobals::Clear();
 	m_Camera->OnUpdate(ts);
-	m_ActiveScene->OnUpdateSimulation(ts, m_Camera);
+	m_ActiveScene->OnUpdateSimulation(m_ActiveScene, ts, m_Camera);
 }
 
 

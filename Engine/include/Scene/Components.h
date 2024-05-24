@@ -177,7 +177,7 @@ namespace Cober {
 	class Scene;
 	struct NativeScriptComponent
 	{
-		std::string className;
+		std::string className = "None";
 
 		NativeScriptComponent() = default;
 		NativeScriptComponent(const NativeScriptComponent&) = default;
@@ -204,8 +204,8 @@ namespace Cober {
 	{
 	};
 
-	using AllComponents = ComponentGroup<TransformComponent, TagComponent, ScriptComponent, Render2DComponent, NativeScriptComponent,
-				Rigidbody2D, BoxCollider2D, CircleCollider2D, EdgeCollider2D, PolygonCollider2D>;
+	using AllComponents = ComponentGroup<TransformComponent, TagComponent, ScriptComponent, Render2DComponent, 
+		ScriptComponent, NativeScriptComponent, Rigidbody2D, BoxCollider2D, CircleCollider2D, EdgeCollider2D, PolygonCollider2D>;
 }
 
 #endif

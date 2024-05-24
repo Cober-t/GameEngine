@@ -147,20 +147,21 @@ namespace Cober {
 	}
 
 
-	void Scene::OnSimulationStart()
+	void Scene::OnSimulationStart(Ref<Scene> scene)
 	{
 		AddSystem<RenderSystem>();
 		AddSystem<PhysicsSystem2D>();
 		AddSystem<ScriptSystem>();
 
         GetSystem<RenderSystem>().Start();
-		GetSystem<PhysicsSystem2D>().Start(this);
-		GetSystem<ScriptSystem>().Start(this);
+		GetSystem<PhysicsSystem2D>().Start(scene);
+		GetSystem<ScriptSystem>().Start(scene);
 	}
 
 
-    void Scene::OnSimulationStop()
+    void Scene::OnSimulationStop(Ref<Scene> scene)
 	{
+		GetSystem<ScriptSystem>().FreeScripts(scene);
 		RemoveSystem<PhysicsSystem2D>();
 		RemoveSystem<RenderSystem>();
 		RemoveSystem<ScriptSystem>();
@@ -181,7 +182,7 @@ namespace Cober {
 	}
 
 
-	void Scene::OnUpdateSimulation(Unique<Timestep>& ts, const Ref<Camera>& camera)
+	void Scene::OnUpdateSimulation(Ref<Scene> scene, Unique<Timestep>& ts, const Ref<Camera>& camera)
 	{
 		GetSystem<RenderSystem>().Update(ts, camera, this);
 
@@ -189,12 +190,12 @@ namespace Cober {
 		{
 			while(ts->GetDeltaTime() >= 1.0f)
             {
-				GetSystem<PhysicsSystem2D>().Update(ts, this);
+				GetSystem<PhysicsSystem2D>().Update(scene, ts);
                 ts->Update();
             }
 		}
 
-		GetSystem<ScriptSystem>().Update(ts->GetDeltaTime());
+		GetSystem<ScriptSystem>().Update(scene, ts->GetDeltaTime());
 	}
 
 
