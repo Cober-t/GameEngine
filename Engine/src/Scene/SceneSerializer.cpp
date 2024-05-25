@@ -1,5 +1,6 @@
 #include <pch.h>
 #include "Scene/SceneSerializer.h"
+#include "Physics/Physics2D.h"
 
 namespace Cober {
 
@@ -21,6 +22,10 @@ namespace Cober {
 
         EngineApp& app = EngineApp::Get();
 		sceneSaver[name]["numEntities"].SetInt(scene->GetSceneEntities().size());
+
+		// Change to enum in the future
+		sceneSaver[name]["Settings"]["SceneType"].SetString("2D");
+		sceneSaver[name]["Settings"]["Gravity"].SetReal(Physics2D::GetSettings().Gravity);
 
 		int32_t numEntity = 0;
 		for (auto& entity : scene->GetSceneEntities()) 
@@ -114,6 +119,11 @@ namespace Cober {
 				}
 			}
 
+			if (entity.HasComponent<NativeScriptComponent>())
+			{
+				auto& script = entity.GetComponent<NativeScriptComponent>();
+				entityToBeSaved["NativeScriptComponent"]["className"].SetString(script.className);
+			}
 		}
 		
 		return Utils::DataFile::Write(sceneSaver, sceneName);
@@ -142,7 +152,8 @@ namespace Cober {
 		if (Utils::DataFile::Read(sceneLoader, sceneName)) 
 		{
 			Ref<Scene> newScene = CreateRef<Scene>();
-			// newScene->_world2D = sceneLoader[name]["world2D"].GetInt();
+
+			Physics2D::GetSettings().Gravity = sceneLoader[name]["Settings"]["Gravity"].GetReal();
 
 			for (int i = 0; i < sceneLoader[name]["numEntities"].GetInt(); i++) 
 			{
@@ -246,6 +257,13 @@ namespace Cober {
 							newEntity.GetComponent<Render2DComponent>().shapeType = Shape2D::Sprite;
 							newEntity.GetComponent<Render2DComponent>().texture = Texture::Create(texturePath);
 						}
+					}
+
+					if (loader.HasProperty("NativeScriptComponent")) 
+					{
+						auto script = loader["NativeScriptComponent"];
+						newEntity.AddComponent<NativeScriptComponent>();
+						newEntity.GetComponent<NativeScriptComponent>().className = script["className"].GetString();
 					}
 				}
 			}
