@@ -118,6 +118,18 @@ namespace Cober {
 			}
 
 			ImGui::SetNextItemWidth(120.0f);
+			ImGui::InputFloat("Physics Timestep", &Physics2D::GetSettings().TimeStep);
+
+			ImGui::SetNextItemWidth(120.0f);
+			ImGui::InputFloat("Physics Gravity", &Physics2D::GetSettings().Gravity);
+
+			ImGui::SetNextItemWidth(120.0f);
+			ImGui::InputInt("Physics Velocity Iterations", &Physics2D::GetSettings().VelocityIterations);
+
+			ImGui::SetNextItemWidth(120.0f);
+			ImGui::InputInt("Physics Position Iterations", &Physics2D::GetSettings().PositionIterations);
+
+			ImGui::SetNextItemWidth(120.0f);
 			if (ImGui::BeginCombo(ICON_FA_TELEVISION  "  Resolution", m_Settings.CurrentScreenSize)) 
 			{
 				for (int i = 0; i < ScreenSize::N_RESOLUTIONS; i++) 

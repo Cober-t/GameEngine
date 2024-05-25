@@ -98,11 +98,7 @@ namespace Cober {
 
 	void PhysicsSystem2D::Update(Scene* scene, Unique<Timestep>& ts)
 	{
-		// Export to Settings
-		const int32_t velocityIterations = 8;
-		const int32_t positionIterations = 3;
-
-		Physics2D::Step(1/20.0f, velocityIterations, positionIterations);
+		Physics2D::Step();
 
 		auto view = scene->GetAllEntitiesWith<TransformComponent, Rigidbody2D>();
 

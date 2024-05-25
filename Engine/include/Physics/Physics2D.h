@@ -24,12 +24,13 @@ namespace Cober {
     public:
         static void Init();
         static void DebugDraw();
-        static void Step(float timeStep, int velocityIterations, int positionIterations);
+        static void Step();
 
         inline static void SetDrawDebug(b2Draw* debugDraw) { m_PhysicsWorld->SetDebugDraw(debugDraw); };
         inline static b2Body* CreateBody(b2BodyDef body) { return m_PhysicsWorld->CreateBody(&body); }
 
         inline static b2World& PhysicsWorld() {return *m_PhysicsWorld; }
+        inline static PhysicsSettings& GetSettings() {return *m_PhysicsSettings; }
 
         static void ApplyForceX(b2Body* body, float x);
         static void ApplyForceY(b2Body* body, float y);
@@ -45,6 +46,7 @@ namespace Cober {
     private:
         static b2World* m_PhysicsWorld;
         static bool m_DebugActive;
+        static PhysicsSettings* m_PhysicsSettings;
     };
 }
 

@@ -6,13 +6,12 @@
 
 namespace Cober {
 
-    b2World* Physics2D::m_PhysicsWorld = nullptr;
     bool Physics2D::m_DebugActive = false;
+    b2World* Physics2D::m_PhysicsWorld = nullptr;
+    PhysicsSettings* Physics2D::m_PhysicsSettings = new PhysicsSettings();
 
     void Physics2D::Init()
     {
-        m_PhysicsWorld = new b2World({ 0.0f, -9.8f });
-
         CreateWorld(m_PhysicsWorld);
         
         m_PhysicsWorld->SetContactListener(new ContactListener());
@@ -27,13 +26,13 @@ namespace Cober {
 
     void Physics2D::CreateWorld(const b2World* physicsWorld)
     {
-        m_PhysicsWorld = new b2World({ 0.0f, -9.8f });
+        m_PhysicsWorld = new b2World({ 0.0f, m_PhysicsSettings->Gravity });
     }
 
 
-    void Physics2D::Step(float timeStep, int velocityIterations, int positionIterations)
+    void Physics2D::Step()
     {
-        m_PhysicsWorld->Step(timeStep, velocityIterations, positionIterations);
+        m_PhysicsWorld->Step(m_PhysicsSettings->TimeStep, m_PhysicsSettings->VelocityIterations, m_PhysicsSettings->PositionIterations);
     }
 
 
