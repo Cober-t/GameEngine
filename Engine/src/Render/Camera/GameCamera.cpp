@@ -1,5 +1,7 @@
 #include <pch.h>
 #include "Render/Camera/GameCamera.h"
+#include "Core/EngineApp.h"
+#include "Core/Input.h"
 
 #include "Render/RenderGlobals.h"
 #include "Events/ApplicationEvents.h"
@@ -107,6 +109,11 @@ namespace Cober {
 		if (event.GetEventType() == EventType::WindowResize)
 		{
 			SetViewportSize(static_cast<WindowResizeEvent&>(event).GetWidth(), static_cast<WindowResizeEvent&>(event).GetHeight());
+		}
+
+		if (Input::IsKeyDown(KeyCode::LeftControl) && Input::IsKeyDown(KeyCode::F))
+		{
+			EngineApp::Get().GetWindow().ChangeFullScreen();
 		}
 	}
 }
