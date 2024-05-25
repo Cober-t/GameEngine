@@ -27,7 +27,7 @@ namespace Cober {
         std::map<std::string, entt::id_type> stringToMap;
         
 
-        void InitScripts()
+        void InitScripts(Entity* entity)
         {
             if (initialized) return;
 
@@ -46,13 +46,10 @@ namespace Cober {
             // auto testScriptFactory = entt::meta<TestScript>()
             //     .data<&TestScript::m_ExampleFloatProperty, entt::as_ref_t>(ids[0])
             //     .data<&TestScript::m_ExampleIntProperty, entt::as_ref_t>(ids[1]);
+
+            // entity->GetComponent<TestScript>().entity = entity;
+            // entity->GetComponent<TestScript>().OnStart();
         }
-
-
-        // void DeleteScript(Entity* entity)
-        // {
-        //     entity->RemoveComponent<TestScript>();
-        // }
     }
 }
 

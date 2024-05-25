@@ -17,48 +17,26 @@
 
 namespace Cober {
 
-	entt::registry registry = entt::registry();
-
-	extern "C" CB_SCRIPT void InitScripts(Ref<Scene> scene, Entity* entity)
+	extern "C" CB_SCRIPT void InitScripts(Ref<Scene> scene)
 	{
-		if (entity->GetComponent<NativeScriptComponent>().className == "TestScript")
-		{
-
-			registry.emplace<TestScript>(entity->GetHandle());
-			auto scriptHandle = registry.get<TestScript>(entity->GetHandle());
-			scriptHandle.OnStart();
-
-			// entity->AddComponent<TestScript>();
-			// entity->GetComponent<TestScript>().entity = entity;
-			// entity->GetComponent<TestScript>().OnStart();
+		auto view = scene->GetAllEntitiesWith<NativeScriptComponent>();
+		for (auto entt : view) 
+        {
+			Entity entity = Entity(entt, scene.get());
+			entity.AddComponent<TestScript>();
+			entity.GetComponent<TestScript>().entity = entity;
+			entity.GetComponent<TestScript>().OnStart();
 		}
 	}
 
 	extern "C" CB_SCRIPT void UpdateScripts(Ref<Scene> scene, float dt)
 	{
-		auto view = registry.view<TestScript>();
+		auto view = scene->GetAllEntitiesWith<TestScript>();
 
-		for (auto entity : view)
+		for (auto entt : view)
 		{
-			auto comp = registry.get<TestScript>(entity);
-			comp.OnUpdate(dt);
-		}
-
-		if (Input::IsKeyDown(KeyCode::A))
-		{
-			scene->FindEntityByName("Entity0").GetComponent<TransformComponent>().position.x -= 0.01 * dt;
-		}
-		if (Input::IsKeyDown(KeyCode::D))
-		{
-			scene->FindEntityByName("Entity0").GetComponent<TransformComponent>().position.x += 0.01 * dt;
-		}
-		if (Input::IsKeyDown(KeyCode::W))
-		{
-			scene->FindEntityByName("Entity0").GetComponent<TransformComponent>().position.y += 0.01 * dt;
-		}
-		if (Input::IsKeyDown(KeyCode::S))
-		{
-			scene->FindEntityByName("Entity0").GetComponent<TransformComponent>().position.y -= 0.01 * dt;
+			Entity entity = Entity(entt, scene.get());
+			entity.GetComponent<TestScript>().OnUpdate(dt);
 		}
 	}
 
@@ -71,23 +49,10 @@ namespace Cober {
 	// {
 	// }
 
-	extern "C" CB_SCRIPT bool IsKeyDown(KeyCode key)
-	{
-		// if (Input::IsKeyDown(Key::A))
-		// {
-		// 	std::cout << "A PRESSED" << std::endl;
-		// }
-		// else
-		
-		// {
-		// 	std::cout << "----" << std::endl;
-		// }
-		return true;
-	}
 
 	extern "C" CB_SCRIPT void DeleteScripts(Ref<Scene> scene)
 	{
-		registry.clear<TestScript>();
+		scene->GetRegistry()->clear<TestScript>();
 	}
 
 

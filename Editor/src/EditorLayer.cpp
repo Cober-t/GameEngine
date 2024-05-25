@@ -190,7 +190,6 @@ namespace Cober {
 
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& event) { return OnKeyPressed(event); });
-		dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& event) { return ScriptFn::isKeyDown(event.GetKeyCode()); });
 	}
 
 
@@ -208,7 +207,7 @@ namespace Cober {
 				case Key::O: 
 				{
 					m_SelectedEntity = Entity();
-					m_EditorScene = Scene::Load("Scene2.lua"); // Test Scene
+					m_EditorScene = Scene::Load("SceneDefault.lua"); // Test Scene
 					m_ActiveScene = m_EditorScene;
 					EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
 					SceneHierarchyPanel::Get().SetContext(m_ActiveScene);
@@ -217,7 +216,7 @@ namespace Cober {
 				case Key::S: 
 				{
 					if (EngineApp::Get().GetGameState() == EngineApp::GameState::EDITOR)
-						Scene::Save(m_ActiveScene, "Scene2.lua");
+						Scene::Save(m_ActiveScene, "SceneDefault.lua");
 					break;
 				}
 				case Key::D:
@@ -243,13 +242,13 @@ namespace Cober {
 	}
 
 
-	Ref<Scene> Editor::GetActiveScene()
+	Ref<Scene>& Editor::GetActiveScene()
 	{
 		return m_ActiveScene;
 	}
 
 
-	Ref<Scene> Editor::GetEditorScene()
+	Ref<Scene>& Editor::GetEditorScene()
 	{
 		return m_EditorScene;
 	}
@@ -261,13 +260,13 @@ namespace Cober {
 	}
 
 
-	void Editor::SetActiveScene(Ref<Scene> scene)
+	void Editor::SetActiveScene(Ref<Scene>& scene)
 	{
 		m_ActiveScene = scene;
 	}
 
 
-	void Editor::SetEditorScene(Ref<Scene> scene)
+	void Editor::SetEditorScene(Ref<Scene>& scene)
 	{
 		m_EditorScene = scene;
 	}

@@ -42,7 +42,6 @@
 #include "Scene/ECS.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneSerializer.h"
-#include "Scene/Script.h"
 
 
 //[++++++++++++++++++++++++++]
@@ -80,6 +79,13 @@
 //[++++++++++++++++++++++++++]
 #include "Physics/Physics2D.h"
 #include "Physics/Debug2DPhysics.h"
+
+
+//[++++++++++++++++++++++++++]
+//[+++++++++ SCRIPTING ++++++++]
+//[++++++++++++++++++++++++++]
+#include "Scripting/NativeScripting.h"
+#include "Scripting/Script.h"
 
 
 //[++++++++++++++++++++++++++++]

@@ -309,9 +309,9 @@ namespace Cober {
             {
 				EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
 
-				Editor::SetActiveScene(Editor::GetEditorScene());
-				SceneHierarchyPanel::Get().SetContext(Editor::GetEditorScene());
 				Editor::GetActiveScene()->OnSimulationStop(Editor::GetActiveScene());
+				Editor::SetActiveScene(Editor::GetEditorScene());
+				// SceneHierarchyPanel::Get().SetContext(Editor::GetEditorScene());
 
 				// Provisional fix to avoid crash
 				Editor::SetSelectedEntity();

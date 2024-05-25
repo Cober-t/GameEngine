@@ -31,11 +31,11 @@ namespace Cober {
 		virtual void OnImGuiRender() override;
 		virtual void OnEvent(Event& event) override;
 
-		static Ref<Scene> GetActiveScene();
-		static Ref<Scene> GetEditorScene();
+		static Ref<Scene>& GetActiveScene();
+		static Ref<Scene>& GetEditorScene();
 		static Entity& SelectedEntity();
-		static void SetActiveScene(Ref<Scene> scene);
-		static void SetEditorScene(Ref<Scene> scene);
+		static void SetActiveScene(Ref<Scene>& scene);
+		static void SetEditorScene(Ref<Scene>& scene);
 		static void SetSelectedEntity(Entity& entity = Entity());
 
 	private:

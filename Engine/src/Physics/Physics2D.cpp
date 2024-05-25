@@ -70,7 +70,7 @@ namespace Cober {
             // LOG_WARNING("BEGIN CONTACT: {0}", reinterpret_cast<Entity*>(indexBodyB)->GetName());
 		}
 
-        // ScriptFn::notifyBeginContact(reinterpret_cast<Entity*>(indexBodyA), reinterpret_cast<Entity*>(indexBodyB));
+        NativeScriptFn::NotifyBeginContact(reinterpret_cast<Entity*>(indexBodyA), reinterpret_cast<Entity*>(indexBodyB));
 	}
 
 

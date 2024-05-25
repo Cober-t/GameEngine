@@ -35,7 +35,4 @@ void Game::OnUpdate(Unique<Timestep>& ts)
 void Game::OnEvent(Event& event) 
 {
 	m_Camera->OnEvent(event);
-
-	EventDispatcher dispatcher(event);
-	dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& event) { return ScriptFn::isKeyDown(event.GetKeyCode()); });
 }

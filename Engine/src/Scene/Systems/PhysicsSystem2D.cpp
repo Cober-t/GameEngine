@@ -115,7 +115,7 @@ namespace Cober {
 			b2Body* body = (b2Body*)rb2d.runtimeBody;
 			const auto& position = body->GetPosition();
 
-			if (rb2d.type == BodyType::Dynamic) 
+			if (rb2d.type == BodyType::Dynamic || rb2d.type == BodyType::Static) 
 			{
 				transform.position.x = position.x;
 				transform.position.y = position.y;
