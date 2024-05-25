@@ -315,6 +315,7 @@ namespace Cober {
 				SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
 
 				// Provisional fix to avoid crash
+				NativeScriptFn::FreeScriptLibrary();
 				Editor::SetSelectedEntity();
 			}
 		}

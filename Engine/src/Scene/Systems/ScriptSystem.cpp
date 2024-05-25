@@ -57,6 +57,5 @@ namespace Cober {
 	void ScriptSystem::FreeScripts(Scene* scene)
 	{
 		NativeScriptFn::DeleteScripts(scene);
-		NativeScriptFn::FreeScriptLibrary();
 	}
 }

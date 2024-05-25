@@ -96,12 +96,11 @@ namespace Cober {
 			m_NotifyBeginContact = NotifyBeginContactStub;
 			m_DeleteScripts = DeleteScriptsStub;
 
-			// CHECK ERROR ON DESTROY SCENE
-			// if (!FreeLibrary(m_Module))
-			// {
-			// 	LOG_WARNING("Could not free script dll. Error Code:");
-			// 	return false;
-			// }
+			if (!FreeLibrary(m_Module))
+			{
+				LOG_WARNING("Could not free script dll. Error Code:");
+				return false;
+			}
 
 			m_Module = nullptr;
 			m_IsLoaded = false;

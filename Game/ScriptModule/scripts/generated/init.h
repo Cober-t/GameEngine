@@ -111,10 +111,8 @@ BOOL WINAPI DllMain(
 			
 				if (lpvReserved != nullptr)
 				{
-					LOG_WARNING("CLEAN UP 1");
 					break; // do not do cleanup if process termination scenario
 				}
-				LOG_WARNING("CLEAN UP 2");
 				
 			// Perform any necessary cleanup.
 				break;
