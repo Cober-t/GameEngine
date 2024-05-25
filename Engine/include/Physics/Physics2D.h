@@ -31,6 +31,14 @@ namespace Cober {
 
         inline static b2World& PhysicsWorld() {return *m_PhysicsWorld; }
 
+        static void ApplyForceX(b2Body* body, float x);
+        static void ApplyForceY(b2Body* body, float y);
+        static void ApplyForce(b2Body* body,float x, float y);
+        static void ApplyImpulseX(b2Body* body,float x);
+        static void ApplyImpulseY(b2Body* body, float y);
+        static void ApplyImpulse(b2Body* body, float x, float y);
+        static void SetTransform(b2Body* body, float x, float y, float angle);
+
     private:
         static void CreateWorld(const b2World* physicsWorld);
         

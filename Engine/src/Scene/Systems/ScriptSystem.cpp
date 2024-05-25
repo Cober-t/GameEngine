@@ -18,7 +18,7 @@ namespace Cober {
 	}
 
 
-    void ScriptSystem::Start(Ref<Scene> scene)
+    void ScriptSystem::Start(Scene* scene)
     {
 		NativeScriptFn::Init(scene);
 
@@ -28,7 +28,7 @@ namespace Cober {
     }
 
 
-    void ScriptSystem::Update(Ref<Scene> scene, float dt)
+    void ScriptSystem::Update(Scene* scene, float dt)
     {
 		NativeScriptFn::Update(scene, dt);
 
@@ -54,7 +54,7 @@ namespace Cober {
     }
 
 
-	void ScriptSystem::FreeScripts(Ref<Scene> scene)
+	void ScriptSystem::FreeScripts(Scene* scene)
 	{
 		NativeScriptFn::DeleteScripts(scene);
 		NativeScriptFn::FreeScriptLibrary();

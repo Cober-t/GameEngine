@@ -18,13 +18,13 @@ namespace Cober {
 	}
 
 
-	void PhysicsSystem2D::Start(Ref<Scene> scene)
+	void PhysicsSystem2D::Start(Scene* scene)
 	{
 		Physics2D::Init();
 
 		for (auto entt : scene->GetAllEntitiesWith<TransformComponent, Rigidbody2D>())
 		{
-			Entity entity = Entity((entt::entity)entt, scene.get() );
+			Entity entity = Entity((entt::entity)entt, scene );
 			InitEntityPhysics(entity);
 		}
 
@@ -96,7 +96,7 @@ namespace Cober {
 	}
 
 
-	void PhysicsSystem2D::Update(Ref<Scene> scene, Unique<Timestep>& ts)
+	void PhysicsSystem2D::Update(Scene* scene, Unique<Timestep>& ts)
 	{
 		// Export to Settings
 		const int32_t velocityIterations = 8;
@@ -108,24 +108,15 @@ namespace Cober {
 
 		for (auto entt : view) 
         {
-			Entity entity = Entity((entt::entity)entt, scene.get() );
+			Entity entity = Entity((entt::entity)entt, scene );
 			auto& transform = entity.GetComponent<TransformComponent>();
 			auto& rb2d = entity.GetComponent<Rigidbody2D>();
 			
 			b2Body* body = (b2Body*)rb2d.runtimeBody;
 			const auto& position = body->GetPosition();
-
-			if (rb2d.type == BodyType::Dynamic || rb2d.type == BodyType::Static) 
-			{
-				transform.position.x = position.x;
-				transform.position.y = position.y;
-				transform.rotation.z = rb2d.fixedRotation ? 0.0f : body->GetAngle();
-			}
-
-			else if (rb2d.type == BodyType::Kinematic) 
-			{
-				body->SetTransform(b2Vec2(transform.position.x, transform.position.y), transform.rotation.z);
-			}
+			transform.position.x = position.x;
+			transform.position.y = position.y;
+			transform.rotation.z = rb2d.fixedRotation ? 0.0f : body->GetAngle();
 		}
 	}
 }

@@ -102,4 +102,40 @@ namespace Cober {
 	{
 		// TODO: Implement me
 	}
+
+
+    void Physics2D::ApplyForceX(b2Body* body, float x)
+    {
+        body->ApplyForce(b2Vec2(x, 0), body->GetWorldCenter(), true);
+    }
+
+    void Physics2D::ApplyForceY(b2Body* body, float y)
+    {
+        body->ApplyForce(b2Vec2(0, y), body->GetWorldCenter(), true);
+    }
+
+    void Physics2D::ApplyForce(b2Body* body,float x, float y)
+    {
+        body->ApplyForce(b2Vec2(x, y), body->GetWorldCenter(), true);
+    }
+
+    void Physics2D::ApplyImpulseX(b2Body* body,float x)
+    {
+        body->ApplyLinearImpulse(b2Vec2(x, 0), body->GetWorldCenter(), true);
+    }
+
+    void Physics2D::ApplyImpulseY(b2Body* body, float y)
+    {
+        body->ApplyLinearImpulse(b2Vec2(0, y), body->GetWorldCenter(), true);
+    }
+    
+    void Physics2D::ApplyImpulse(b2Body* body, float x, float y)
+    {
+        body->ApplyLinearImpulse(b2Vec2(x, y), body->GetWorldCenter(), true);
+    }
+
+    void Physics2D::SetTransform(b2Body* body, float x, float y, float angle)
+    {
+        body->SetTransform(b2Vec2(x, y), angle);
+    }
 }

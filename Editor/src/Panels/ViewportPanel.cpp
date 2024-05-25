@@ -302,16 +302,17 @@ namespace Cober {
 				EngineApp::Get().SetGameState(EngineApp::GameState::RUNTIME_EDITOR);
 
 				Editor::SetActiveScene(Scene::Copy(Editor::GetEditorScene()));
-				Editor::GetActiveScene()->OnSimulationStart(Editor::GetActiveScene());
+				Editor::GetActiveScene()->OnSimulationStart();
 				SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
 			}
 			else if (gameState == EngineApp::GameState::RUNTIME_EDITOR) 
             {
+				Editor::GetActiveScene()->OnSimulationStop();
+
 				EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
 
-				Editor::GetActiveScene()->OnSimulationStop(Editor::GetActiveScene());
 				Editor::SetActiveScene(Editor::GetEditorScene());
-				// SceneHierarchyPanel::Get().SetContext(Editor::GetEditorScene());
+				SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
 
 				// Provisional fix to avoid crash
 				Editor::SetSelectedEntity();
@@ -328,7 +329,8 @@ namespace Cober {
 			ImGui::SameLine();
 
 			if (ImGui::Button(ICON_FA_STEP_FORWARD))
-				Editor::GetActiveScene()->Step(2);
+		
+				Editor::GetActiveScene()->Step();
 		}
 
 		ImGui::PopStyleVar(2);

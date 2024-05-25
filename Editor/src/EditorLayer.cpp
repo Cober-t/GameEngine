@@ -84,7 +84,7 @@ namespace Cober {
 			case EngineApp::GameState::RUNTIME_EDITOR: 
 			{
 				colors[ImGuiCol_WindowBg] = ImVec4(0, 0.0, 0.0, 0.268f);
-				m_ActiveScene->OnUpdateSimulation(m_ActiveScene, ts, m_EditorCamera);
+				m_ActiveScene->OnUpdateSimulation(ts, m_EditorCamera);
 				break;
 			}
 		}

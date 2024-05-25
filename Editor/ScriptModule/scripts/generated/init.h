@@ -17,25 +17,27 @@
 
 namespace Cober {
 
-	extern "C" CB_SCRIPT void InitScripts(Entity entity)
+	extern "C" CB_SCRIPT void InitScripts(Scene* scene)
 	{
-		if (entity.GetComponent<NativeScriptComponent>().className == "TestScript")
-		{
-			entity.AddComponent<TestScript>();
-			entity.GetComponent<TestScript>().entity = entity;
-			entity.GetComponent<TestScript>().OnStart();
-		}
+		auto view = scene->GetAllEntitiesWith<NativeScriptComponent>();
+		// for (auto entt : view) 
+        // {
+		// 	Entity entity = Entity(entt, scene);
+		// 	entity.AddComponent<TestScript>();
+		// 	entity.GetComponent<TestScript>().entity = entity;
+		// 	entity.GetComponent<TestScript>().OnStart();
+		// }
 	}
 
 	extern "C" CB_SCRIPT void UpdateScripts(Scene* scene, float dt)
 	{
-		auto view = scene->GetAllEntitiesWith<TestScript>();
+		// auto view = scene->GetAllEntitiesWith<TestScript>();
 
-		for (auto entt : view)
-		{
-			Entity entity = Entity(entt, scene);
-			entity.GetComponent<TestScript>().OnUpdate(dt);
-		}
+		// for (auto entt : view)
+		// {
+		// 	Entity entity = Entity(entt, scene);
+		// 	entity.GetComponent<TestScript>().OnUpdate(dt);
+		// }
 	}
 
 	extern "C" CB_SCRIPT void NotifyBeginContact(Entity* entityA, Entity* entityB)
@@ -50,7 +52,7 @@ namespace Cober {
 
 	extern "C" CB_SCRIPT void DeleteScripts(Scene* scene)
 	{
-		scene->GetRegistry()->clear<TestScript>();
+		// scene->GetRegistry()->clear<TestScript>();
 	}
 
 
@@ -83,43 +85,6 @@ namespace Cober {
 	// {
 	// 	// Log::Info("Deletink Scripts");
 	// }
-
-}
-
-BOOL WINAPI DllMain(
-	HINSTANCE hinstDLL,  // handle to DLL module
-	DWORD fdwReason,     // reason for calling function
-	LPVOID lpvReserved )  // reserved
-	{
-		// Perform actions based on the reason for calling.
-		switch( fdwReason ) 
-		{ 
-			case DLL_PROCESS_ATTACH:
-			// Initialize once for each new process.
-			// Return FALSE to fail DLL load.
-				break;
-
-			case DLL_THREAD_ATTACH:
-			// Do thread-specific initialization.
-				break;
-
-			case DLL_THREAD_DETACH:
-			// Do thread-specific cleanup.
-				break;
-
-			case DLL_PROCESS_DETACH:
-			
-				if (lpvReserved != nullptr)
-				{
-					LOG_WARNING("CLEAN UP 1");
-					break; // do not do cleanup if process termination scenario
-				}
-				LOG_WARNING("CLEAN UP 2");
-				
-			// Perform any necessary cleanup.
-				break;
-	}
-	return TRUE;  // Successful DLL_PROCESS_ATTACH.
 }
 
 #endif

@@ -31,11 +31,11 @@ namespace Cober {
 		void OnRuntimeStart();
 		void OnRuntimeStop();
 
-		void OnSimulationStart(Ref<Scene> scene);
-		void OnSimulationStop(Ref<Scene> scene);
+		void OnSimulationStart();
+		void OnSimulationStop();
 
 		void OnUpdateRuntime(Unique<Timestep>& ts, const Ref<Camera>& camera);
-		void OnUpdateSimulation(Ref<Scene> scene, Unique<Timestep>& ts, const Ref<Camera>& camera);
+		void OnUpdateSimulation(Unique<Timestep>& ts, const Ref<Camera>& camera);
 
 		template<typename... Components>
 		inline auto GetAllEntitiesWith() { return m_Registry.view<Components...>(); }

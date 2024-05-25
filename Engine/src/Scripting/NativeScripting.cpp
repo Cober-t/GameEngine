@@ -15,10 +15,10 @@ namespace Cober {
 		static HMODULE m_Module;
 
 		// Forward Declarations
-		static void InitScriptsStub(Ref<Scene> scene) {}
-		static void UpdateScriptStub(Ref<Scene> scene, float dt) {}
+		static void InitScriptsStub(Entity entity) {}
+		static void UpdateScriptStub(Scene* scene, float dt) {}
 		static void NotifyBeginContactStub(Entity* a, Entity* b) {}
-		static void DeleteScriptsStub(Ref<Scene> scene) { }
+		static void DeleteScriptsStub(Scene* scene) {}
 
 		static FARPROC __stdcall TryLoadFunction(HMODULE module, const char* functionName)
 		{
@@ -31,7 +31,7 @@ namespace Cober {
 			return func;
 		}
 
-		void Init(Ref<Scene> scene)
+		void Init(Scene* scene)
 		{
 			if (m_IsLoaded)
 			{
@@ -49,12 +49,17 @@ namespace Cober {
 
 				if (m_InitScripts)
 				{
-					m_InitScripts(scene);
+					auto view = scene->GetAllEntitiesWith<NativeScriptComponent>();
+					for (auto entt : view) 
+					{
+						Entity entity = Entity(entt, scene);
+						m_InitScripts(entity);
+					}
 				}
 			}
 		}
 
-		void Update(Ref<Scene> scene, float dt)
+		void Update(Scene* scene, float dt)
 		{
 			if (m_UpdateScripts)
 			{
@@ -70,7 +75,7 @@ namespace Cober {
 			}
 		}
 
-		void DeleteScripts(Ref<Scene> scene)
+		void DeleteScripts(Scene* scene)
 		{
 			if (m_DeleteScripts)
 			{
@@ -91,11 +96,12 @@ namespace Cober {
 			m_NotifyBeginContact = NotifyBeginContactStub;
 			m_DeleteScripts = DeleteScriptsStub;
 
-			if (!FreeLibrary(m_Module))
-			{
-				LOG_WARNING("Could not free script dll. Error Code:");
-				return false;
-			}
+			// CHECK ERROR ON DESTROY SCENE
+			// if (!FreeLibrary(m_Module))
+			// {
+			// 	LOG_WARNING("Could not free script dll. Error Code:");
+			// 	return false;
+			// }
 
 			m_Module = nullptr;
 			m_IsLoaded = false;

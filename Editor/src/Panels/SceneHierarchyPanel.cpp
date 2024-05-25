@@ -29,7 +29,6 @@ namespace Cober {
 		m_AssetIconMap["sprite"] = EditorResources::SpriteIcon;
 		m_AssetIconMap["transform"] = EditorResources::TransformIcon;
 		m_AssetIconMap["remove"] = EditorResources::ClearIcon;
-
 	}
 
 

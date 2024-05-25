@@ -5,17 +5,17 @@
 
 namespace Cober {
     
- 	typedef void (*InitScriptsFn)(Ref<Scene> scene);
-	typedef void (*UpdateScriptFn)(Ref<Scene> scene, float dt);
+ 	typedef void (*InitScriptsFn)(Entity entity);
+	typedef void (*UpdateScriptFn)(Scene* scene, float dt);
   	typedef void (*NotifyBeginContactFn)(Entity* entityA, Entity* entityB);
-	typedef void (*DeleteScriptsFn)(Ref<Scene> scene);
+	typedef void (*DeleteScriptsFn)(Scene* scene);
 
     namespace NativeScriptFn 
 	{
-	    CB_API void Init(Ref<Scene> scene);
-        CB_API void Update(Ref<Scene> scene, float dt);
+	    CB_API void Init(Scene* scene);
+        CB_API void Update(Scene* scene, float dt);
 		CB_API void NotifyBeginContact(Entity* entityA, Entity* entityB);
-		CB_API void DeleteScripts(Ref<Scene> scene);
+		CB_API void DeleteScripts(Scene* scene);
 
 		CB_API bool FreeScriptLibrary();
     }

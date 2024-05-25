@@ -18,9 +18,9 @@ namespace Cober {
 		ScriptSystem();
 		~ScriptSystem();
 
-        void Start(Ref<Scene> scene);
-		void Update(Ref<Scene> scene, float dt);
-		void FreeScripts(Ref<Scene> scene);
+        void Start(Scene* scene);
+		void Update(Scene* scene, float dt);
+		void FreeScripts(Scene* scene);
 
     private:
 		sol::state lua;
