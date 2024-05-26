@@ -5,8 +5,19 @@
 #include <glm/gtx/matrix_decompose.hpp>
 
 
-namespace Cober::Utils {
+namespace Cober::Random {
 
+	double Value(int min, int max) 
+	{
+		return min + std::rand() % (max - min + 1);
+	}
+	void Seed(double seed) 
+	{
+		return std::srand(seed);
+	}
+}
+
+namespace Cober::Utils {
 
 	bool DecomposeTransform(const glm::mat4& transform, glm::vec3& translation, glm::vec3& rotation, glm::vec3& scale)
 	{

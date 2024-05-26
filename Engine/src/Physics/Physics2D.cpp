@@ -133,8 +133,13 @@ namespace Cober {
         body->ApplyLinearImpulse(b2Vec2(x, y), body->GetWorldCenter(), true);
     }
 
-    void Physics2D::SetTransform(b2Body* body, float x, float y, float angle)
+    void Physics2D::Move(b2Body* body, float x, float y)
     {
-        body->SetTransform(b2Vec2(x, y), angle);
+        b2Vec2 velocity(x, y);
+        if (body->GetLinearVelocity() == velocity)
+            return;
+
+        body->SetLinearVelocity(velocity);
     }
+    
 }

@@ -37,6 +37,7 @@ namespace Cober {
 		}
 
 		inline int GetFrames() const { return m_FramesOneSec; }
+		inline double TimePassed() const { return m_NowTime; }
 		inline float GetLimitFPS() const { return m_LimitFPS; }
 		inline void SetLimitFPS(int limitFPS = 1) { m_LimitFPS = limitFPS; }
 

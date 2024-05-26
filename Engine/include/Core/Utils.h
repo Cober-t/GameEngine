@@ -3,6 +3,13 @@
 
 #include <map>
 #include <glm/glm.hpp>
+#include "Core/EngineApp.h"
+
+namespace Cober::Random {
+
+	CB_API double Value(int min = 1, int max = 10);
+	CB_API void Seed(double seed = glfwGetTime());
+}
 
 namespace Cober::Utils {
 

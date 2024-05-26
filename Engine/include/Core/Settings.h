@@ -38,6 +38,8 @@ namespace Cober {
         static const glm::vec4 blue = glm::vec4(0.0f, 0.0f, 255.0f, 255.0f);
         static const glm::vec4 yellow = glm::vec4(255.0f, 255.0f, 0.0f, 255.0f);
         static const glm::vec4 purple = glm::vec4(255.0f, 0.0f, 255.0f, 255.0f);
+        static const glm::vec4 white = glm::vec4(255.0f, 255.0f, 255.0f, 255.0f);
+        static const glm::vec4 black = glm::vec4(0.0f, 0.0f, 0.0f, 255.0f);
     };
 
     struct PhysicsSettings

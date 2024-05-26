@@ -15,7 +15,7 @@ namespace Cober {
 		static HMODULE m_Module;
 
 		// Forward Declarations
-		static void InitScriptsStub(Entity entity) {}
+		static void InitScriptsStub(Scene* scene, Entity entity) {}
 		static void UpdateScriptStub(Scene* scene, float dt) {}
 		static void NotifyBeginContactStub(Entity* a, Entity* b) {}
 		static void DeleteScriptsStub(Scene* scene) {}
@@ -53,7 +53,7 @@ namespace Cober {
 					for (auto entt : view) 
 					{
 						Entity entity = Entity(entt, scene);
-						m_InitScripts(entity);
+						m_InitScripts(scene, entity);
 					}
 				}
 			}

@@ -14,10 +14,11 @@ namespace Cober {
 
 		virtual void OnUpdate(float dt) = 0;
 
-		// virtual void OnBeginContact(Entity other) = 0;
+		virtual void OnBeginContact(Entity* other) = 0;
 		// virtual void OnEndContact(Entity other) = 0;
 	public:
 		Entity entity;
+		Scene* scene;
 	};
 }
 

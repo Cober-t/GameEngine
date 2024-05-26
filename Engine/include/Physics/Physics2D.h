@@ -38,7 +38,7 @@ namespace Cober {
         static void ApplyImpulseX(b2Body* body,float x);
         static void ApplyImpulseY(b2Body* body, float y);
         static void ApplyImpulse(b2Body* body, float x, float y);
-        static void SetTransform(b2Body* body, float x, float y, float angle);
+        static void Move(b2Body* body, float x, float y);
 
     private:
         static void CreateWorld(const b2World* physicsWorld);

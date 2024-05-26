@@ -5,7 +5,7 @@
 
 namespace Cober {
     
- 	typedef void (*InitScriptsFn)(Entity entity);
+ 	typedef void (*InitScriptsFn)(Scene* scene, Entity entity);
 	typedef void (*UpdateScriptFn)(Scene* scene, float dt);
   	typedef void (*NotifyBeginContactFn)(Entity* entityA, Entity* entityB);
 	typedef void (*DeleteScriptsFn)(Scene* scene);
