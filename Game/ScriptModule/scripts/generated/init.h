@@ -2,16 +2,13 @@
 #define INIT_SCRIPTS_H
 
 #include <Engine.h>
-// #include <Windows.h>
 #include <iostream>
 #include <cstdlib>
 
 #include "Core/Core.h"
 #include "Scene/ECS.h"
 
-#include "../Player1Controller.h"
-#include "../Player2Controller.h"
-#include "../Ball.h"
+#include "../TestScript.h"
 
 #define ENTT_STANDARD_CPP
 #include <entt/entt.hpp>
@@ -21,64 +18,29 @@ namespace Cober {
 
 	extern "C" CB_SCRIPT void InitScripts(Scene* scene, Entity entity)
 	{
-		if (entity.GetComponent<NativeScriptComponent>().className == "Player1Controller")
+		if (entity.GetComponent<NativeScriptComponent>().className == "TestScript")
 		{
-			entity.AddComponent<Player1Controller>();
-			entity.GetComponent<Player1Controller>().entity = entity;
-			entity.GetComponent<Player1Controller>().scene = scene;
-			entity.GetComponent<Player1Controller>().OnStart();
-		}
-
-		else if (entity.GetComponent<NativeScriptComponent>().className == "Player2Controller")
-		{
-			entity.AddComponent<Player2Controller>();
-			entity.GetComponent<Player2Controller>().entity = entity;
-			entity.GetComponent<Player2Controller>().scene = scene;
-			entity.GetComponent<Player2Controller>().OnStart();
-		}
-
-		else if (entity.GetComponent<NativeScriptComponent>().className == "Ball")
-		{
-			entity.AddComponent<Ball>();
-			entity.GetComponent<Ball>().entity = entity;
-			entity.GetComponent<Ball>().scene = scene;
-			entity.GetComponent<Ball>().OnStart();
+			entity.AddComponent<TestScript>();
 		}
 	}
 
 	extern "C" CB_SCRIPT void UpdateScripts(Scene* scene, float dt)
 	{
-		auto player1ScriptView = scene->GetAllEntitiesWith<Player1Controller>();
+		auto testScriptView = scene->GetAllEntitiesWith<TestScript>();
 
-		for (auto entt : player1ScriptView)
+		for (auto entt : testScriptView)
 		{
 			Entity entity = Entity(entt, scene);
-			entity.GetComponent<Player1Controller>().OnUpdate(dt);
-		}
-
-		auto player2ScriptView = scene->GetAllEntitiesWith<Player2Controller>();
-
-		for (auto entt : player2ScriptView)
-		{
-			Entity entity = Entity(entt, scene);
-			entity.GetComponent<Player2Controller>().OnUpdate(dt);
-		}
-
-		auto ballScriptView = scene->GetAllEntitiesWith<Ball>();
-
-		for (auto entt : ballScriptView)
-		{
-			Entity entity = Entity(entt, scene);
-			entity.GetComponent<Ball>().OnUpdate(dt);
+			entity.GetComponent<TestScript>().OnUpdate(dt);
 		}
 	}
 
 	extern "C" CB_SCRIPT void NotifyBeginContact(Entity* entityA, Entity* entityB)
 	{
-		if (entityA->HasComponent<Ball>())
-			entityA->GetComponent<Ball>().OnBeginContact(entityB);
-		else
-			entityB->GetComponent<Ball>().OnBeginContact(entityA);
+		if (entityA->HasComponent<TestScript>())
+			entityA->GetComponent<TestScript>().OnBeginContact(entityB);
+		else if (entityA->HasComponent<TestScript>())
+			entityB->GetComponent<TestScript>().OnBeginContact(entityA);
 	}
 
 	// extern "C" CB_SCRIPT void NotifyEndContact(Entity* entityA, Entity* entityB)
@@ -88,9 +50,7 @@ namespace Cober {
 
 	extern "C" CB_SCRIPT void DeleteScripts(Scene* scene)
 	{
-		scene->GetRegistry()->clear<Player1Controller>();
-		scene->GetRegistry()->clear<Player2Controller>();
-		scene->GetRegistry()->clear<Ball>();
+		scene->GetRegistry()->clear<TestScript>();
 	}
 
 

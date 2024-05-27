@@ -6,7 +6,7 @@ class ProjectSettingsTemplate():
 {{
     "name": "\\"{0}\\"",
     "assetsPath": "\\"{1}\\"",
-    "buildPath": "%{{prj.name/build}}",
+    "buildPath": "%{{prj.name}}/build",
     "lastScene": "SceneDefault.lua",
     "screenWidth": 1280,
     "screenHeight": 720

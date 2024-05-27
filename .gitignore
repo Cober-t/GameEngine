@@ -8,6 +8,7 @@ __pycache__/
 Game/assets/
 Editor/assets/
 Game/build/
+Projects/
 
 *.log
 *.sln

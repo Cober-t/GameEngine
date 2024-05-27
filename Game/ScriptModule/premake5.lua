@@ -15,7 +15,7 @@ workspace "ScriptingWorkspace"
 		staticruntime "off"
 
 		targetdir("bin/%{prj.name}")
-		objdir("bin-int/%{prj.name}")
+		objdir("bin/obj")
 
 		files
 		{
@@ -74,6 +74,13 @@ workspace "ScriptingWorkspace"
 			"C:/Users/Jorge/Documents/GameEngine/libraries/glad/bin/Debug-windows-x86_64/Glad/Glad.lib",
 			"C:/Users/Jorge/Documents/GameEngine/libraries/glfw/bin/Debug-windows-x86_64/GLFW/GLFW.lib",
 			"C:/Users/Jorge/Documents/GameEngine/libraries/imgui/bin/Debug-windows-x86_64/ImGui/ImGui.lib"
+		}
+
+		postbuildcommands
+		{
+			"del \"./**.sln\"";
+			"del \"./**.vcxproj\"";
+			"del \"./**.vcxproj.filters\"";
 		}
 
 		filter "system:windows"

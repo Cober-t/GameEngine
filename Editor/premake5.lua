@@ -69,6 +69,13 @@ project "Editor"
         'EDITOR_ICONS_DIR=R"($(SolutionDir)Editor\\icons\\)"',
     }
 
+    -- postbuildcommands
+	-- {
+	-- 	"del \"./**.vcxproj\"",
+	-- 	"del \"./**.vcxproj.filters\"",
+	-- 	"del \"./**.vcxproj.user\"",
+	-- }
+
     filter { "system:windows", "configurations:Debug" }
         buildoptions "/MDd"       
 

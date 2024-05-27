@@ -26,7 +26,7 @@ SHADERS_FOLDER = "shaders"
 ALL_ASSETS_FOLDERS = [AUDIO_FOLDER, FILES_FOLDER, FONTS_FOLDER, IMAGES_FOLDER,
                       MODELS_FOLDER, SCENES_FOLDER, SCRIPTS_FOLDER, SHADERS_FOLDER]
 
-ENGINE_ASSETS_FOLDER = "C:\\Users\\Jorge\\Documents\\GameEngine\\assets"
+ENGINE_ASSETS_FOLDER = ".\\assets"
 DEFAULT_BUILD_ICON = ".\\thumbnails\\default.jpg"
 THUMBNAIL_PATH = ".\\thumbnails"
 THUMBNAIL_NAME = "thumbnail"

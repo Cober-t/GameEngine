@@ -39,6 +39,11 @@ project "Game"
 		"Engine",
 	}
 
+	postbuildcommands
+	{
+		"del \"./**.vcxproj\"",
+	}
+
 	defines
     {
         "_CRT_SECURE_NO_WARNINGS",
