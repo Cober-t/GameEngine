@@ -20,6 +20,7 @@ namespace Cober {
 		constexpr std::string_view Render2DShape = "Render 2D Shape";
 		constexpr std::string_view NativeScript = "Native Script Component";
 		constexpr std::string_view Audio = "Audio Component";
+		constexpr std::string_view Text = "Text Component";
 	}
 
 	class SceneHierarchyPanel

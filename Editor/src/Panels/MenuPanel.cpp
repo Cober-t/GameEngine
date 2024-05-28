@@ -5,6 +5,8 @@
 #include "Panels/SceneHierarchyPanel.h"
 #include "Render/Render2D.h"
 #include "Core/EngineApp.h"
+// #include "Render/Text/Font.h"
+
 #include "EditorLayer.h"
 
 #include <imgui/imgui.h>
@@ -12,11 +14,14 @@
 
 namespace Cober {
 
+	// static Ref<Font> s_Font;
 	MenuPanel* MenuPanel::s_Instance = nullptr;
 
 	MenuPanel::MenuPanel() 
 	{
 		s_Instance = this;
+		// s_Font = Font::GetDefault();
+		m_ShotFontAtlas = false;
 		m_FileBrowser = new ImGui::FileBrowser();
 		m_Settings.Vsync = EngineApp::Get().GetWindow().GetVsync();
 	}
@@ -145,6 +150,7 @@ namespace Cober {
 				ImGui::EndCombo();
 			}
 
+
 			if (ImGui::Checkbox(ICON_FA_CODE  "  Debug Mode", &EngineApp::Get().IsDebugMode()))
 			{
 				Debug2DPhysics::Get().UpdateFlags();
@@ -161,6 +167,10 @@ namespace Cober {
 						Debug2DPhysics::Get().UpdateFlags();
 				}
 			}
+
+			// ImGui::Checkbox(ICON_FA_FILE_TEXT_O  "  Font Atlas", &m_ShotFontAtlas);
+			// if (m_ShotFontAtlas)
+			// 	ImGui::Image((ImTextureID)s_Font->GetAtlasTexture()->GetRendererID(), { 512,512 }, {0, 1}, {1, 0});
 			
 			ImGui::EndMenu();
 		}

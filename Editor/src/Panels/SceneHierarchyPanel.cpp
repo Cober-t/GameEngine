@@ -2,7 +2,7 @@
 
 #include "EditorLayer.h"
 #include "Panels/SceneHierarchyPanel.h"
-// #include "Cober/Scene/Components.h"
+#include "Render/Text/Font.h"
 //#include "Cober/Renderer/Renderer.h"
 //#include "Cober/Renderer/Lighting.h"
 
@@ -317,6 +317,10 @@ namespace Cober {
 				{
 					m_SelectionContext.AddComponent<AudioComponent>();
 				}
+				else if (!m_SelectionContext.HasComponent<TextComponent>())
+				{
+					m_SelectionContext.AddComponent<TextComponent>();
+				}
 			}
 			else
 				ImGui::OpenPopup("AddComponent");
@@ -332,6 +336,7 @@ namespace Cober {
 			AddIfHasComponent<Render2DComponent>((std::string)ComponentNames::Render2DShape);
 			AddIfHasComponent<NativeScriptComponent>((std::string)ComponentNames::NativeScript);
 			AddIfHasComponent<AudioComponent>((std::string)ComponentNames::Audio);
+			AddIfHasComponent<TextComponent>((std::string)ComponentNames::Text);
 			// ...
 			// ...
 
@@ -554,6 +559,22 @@ namespace Cober {
 				{
 					Audio::LoopSound(component.audioName, component.loop);
 				}
+			});
+		
+
+		DrawComponent<TextComponent>((std::string)ComponentNames::Text, entity, [](auto& component)
+			{
+				char buffer[256];
+				memset(buffer, 0, sizeof(buffer));
+				strcpy_s(buffer, sizeof(buffer), component.Text.c_str());
+
+				if (ImGui::InputTextMultiline("Text String", buffer, sizeof(buffer)))
+				{
+					component.Text = (std::string)buffer;
+				}
+				ImGui::ColorEdit4("Color", glm::value_ptr(component.Color));
+				ImGui::DragFloat("Kerning", &component.Kerning, 0.025f);
+				ImGui::DragFloat("Line Spacing", &component.LineSpacing, 0.025f);
 			});
 	}
 }

@@ -44,6 +44,8 @@ project "Engine"
 		"include/Platforms",
 		"include/Platforms/OpenGL",
 		"include/Render",
+		"include/Render/Text",
+		"include/Render/Primitives",
 		"include/Render/Camera",
 		"include/Scene",
 		"include/Scene/Systems",

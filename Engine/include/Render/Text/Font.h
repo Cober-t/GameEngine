@@ -10,7 +10,7 @@ namespace Cober {
 
 	struct MSDFData;
 
-	class Font
+	class CB_API Font
 	{
 	public:
 		Font(const std::filesystem::path& font);
@@ -20,6 +20,7 @@ namespace Cober {
 		Ref<Texture> GetAtlasTexture() const { return m_AtlasTexture; }
 
 		static Ref<Font> GetDefault();
+
 	private:
 		MSDFData* m_Data;
 		Ref<Texture> m_AtlasTexture;

@@ -1,5 +1,5 @@
-#ifndef CIRCLE_H
-#define CIRCLE_H
+#ifndef TEXT_H
+#define TEXT_H
 
 #include "Render/VertexArray.h"
 #include "Render/Texture.h"

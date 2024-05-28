@@ -132,6 +132,15 @@ namespace Cober {
 				entityToBeSaved["AudioComponent"]["audioPath"].SetString(audio.audioPath.string());
 				entityToBeSaved["AudioComponent"]["loop"].SetInt(audio.loop);
 			}
+
+			if (entity.HasComponent<TextComponent>())
+			{
+				auto& text = entity.GetComponent<TextComponent>();
+				entityToBeSaved["TextComponent"]["text"].SetString(text.Text);
+				entityToBeSaved["TextComponent"]["color"].SetVec4(text.Color);
+				entityToBeSaved["TextComponent"]["kerning"].SetReal(text.Kerning);
+				entityToBeSaved["TextComponent"]["lineSpacing"].SetReal(text.LineSpacing);
+			}
 		}
 		
 		return Utils::DataFile::Write(sceneSaver, sceneName);
@@ -281,6 +290,16 @@ namespace Cober {
 						newEntity.GetComponent<AudioComponent>().audioName = audio["audioName"].GetString();
 						newEntity.GetComponent<AudioComponent>().audioPath = audio["audioPath"].GetString();
 						newEntity.GetComponent<AudioComponent>().loop = audio["loop"].GetInt();
+					}
+
+					if (loader.HasProperty("TextComponent")) 
+					{
+						auto text = loader["TextComponent"];
+						newEntity.AddComponent<TextComponent>();
+						newEntity.GetComponent<TextComponent>().Text = text["text"].GetString();
+						newEntity.GetComponent<TextComponent>().Color = text["color"].GetVec4();
+						newEntity.GetComponent<TextComponent>().Kerning = text["kerning"].GetReal();
+						newEntity.GetComponent<TextComponent>().LineSpacing = text["lineSpacing"].GetReal();
 					}
 				}
 			}

@@ -200,8 +200,8 @@ namespace Cober {
 
 	struct TextComponent
 	{
-		std::string TextString;
-		Ref<Font> FontAsset = Font::GetDefault();
+		std::string Text;
+		// Ref<Font> FontAsset = Font::GetDefault();
 		glm::vec4 Color{ 1.0f };
 		float Kerning = 0.0f;
 		float LineSpacing = 0.0f;
@@ -228,8 +228,12 @@ namespace Cober {
 	{
 	};
 
-	using AllComponents = ComponentGroup<TransformComponent, ScriptComponent, Render2DComponent, AudioComponent,
-		ScriptComponent, NativeScriptComponent, Rigidbody2D, BoxCollider2D, CircleCollider2D, EdgeCollider2D, PolygonCollider2D>;
+	using AllComponents = ComponentGroup<TransformComponent,
+		Render2DComponent,
+		AudioComponent,
+		TextComponent,
+		Rigidbody2D, BoxCollider2D, CircleCollider2D, EdgeCollider2D, PolygonCollider2D,
+		ScriptComponent, NativeScriptComponent>;
 }
 
 #endif

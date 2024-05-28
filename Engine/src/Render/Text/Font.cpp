@@ -36,6 +36,7 @@ namespace Cober {
 		return texture;
 	}
 
+
 	Font::Font(const std::filesystem::path& filepath)
 		: m_Data(new MSDFData())
 	{
@@ -139,6 +140,7 @@ namespace Cober {
 		msdfgen::deinitializeFreetype(ft);
 	}
 
+
 	Font::~Font()
 	{
 		delete m_Data;
@@ -149,7 +151,7 @@ namespace Cober {
 	{
 		static Ref<Font> DefaultFont;
 		if (!DefaultFont)
-			DefaultFont = CreateRef<Font>(std::filesystem::current_path()/"assets"/"fonts"/"opensans"/" OpenSans-Regular.ttf");
+			DefaultFont = CreateRef<Font>(std::filesystem::current_path()/"assets"/"fonts"/"opensans"/"OpenSans-Regular.ttf");
 
 		return DefaultFont;
 	}

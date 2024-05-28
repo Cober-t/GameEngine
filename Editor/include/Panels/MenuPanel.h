@@ -71,6 +71,7 @@ namespace Cober {
 
 		MenuOptions m_MenuFileOption;
 		Settings m_Settings;
+		bool m_ShotFontAtlas;
         
 	private:
 		static MenuPanel* s_Instance;
