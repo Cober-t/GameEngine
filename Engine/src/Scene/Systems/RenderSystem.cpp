@@ -50,6 +50,13 @@ namespace Cober {
 			}
 		}
 
+		auto viewText = scene->GetAllEntitiesWith<TransformComponent, TagComponent, TextComponent>();
+		for (auto& entt : viewText)
+        {
+			Entity entity = Entity((entt::entity)entt, scene );
+			Render2D::DrawText(entity);
+		}
+
 		if (EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR)
 			Physics2D::DebugDraw();
 

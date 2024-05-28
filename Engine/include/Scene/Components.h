@@ -201,7 +201,7 @@ namespace Cober {
 	struct TextComponent
 	{
 		std::string Text;
-		// Ref<Font> FontAsset = Font::GetDefault();
+		Ref<Font> FontAsset = Font::GetDefault();
 		glm::vec4 Color{ 1.0f };
 		float Kerning = 0.0f;
 		float LineSpacing = 0.0f;

@@ -2,6 +2,7 @@
 #include "Render/Primitives/Text.h"
 #include "Render/RenderGlobals.h"
 #include "Render/Render2D.h"
+#include "Render/Text/MSDFData.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -38,12 +39,7 @@ namespace Cober {
 			delete[] textIndices;
 
 			data.Shader = Shader::Create("Text.glsl");
-
-            data.WhiteTexture = Texture::Create(TextureSpecification());
-			uint32_t whiteTextureData = 0xffffffff;
-			data.WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
-
-			data.TextureSlots[0] = data.WhiteTexture;
+			data.Shader->Bind();
 		}
 
 
@@ -91,48 +87,125 @@ namespace Cober {
 		}
 
 
-		void Text::Draw(Entity& entity) 
+		void Text::Draw(Entity& entity)
 		{
-			// auto& enttTrans = entity.GetComponent<TransformComponent>();
+			auto& enttTrans = entity.GetComponent<TransformComponent>();
+			auto& enttText = entity.GetComponent<TextComponent>();
 
-			// glm::vec3 position{ enttTrans.position.x, enttTrans.position.y, enttTrans.position.z + 0.001f };
-			// glm::vec3 scale{ enttTrans.scale.x, enttTrans.scale.y, 1.0f };
-
-			// glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
-			// 	* glm::toMat4(glm::quat(enttTrans.rotation))
-			// 	* glm::scale(glm::mat4(1.0f), scale);
-
-			// if (data.IndexCount >= Render2D::GetStats().MaxIndices)
-			// 	NextBatch();
-			
-			// glm::vec4 color = entity.GetComponent<Render2DComponent>().color;
-
-			// SetAttributes(transform, color, thickness, fade, (int)entity);
+			SetAttributes(enttText.Text, enttText.FontAsset, enttTrans.GetTransform(), 
+					{ enttText.Color, enttText.Kerning, enttText.LineSpacing }, (int)entity);
 		}
-
-
-		void Text::Draw(const glm::mat4& transform, const glm::vec4& color, float thickness)
+		
+		void Text::SetAttributes(const std::string& string, Ref<Font> font, const glm::mat4& transform, const TextParams& textParams, int entityID)
 		{
-			// SetAttributes(transform, color, thickness, 0, -1);
-		}
+            const auto& fontGeometry = font->GetMSDFData()->FontGeometry;
+			const auto& metrics = fontGeometry.getMetrics();
+			Ref<Texture> fontAtlas = font->GetAtlasTexture();
 
+			data.FontAtlasTexture = fontAtlas;
 
-		void Text::SetAttributes(const glm::mat3& position, const glm::vec4& color, const glm::vec2& texCoord, int entityID) 
-		{
-            // size_t VertexCount = sizeof(Render2D::GetStats().QuadVertexPositions) / sizeof(Render2D::GetStats().QuadVertexPositions[0]);
+			double x = 0.0;
+			double fsScale = 1.0 / (metrics.ascenderY - metrics.descenderY);
+			double y = 0.0;
 
-			// for (size_t i = 0; i < VertexCount; i++)
-			// {
-			// 	data.VertexBufferPtr->Position = position;
-			// 	data.VertexBufferPtr->Color = color;
-			// 	data.VertexBufferPtr->TexCoord = texCoord;
-			// 	data.VertexBufferPtr->EntityID = entityID;
-			// 	data.VertexBufferPtr++;
-			// }
+			const float spaceGlyphAdvance = fontGeometry.getGlyph(' ')->getAdvance();
 			
-			data.IndexCount += 6;
+			for (size_t i = 0; i < string.size(); i++)
+			{
+				char character = string[i];
+				if (character == '\r')
+					continue;
 
-			Render2D::GetStats().TextCount++;
+				if (character == '\n')
+				{
+					x = 0;
+					y -= fsScale * metrics.lineHeight + textParams.LineSpacing;
+					continue;
+				}
+
+				if (character == ' ')
+				{
+					float advance = spaceGlyphAdvance;
+					if (i < string.size() - 1)
+					{
+						char nextCharacter = string[i + 1];
+						double dAdvance;
+						fontGeometry.getAdvance(dAdvance, character, nextCharacter);
+						advance = (float)dAdvance;
+					}
+
+					x += fsScale * advance + textParams.Kerning;
+					continue;
+				}
+
+				if (character == '\t')
+				{
+					x += 4.0f * (fsScale * spaceGlyphAdvance + textParams.Kerning);
+					continue;
+				}
+
+				auto glyph = fontGeometry.getGlyph(character);
+				if (!glyph)
+					glyph = fontGeometry.getGlyph('?');
+				if (!glyph)
+					return;
+
+				double al, ab, ar, at;
+				glyph->getQuadAtlasBounds(al, ab, ar, at);
+				glm::vec2 texCoordMin((float)al, (float)ab);
+				glm::vec2 texCoordMax((float)ar, (float)at);
+
+				double pl, pb, pr, pt;
+				glyph->getQuadPlaneBounds(pl, pb, pr, pt);
+				glm::vec2 quadMin((float)pl, (float)pb);
+				glm::vec2 quadMax((float)pr, (float)pt);
+
+				quadMin *= fsScale, quadMax *= fsScale;
+				quadMin += glm::vec2(x, y);
+				quadMax += glm::vec2(x, y);
+
+				float texelWidth = 1.0f / fontAtlas->GetWidth();
+				float texelHeight = 1.0f / fontAtlas->GetHeight();
+				texCoordMin *= glm::vec2(texelWidth, texelHeight);
+				texCoordMax *= glm::vec2(texelWidth, texelHeight);
+
+				// render here
+				data.VertexBufferPtr->Position = transform * glm::vec4(quadMin, 0.0f, 1.0f);
+				data.VertexBufferPtr->Color = textParams.Color;
+				data.VertexBufferPtr->TexCoord = texCoordMin;
+				data.VertexBufferPtr->EntityID = entityID;
+				data.VertexBufferPtr++;
+
+				data.VertexBufferPtr->Position = transform * glm::vec4(quadMin.x, quadMax.y, 0.0f, 1.0f);
+				data.VertexBufferPtr->Color = textParams.Color;
+				data.VertexBufferPtr->TexCoord = { texCoordMin.x, texCoordMax.y };
+				data.VertexBufferPtr->EntityID = entityID;
+				data.VertexBufferPtr++;
+
+				data.VertexBufferPtr->Position = transform * glm::vec4(quadMax, 0.0f, 1.0f);
+				data.VertexBufferPtr->Color = textParams.Color;
+				data.VertexBufferPtr->TexCoord = texCoordMax;
+				data.VertexBufferPtr->EntityID = entityID;
+				data.VertexBufferPtr++;
+
+				data.VertexBufferPtr->Position = transform * glm::vec4(quadMax.x, quadMin.y, 0.0f, 1.0f);
+				data.VertexBufferPtr->Color = textParams.Color;
+				data.VertexBufferPtr->TexCoord = { texCoordMax.x, texCoordMin.y };
+				data.VertexBufferPtr->EntityID = entityID;
+				data.VertexBufferPtr++;
+
+				data.IndexCount += 6;
+				Render2D::GetStats().TextCount++;
+
+				if (i < string.size() - 1)
+				{
+					double advance = glyph->getAdvance();
+					char nextCharacter = string[i + 1];
+					fontGeometry.getAdvance(advance, character, nextCharacter);
+
+					x += fsScale * advance + textParams.Kerning;
+				}
+			}
 		}
 	}
 }

@@ -5,7 +5,8 @@
 #include "Render/Primitives/Line.h"
 #include "Render/Primitives/Quad.h"
 #include "Render/Primitives/Circle.h"
-#include "Render/Primitives/Cube.h"
+#include "Render/Primitives/Text.h"
+// #include "Render/Primitives/Cube.h"
 
 #include <memory>
 
@@ -28,6 +29,7 @@ namespace Cober {
 		Primitive::Quad::Init();
 		Primitive::Line::Init();
 		Primitive::Circle::Init();
+		Primitive::Text::Init();
 		// Primitive::Cube::Init()
 
 		CameraUniformBuffer = UniformBuffer::Create(sizeof(CameraData), 0);
@@ -49,6 +51,7 @@ namespace Cober {
 		Primitive::Quad::Flush();
 		Primitive::Line::Flush();
 		Primitive::Circle::Flush();
+		Primitive::Text::Flush();
 		// 	Cube::Flush();
 	}
 
@@ -58,6 +61,7 @@ namespace Cober {
 		Primitive::Quad::StartBatch();
 		Primitive::Line::StartBatch();
 		Primitive::Circle::StartBatch();
+		Primitive::Text::StartBatch();
 		// Primitive::Cube::StartBatch();
 	}
 
@@ -67,6 +71,7 @@ namespace Cober {
 		Primitive::Quad::NextBatch();
 		Primitive::Line::NextBatch();
 		Primitive::Circle::NextBatch();
+		Primitive::Text::NextBatch();
 		// Primitive::Cube::NextBatch();
 	}
 
@@ -74,7 +79,6 @@ namespace Cober {
 	void Render2D::ResetStats() 
 	{
 		m_RenderSettings->Reset();
-		// memset(&m_RenderSettings, 0, sizeof(RenderSettings));
 	}
 
 
@@ -93,8 +97,9 @@ namespace Cober {
 	void Render2D::Shutdown() 
 	{
 		Primitive::Quad::CleanVertexBuffer();
-		// Primitive::Line::CleanVertexBuffer();
-		// Primitive::Circle::CleanVertexBuffer();
+		Primitive::Line::CleanVertexBuffer();
+		Primitive::Circle::CleanVertexBuffer();
+		Primitive::Text::CleanVertexBuffer();
 		// Primitive::Cube::CleanVertexBuffer();
 	}
 
@@ -127,5 +132,11 @@ namespace Cober {
 	void Render2D::DrawSprite(Entity& entity) 
 	{
 		Primitive::Quad::DrawTexture(entity);
+	}
+
+	
+	void Render2D::DrawText(Entity& entity) 
+	{		
+		Primitive::Text::Draw(entity);
 	}
 }

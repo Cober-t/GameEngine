@@ -39,6 +39,7 @@ namespace Cober {
 		static void DrawLine(Entity& entity);
 		static void DrawCircle(Entity& entity);
 		static void DrawSprite(Entity& entity);
+		static void DrawText(Entity& entity);
 
 	public:
 		static void ResetStats();

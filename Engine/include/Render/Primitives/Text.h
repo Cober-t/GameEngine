@@ -20,7 +20,6 @@ namespace Cober  {
 			static void CleanVertexBuffer();
 
 			static void Draw(Entity& entity);
-			static void Draw(const glm::mat4& transform, const glm::vec4& color, float thickness);
 			
 			static void Flush();
 			static void StartBatch();
@@ -29,6 +28,13 @@ namespace Cober  {
 			static uint32_t GetIndexCount();
 
 		public:
+			struct TextParams
+			{
+				glm::vec4 Color{ 1.0f };
+				float Kerning = 0.0f;
+				float LineSpacing = 0.0f;
+			};
+
 			struct Attributes
 			{
 			    glm::vec3 Position;
@@ -47,10 +53,6 @@ namespace Cober  {
 				Ref<Shader> Shader;
 				
                 Ref<Texture> FontAtlasTexture;
-                Ref<Texture> WhiteTexture;
-                static const uint32_t MaxTextureSlots = 32; // TODO: RenderCaps
-				std::array<Ref<Texture>, MaxTextureSlots> TextureSlots;
-				uint32_t TextureSlotIndex = 1;
 				uint32_t IndexCount = 0;
 
 				Attributes* VertexBufferBase = nullptr;
@@ -60,7 +62,7 @@ namespace Cober  {
 			Attributes* attributes;
 
 		private:
-			static void SetAttributes(const glm::mat3& position, const glm::vec4& color, const glm::vec2& texCoord, int entityID);
+			static void SetAttributes(const std::string& string, Ref<Font> font, const glm::mat4& transform, const TextParams& textParams, int entityID);
 		};
 	}
 }

@@ -568,7 +568,7 @@ namespace Cober {
 				memset(buffer, 0, sizeof(buffer));
 				strcpy_s(buffer, sizeof(buffer), component.Text.c_str());
 
-				if (ImGui::InputTextMultiline("Text String", buffer, sizeof(buffer)))
+				if (ImGui::InputTextMultiline("##", buffer, sizeof(buffer)))
 				{
 					component.Text = (std::string)buffer;
 				}

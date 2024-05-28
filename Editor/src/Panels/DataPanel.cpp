@@ -33,6 +33,7 @@ namespace Cober {
 		ImGui::Text("Quads: %d", Render2D::GetStats().QuadCount);
 		ImGui::Text("Lines: %d", Render2D::GetStats().LineCount);
 		ImGui::Text("Circles: %d", Render2D::GetStats().CircleCount);
+		ImGui::Text("Text: %d", Render2D::GetStats().TextCount);
 		ImGui::Spacing();
 		ImGui::Text("Screen size:\nX: %i Y: %i", EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight());
 		ImGui::Text("Mouse Coords:\nX: %i Y: %i", mouseX, mouseY);

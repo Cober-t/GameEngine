@@ -126,23 +126,14 @@ namespace Cober {
 		void Quad::DrawTexture(Entity& entity) 
 		{
 			auto& enttTrans = entity.GetComponent<TransformComponent>();
-			
-			glm::vec3 position{ enttTrans.position.x, enttTrans.position.y, enttTrans.position.z + 0.001f };
-			glm::vec3 scale{ enttTrans.scale.x, enttTrans.scale.y, 1.0f };
-
-			glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
-				* glm::toMat4(glm::quat(enttTrans.rotation))
-				* glm::scale(glm::mat4(1.0f), scale);
-
+	
 			constexpr float tilingFactor = 1.0f;
 			float textureIndex = 0.0f; // White Texture
 			glm::vec4 color = entity.GetComponent<Render2DComponent>().color;
 			glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
-				
 			if (entity.GetComponent<Render2DComponent>().texture)
 			{
-				// LOG_WARNING("{0} {1} {2}", data.TextureSlotIndex, entity.GetComponent<Render2DComponent>().texture->GetName(), entity.GetName());
 				for (uint32_t i = 1; i < data.TextureSlotIndex; i++) 
 				{
 					if (*data.TextureSlots[i] == *entity.GetComponent<Render2DComponent>().texture) 
@@ -160,7 +151,7 @@ namespace Cober {
 				}
 			}
 
-			SetAttributes(transform, color, textureIndex, textureCoords, 1.0f, (int)entity);
+			SetAttributes(enttTrans.GetTransform(), color, textureIndex, textureCoords, 1.0f, (int)entity);
 		}
 
 		

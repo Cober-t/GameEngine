@@ -88,13 +88,6 @@ namespace Cober {
 		{
 			auto& enttTrans = entity.GetComponent<TransformComponent>();
 
-			glm::vec3 position{ enttTrans.position.x, enttTrans.position.y, enttTrans.position.z + 0.001f };
-			glm::vec3 scale{ enttTrans.scale.x, enttTrans.scale.y, 1.0f };
-
-			glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
-				* glm::toMat4(glm::quat(enttTrans.rotation))
-				* glm::scale(glm::mat4(1.0f), scale);
-
 			if (data.IndexCount >= Render2D::GetStats().MaxIndices)
 				NextBatch();
 			
@@ -102,7 +95,7 @@ namespace Cober {
 			float thickness = entity.GetComponent<Render2DComponent>().thickness;
 			float fade = entity.GetComponent<Render2DComponent>().fade;
 
-			SetAttributes(transform, color, thickness, fade, (int)entity);
+			SetAttributes(enttTrans.GetTransform(), color, thickness, fade, (int)entity);
 		}
 
 
