@@ -14,12 +14,11 @@ namespace Cober {
 
 	public:
 		OpenGLTexture(const std::string& path);
-		OpenGLTexture(uint32_t width, uint32_t height);
+		OpenGLTexture(const TextureSpecification& specification);
 		virtual ~OpenGLTexture();
 
-		virtual uint32_t GetWidth() const override { return m_Width;  }
-		virtual uint32_t GetHeight() const override { return m_Height; }
 		virtual uint32_t GetRendererID() const override { return m_RendererID; }
+		virtual const TextureSpecification& GetSpecification() const override { return m_Specification; }
 		
 		virtual std::string GetName()   const override;
 		virtual std::string GetFormat() const override;
@@ -35,12 +34,11 @@ namespace Cober {
 		}
 
 	private:
-		uint32_t m_Width, m_Height;
-		ImageFormat m_Format = ImageFormat::RGBA8;
-		bool m_GenerateMips = true;
-		std::string m_Path;
+		TextureSpecification m_Specification;
 
+		std::string m_Path;
 		bool m_IsLoaded = false;
+		uint32_t m_Width, m_Height;
 		uint32_t m_RendererID;
 		GLenum m_InternalFormat, m_DataFormat;
 	};

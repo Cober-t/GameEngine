@@ -54,6 +54,8 @@ project "Engine"
         "%{IncludeDir.Box2D}",
 		"%{IncludeDir.glm}",
         "%{IncludeDir.entt}",
+		"%{IncludeDir.msdf}",
+		"%{IncludeDir.msdfgen}",
         "%{IncludeDir.stb_image}",
         "%{IncludeDir.stb_truetype}",
         "%{IncludeDir.spdlog}",
@@ -69,6 +71,7 @@ project "Engine"
         "Box2D",
         "ImGui",
 		"Lua",
+		"msdf-atlas-gen",
 	}
 
 	postbuildcommands

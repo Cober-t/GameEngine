@@ -16,6 +16,7 @@
 
 #include "Core/Core.h"
 #include "Render/Texture.h"
+#include "Render/Text/Font.h"
 
 namespace Cober {
 	
@@ -194,6 +195,16 @@ namespace Cober {
 
 		AudioComponent() = default;
 		AudioComponent(const AudioComponent&) = default;
+	};
+
+
+	struct TextComponent
+	{
+		std::string TextString;
+		Ref<Font> FontAsset = Font::GetDefault();
+		glm::vec4 Color{ 1.0f };
+		float Kerning = 0.0f;
+		float LineSpacing = 0.0f;
 	};
 
 

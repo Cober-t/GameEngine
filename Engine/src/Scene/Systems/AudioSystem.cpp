@@ -41,7 +41,10 @@ namespace Cober {
             Entity entity = Entity((entt::entity)entt, scene );
 
 			if (std::filesystem::exists(entity.GetComponent<AudioComponent>().audioPath))
-				Audio::PlaySound(entity.GetComponent<AudioComponent>().audioName);
+			{
+				// Only TEST
+				// Audio::PlaySound(entity.GetComponent<AudioComponent>().audioName);
+			}
 		}
 	}
 }

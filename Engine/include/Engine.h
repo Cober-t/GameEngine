@@ -73,6 +73,8 @@
 #include "Render/Primitives/Circle.h"
 #include "Render/Primitives/Cube.h"
 #include "Render/Primitives/Grid.h"
+#include "Render/Primitives/Text.h"
+#include "Render/Text/Font.h"
 
 
 //[++++++++++++++++++++++++++]

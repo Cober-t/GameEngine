@@ -6,12 +6,12 @@
 
 namespace Cober {
 
-	Ref<Texture> Texture::Create(uint32_t width, uint32_t height)
+	Ref<Texture> Texture::Create(const TextureSpecification& specification)
 	{
 		switch (RenderAPI::GetAPI())
 		{
 			case RenderAPI::API::None:      LOG_CORE_WARNING("RendererAPI::None is currently not supported!"); return nullptr;
-			case RenderAPI::API::OpenGL:    return CreateRef<OpenGLTexture>(width, height);
+			case RenderAPI::API::OpenGL:    return CreateRef<OpenGLTexture>(specification);
 			default:	LOG_CORE_ASSERT(false, "Unknown RendererAPI!"); break;
 		}
 		

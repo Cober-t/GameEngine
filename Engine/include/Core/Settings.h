@@ -67,6 +67,7 @@ namespace Cober {
             QuadCount = 0;
             LineCount = 0;
             CircleCount = 0;
+            TextCount = 0;
         }
 
         uint32_t* GetIndices()
@@ -110,9 +111,10 @@ namespace Cober {
         uint32_t QuadCount = 0;
         uint32_t LineCount = 0;
         uint32_t CircleCount = 0;
+        uint32_t TextCount = 0;
 
-        uint32_t GetTotalVertexCount() { return QuadCount * 4 + LineCount * 2 + CircleCount * 4; }
-        uint32_t GetTotalIndexCount()  { return QuadCount * 6 + CircleCount * 6; }
+        uint32_t GetTotalVertexCount() { return QuadCount * 4 + LineCount * 2 + CircleCount * 4 + TextCount * 4; }
+        uint32_t GetTotalIndexCount()  { return QuadCount * 6 + CircleCount * 6 + TextCount * 6; }
     };
 }
 

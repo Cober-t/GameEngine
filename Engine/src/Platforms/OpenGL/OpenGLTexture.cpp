@@ -34,14 +34,14 @@ namespace Cober {
 	}
 
 
-	OpenGLTexture::OpenGLTexture(uint32_t width, uint32_t height)
-		: m_Width(width), m_Height(height)
+	OpenGLTexture::OpenGLTexture(const TextureSpecification& specification)
+		: m_Specification(specification), m_Width(m_Specification.Width), m_Height(m_Specification.Height)
 	{
-		m_InternalFormat = Utils::ImageFormatToGLInternalFormat(m_Format);
-		m_DataFormat = Utils::ImageFormatToGLDataFormat(m_Format);
+		m_InternalFormat = Utils::ImageFormatToGLInternalFormat(m_Specification.Format);
+		m_DataFormat = Utils::ImageFormatToGLDataFormat(m_Specification.Format);
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
-		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
+		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Specification.Width, m_Specification.Height);
 
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
