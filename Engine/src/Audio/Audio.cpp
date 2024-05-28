@@ -3,26 +3,26 @@
 #include "Audio/miniaudio.h"
 #include "Audio/Audio.h"
 
-
 #define MAX_SOUNDS 32
 
 namespace Cober {
 
+    static std::map<std::string, ma_sound> sounds;
+
     static ma_result m_Result;
     static ma_engine m_Engine;
     static ma_uint32 m_EngineCount = 0;
+    static ma_engine_config m_EngineConfig;
+
     static ma_context m_Context;
+
     static ma_device m_Device;
     static ma_device_config m_DeviceConfig;
-    static ma_engine_config m_EngineConfig;
+    static ma_uint32 m_PlaybackDeviceCount;
+    static ma_device_info* m_PlaybackDeviceInfos;
+
     static ma_resource_manager m_ResourceManager;
     static ma_resource_manager_config m_ResourceManagerConfig;
-    static ma_device_info* m_PlaybackDeviceInfos;
-    static ma_uint32 m_PlaybackDeviceCount;
-    static ma_uint32 iAvailableDevice;
-    static ma_sound sounds[MAX_SOUNDS];
-    static ma_uint32 soundCount;
-    static ma_uint32 iSound;
 
     void data_callback(ma_device* pDevice, void* pOutput, const void* pInput, ma_uint32 frameCount)
     {
@@ -30,9 +30,9 @@ namespace Cober {
         ma_engine_read_pcm_frames((ma_engine*)pDevice->pUserData, pOutput, frameCount, NULL);
     }
 
+
     void Audio::Init() 
     {
-        soundCount = 0;
         // Init Resource Manager
         m_ResourceManagerConfig = ma_resource_manager_config_init();
         m_Result = ma_resource_manager_init(&m_ResourceManagerConfig, &m_ResourceManager);
@@ -55,16 +55,17 @@ namespace Cober {
             return;
         }
 
+        // Get Context Devices
         m_Result = ma_context_get_devices(&m_Context, &m_PlaybackDeviceInfos, &m_PlaybackDeviceCount, NULL, NULL);
         if (m_Result != MA_SUCCESS) {
             LOG_CORE_ERROR("Failed to enumerate playback devices.");
             ma_context_uninit(&m_Context);
             return;
         }
-
-        for (ma_uint32 iAvailableDevice = 0; iAvailableDevice < m_PlaybackDeviceCount; iAvailableDevice += 1)
-            LOG_WARNING(m_PlaybackDeviceInfos[iAvailableDevice].name);
+        // for (ma_uint32 iAvailableDevice = 0; iAvailableDevice < m_PlaybackDeviceCount; iAvailableDevice += 1)
+        //     LOG_WARNING(m_PlaybackDeviceInfos[iAvailableDevice].name);
         
+        // Init Devices
         m_DeviceConfig = ma_device_config_init(ma_device_type_playback);
         // m_DeviceConfig.playback.pDeviceID = &m_PlaybackDeviceInfos[2].id;
         m_DeviceConfig.playback.format    = m_ResourceManager.config.decodedFormat;
@@ -79,6 +80,7 @@ namespace Cober {
             return;
         }
 
+        // Init Engine
         m_EngineConfig = ma_engine_config_init();
         m_EngineConfig.pDevice          = &m_Device;
         m_EngineConfig.pResourceManager = &m_ResourceManager;
@@ -98,15 +100,15 @@ namespace Cober {
             LOG_CORE_ERROR("Failed to start audio engine");
             return;
         }
-
-        // TEST
-        Audio::PlaySound("hit.mp3");
     }
+
     
-    void Audio::Stop() 
+    void Audio::Exit() 
     {
-        for (ma_int32 iSound = 0; iSound < soundCount; iSound += 1)
-            ma_sound_uninit(&sounds[iSound]);
+        for (auto [key, value] : sounds)
+            ma_sound_uninit(&value);
+
+        sounds.clear();
 
         ma_engine_uninit(&m_Engine);
         ma_device_uninit(&m_Device);
@@ -114,53 +116,69 @@ namespace Cober {
         ma_resource_manager_uninit(&m_ResourceManager);
     }
 
-    void Audio::Update() 
-    {
-        
-    }
 
-    bool Audio::PlaySound(const char* soundName) 
+    bool Audio::PlaySound(std::string soundName) 
     {
         if (!&m_Engine)
             return false;
+    
+        if (sounds.find(soundName) != sounds.end())
+            m_Result = ma_sound_start(&sounds.find(soundName)->second);
 
+        if (m_Result != MA_SUCCESS) 
+        {
+            LOG_WARNING("Failed to start sound.");
+            return false;
+        }
+
+        return true;
+    }
+
+
+    bool Audio::LoadSound(std::string soundName) 
+    {
+        if (!&m_Engine)
+            return false;
+    
         std::filesystem::path soundPath = std::filesystem::current_path() / "assets" / "audio" / soundName;
-        // m_Result = ma_engine_play_sound(&m_Engine, soundPath.string().c_str(), NULL);
+        // m_Result = ma_engine_play_sound(&m_Engine, soundPath.string().c_str(), &sound);
+
+        if (sounds.find(soundName) != sounds.end())
+        {
+            LOG_WARNING("Sound {0} is already loaded yet", soundName);
+            return true;
+        }
+
+        ma_sound sound;
+        sounds.insert(std::make_pair(soundName, sound));
         m_Result = ma_sound_init_from_file(&m_Engine, soundPath.string().c_str(), 
-                        MA_RESOURCE_MANAGER_DATA_SOURCE_FLAG_DECODE | 
-                        MA_RESOURCE_MANAGER_DATA_SOURCE_FLAG_ASYNC | 
-                        MA_RESOURCE_MANAGER_DATA_SOURCE_FLAG_STREAM, NULL, NULL, 
-                        &sounds[soundCount]);
+                MA_RESOURCE_MANAGER_DATA_SOURCE_FLAG_DECODE | 
+                MA_RESOURCE_MANAGER_DATA_SOURCE_FLAG_ASYNC | 
+                MA_RESOURCE_MANAGER_DATA_SOURCE_FLAG_STREAM, NULL, NULL, &sounds.find(soundName)->second);
 
         if (m_Result != MA_SUCCESS) 
         {
             LOG_WARNING("Failed to load sound {0}", soundName);
             return false;
         }
-        m_Result = ma_sound_start(&sounds[soundCount]);
-        if (m_Result != MA_SUCCESS) 
-        {
-            LOG_WARNING("Failed to start sound.");
-        }
-        soundCount += 1;
 
         return true;
     }
 
-    bool Audio::LoadSound(const char* soundName) 
-    {
-        return true;
-    }
 
-    void Audio::StopSound(const char* soundName) 
+    void Audio::StopSound(std::string soundName) 
     {   
-        // Map sounds name  
-        // ma_sound_uninit(&sounds[iSound]);
+        if (sounds.find(soundName) != sounds.end())
+            ma_sound_stop(&sounds.find(soundName)->second);
     }
 
-    void Audio::LoopSound(bool loop) 
+
+    void Audio::LoopSound(std::string soundName, bool loop) 
     {
+        if (sounds.find(soundName) != sounds.end())
+            ma_sound_set_looping(&sounds.find(soundName)->second, loop);
     }
+
 
     void Audio::SetVolume(int volume)
     {

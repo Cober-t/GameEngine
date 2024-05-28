@@ -124,6 +124,14 @@ namespace Cober {
 				auto& script = entity.GetComponent<NativeScriptComponent>();
 				entityToBeSaved["NativeScriptComponent"]["className"].SetString(script.className);
 			}
+
+			if (entity.HasComponent<AudioComponent>())
+			{
+				auto& audio = entity.GetComponent<AudioComponent>();
+				entityToBeSaved["AudioComponent"]["audioName"].SetString(audio.audioName);
+				entityToBeSaved["AudioComponent"]["audioPath"].SetString(audio.audioPath.string());
+				entityToBeSaved["AudioComponent"]["loop"].SetInt(audio.loop);
+			}
 		}
 		
 		return Utils::DataFile::Write(sceneSaver, sceneName);
@@ -264,6 +272,15 @@ namespace Cober {
 						auto script = loader["NativeScriptComponent"];
 						newEntity.AddComponent<NativeScriptComponent>();
 						newEntity.GetComponent<NativeScriptComponent>().className = script["className"].GetString();
+					}
+
+					if (loader.HasProperty("AudioComponent")) 
+					{
+						auto audio = loader["AudioComponent"];
+						newEntity.AddComponent<AudioComponent>();
+						newEntity.GetComponent<AudioComponent>().audioName = audio["audioName"].GetString();
+						newEntity.GetComponent<AudioComponent>().audioPath = audio["audioPath"].GetString();
+						newEntity.GetComponent<AudioComponent>().loop = audio["loop"].GetInt();
 					}
 				}
 			}

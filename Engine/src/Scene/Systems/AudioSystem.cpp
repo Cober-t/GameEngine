@@ -12,7 +12,7 @@ namespace Cober {
 
 	AudioSystem::~AudioSystem()
 	{
-        Audio::Stop();
+        Audio::Exit();
 		LOG_INFO("Audio System Removed from Registry");
 	}
 
@@ -20,10 +20,28 @@ namespace Cober {
 	void AudioSystem::Start(Scene* scene)
 	{
         Audio::Init();
+
+		auto view = scene->GetAllEntitiesWith<AudioComponent>();
+
+        for (auto& entt : view)
+        {
+            Entity entity = Entity((entt::entity)entt, scene );
+
+			if (std::filesystem::exists(entity.GetComponent<AudioComponent>().audioPath))
+				Audio::LoadSound(entity.GetComponent<AudioComponent>().audioName);
+		}
 	}
 
 	void AudioSystem::Update(Scene* scene)
 	{
-        Audio::Update();
+		auto view = scene->GetAllEntitiesWith<AudioComponent>();
+
+        for (auto& entt : view)
+        {
+            Entity entity = Entity((entt::entity)entt, scene );
+
+			if (std::filesystem::exists(entity.GetComponent<AudioComponent>().audioPath))
+				Audio::PlaySound(entity.GetComponent<AudioComponent>().audioName);
+		}
 	}
 }

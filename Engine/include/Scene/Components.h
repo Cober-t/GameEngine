@@ -10,6 +10,8 @@
 #include <b2_circle_shape.h>
 #include <b2_polygon_shape.h>
 
+#include <filesystem>
+
 #include <sol/sol.hpp>
 
 #include "Core/Core.h"
@@ -184,6 +186,17 @@ namespace Cober {
 	};
 
 
+	struct AudioComponent
+	{
+		std::filesystem::path audioPath;
+		std::string audioName = "None";
+		bool loop = false;
+
+		AudioComponent() = default;
+		AudioComponent(const AudioComponent&) = default;
+	};
+
+
 	/*
 	struct Animation2D {
 		int numFrames;
@@ -204,7 +217,7 @@ namespace Cober {
 	{
 	};
 
-	using AllComponents = ComponentGroup<TransformComponent, ScriptComponent, Render2DComponent, 
+	using AllComponents = ComponentGroup<TransformComponent, ScriptComponent, Render2DComponent, AudioComponent,
 		ScriptComponent, NativeScriptComponent, Rigidbody2D, BoxCollider2D, CircleCollider2D, EdgeCollider2D, PolygonCollider2D>;
 }
 

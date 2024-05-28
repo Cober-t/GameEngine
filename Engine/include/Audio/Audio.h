@@ -2,19 +2,19 @@
 #define AUDIO_H
 
 
+
 namespace Cober {
 
     class CB_API Audio
     {
     public:
         static void Init();
-        static void Update();
-        static void Stop();
+        static void Exit();
 
-        static bool PlaySound(const char* soundName);
-        static void StopSound(const char* soundName);
-        static bool LoadSound(const char* soundName);
-        static void LoopSound(bool loop);
+        static bool PlaySound(std::string soundName);
+        static void StopSound(std::string soundName);
+        static bool LoadSound(std::string soundName);
+        static void LoopSound(std::string soundName, bool loop);
         static void SetVolume(int volume);
     };
 }

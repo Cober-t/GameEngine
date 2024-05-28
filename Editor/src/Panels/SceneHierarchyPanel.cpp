@@ -2,7 +2,7 @@
 
 #include "EditorLayer.h"
 #include "Panels/SceneHierarchyPanel.h"
-//#include "Cober/Scene/Components.h"
+// #include "Cober/Scene/Components.h"
 //#include "Cober/Renderer/Renderer.h"
 //#include "Cober/Renderer/Lighting.h"
 
@@ -279,15 +279,7 @@ namespace Cober {
 		strcpy_s(buffer, sizeof(buffer), entity.GetComponent<TagComponent>().tag.c_str());
 
 		if (ImGui::InputText("##Name", buffer, sizeof(buffer)))
-			m_NewEntityTag = buffer;
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Rename")) 
-        {
-			if (m_NewEntityTag != "") 
-				entity.GetComponent<TagComponent>().tag = (std::string)m_NewEntityTag;
-		}
+			entity.GetComponent<TagComponent>().tag = (std::string)buffer;
 
 		if (ImGui::Button("Add Component")) 
         {
@@ -321,6 +313,10 @@ namespace Cober {
 				{
 					m_SelectionContext.AddComponent<NativeScriptComponent>();
 				}
+				else if (!m_SelectionContext.HasComponent<AudioComponent>())
+				{
+					m_SelectionContext.AddComponent<AudioComponent>();
+				}
 			}
 			else
 				ImGui::OpenPopup("AddComponent");
@@ -328,13 +324,14 @@ namespace Cober {
 
 		if (ImGui::BeginPopup("AddComponent")) 
 		{
-			AddIfHasComponent<Rigidbody2D>("Rigidbody 2D Component");
-			AddIfHasComponent<BoxCollider2D>("Box Collider 2D Component");
-			AddIfHasComponent<CircleCollider2D>("Circle Collider 2D Component");
+			AddIfHasComponent<Rigidbody2D>((std::string)ComponentNames::Rigidbody2D);
+			AddIfHasComponent<BoxCollider2D>((std::string)ComponentNames::Box2DCollider);
+			AddIfHasComponent<CircleCollider2D>((std::string)ComponentNames::Circle2DCollider);
 			// AddIfHasComponent<EdgeCollider2D>("Edge Collider 2D Component");
 			// AddIfHasComponent<PolygonCollider2D>("Polygon Collider 2D Component");
-			AddIfHasComponent<Render2DComponent>("Render 2D Shape Component");
-			AddIfHasComponent<NativeScriptComponent>("Native Script Component");
+			AddIfHasComponent<Render2DComponent>((std::string)ComponentNames::Render2DShape);
+			AddIfHasComponent<NativeScriptComponent>((std::string)ComponentNames::NativeScript);
+			AddIfHasComponent<AudioComponent>((std::string)ComponentNames::Audio);
 			// ...
 			// ...
 
@@ -513,6 +510,49 @@ namespace Cober {
 					}
 
 					ImGui::EndCombo();
+				}
+			});
+		
+		DrawComponent<AudioComponent>((std::string)ComponentNames::Audio, entity, [](auto& component)
+			{
+				char buffer[256];
+				memset(buffer, 0, sizeof(buffer));
+				strcpy_s(buffer, sizeof(buffer), component.audioName.c_str());
+				std::filesystem::path audioPath = std::filesystem::current_path() / "assets";
+
+				if (ImGui::InputText("##Name", buffer, sizeof(buffer)))
+				{
+					component.audioPath = audioPath / "audio" / (std::string)buffer;
+
+					std::string format = (std::string)buffer;
+					auto lastDot = format.find_last_of('.');
+					format = lastDot != std::string::npos ? format.substr(lastDot) : "null";
+					component.audioName = (std::string)buffer;
+				}
+
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
+						const wchar_t* path = (const wchar_t*)payload->Data;
+
+						component.audioPath = audioPath / path;
+
+						std::string format = component.audioPath.string();
+						auto lastDot = format.find_last_of('.');
+						format = lastDot != std::string::npos ? format.substr(lastDot) : "null";
+
+						if (format == ".mp3" || format == ".wav" && std::filesystem::exists(audioPath / path))
+						{
+							component.audioName = component.audioPath.filename().string();
+							strcpy_s(buffer, sizeof(buffer), component.audioName.c_str());
+						}
+					}
+					ImGui::EndDragDropTarget();
+				}
+
+				if (ImGui::Checkbox("Loop", &component.loop))
+				{
+					Audio::LoopSound(component.audioName, component.loop);
 				}
 			});
 	}
