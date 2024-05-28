@@ -7,6 +7,7 @@
 #include "Scene/Systems/RenderSystem.h"
 #include "Scene/Systems/PhysicsSystem2D.h"
 #include "Scene/Systems/ScriptSystem.h"
+#include "Scene/Systems/AudioSystem.h"
 
 #include <glm/glm.hpp>
 
@@ -152,10 +153,12 @@ namespace Cober {
 		AddSystem<RenderSystem>();
 		AddSystem<PhysicsSystem2D>();
 		AddSystem<ScriptSystem>();
+		AddSystem<AudioSystem>();
 
         GetSystem<RenderSystem>().Start();
 		GetSystem<PhysicsSystem2D>().Start(this);
 		GetSystem<ScriptSystem>().Start(this);
+		GetSystem<AudioSystem>().Start(this);
 	}
 
 
@@ -165,6 +168,7 @@ namespace Cober {
 		RemoveSystem<RenderSystem>();
 		GetSystem<ScriptSystem>().FreeScripts(this);
 		RemoveSystem<ScriptSystem>();
+		RemoveSystem<AudioSystem>();
 	}
 
 
@@ -196,6 +200,7 @@ namespace Cober {
 		}
 
 		GetSystem<ScriptSystem>().Update(this, ts->GetDeltaTime());
+		GetSystem<AudioSystem>().Update(this);
 	}
 
 

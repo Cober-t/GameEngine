@@ -46,7 +46,6 @@ workspace "ScriptingWorkspace"
 			"C:/Users/Jorge/Documents/GameEngine/libraries/glad/include",
 			"C:/Users/Jorge/Documents/GameEngine/libraries/glm",
 			"C:/Users/Jorge/Documents/GameEngine/libraries/entt",
-			"C:/Users/Jorge/Documents/GameEngine/libraries/raudio",
 			"C:/Users/Jorge/Documents/GameEngine/libraries/box2d/include/box2d",
 			"C:/Users/Jorge/Documents/GameEngine/libraries/stb_image/include",
 			"C:/Users/Jorge/Documents/GameEngine/libraries/stb_truetype",

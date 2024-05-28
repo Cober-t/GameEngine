@@ -32,5 +32,4 @@
 <!-- Load Assets -->
 [X] stb_image
 [X] stb_truetype
-[X] raudio
 [ ] Assimp

@@ -42,7 +42,6 @@ project "Editor"
         "%{IncludeDir.ImGuizmo}",
         "%{IncludeDir.Box2D}",
         "%{IncludeDir.GLFW}",
-        "%{IncludeDir.raudio}",
         "%{IncludeDir.stb_image}",
         "%{IncludeDir.stb_truetype}",
         "%{IncludeDir.lua}",

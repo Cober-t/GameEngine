@@ -54,7 +54,6 @@ project "Engine"
         "%{IncludeDir.Box2D}",
 		"%{IncludeDir.glm}",
         "%{IncludeDir.entt}",
-        "%{IncludeDir.raudio}",
         "%{IncludeDir.stb_image}",
         "%{IncludeDir.stb_truetype}",
         "%{IncludeDir.spdlog}",

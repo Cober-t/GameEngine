@@ -50,6 +50,7 @@
 #include "Scene/Systems/RenderSystem.h"
 #include "Scene/Systems/PhysicsSystem2D.h"
 #include "Scene/Systems/ScriptSystem.h"
+#include "Scene/Systems/AudioSystem.h"
 
 
 //[++++++++++++++++++++++++++]
@@ -75,7 +76,13 @@
 
 
 //[++++++++++++++++++++++++++]
-//[+++++++++ Debug +++++++++]
+//[+++++++++ Audio ++++++++++]
+//[++++++++++++++++++++++++++]
+#include "Audio/Audio.h"
+
+
+//[++++++++++++++++++++++++++]
+//[+++++++++ Debug ++++++++++]
 //[++++++++++++++++++++++++++]
 #include "Physics/Physics2D.h"
 #include "Physics/Debug2DPhysics.h"
