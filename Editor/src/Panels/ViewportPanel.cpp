@@ -232,7 +232,7 @@ namespace Cober {
 		//Gizmos
 		if (Editor::SelectedEntity() && m_GizmoType != -1)
 		{
-			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetOrthographic(!editorCamera->IsPerspective());
 			ImGuizmo::SetDrawlist();
 
 			ImGuizmo::SetRect(m_MinViewportBound.x, m_MinViewportBound.y, 

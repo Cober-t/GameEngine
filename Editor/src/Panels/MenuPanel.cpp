@@ -135,21 +135,19 @@ namespace Cober {
 			ImGui::InputInt("Physics Position Iterations", &Physics2D::GetSettings().PositionIterations);
 
 			ImGui::SetNextItemWidth(120.0f);
-			if (ImGui::BeginCombo(ICON_FA_TELEVISION  "  Resolution", m_Settings.CurrentScreenSize)) 
+			if (ImGui::Checkbox(ICON_FA_CAMERA  "  Camera Type", &editorCamera->IsPerspective()))
 			{
-				for (int i = 0; i < ScreenSize::N_RESOLUTIONS; i++) 
+				if (editorCamera->IsPerspective() == false)
 				{
-					bool isSelected = m_Settings.CurrentScreenSize == m_Settings.ScreenValues[i];
-					if (ImGui::Selectable(m_Settings.ScreenValues[i], isSelected)) 
-					{
-						m_Settings.CurrentScreenSize = m_Settings.ScreenValues[i];
-						if (isSelected)
-							Resize(editorCamera, m_Settings.VPSize[i].x, m_Settings.VPSize[i].y, editorCamera->IsPerspective());
-					}
+					editorCamera->GetSettings().focalPoint = glm::vec3(0.0f, 0.0f, -1.0f);
+					editorCamera->GetSettings().yaw = 0.0f;
+					editorCamera->GetSettings().pitch = 0.0;
+					editorCamera->GetSettings().roll = 0.0f;
 				}
-				ImGui::EndCombo();
+					
+				editorCamera->SetViewportSize(editorCamera->GetSettings().width,
+											  editorCamera->GetSettings().height);
 			}
-
 
 			if (ImGui::Checkbox(ICON_FA_CODE  "  Debug Mode", &EngineApp::Get().IsDebugMode()))
 			{

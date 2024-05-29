@@ -14,7 +14,7 @@ namespace Cober {
 
 	public:
 		EditorCamera() = default;
-		EditorCamera(float fov, float width, float height, float nearClip, float farClip, bool ortho = false);
+		EditorCamera(float fov, float width, float height, float nearClip, float farClip, bool persp = true);
 		virtual ~EditorCamera();
 
 		void OnUpdate(Unique<Timestep>& ts) override;

@@ -11,9 +11,9 @@
 
 namespace Cober {
 
-	EditorCamera::EditorCamera(float fov, float width, float height, float nearClip, float farClip, bool ortho)
+	EditorCamera::EditorCamera(float fov, float width, float height, float nearClip, float farClip, bool persp)
 		: Camera(glm::perspectiveFov(glm::radians(fov), width, height, farClip, nearClip), glm::perspectiveFov(glm::radians(fov), width, height, nearClip, farClip)),
-		m_EditorCamera(CameraSettings(fov, width, height, nearClip, farClip, ortho))
+		m_EditorCamera(CameraSettings(fov, width, height, nearClip, farClip, persp))
 	{
 		m_EditorCamera.focalPoint = glm::vec3(0.0f, 0.0f, -1.0f);
 		m_EditorCamera.nearClip = nearClip;
@@ -48,19 +48,38 @@ namespace Cober {
 
 	void EditorCamera::SetViewportSize(float width, float height)
 	{
-		if (m_ViewportWidth == width && m_ViewportHeight == height)
-				return;
-		SetPerspectiveProjectionMatrix(glm::radians(m_EditorCamera.fov), (float)width, (float)height, m_EditorCamera.nearClip, m_EditorCamera.farClip);
+		if (IsPerspective())
+		{
+			SetPerspectiveProjectionMatrix(glm::radians(m_EditorCamera.fov), (float)width, (float)height, m_EditorCamera.nearClip, m_EditorCamera.farClip);
+		}
+		else
+		{
+			m_EditorCamera.aspectRatio = (float)width / (float)height;
+			SetOrthoProjectionMatrix(m_EditorCamera.aspectRatio * m_EditorCamera.distance, // Left
+									 m_EditorCamera.aspectRatio * m_EditorCamera.distance,// Right
+									 m_EditorCamera.distance,	// Bottom 
+									 m_EditorCamera.distance,	// Top
+									 m_EditorCamera.nearClip, m_EditorCamera.farClip);
+		}
+		
 		m_ViewportWidth = width;
 		m_ViewportHeight = height;
-
-		// In the future, to change between ortho and perspective
-		// UpdateCameraView();
+		UpdateCameraView();
 	}
 
 
 	void EditorCamera::UpdateCameraView() 
 	{
+		// Becasue the distance is involve and needs to be updated
+		if (IsPerspective() == false)
+		{
+			SetOrthoProjectionMatrix(m_EditorCamera.aspectRatio * m_EditorCamera.distance, // Left
+									 m_EditorCamera.aspectRatio * m_EditorCamera.distance,// Right
+									 m_EditorCamera.distance,	// Bottom 
+									 m_EditorCamera.distance,	// Top
+									 m_EditorCamera.nearClip, m_EditorCamera.farClip);
+		}
+
 		m_EditorCamera.position = CalculatePosition();
 		glm::quat orientation = GetOrientation();
 		glm::mat4 viewMatrix = glm::translate(glm::mat4(1.0f), m_EditorCamera.position) * glm::toMat4(orientation);
@@ -192,23 +211,33 @@ namespace Cober {
 
 		if (Input::IsKeyDown(KeyCode::LeftAlt))
 		{
-			if (Input::IsMouseButtonDown(MouseButton::Middle))
+			// PERSP Controls
+			if (IsPerspective() == true)
 			{
-				DisableMouse();
-				MousePan(delta);
+				if (Input::IsMouseButtonDown(MouseButton::Middle))
+				{
+					DisableMouse();
+					MousePan(delta);
+				}
+				else if (Input::IsMouseButtonDown(MouseButton::Left))
+				{
+					DisableMouse();
+					MouseRotate(delta);
+				}
+				else
+					EnableMouse();
 			}
-			else if (Input::IsMouseButtonDown(MouseButton::Left))
+			// ORTHO Controls
+			else if (IsPerspective() == false)
 			{
-				DisableMouse();
-				MouseRotate(delta);
+				if (Input::IsMouseButtonDown(MouseButton::Left))
+				{
+					DisableMouse();
+					MousePan(delta);
+				}
+				else
+					EnableMouse();
 			}
-			else if (Input::IsMouseButtonDown(MouseButton::Right))
-			{
-				DisableMouse();
-				MouseZoom(delta.y);
-			}
-			else
-				EnableMouse();
 		}
 		else
 		{
@@ -232,7 +261,6 @@ namespace Cober {
 	{
 		MouseZoom(event.GetYOffset() * 0.1f);
 		UpdateCameraView();
-
 		return true;
 	}
 

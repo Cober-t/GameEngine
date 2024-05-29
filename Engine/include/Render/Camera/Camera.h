@@ -26,8 +26,8 @@ namespace Cober {
 		float width, height;
 
 		CameraSettings() = default;
-		CameraSettings(float newFov, float widthValue, float heightValue, float nearValue, float farValue, bool ortho)
-		 : fov(newFov), width(widthValue), height(heightValue), nearClip(nearValue), farClip(farValue), perspectiveProjection(ortho) { };
+		CameraSettings(float newFov, float widthValue, float heightValue, float nearValue, float farValue, bool persp)
+		 : fov(newFov), width(widthValue), height(heightValue), nearClip(nearValue), farClip(farValue), perspectiveProjection(persp) { };
 
 		~CameraSettings() = default;
 	};
@@ -61,8 +61,12 @@ namespace Cober {
 
 		void SetOrthoProjectionMatrix(float width, float height, float nearClip, float farClip)
 		{
-			//TODO(Karim): Make sure this is correct.
-			m_ProjectionMatrix = glm::ortho(-width * 0.5f, width * 0.5f, -height * 0.5f, height * 0.5f, nearClip, farClip);
+			m_ProjectionMatrix = glm::ortho(-width, width, -height, height, nearClip, farClip);
+		}
+
+		void SetOrthoProjectionMatrix(float left, float right, float bottom, float top, float nearClip, float farClip)
+		{
+			m_ProjectionMatrix = glm::ortho(-left, right, -bottom, top, nearClip, farClip);
 		}
 
 	private:
