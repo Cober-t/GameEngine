@@ -217,7 +217,12 @@ namespace Cober {
 					auto lastDot = m_FilePath.find_last_of('.');
 					std::string format = lastDot != std::string::npos ? m_FilePath.substr(lastDot) : "null";
 					if (lastDot != std::string::npos && (format == ".png" || format == ".jpg" || format == ".jpeg"))
-						Editor::SelectedEntity().GetComponent<Render2DComponent>().texture = Texture::Create(m_FilePath);
+					{
+						auto textureHolder = Texture::Create(m_FilePath);
+						Editor::SelectedEntity().GetComponent<Render2DComponent>().texture = textureHolder;
+						Editor::SelectedEntity().GetComponent<TransformComponent>().scale.x = textureHolder->GetWidth()*0.01;
+						Editor::SelectedEntity().GetComponent<TransformComponent>().scale.y = textureHolder->GetHeight()*0.01;
+					}
 				}
 			}
 			ImGui::EndDragDropTarget();

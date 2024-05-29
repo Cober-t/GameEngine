@@ -37,7 +37,7 @@ namespace Cober {
 		
 		SetViewportSize(width, height);
 
-		LOG_INFO("Editor Camera Created!!");
+		LOG_INFO("Game Camera Created!!");
 	}
 
 

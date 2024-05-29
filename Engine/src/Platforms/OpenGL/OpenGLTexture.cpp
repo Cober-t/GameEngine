@@ -44,7 +44,7 @@ namespace Cober {
 		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Specification.Width, m_Specification.Height);
 
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -59,7 +59,6 @@ namespace Cober {
 		stbi_set_flip_vertically_on_load(1);
 
 		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
-		
 		if (data)
 		{
 			m_IsLoaded = true;
@@ -82,14 +81,14 @@ namespace Cober {
 			m_InternalFormat = internalFormat;
 			m_DataFormat = dataFormat;
 
-			LOG_CORE_ASSERT(internalFormat & dataFormat, "Format not supported!");
-
+			if (channels == 3 && m_Width%channels != 0)
+				glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 			glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 			glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);
 
 			glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
