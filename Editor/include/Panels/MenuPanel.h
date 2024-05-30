@@ -61,7 +61,6 @@ namespace Cober {
 		void FileMenu(Ref<EditorCamera>& editorCamera);
 		void OptionsMenu(Ref<EditorCamera>& editorCamera);
 		void OpenFileDialog();
-		void Resize(Ref<EditorCamera>& camera, int width, int height, bool ortho);
 
 	private:
 		ImGui::FileBrowser* m_FileBrowser;

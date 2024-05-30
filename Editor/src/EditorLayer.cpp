@@ -48,6 +48,7 @@ namespace Cober {
 		m_ActiveScene  = nullptr;
 		m_EditorScene  = nullptr;
 		m_EditorCamera = nullptr;
+		m_CameraActive = nullptr;
 
 		EditorResources::Shutdown();
 
@@ -99,7 +100,7 @@ namespace Cober {
 	{
 		InitDockspace();
 
-		ViewportPanel::Get().OnGuiRender(m_EditorCamera);
+		ViewportPanel::Get().OnGuiRender(m_EditorCamera, m_CameraActive);
 		DataPanel::Get().OnGuiRender();
 		ConsolePanel::Get().OnImGuiRender();
 		SceneHierarchyPanel::Get().OnGuiRender();
@@ -183,7 +184,7 @@ namespace Cober {
 		if (gameState == EngineApp::GameState::EDITOR || gameState == EngineApp::GameState::RUNTIME_EDITOR)
 		{
 			if (m_AllowViewportCameraEvents)
-				m_EditorCamera->OnEvent(event);
+				m_CameraActive->OnEvent(event);
 		}
 		
 		ViewportPanel::Get().OnEvent(event);

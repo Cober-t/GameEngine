@@ -36,6 +36,7 @@ namespace Cober {
 		static void NextBatch();
 
 		static void DrawQuad(Entity& entity);
+		static void DrawRect(glm::vec3 position, glm::vec3 rotation, float width, float height, Entity& entityID, glm::vec4 color = glm::vec4(1.0f));
 		static void DrawLine(Entity& entity);
 		static void DrawCircle(Entity& entity);
 		static void DrawSprite(Entity& entity);

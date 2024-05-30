@@ -169,6 +169,22 @@ namespace Cober {
             Line::Draw(lineVertices[3], lineVertices[0], color, (int)entity);
         }
 
+		void Quad::DrawRect(glm::vec3 position, glm::vec3 rotation, float width, float height, Entity& entityID, glm::vec4 color)
+        {
+			glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+				* glm::toMat4(glm::quat(rotation))
+				* glm::scale(glm::mat4(1.0f), glm::vec3(width*0.01f, height*0.01f, 1.0f));
+
+            glm::vec3 lineVertices[4];
+            for (size_t i = 0; i < 4; i++)
+                lineVertices[i] = transform * Render2D::GetStats().QuadVertexPositions[i];
+
+            Line::Draw(lineVertices[0], lineVertices[1], color, (int)entityID);
+            Line::Draw(lineVertices[1], lineVertices[2], color, (int)entityID);
+            Line::Draw(lineVertices[2], lineVertices[3], color, (int)entityID);
+            Line::Draw(lineVertices[3], lineVertices[0], color, (int)entityID);
+        }
+
 		
 		void Quad::Draw(const std::vector<glm::vec3> vertices, int vertexCount, const glm::vec4& color) 
 		{

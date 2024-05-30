@@ -381,8 +381,7 @@ namespace Cober {
 				if (ImGui::Checkbox("Perspective", &component.perspective))
 				{
 					component.camera->GetSettings().perspectiveProjection = component.perspective;
-				    component.camera->SetViewportSize(component.width, component.height);
-					ViewportPanel::Get().ResizeViewport(component.camera);
+				    ViewportPanel::Get().MustResize();
 				}
 					
 				if (ImGui::Checkbox("Main Camera", &component.mainCamera))
@@ -393,6 +392,8 @@ namespace Cober {
 						Editor::SetMainCamera(component.camera);
 					else
 						Editor::SetMainCamera(Editor::GetEditorCamera());
+						
+					ViewportPanel::Get().MustResize();
 				}
 				ImGui::Checkbox("Debug", &component.debug);
 			});

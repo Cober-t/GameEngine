@@ -68,7 +68,6 @@ namespace Cober {
 
 	struct CameraComponent
     {
-		glm::vec3 focalPoint	= { 0.0f, 0.0f, 0.0f };
 		float distance	= 5.0f;
 		int width = 1280;
 		int height = 720;
@@ -90,11 +89,9 @@ namespace Cober {
 
 		void UpdateCameraValues()
 		{
+			camera->GetSettings().distance = distance;
 			camera->GetSettings().width = width;
 			camera->GetSettings().height = height;
-
-   			camera->GetSettings().focalPoint = focalPoint;
-			camera->GetSettings().distance = distance;
 			
 			camera->GetSettings().nearClip = nearClip;
 			camera->GetSettings().farClip = farClip;

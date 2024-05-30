@@ -21,7 +21,7 @@ namespace Cober {
 
 		void Start();
 
-		void Update(const Ref<Camera>& camera, Scene* scene);
+		void Update(Scene* scene);
 
 		//void OnEvent(Unique<EventHandler>& eventHandler);
 		

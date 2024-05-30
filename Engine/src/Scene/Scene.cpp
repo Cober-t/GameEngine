@@ -196,8 +196,11 @@ namespace Cober {
 
 	void Scene::OnUpdateSimulation(Unique<Timestep>& ts, Ref<Camera>& camera)
 	{
+		Render2D::ResetStats();
+		Render2D::BeginScene(camera);
 		GetSystem<CameraSystem>().Update(ts, camera, this);
-		GetSystem<RenderSystem>().Update(camera, this);
+		GetSystem<RenderSystem>().Update(this);
+		Render2D::EndScene();
 
 		if (!m_IsPaused || m_StepFrames-- > 0.0f)
 		{
@@ -215,8 +218,11 @@ namespace Cober {
 
 	void Scene::OnUpdateRuntime(Unique<Timestep>& ts, Ref<Camera>& camera)
 	{	
+		Render2D::ResetStats();
+		Render2D::BeginScene(camera);
 		GetSystem<CameraSystem>().Update(ts, camera, this);
-		GetSystem<RenderSystem>().Update(camera, this);
+		GetSystem<RenderSystem>().Update(this);
+		Render2D::EndScene();
 	}
 
 

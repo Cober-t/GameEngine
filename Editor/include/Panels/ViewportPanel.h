@@ -27,9 +27,10 @@ namespace Cober {
 		void ResizeViewport(Ref<Camera> editorCamera);
 		void ResizeFramebufferSpecification(Ref<Camera> editorCamera, uint32_t width, uint32_t height);
 
-		void OnGuiRender(Ref<Camera> editorCamera);
+		void OnGuiRender(Ref<EditorCamera>& editorCamera, Ref<Camera>& camera);
 
 		void SetCursorEntity();
+		void MustResize(bool resize = true) { m_MustResize = resize; }; 
 		void PlayButtonBar(EngineApp::GameState gameState);
 		inline bool AllowViewportCameraEvents() { return m_AllowViewportCameraEvents; }
 
@@ -43,6 +44,7 @@ namespace Cober {
 		ImVec2 m_MinViewportBound, m_MaxViewportBound;
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
 		bool m_StartedCameraClickInViewport = false, m_AllowViewportCameraEvents = false;
+		bool m_MustResize = false;
 
 		bool m_MouseButtonHeld = false;
 		glm::vec2 m_Mouse{0.0f, 0.0f}, m_LastMousePos{ 0.0f, 0.0f };

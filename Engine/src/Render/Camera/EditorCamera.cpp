@@ -53,9 +53,6 @@ namespace Cober {
 
 	void EditorCamera::SetViewportSize(float width, float height)
 	{
-		if (IsMainCamera() == false)
-			return;
-
 		auto& m_EditorCamera = GetSettings();
 		if (IsPerspective())
 		{
@@ -217,7 +214,7 @@ namespace Cober {
 		const glm::vec2& mouse{ Input::GetMouseX(), Input::GetMouseY() };
 		const glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.003f;
 
-		if (m_IsActive == false || IsMainCamera() == false)
+		if (m_IsActive == false)
 		{
 			// if (!EngineApp::Get().GetImGuiLayer()->IsInputEnabled())
 			// 	EngineApp::Get().GetImGuiLayer()->SetInputEnabled(true);

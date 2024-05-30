@@ -86,11 +86,6 @@ namespace Cober {
 			if (ImGui::MenuItem(ICON_FA_TIMES "  Exit"))
 				EngineApp::Get().Close();
 
-			if (ImGui::Checkbox("2D", &editorCamera->IsPerspective()))
-			{
-				// TODO: Change to 2D projection
-				// editorCamera->UpdateProjection(game2D);
-			}
 
 			if (ImGui::Checkbox("Fullscreen", &m_Settings.Fullscreen))
 				EngineApp::Get().GetWindow().ChangeFullScreen();
@@ -147,8 +142,7 @@ namespace Cober {
 						editorCamera->GetSettings().roll = 0.0f;
 					}
 						
-					editorCamera->SetViewportSize(editorCamera->GetSettings().width,
-												editorCamera->GetSettings().height);
+					ViewportPanel::Get().MustResize();
 				}
 			}
 
@@ -207,12 +201,5 @@ namespace Cober {
 				break;
 		}
 		m_FileBrowser->ClearSelected();
-	}
-
-
-	void MenuPanel::Resize(Ref<EditorCamera>& camera, int width, int height, bool ortho) 
-    {
-        // Todo: Change between ortho and perspective projection
-		ViewportPanel::Get().ResizeFramebufferSpecification(camera, width, height);
 	}
 }

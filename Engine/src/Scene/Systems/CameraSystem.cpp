@@ -10,30 +10,12 @@ namespace Cober {
 
 	CameraSystem::~CameraSystem() 
     {
-        // auto view = scene->GetAllEntitiesWith<TransformComponent, TagComponent, CameraComponent>();
-        // if (view != entt::null)
-        // {
-        //     for (auto& entt : view)
-        //     {
-        //         Entity entity = Entity((entt::entity)entt, scene );
-        //         entity.GetComponent<CameraComponent>().camera = nullptr;
-        //     }
-        // }
 		LOG_INFO("Camera System Removed from Registry");
 	}
 
 
 	void CameraSystem::Start(const Scene* scene)
 	{
-        // auto view = scene->GetAllEntitiesWith<TransformComponent, TagComponent, CameraComponent>();
-        // if (view != entt::null)
-        // {
-        //     for (auto& entt : view)
-        //     {
-        //         Entity entity = Entity((entt::entity)entt, scene );
-        //         entity.GetComponent<CameraComponent>().camera = nullptr;
-        //     }
-        // }
 		LOG_INFO("Camera System Started!!");
 	}
 
@@ -52,6 +34,12 @@ namespace Cober {
                 auto& transformComponent = entity.GetComponent<TransformComponent>();
                 auto& gameCamera = cameraComponent.camera;
 
+                if (cameraComponent.debug)
+                {
+                    Render2D::DrawRect(transformComponent.position, transformComponent.rotation,
+                                        cameraComponent.width, cameraComponent.height, entity);
+                }
+
                 if (gameCamera && cameraComponent.mainCamera)
                 {
                     auto& gameCameraSettings = cameraComponent.camera->GetSettings();
@@ -68,9 +56,6 @@ namespace Cober {
                     // Handle a list of cameras in the future to avoid return
                     defaultCamera = cameraComponent.camera;
                     cameraComponent.camera->OnUpdate(ts);
-
-                    // if (cameraComponent.debug)
-                        // Render2D::DrawQuad()
 
                     return;
                 }
