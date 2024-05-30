@@ -290,11 +290,17 @@ namespace Cober {
 
 	void Editor::SetMainCamera(Ref<Camera>& camera)
 	{
+		m_EditorCamera->SetMainCamera(false);
+
 		m_CameraActive = camera;
+		m_CameraActive->SetMainCamera(true);
 	}
 
 	void Editor::SetMainCamera(Ref<EditorCamera>& camera)
 	{
+		m_EditorCamera->SetMainCamera(false);
+		
 		m_CameraActive = camera;
+		m_CameraActive->SetMainCamera(true);
 	}
 }

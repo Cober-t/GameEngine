@@ -216,6 +216,7 @@ namespace Cober {
 
 						newEntity.GetComponent<CameraComponent>().mainCamera = camera["mainCamera"].GetInt();
 						newEntity.GetComponent<CameraComponent>().camera->SetMainCamera(camera["mainCamera"].GetInt());
+						newEntity.GetComponent<CameraComponent>().camera->SetViewportSize(camera["width"].GetInt(), camera["height"].GetInt());
 					}
 
 					if (loader.HasProperty("Rigidbody2D")) 

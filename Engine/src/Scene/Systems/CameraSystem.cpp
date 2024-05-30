@@ -42,16 +42,12 @@ namespace Cober {
 
                 if (gameCamera && cameraComponent.mainCamera)
                 {
-                    auto& gameCameraSettings = cameraComponent.camera->GetSettings();
+                    auto& cameraSettings = gameCamera->GetSettings();
                     
-                    // Assignment must be done only one time in the future
-                    cameraComponent.SetMain(true);
-                    defaultCamera->SetMainCamera(false);
-
-                    gameCameraSettings.focalPoint = transformComponent.position;
-                    gameCameraSettings.yaw = transformComponent.rotation.y;
-                    gameCameraSettings.pitch = -transformComponent.rotation.x;
-                    gameCameraSettings.roll = transformComponent.rotation.z;
+                    cameraSettings.focalPoint = transformComponent.position;
+                    cameraSettings.yaw = transformComponent.rotation.y;
+                    cameraSettings.pitch = -transformComponent.rotation.x;
+                    cameraSettings.roll = transformComponent.rotation.z;
 
                     // Handle a list of cameras in the future to avoid return
                     defaultCamera = cameraComponent.camera;
@@ -63,7 +59,6 @@ namespace Cober {
         }
 
         // If the future list of cameras is not empty render the default camera
-        defaultCamera->SetMainCamera(true);
         defaultCamera->OnUpdate(ts);
 	}
 

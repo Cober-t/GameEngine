@@ -64,6 +64,9 @@ namespace Cober {
 
 	void GameCamera::SetViewportSize(float width, float height)
 	{
+		if (IsMainCamera() == false)
+			return;
+
 		auto& m_GameCamera = GetSettings();
 
 		if (IsPerspective())
@@ -117,6 +120,9 @@ namespace Cober {
 	
 	void GameCamera::OnUpdate(Unique<Timestep>& ts) 
 	{
+		if (IsMainCamera() == false)
+			return;
+
 		UpdateCameraView();
 	}
 

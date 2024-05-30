@@ -45,7 +45,7 @@ namespace Cober {
 		virtual void SetViewportSize(float width, float height) = 0;
 
 		bool IsMainCamera(){ return m_IsMainCamera; }
-		void SetMainCamera(bool main){ m_IsMainCamera = main ; }
+		void SetMainCamera(bool main = true){ m_IsMainCamera = main ; }
 		bool& IsPerspective() { return m_CameraSettings.perspectiveProjection; }
 
 		CameraSettings& GetSettings() { return m_CameraSettings; }
