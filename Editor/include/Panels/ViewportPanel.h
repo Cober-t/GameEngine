@@ -24,10 +24,10 @@ namespace Cober {
 		void FBOClearAttachments(uint32_t attachmentIndex, int value) { m_Fbo->ClearAttachment(attachmentIndex, value); }
 
 		void OnEvent(Event& event);	// Abstract to EVENT API
-		void ResizeViewport(Ref<EditorCamera> editorCamera, bool& game2D);
-		void ResizeFramebufferSpecification(Ref<EditorCamera> editorCamera, uint32_t width, uint32_t height);
+		void ResizeViewport(Ref<Camera> editorCamera);
+		void ResizeFramebufferSpecification(Ref<Camera> editorCamera, uint32_t width, uint32_t height);
 
-		void OnGuiRender(Ref<EditorCamera> editorCamera);
+		void OnGuiRender(Ref<Camera> editorCamera);
 
 		void SetCursorEntity();
 		void PlayButtonBar(EngineApp::GameState gameState);
@@ -35,7 +35,6 @@ namespace Cober {
 
 	private:
 		Ref<Framebuffer> m_Fbo;
-		Ref<EditorCamera> m_CameraAux;
 		std::map<std::string, Ref<Texture>> m_AssetIconMap;
 		static ViewportPanel* m_Instance;
 

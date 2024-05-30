@@ -285,6 +285,10 @@ namespace Cober {
         {
 			if (ImGui::IsMouseDown(ImGuiMouseButton_Right)) 
             {
+				if (!m_SelectionContext.HasComponent<CameraComponent>()) 
+                {
+					m_SelectionContext.AddComponent<CameraComponent>();
+				}
 				if (!m_SelectionContext.HasComponent<Rigidbody2D>()) 
                 {
 					m_SelectionContext.AddComponent<Rigidbody2D>();
@@ -328,6 +332,7 @@ namespace Cober {
 
 		if (ImGui::BeginPopup("AddComponent")) 
 		{
+			AddIfHasComponent<CameraComponent>((std::string)ComponentNames::Camera);
 			AddIfHasComponent<Rigidbody2D>((std::string)ComponentNames::Rigidbody2D);
 			AddIfHasComponent<BoxCollider2D>((std::string)ComponentNames::Box2DCollider);
 			AddIfHasComponent<CircleCollider2D>((std::string)ComponentNames::Circle2DCollider);
@@ -351,7 +356,46 @@ namespace Cober {
 				component.rotation = glm::radians(rotation);
 				DrawVec3Control("Scale", component.scale, 1.0f);
 			});
-	
+
+		DrawComponent<CameraComponent>((std::string)ComponentNames::Camera, entity, [](auto& component)
+			{
+				// DrawVec3Control("Focal Point", component.focalPoint);
+				if (ImGui::DragFloat("Distance", &component.distance, 0.1, 0.0f, 100.0f))
+					component.camera->GetSettings().distance = component.distance;
+
+				if (ImGui::DragInt("Width", &component.width, 1, 1))
+					component.camera->GetSettings().width = component.width;
+
+				if (ImGui::DragInt("Height", &component.height, 1, 1))
+					component.camera->GetSettings().height = component.height;
+
+				if (ImGui::DragFloat("Near Clip", &component.nearClip, 10.0f, 0.0f, 1000.0f))
+					component.camera->GetSettings().nearClip = component.nearClip;
+
+				if (ImGui::DragFloat("Far Clip", &component.farClip, 10.0f, 0.0f, 1000.0f))
+					component.camera->GetSettings().farClip = component.farClip;
+
+				if (ImGui::DragFloat("Fov", &component.fov, 0.01f, 0.0f, 90.0f))
+					component.camera->GetSettings().fov = component.fov;
+
+				if (ImGui::Checkbox("Perspective", &component.perspective))
+				{
+					component.camera->GetSettings().perspectiveProjection = component.perspective;
+				    component.camera->SetViewportSize(component.width, component.height);
+					ViewportPanel::Get().ResizeViewport(component.camera);
+				}
+					
+				if (ImGui::Checkbox("Main Camera", &component.mainCamera))
+				{
+					component.camera->SetMainCamera(component.mainCamera);
+
+					if (component.mainCamera)
+						Editor::SetMainCamera(component.camera);
+					else
+						Editor::SetMainCamera(Editor::GetEditorCamera());
+				}
+				ImGui::Checkbox("Debug", &component.debug);
+			});
 
 		DrawComponent<Rigidbody2D>((std::string)ComponentNames::Rigidbody2D, entity, [](auto& component)
 			{

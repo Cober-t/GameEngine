@@ -9,7 +9,6 @@
 
 namespace Cober {
 
-
 	struct CameraSettings
 	{
 		float aspectRatio = 1.7f;
@@ -43,7 +42,14 @@ namespace Cober {
 
 		virtual void OnUpdate(Unique<Timestep>& ts) = 0;
 		virtual void OnEvent(Event& event) = 0;
+		virtual void SetViewportSize(float width, float height) = 0;
 
+		bool IsMainCamera(){ return m_IsMainCamera; }
+		void SetMainCamera(bool main){ m_IsMainCamera = main ; }
+		bool& IsPerspective() { return m_CameraSettings.perspectiveProjection; }
+
+		CameraSettings& GetSettings() { return m_CameraSettings; }
+		CameraSettings GetSettings() const { return m_CameraSettings; }
 		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
 		void SetViewMatrix(glm::mat4& viewMatrix) { m_ViewMatrix = viewMatrix; }
 		const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
@@ -72,6 +78,9 @@ namespace Cober {
 	private:
 		glm::mat4 m_ViewMatrix = glm::mat4(1.0f);
 		glm::mat4 m_ProjectionMatrix = glm::mat4(1.0f);
+		bool m_IsMainCamera = false;
+
+		CameraSettings m_CameraSettings;
 	};
 }
 

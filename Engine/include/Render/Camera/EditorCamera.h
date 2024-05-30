@@ -20,28 +20,16 @@ namespace Cober {
 		void OnUpdate(Unique<Timestep>& ts) override;
 		void OnEvent(Event& event) override;
 
-		void SetViewportSize(float width, float height);
+		void SetViewportSize(float width, float height) override;
 
 		bool IsActive() const { return m_IsActive; }
 		void SetActive(bool active) { m_IsActive = active; }
-		CameraSettings& GetSettings() { return m_EditorCamera; }
-		bool& IsPerspective() { return m_EditorCamera.perspectiveProjection; }
-
-		// const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
-		// glm::mat4 GetViewProjection() const { return GetProjectionMatrix() * m_ViewMatrix; }
 
 		glm::quat GetOrientation() const;
 		glm::vec3 GetUpDirection() const;
 		glm::vec3 GetRightDirection() const;
 		glm::vec3 GetForwardDirection() const;
 
-		const glm::vec3& GetFocalPoint() const { return m_EditorCamera.focalPoint; }
-		inline float GetDistance() const { return m_EditorCamera.distance; }
-
-		const glm::vec3& GetPosition() const { return m_EditorCamera.position; }
-		inline float GetPitch() const 	{ return m_EditorCamera.pitch; }
-		inline float GetYaw() const 	{ return m_EditorCamera.yaw; }
-		inline float GetRoll() const 	{ return m_EditorCamera.roll; }
 		float GetCameraSpeed() const;
 
 	private:
@@ -60,8 +48,6 @@ namespace Cober {
 		float ZoomSpeed() const;
 
 	private:
-		CameraSettings m_EditorCamera;
-
 		glm::vec2 m_InitialMousePosition = { 0.0f, 0.0f };
 
 		bool m_IsActive = true;

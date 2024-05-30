@@ -5,12 +5,14 @@ namespace Cober {
 
 	static Ref<Scene> m_ActiveScene;
 	static Ref<Scene> m_EditorScene;
+	static Ref<Camera> m_CameraActive;
+	static Ref<EditorCamera> m_EditorCamera;
 	static Entity m_SelectedEntity;
 
 	Editor::Editor() : Layer("Editor")
 	{
 		m_EditorCamera = CreateUnique<EditorCamera>(45.0f, EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight(), 0.01f, 1000.0f);
-		m_EditorCamera->SetActive(true);
+		m_CameraActive = m_EditorCamera;
 
 		EditorResources::Init();
 
@@ -55,8 +57,7 @@ namespace Cober {
 
 	void Editor::OnUpdate(Unique<Timestep>& ts) 
 	{
-		bool projectMode = false;
-		ViewportPanel::Get().ResizeViewport(m_EditorCamera, projectMode);
+		ViewportPanel::Get().ResizeViewport(m_CameraActive);
 		ViewportPanel::Get().BindFramebuffer();
 		// ViewportPanel::Get().RenderSkybox();
 
@@ -75,8 +76,7 @@ namespace Cober {
 			{
 				colors[ImGuiCol_WindowBg] = ImGui::ColorConvertU32ToFloat4(Colors::Theme::titlebar);
 				m_EditorCamera->SetActive(ViewportPanel::Get().AllowViewportCameraEvents());
-				m_EditorCamera->OnUpdate(ts);
-				m_ActiveScene->OnUpdateRuntime(ts, m_EditorCamera);
+				m_ActiveScene->OnUpdateRuntime(ts, m_CameraActive);
 				// Commented because of a problem with the framebuffer and camera depth
 				// Primitive::Grid::Draw(m_EditorCamera);
 				break;
@@ -84,7 +84,7 @@ namespace Cober {
 			case EngineApp::GameState::RUNTIME_EDITOR: 
 			{
 				colors[ImGuiCol_WindowBg] = ImVec4(0, 0.0, 0.0, 0.268f);
-				m_ActiveScene->OnUpdateSimulation(ts, m_EditorCamera);
+				m_ActiveScene->OnUpdateSimulation(ts, m_CameraActive);
 				break;
 			}
 		}
@@ -253,6 +253,11 @@ namespace Cober {
 		return m_EditorScene;
 	}
 
+	Ref<EditorCamera>& Editor::GetEditorCamera()
+	{
+		return m_EditorCamera;
+	}
+
 
 	Entity& Editor::SelectedEntity()
 	{
@@ -275,5 +280,20 @@ namespace Cober {
 	void Editor::SetSelectedEntity(Entity& entity)
 	{
 		m_SelectedEntity = entity;
+	}
+
+	Ref<Camera>& Editor::GetActiveCamera()
+	{
+		return m_CameraActive;
+	}
+
+	void Editor::SetMainCamera(Ref<Camera>& camera)
+	{
+		m_CameraActive = camera;
+	}
+
+	void Editor::SetMainCamera(Ref<EditorCamera>& camera)
+	{
+		m_CameraActive = camera;
 	}
 }

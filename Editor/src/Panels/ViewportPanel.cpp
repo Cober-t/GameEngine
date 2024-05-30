@@ -106,7 +106,7 @@ namespace Cober {
 	}
 
 
-	void ViewportPanel::ResizeViewport(Ref<EditorCamera> editorCamera, bool& game2D) 
+	void ViewportPanel::ResizeViewport(Ref<Camera> editorCamera) 
     {
 		FramebufferSpecification spec = m_Fbo->GetSpecification();
 		if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
@@ -116,7 +116,7 @@ namespace Cober {
 		}
 	}
 
-	void ViewportPanel::ResizeFramebufferSpecification(Ref<EditorCamera> editorCamera, uint32_t width, uint32_t height)
+	void ViewportPanel::ResizeFramebufferSpecification(Ref<Camera> editorCamera, uint32_t width, uint32_t height)
 	{
 		// FIS THIS!! Performance issue
 		m_Fbo->Resize(width, height);
@@ -124,7 +124,7 @@ namespace Cober {
 	}
 
 
-	void ViewportPanel::OnGuiRender(Ref<EditorCamera> editorCamera) 
+	void ViewportPanel::OnGuiRender(Ref<Camera> editorCamera) 
     {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
@@ -203,7 +203,7 @@ namespace Cober {
 
 		///////////////////////////////////
 		// Export to DragDropViewportTarget
-		if (ImGui::BeginDragDropTarget()) 
+		if (ImGui::BeginDragDropTarget())
 		{
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) 
 			{
@@ -230,7 +230,9 @@ namespace Cober {
 
 		///////////////////////////////
 		//Gizmos
-		if (Editor::SelectedEntity() && m_GizmoType != -1)
+		if (Editor::SelectedEntity() && 
+			m_GizmoType != -1 		 && 
+			dynamic_cast<EditorCamera*>(Editor::GetActiveCamera().get()) != nullptr) // Camera type must be "EditorCamera"
 		{
 			ImGuizmo::SetOrthographic(!editorCamera->IsPerspective());
 			ImGuizmo::SetDrawlist();

@@ -33,10 +33,15 @@ namespace Cober {
 
 		static Ref<Scene>& GetActiveScene();
 		static Ref<Scene>& GetEditorScene();
+		static Ref<EditorCamera>& GetEditorCamera();
 		static Entity& SelectedEntity();
 		static void SetActiveScene(Ref<Scene>& scene);
 		static void SetEditorScene(Ref<Scene>& scene);
 		static void SetSelectedEntity(Entity& entity = Entity());
+
+		static Ref<Camera>& GetActiveCamera();
+		static void SetMainCamera(Ref<Camera>& entity);
+		static void SetMainCamera(Ref<EditorCamera>& entity);
 
 	private:
 		void InitDockspace();
@@ -44,7 +49,6 @@ namespace Cober {
 		bool OnKeyPressed(KeyPressedEvent& event);
 
 	private:
-		Ref<EditorCamera> m_EditorCamera;
 		Ref<Framebuffer> m_Fbo;
 		bool m_AllowViewportCameraEvents;
 

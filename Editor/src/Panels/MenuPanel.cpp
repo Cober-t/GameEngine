@@ -135,18 +135,21 @@ namespace Cober {
 			ImGui::InputInt("Physics Position Iterations", &Physics2D::GetSettings().PositionIterations);
 
 			ImGui::SetNextItemWidth(120.0f);
-			if (ImGui::Checkbox(ICON_FA_CAMERA  "  Camera Type", &editorCamera->IsPerspective()))
+			if (ImGui::Checkbox(ICON_FA_CAMERA  "  Camera Perspective", &editorCamera->IsPerspective()))
 			{
-				if (editorCamera->IsPerspective() == false)
+				if (editorCamera->IsMainCamera())
 				{
-					editorCamera->GetSettings().focalPoint = glm::vec3(0.0f, 0.0f, -1.0f);
-					editorCamera->GetSettings().yaw = 0.0f;
-					editorCamera->GetSettings().pitch = 0.0;
-					editorCamera->GetSettings().roll = 0.0f;
+					if (editorCamera->IsPerspective() == false)
+					{
+						editorCamera->GetSettings().focalPoint = glm::vec3(0.0f, 0.0f, -1.0f);
+						editorCamera->GetSettings().yaw = 0.0f;
+						editorCamera->GetSettings().pitch = 0.0;
+						editorCamera->GetSettings().roll = 0.0f;
+					}
+						
+					editorCamera->SetViewportSize(editorCamera->GetSettings().width,
+												editorCamera->GetSettings().height);
 				}
-					
-				editorCamera->SetViewportSize(editorCamera->GetSettings().width,
-											  editorCamera->GetSettings().height);
 			}
 
 			if (ImGui::Checkbox(ICON_FA_CODE  "  Debug Mode", &EngineApp::Get().IsDebugMode()))

@@ -5,8 +5,6 @@
 #include "Core/UUID.h"
 #include "Core/Utils.h"
 
-#include "Render/Camera/GameCamera.h"
-
 #include "Scene/Components.h"
 
 #include <entt/entt.hpp>
@@ -34,8 +32,8 @@ namespace Cober {
 		void OnSimulationStart();
 		void OnSimulationStop();
 
-		void OnUpdateRuntime(Unique<Timestep>& ts, const Ref<Camera>& camera);
-		void OnUpdateSimulation(Unique<Timestep>& ts, const Ref<Camera>& camera);
+		void OnUpdateRuntime(Unique<Timestep>& ts, Ref<Camera>& camera);
+		void OnUpdateSimulation(Unique<Timestep>& ts, Ref<Camera>& camera);
 
 		template<typename... Components>
 		inline auto GetAllEntitiesWith() { return m_Registry.view<Components...>(); }

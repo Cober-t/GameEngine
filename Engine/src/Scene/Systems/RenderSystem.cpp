@@ -22,7 +22,7 @@ namespace Cober {
 	}
 
 
-	void RenderSystem::Update(Unique<Timestep>& ts, const Ref<Camera>& camera, Scene* scene)
+	void RenderSystem::Update(const Ref<Camera>& camera, Scene* scene)
 	{
 		Render2D::ResetStats();
 		Render2D::BeginScene(camera);

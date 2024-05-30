@@ -41,6 +41,21 @@ namespace Cober {
 			entityToBeSaved["TransformComponent"]["rotation"].SetVec3(transform.rotation);
 			entityToBeSaved["TransformComponent"]["scale"].SetVec3(transform.scale);
 
+			if (entity.HasComponent<CameraComponent>()) 
+            {
+				auto& camera = entity.GetComponent<CameraComponent>();
+				entityToBeSaved["CameraComponent"]["focalPoint"].SetVec3(camera.focalPoint);
+				entityToBeSaved["CameraComponent"]["distance"].SetReal(camera.distance);
+				entityToBeSaved["CameraComponent"]["width"].SetInt(camera.width);
+				entityToBeSaved["CameraComponent"]["height"].SetInt(camera.height);
+				entityToBeSaved["CameraComponent"]["nearClip"].SetReal(camera.nearClip);
+				entityToBeSaved["CameraComponent"]["farClip"].SetReal(camera.farClip);
+				entityToBeSaved["CameraComponent"]["fov"].SetReal(camera.fov);
+				entityToBeSaved["CameraComponent"]["perspective"].SetInt(camera.perspective);
+				entityToBeSaved["CameraComponent"]["mainCamera"].SetInt(camera.mainCamera);
+				entityToBeSaved["CameraComponent"]["debug"].SetInt(camera.debug);
+			}
+
 			if (entity.HasComponent<Rigidbody2D>()) 
             {
 				auto& rb2d = entity.GetComponent<Rigidbody2D>();
@@ -184,6 +199,35 @@ namespace Cober {
 					newEntity.GetComponent<TransformComponent>().position = loader["TransformComponent"]["position"].GetVec3();
 					newEntity.GetComponent<TransformComponent>().rotation = loader["TransformComponent"]["rotation"].GetVec3();
 					newEntity.GetComponent<TransformComponent>().scale = loader["TransformComponent"]["scale"].GetVec3();
+							
+					if (loader.HasProperty("CameraComponent")) 
+					{
+						auto camera = loader["CameraComponent"];
+						newEntity.AddComponent<CameraComponent>();
+						newEntity.GetComponent<CameraComponent>().focalPoint = camera["focalPoint"].GetVec3();
+						newEntity.GetComponent<CameraComponent>().distance = camera["distance"].GetReal();
+						newEntity.GetComponent<CameraComponent>().width = camera["width"].GetInt();
+						newEntity.GetComponent<CameraComponent>().height = camera["height"].GetInt();
+
+						newEntity.GetComponent<CameraComponent>().nearClip = camera["nearClip"].GetReal();
+						newEntity.GetComponent<CameraComponent>().farClip = camera["farClip"].GetReal();
+						newEntity.GetComponent<CameraComponent>().fov = camera["fov"].GetReal();
+
+						newEntity.GetComponent<CameraComponent>().perspective = camera["perspective"].GetInt();
+						newEntity.GetComponent<CameraComponent>().debug = camera["debug"].GetInt();
+
+						// Types of cameras in the future and Specification
+						// newEntity.GetComponent<CameraComponent>().camera = CreateRef<GameCamera>(
+						// 		camera["fov"].GetReal(),
+						// 		camera["width"].GetReal(),
+						// 		camera["height"].GetReal(),
+						// 		camera["nearClip"].GetReal(),
+						// 		camera["farClip"].GetReal()
+						// 	);
+
+						newEntity.GetComponent<CameraComponent>().mainCamera = camera["mainCamera"].GetInt();
+						// newEntity.GetComponent<CameraComponent>().camera->SetMainCamera(camera["mainCamera"].GetInt());
+					}
 
 					if (loader.HasProperty("Rigidbody2D")) 
 					{

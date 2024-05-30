@@ -26,22 +26,22 @@ namespace Cober {
 		const char* BuildValues[3]	= { "Windows", "Linux", "Web" };	// Add paths to makefiles instead platform names
 
 		const char* CurrentBuildOption = "Empty";
-		const char* ScreenValues[6] = {
-			{  "640 x 480"  },
-			{  "800 x 400"  },
-			{ "1280 x 720"  },
-			{ "1366 x 768"  },
-			{ "1920 x 1080" },
-			{ "2560 x 1440" }
-		};
-		glm::vec2 VPSize[6] = { 
-            {1, 30}, 
-            {800, 400}, 
-            {1280, 720}, 
-            {1366, 768}, 
-            {1920, 1080}, 
-            {2560, 1440} 
-        };
+		// const char* ScreenValues[6] = {
+		// 	{  "640 x 480"  },
+		// 	{  "800 x 400"  },
+		// 	{ "1280 x 720"  },
+		// 	{ "1366 x 768"  },
+		// 	{ "1920 x 1080" },
+		// 	{ "2560 x 1440" }
+		// };
+		// glm::vec2 VPSize[6] = { 
+        //     {1, 30}, 
+        //     {800, 400}, 
+        //     {1280, 720}, 
+        //     {1366, 768}, 
+        //     {1920, 1080}, 
+        //     {2560, 1440} 
+        // };
 	};
 
 	

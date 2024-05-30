@@ -16,6 +16,7 @@
 
 #include "Core/Core.h"
 #include "Render/Texture.h"
+#include "Render/Camera/GameCamera.h"
 #include "Render/Text/Font.h"
 
 namespace Cober {
@@ -62,6 +63,47 @@ namespace Cober {
 		TagComponent() = default;
 		TagComponent(const TagComponent&) = default;;
 		TagComponent(const std::string& tag) : tag(tag) {};
+	};
+
+
+	struct CameraComponent
+    {
+		glm::vec3 focalPoint	= { 0.0f, 0.0f, 0.0f };
+		float distance	= 5.0f;
+		int width = 1280;
+		int height = 720;
+		float nearClip = 0.01f;
+		float farClip = 1000.0f;
+		float fov = 45.0f;
+
+		bool perspective = true;
+		bool mainCamera = false;
+		bool debug = true;
+		Ref<Camera> camera = CreateRef<GameCamera>(45.0f, width, height, 0.01f, 1000.0f);
+
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
+		CameraComponent(float f, int w, int h)
+		 : fov(f), width(w), height(h) 
+		{
+		}
+
+		void UpdateCameraValues()
+		{
+			camera->GetSettings().width = width;
+			camera->GetSettings().height = height;
+
+   			camera->GetSettings().focalPoint = focalPoint;
+			camera->GetSettings().distance = distance;
+			
+			camera->GetSettings().nearClip = nearClip;
+			camera->GetSettings().farClip = farClip;
+			camera->GetSettings().fov = fov;
+			
+			camera->GetSettings().perspectiveProjection = perspective;
+		}
+
+		void SetMain(bool isMain) { mainCamera = isMain; }
 	};
 
 
@@ -228,7 +270,7 @@ namespace Cober {
 	{
 	};
 
-	using AllComponents = ComponentGroup<TransformComponent,
+	using AllComponents = ComponentGroup<TransformComponent, CameraComponent,
 		Render2DComponent,
 		AudioComponent,
 		TextComponent,

@@ -4,6 +4,7 @@
 #include "Scene/ECS.h"
 #include "Scene/Components.h"
 #include "Scene/SceneSerializer.h"
+#include "Scene/Systems/CameraSystem.h"
 #include "Scene/Systems/RenderSystem.h"
 #include "Scene/Systems/PhysicsSystem2D.h"
 #include "Scene/Systems/ScriptSystem.h"
@@ -150,11 +151,13 @@ namespace Cober {
 
 	void Scene::OnSimulationStart()
 	{
+		AddSystem<CameraSystem>();
 		AddSystem<RenderSystem>();
 		AddSystem<PhysicsSystem2D>();
 		AddSystem<ScriptSystem>();
 		AddSystem<AudioSystem>();
 
+		GetSystem<CameraSystem>().Start(this);
         GetSystem<RenderSystem>().Start();
 		GetSystem<PhysicsSystem2D>().Start(this);
 		GetSystem<ScriptSystem>().Start(this);
@@ -166,29 +169,35 @@ namespace Cober {
 	{
 		RemoveSystem<PhysicsSystem2D>();
 		RemoveSystem<RenderSystem>();
+		RemoveSystem<CameraSystem>();
+		RemoveSystem<AudioSystem>();
+
 		GetSystem<ScriptSystem>().FreeScripts(this);
 		RemoveSystem<ScriptSystem>();
-		RemoveSystem<AudioSystem>();
 	}
 
 
 	void Scene::OnRuntimeStart()
 	{
+		AddSystem<CameraSystem>();
 		AddSystem<RenderSystem>();
 
+		GetSystem<CameraSystem>().Start(this);
         GetSystem<RenderSystem>().Start();
 	}
 
 
     void Scene::OnRuntimeStop()
 	{
+		RemoveSystem<CameraSystem>();
 		RemoveSystem<RenderSystem>();
 	}
 
 
-	void Scene::OnUpdateSimulation(Unique<Timestep>& ts, const Ref<Camera>& camera)
+	void Scene::OnUpdateSimulation(Unique<Timestep>& ts, Ref<Camera>& camera)
 	{
-		GetSystem<RenderSystem>().Update(ts, camera, this);
+		GetSystem<CameraSystem>().Update(ts, camera, this);
+		GetSystem<RenderSystem>().Update(camera, this);
 
 		if (!m_IsPaused || m_StepFrames-- > 0.0f)
 		{
@@ -204,9 +213,10 @@ namespace Cober {
 	}
 
 
-	void Scene::OnUpdateRuntime(Unique<Timestep>& ts, const Ref<Camera>& camera)
+	void Scene::OnUpdateRuntime(Unique<Timestep>& ts, Ref<Camera>& camera)
 	{	
-		GetSystem<RenderSystem>().Update(ts, camera, this);
+		GetSystem<CameraSystem>().Update(ts, camera, this);
+		GetSystem<RenderSystem>().Update(camera, this);
 	}
 
 
