@@ -14,7 +14,7 @@ void Game::OnAttach()
 }
 
 
-void Game::OnDetach() 
+void Game::OnDetach()
 {
 	m_ActiveScene->OnSimulationStop();
 	m_ActiveScene = nullptr;

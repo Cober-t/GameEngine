@@ -55,13 +55,13 @@ namespace Cober {
 		template<typename T, typename ...TArgs> 			
         void AddSystem(TArgs&& ...args);
 
-		template<typename T>		
+		template<typename T>
         void RemoveSystem();
 
-		template<typename T>		
+		template<typename T>
         bool HasSystem() const;
 
-		template<typename T>		
+		template<typename T>
         T& GetSystem() const;
 
         std::map<std::type_index, Ref<System>> GetSystems() { return m_Systems; }

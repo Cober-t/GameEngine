@@ -30,6 +30,7 @@ namespace Cober {
 	void Editor::OnAttach() 
 	{
 		m_ActiveScene = Scene::Load(EngineApp::Get().GetSpecification().LastScene);
+		m_CameraActive->SetViewportSize(m_CameraActive->GetSettings().width, m_CameraActive->GetSettings().height);
 
 		m_ActiveScene->OnRuntimeStart();
 		m_EditorScene = m_ActiveScene;
@@ -299,7 +300,7 @@ namespace Cober {
 	void Editor::SetMainCamera(Ref<EditorCamera>& camera)
 	{
 		m_EditorCamera->SetMainCamera(false);
-		
+
 		m_CameraActive = camera;
 		m_CameraActive->SetMainCamera(true);
 	}

@@ -24,47 +24,38 @@ namespace Cober {
 	{
 		auto view = scene->GetAllEntitiesWith<TransformComponent, TagComponent, CameraComponent>();
 
-        if (view.size_hint() > 0)
+        for (auto& entt : view)
         {
-            for (auto& entt : view)
+            Entity entity = Entity((entt::entity)entt, scene );
+
+            auto& cameraComponent = entity.GetComponent<CameraComponent>();
+            auto& transformComponent = entity.GetComponent<TransformComponent>();
+            auto& gameCamera = cameraComponent.camera;
+
+            // if (cameraComponent.debug)
+            // {
+            //     Render2D::DrawRect(transformComponent.position, transformComponent.rotation,
+            //                         cameraComponent.width, cameraComponent.height, entity);
+            // }
+
+            if (gameCamera && cameraComponent.mainCamera)
             {
-                Entity entity = Entity((entt::entity)entt, scene );
+                auto& cameraSettings = gameCamera->GetSettings();
+                
+                cameraSettings.focalPoint = transformComponent.position;
+                cameraSettings.yaw = transformComponent.rotation.y;
+                cameraSettings.pitch = -transformComponent.rotation.x;
+                cameraSettings.roll = transformComponent.rotation.z;
 
-                auto& cameraComponent = entity.GetComponent<CameraComponent>();
-                auto& transformComponent = entity.GetComponent<TransformComponent>();
-                auto& gameCamera = cameraComponent.camera;
+                // Handle a list of cameras in the future to avoid return
+                defaultCamera = cameraComponent.camera;
+                cameraComponent.camera->OnUpdate(ts);
 
-                if (cameraComponent.debug)
-                {
-                    Render2D::DrawRect(transformComponent.position, transformComponent.rotation,
-                                        cameraComponent.width, cameraComponent.height, entity);
-                }
-
-                if (gameCamera && cameraComponent.mainCamera)
-                {
-                    auto& cameraSettings = gameCamera->GetSettings();
-                    
-                    cameraSettings.focalPoint = transformComponent.position;
-                    cameraSettings.yaw = transformComponent.rotation.y;
-                    cameraSettings.pitch = -transformComponent.rotation.x;
-                    cameraSettings.roll = transformComponent.rotation.z;
-
-                    // Handle a list of cameras in the future to avoid return
-                    defaultCamera = cameraComponent.camera;
-                    cameraComponent.camera->OnUpdate(ts);
-
-                    return;
-                }
+                return;
             }
         }
 
         // If the future list of cameras is not empty render the default camera
         defaultCamera->OnUpdate(ts);
 	}
-
-
-    // void CameraSystem::UpdateSimulation(Unique<Timestep>& ts, const Ref<Camera>& defaultCamera, Scene* scene)
-    // {
-    //     defaultCamera->OnUpdate(ts);
-    // }
 }

@@ -117,11 +117,10 @@ namespace Cober {
 	}
 
 
-	void Render2D::DrawRect(glm::vec3 position, glm::vec3 rotation, float width, float height, Entity& entityID, glm::vec4 color)
-	{
-		Primitive::Quad::DrawRect(position, rotation, width, height, entityID, color);
-	}
-
+	// void Render2D::DrawRect(glm::vec3 position, glm::vec3 rotation, float width, float height, Entity& entityID, glm::vec4 color)
+	// {
+	// 	Primitive::Quad::DrawRect(position, rotation, width, height, entityID, color);
+	// }
 
 
 	void Render2D::DrawLine(Entity& entity) 

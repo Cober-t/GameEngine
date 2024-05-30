@@ -78,7 +78,8 @@ namespace Cober {
 	private:
 		glm::mat4 m_ViewMatrix = glm::mat4(1.0f);
 		glm::mat4 m_ProjectionMatrix = glm::mat4(1.0f);
-		bool m_IsMainCamera = false;
+		// This must be true to SetViewportSize on Camera Init
+		bool m_IsMainCamera = true;
 
 		CameraSettings m_CameraSettings;
 	};
