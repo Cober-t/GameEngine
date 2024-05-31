@@ -95,7 +95,7 @@ public:
 	void OnEvent(Event& event) override;
 private:
 	Ref<Scene> m_ActiveScene;
-	Ref<GameCamera> m_Camera;
+	Ref<Camera> m_Camera;
 }};
 
 #endif

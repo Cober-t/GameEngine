@@ -75,9 +75,12 @@ namespace Cober {
 		}
 		else
 		{
-			m_GameCamera.aspectRatio = (float)width / (float)height;
-			SetOrthoProjectionMatrix(m_GameCamera.aspectRatio * m_GameCamera.distance, // Left
-									 m_GameCamera.aspectRatio * m_GameCamera.distance,// Right
+			// m_GameCamera.aspectRatio = (float)width / (float)height;
+			float screenWidth = EngineApp::Get().GetWindow().GetWidth();
+			float screenHeight = EngineApp::Get().GetWindow().GetHeight();
+			float aspectRatio = screenWidth / screenHeight; 
+			SetOrthoProjectionMatrix(screenWidth * 0.001 * m_GameCamera.distance, // Left
+									 screenWidth * 0.001 * m_GameCamera.distance,// Right
 									 m_GameCamera.distance,	// Bottom 
 									 m_GameCamera.distance,	// Top
 									 m_GameCamera.nearClip, m_GameCamera.farClip);

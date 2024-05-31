@@ -215,7 +215,7 @@ namespace Cober {
 						newEntity.GetComponent<CameraComponent>().debug = camera["debug"].GetInt();
 
 						newEntity.GetComponent<CameraComponent>().mainCamera = camera["mainCamera"].GetInt();
-						newEntity.GetComponent<CameraComponent>().camera->SetMainCamera(camera["mainCamera"].GetInt());
+						newEntity.GetComponent<CameraComponent>().UpdateCameraValues();
 						newEntity.GetComponent<CameraComponent>().camera->SetViewportSize(camera["width"].GetInt(), camera["height"].GetInt());
 					}
 

@@ -361,22 +361,44 @@ namespace Cober {
 			{
 				// DrawVec3Control("Focal Point", component.focalPoint);
 				if (ImGui::DragFloat("Distance", &component.distance, 0.1, 0.0f, 100.0f))
+				{
 					component.camera->GetSettings().distance = component.distance;
+					component.camera->SetViewportSize(component.width, component.height);
+					ViewportPanel::Get().MustResize();
+				}
 
 				if (ImGui::DragInt("Width", &component.width, 1, 1))
+				{
 					component.camera->GetSettings().width = component.width;
+					component.camera->SetViewportSize(component.width, component.height);
+				}
 
 				if (ImGui::DragInt("Height", &component.height, 1, 1))
+				{
 					component.camera->GetSettings().height = component.height;
+					component.camera->SetViewportSize(component.width, component.height);
+				}
 
 				if (ImGui::DragFloat("Near Clip", &component.nearClip, 10.0f, 0.0f, 1000.0f))
+				{
 					component.camera->GetSettings().nearClip = component.nearClip;
+					component.camera->SetViewportSize(component.width, component.height);
+					ViewportPanel::Get().MustResize();
+				}
 
 				if (ImGui::DragFloat("Far Clip", &component.farClip, 10.0f, 0.0f, 1000.0f))
-					component.camera->GetSettings().farClip = component.farClip;
+				{
+					component.camera->GetSettings().nearClip = component.nearClip;
+					component.camera->SetViewportSize(component.width, component.height);
+					ViewportPanel::Get().MustResize();
+				}
 
 				if (ImGui::DragFloat("Fov", &component.fov, 0.01f, 0.0f, 90.0f))
+				{
 					component.camera->GetSettings().fov = component.fov;
+					component.camera->SetViewportSize(component.width, component.height);
+					ViewportPanel::Get().MustResize();
+				}
 
 				if (ImGui::Checkbox("Perspective", &component.perspective))
 				{

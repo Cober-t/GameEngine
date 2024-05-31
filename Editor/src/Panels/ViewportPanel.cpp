@@ -130,17 +130,8 @@ namespace Cober {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
 
-		//if (ImGui::IsMouseClicked(0) && ImGui::IsWindowHovered() && !ImGuizmo::IsOver() && !Input::IsKeyDown(KeyCode::LeftAlt))
-		//{
-			//LOG_INFO("Mouse clicked imgui event!!");
-			//scene->SetDefaultEntity(hoveredEntity);
-			//SceneHierarchyPanel::Get().SetNullEntityContext();
-		//}
-
-		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-
 		// Hovered Entity
+		auto viewportPanelSize = ImGui::GetContentRegionAvail();
 		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
 		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
 		auto viewportOffset = ImGui::GetWindowPos();
@@ -153,6 +144,42 @@ namespace Cober {
 		m_ViewportFocused = ImGui::IsWindowFocused();
 		m_ViewportHovered = ImGui::IsWindowHovered();
 		EngineApp::Get().GetImGuiLayer()->BlockEvents(!m_ViewportHovered);
+
+		if (dynamic_cast<GameCamera*>(Editor::GetActiveCamera().get()) != nullptr)
+		{
+			float screenWidth  = EngineApp::Get().GetWindow().GetWidth();
+			float screenHeight = EngineApp::Get().GetWindow().GetHeight();
+
+			viewportPanelSize = ImGui::GetContentRegionAvail();
+			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+			
+			if (viewportPanelSize.x >= viewportPanelSize.y)
+				m_ViewportSize = { m_ViewportSize.y * screenWidth / screenHeight  , m_ViewportSize.y };
+			else if (viewportPanelSize.x < viewportPanelSize.y)
+				m_ViewportSize = { m_ViewportSize.x, m_ViewportSize.x * screenHeight / screenWidth };
+			
+			if (m_ViewportSize.x >= viewportPanelSize.x) 
+			{
+				m_ViewportSize.x = viewportPanelSize.x;
+				m_ViewportSize.y = m_ViewportSize.x * screenHeight / screenWidth;
+				m_ViewportMargin.y = (viewportPanelSize.y - m_ViewportSize.y) / 2;
+				m_ViewportMargin.x = 0.0f;
+			}
+
+			if (m_ViewportSize.y >= viewportPanelSize.y) 
+			{
+				m_ViewportSize.y = viewportPanelSize.y;
+				m_ViewportSize.x = m_ViewportSize.y * screenWidth / screenHeight;
+				m_ViewportMargin.x = (viewportPanelSize.x - m_ViewportSize.x) / 2;
+				m_ViewportMargin.y = 0.0f;
+			}
+		}
+		else
+		{
+			viewportPanelSize = ImGui::GetContentRegionAvail();
+			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+			m_ViewportMargin = { 0.0f, 0.0f };
+		}
 
 		/////////////////////////
 		// Center Viewport Image
