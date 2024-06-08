@@ -1,6 +1,7 @@
 #ifndef CONTENT_BROWSER_PANEL_H
 #define CONTENT_BROWSER_PANEL_H
 
+#include <Engine.h>
 #include "Theme/EditorResources.h"
 #include <filesystem>
 

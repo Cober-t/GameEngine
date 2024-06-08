@@ -1,4 +1,6 @@
 #include <pch.h>
+
+#include "EditorLayer.h"
 #include "Panels/ContentBrowserPanel.h"
 
 #include <imgui/imgui.h>
@@ -34,6 +36,19 @@ namespace Cober {
 	{
 		ImGui::Begin("Content Browser");
 
+		ImRect inner_rect = ImGui::GetCurrentWindow()->InnerRect;
+		if (ImGui::BeginDragDropTargetCustom(inner_rect, ImGui::GetID("##WindowBgArea")))
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ENTITY_TYPE"))
+			{
+				uint64_t uuid;
+				memcpy((uint64_t*)&uuid, payload->Data, sizeof(uint64_t));
+				auto& entity = Editor::GetActiveScene()->GetEntityByUUID(uuid);
+				EntitySerializer::Serialize(entity, entity.GetName() + ".lua");
+				ImGui::EndDragDropTarget();
+			}
+		}
+
 		if (m_CurrentDirectory != m_AssetsPath)
 		{
 			if (ImGui::ImageButton((ImTextureID)m_AssetIconMap["backwards"]->GetRendererID(), ImVec2(18.0f, 18.0f), { 0, 1 }, { 1, 0 }))
@@ -65,6 +80,7 @@ namespace Cober {
 		ImGui::SameLine();
 		ImGui::SliderFloat("Padding", &padding, 0, 32, "%.0f"); // Export to Settings
 		ImGui::PopItemWidth();
+		
 
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 10 });
 
@@ -105,6 +121,13 @@ namespace Cober {
             {
 				const wchar_t* itemPath = relativePath.c_str();
 				ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
+				ImGui::EndDragDropSource();
+			}
+
+			if (ImGui::BeginDragDropSource()) 
+            {
+				const wchar_t* itemPath = relativePath.c_str();
+				ImGui::SetDragDropPayload("CONTENT_BROWSER_PREFAB", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
 				ImGui::EndDragDropSource();
 			}
 

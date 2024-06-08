@@ -228,6 +228,18 @@ namespace Cober {
 			ImGui::EndDragDropTarget();
 		}
 
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_PREFAB")) 
+			{
+				const wchar_t* path = (const wchar_t*)payload->Data;
+				std::filesystem::path prefabPath = std::filesystem::current_path() / "assets" / path;
+				Scene::LoadPrefab(Editor::GetActiveScene().get(), prefabPath.filename().string());
+			}
+			ImGui::EndDragDropTarget();
+		}
+
+
 		///////////////////////////////
 		//Gizmos
 		if (Editor::SelectedEntity() && 

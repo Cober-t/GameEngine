@@ -4,6 +4,7 @@
 #include <b2_world.h>
 #include <b2_contact.h>
 
+#include "Scene/ECS.h"
 #include "Physics/Debug2DPhysics.h"
 
 namespace Cober {
@@ -25,6 +26,9 @@ namespace Cober {
         static void Init();
         static void DebugDraw();
         static void Step();
+        
+        static void InitEntityPhysics(Entity& entity);
+        static void SetBodyType(Entity& entity, BodyType type);
 
         inline static void SetDrawDebug(b2Draw* debugDraw) { m_PhysicsWorld->SetDebugDraw(debugDraw); };
         inline static b2Body* CreateBody(b2BodyDef body) { return m_PhysicsWorld->CreateBody(&body); }

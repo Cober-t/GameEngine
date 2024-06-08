@@ -67,6 +67,12 @@ namespace Cober {
 		for (auto& entity : m_SceneContext->GetSceneEntities()) 
 		{
 			DrawEntityNode(entity);
+			if (ImGui::BeginDragDropSource())
+			{
+				uint64_t id = (uint64_t)entity.GetUUID();
+				ImGui::SetDragDropPayload("ENTITY_TYPE", &id, sizeof(uint64_t));
+				ImGui::EndDragDropSource();
+			}
 		}
 
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) 
@@ -90,7 +96,7 @@ namespace Cober {
 		ImGui::Begin("Properties");
 		if (m_SelectionContext != m_NullEntityContext)
 			DrawComponents(m_SelectionContext);
-
+			
 		ImGui::End();
 	}
 
@@ -250,7 +256,7 @@ namespace Cober {
 
 			if (open) 
 			{
-				uiFunction(component);
+				uiFunction(component, entity);
 				ImGui::TreePop();
 			}
 		}
@@ -348,7 +354,7 @@ namespace Cober {
 			ImGui::EndPopup();
 		}
 
-		DrawComponent<TransformComponent>((std::string)ComponentNames::Transform, entity, [](auto& component)
+		DrawComponent<TransformComponent>((std::string)ComponentNames::Transform, entity, [](auto& component, auto& entity)
 			{
 				DrawVec3Control("Position", component.position);
 				glm::vec3 rotation = glm::degrees(component.rotation);
@@ -357,7 +363,7 @@ namespace Cober {
 				DrawVec3Control("Scale", component.scale, 1.0f);
 			});
 
-		DrawComponent<CameraComponent>((std::string)ComponentNames::Camera, entity, [](auto& component)
+		DrawComponent<CameraComponent>((std::string)ComponentNames::Camera, entity, [](auto& component, auto& entity)
 			{
 				// DrawVec3Control("Focal Point", component.focalPoint);
 				if (ImGui::DragFloat("Distance", &component.distance, 0.1, 0.0f, 100.0f))
@@ -420,7 +426,7 @@ namespace Cober {
 				ImGui::Checkbox("Debug", &component.debug);
 			});
 
-		DrawComponent<Rigidbody2D>((std::string)ComponentNames::Rigidbody2D, entity, [](auto& component)
+		DrawComponent<Rigidbody2D>((std::string)ComponentNames::Rigidbody2D, entity, [](auto& component, auto& entity)
 			{
 				const char* bodyTypeStrings[] = { "Static", "Kinematic", "Dynamic" };
 				const char* currentBodyTypeString = bodyTypeStrings[(int)component.type];
@@ -428,9 +434,10 @@ namespace Cober {
 
 					for (int i = 0; i < 3; i++) {
 						bool isSelected = currentBodyTypeString == bodyTypeStrings[i];
-						if (ImGui::Selectable(bodyTypeStrings[i], isSelected)) {
+						if (ImGui::Selectable(bodyTypeStrings[i], isSelected)) 
+						{
 							currentBodyTypeString = bodyTypeStrings[i];
-							component.type = (BodyType)i;
+							Physics2D::SetBodyType(entity, (BodyType)i);
 						}
 						if (isSelected)
 							ImGui::SetItemDefaultFocus();
@@ -441,7 +448,7 @@ namespace Cober {
 				ImGui::Checkbox("Fixed Rotation", &component.fixedRotation);
 			});
 
-		DrawComponent<BoxCollider2D>((std::string)ComponentNames::Box2DCollider, entity, [](auto& component)
+		DrawComponent<BoxCollider2D>((std::string)ComponentNames::Box2DCollider, entity, [](auto& component, auto& entity)
 			{
 				ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
 				ImGui::DragFloat2("Size", glm::value_ptr(component.size), 1.0f, 1.0f);
@@ -451,7 +458,7 @@ namespace Cober {
 			});
 
 
-		DrawComponent<CircleCollider2D>((std::string)ComponentNames::Circle2DCollider, entity, [](auto& component)
+		DrawComponent<CircleCollider2D>((std::string)ComponentNames::Circle2DCollider, entity, [](auto& component, auto& entity)
 			{
 				ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
 				ImGui::DragFloat("Radius", &component.radius, 0.5f, 0.0f, 100.0f);
@@ -461,7 +468,7 @@ namespace Cober {
 			});
 
 
-		DrawComponent<EdgeCollider2D>("Edge Collider 2D", entity, [](auto& component)
+		DrawComponent<EdgeCollider2D>("Edge Collider 2D", entity, [](auto& component, auto& entity)
 			{
 				ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
 				ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
@@ -469,7 +476,7 @@ namespace Cober {
 			});
 
 
-		DrawComponent<PolygonCollider2D>("Polygon Collider 2D", entity, [](auto& component)
+		DrawComponent<PolygonCollider2D>("Polygon Collider 2D", entity, [](auto& component, auto& entity)
 			{
 				ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
 				ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
@@ -477,7 +484,7 @@ namespace Cober {
 			});
 		
 
-		DrawComponent<Render2DComponent>((std::string)ComponentNames::Render2DShape, entity, [](auto& component)
+		DrawComponent<Render2DComponent>((std::string)ComponentNames::Render2DShape, entity, [](auto& component, auto& entity)
 			{
 				ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
 
@@ -540,7 +547,7 @@ namespace Cober {
 				}
 			});
 
-		DrawComponent<NativeScriptComponent>((std::string)ComponentNames::NativeScript, entity, [](auto& component)
+		DrawComponent<NativeScriptComponent>((std::string)ComponentNames::NativeScript, entity, [](auto& component, auto& entity)
 			{
 				if (m_LoadScripts)
 				{
@@ -585,7 +592,7 @@ namespace Cober {
 				}
 			});
 		
-		DrawComponent<AudioComponent>((std::string)ComponentNames::Audio, entity, [](auto& component)
+		DrawComponent<AudioComponent>((std::string)ComponentNames::Audio, entity, [](auto& component, auto& entity)
 			{
 				char buffer[256];
 				memset(buffer, 0, sizeof(buffer));
@@ -629,7 +636,7 @@ namespace Cober {
 			});
 		
 
-		DrawComponent<TextComponent>((std::string)ComponentNames::Text, entity, [](auto& component)
+		DrawComponent<TextComponent>((std::string)ComponentNames::Text, entity, [](auto& component, auto& entity)
 			{
 				char buffer[256];
 				memset(buffer, 0, sizeof(buffer));

@@ -14,6 +14,7 @@
 namespace Cober {
 
 	class Entity;
+	class ScriptableEntity;
 	class System;
 
 	class CB_API Scene
@@ -49,6 +50,7 @@ namespace Cober {
 		void Pause() { m_IsPaused = m_IsPaused == true ? false : true; };
 		static bool Save(const Ref<Scene>& scene, std::string sceneName = "Scene1");
 		static Ref<Scene> Load(std::string scenePath = "SceneDefault.lua");
+		static Entity LoadPrefab(Scene* currentScene, std::string prefabName = "EntityDefault.lua");
 		static Ref<Scene> Copy(Ref<Scene> scene);
 
 	private:

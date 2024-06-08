@@ -23,6 +23,76 @@ namespace Cober {
 		}
     }
 
+    void Physics2D::InitEntityPhysics(Entity& entity)
+	{
+		auto& transform = entity.GetComponent<TransformComponent>();
+		auto& rb2d = entity.GetComponent<Rigidbody2D>();
+
+		b2BodyDef bodyDef;
+		bodyDef.type = (b2BodyType)rb2d.type;
+		bodyDef.position.Set(transform.position.x, transform.position.y);
+		bodyDef.angle = transform.rotation.z;
+
+		Entity* staticRef = (Entity*)malloc(sizeof(entity));
+		*staticRef = entity;
+		bodyDef.userData.pointer = (uintptr_t)staticRef;
+
+        if (rb2d.runtimeBody)
+            m_PhysicsWorld->DestroyBody((b2Body*)rb2d.runtimeBody);
+            
+		b2Body* body = Physics2D::CreateBody(bodyDef);
+
+		body->SetFixedRotation(rb2d.fixedRotation);
+		rb2d.runtimeBody = body;
+
+		if (entity.HasComponent<BoxCollider2D>()) 
+		{
+			auto& boxEntity = entity.GetComponent<BoxCollider2D>();
+
+			boxEntity.shape.SetAsBox((abs(boxEntity.size.x) * abs(transform.scale.x)), 
+								(abs(boxEntity.size.y) * abs(transform.scale.y)),
+								(b2Vec2(boxEntity.offset.x, boxEntity.offset.y)),
+								0.0f);
+
+			b2FixtureDef fixtureDef;
+			fixtureDef.shape = &boxEntity.shape;
+			fixtureDef.density = boxEntity.density;
+			fixtureDef.friction = boxEntity.friction;
+			fixtureDef.restitution = boxEntity.restitution;
+			body->CreateFixture(&fixtureDef);
+		}
+		else if (entity.HasComponent<CircleCollider2D>())
+		{
+			auto& circleEntity = entity.GetComponent<CircleCollider2D>();
+
+			circleEntity.shape.m_p.Set(circleEntity.offset.x, circleEntity.offset.y);
+			circleEntity.shape.m_radius = transform.scale.x * circleEntity.radius;
+			
+			b2FixtureDef fixtureDef;
+			fixtureDef.shape = &circleEntity.shape;
+			fixtureDef.density = circleEntity.density;
+			fixtureDef.friction = circleEntity.friction;
+			fixtureDef.restitution = circleEntity.restitution;
+			body->CreateFixture(&fixtureDef);
+		}
+	}
+
+
+    void Physics2D::SetBodyType(Entity& entity, BodyType type)
+    {
+        if (entity.HasComponent<Rigidbody2D>())
+        {
+            auto& entityBodyType = entity.GetComponent<Rigidbody2D>().type;
+            if (entityBodyType == type)
+                return;
+
+            entityBodyType = type;
+
+            if (EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR
+                || EngineApp::Get().GetGameState() == EngineApp::GameState::PLAY)
+                Physics2D::InitEntityPhysics(entity);
+        }
+    }
 
     void Physics2D::CreateWorld(const b2World* physicsWorld)
     {

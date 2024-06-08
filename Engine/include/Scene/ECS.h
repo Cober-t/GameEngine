@@ -65,7 +65,7 @@ namespace Cober {
 
 		UUID GetUUID() { return GetComponent<IDComponent>().ID; }
 		Scene* GetScene() { return m_Scene; }
-		const std::string& GetName() { return GetComponent<TagComponent>().tag; }
+		std::string GetName() { return GetComponent<TagComponent>().tag; }
 		const entt::entity GetHandle() { return m_EntityHandle; }
 
 		bool operator==(const Entity& other) const

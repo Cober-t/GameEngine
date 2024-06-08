@@ -48,6 +48,12 @@ namespace Cober {
 		return scene;
 	}
 
+	
+	Entity Scene::LoadPrefab(Scene* currentScene, std::string prefabName) 
+	{
+		return EntitySerializer::Deserialize(currentScene, prefabName);
+	}
+
 
 	template<typename... Component>
 	static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)

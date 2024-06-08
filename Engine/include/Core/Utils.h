@@ -52,9 +52,9 @@ namespace Cober::Utils {
 		}
 
 		// Serializer
-		static bool Write(const DataFile& dataFile, const std::string& fileName, const std::string& indent = "\t", const char listStep = ',');
+		static bool Write(const DataFile& dataFile, const std::filesystem::path& path, const std::string& indent = "\t", const char listStep = ',');
 		// Deserializer
-		static bool Read(DataFile& dataFile, std::string& fileName, const char listStep = ',');
+		static bool Read(DataFile& dataFile, std::filesystem::path& path, const char listStep = ',');
 
 	private:
 		// The "list of strings" that make up a property value
