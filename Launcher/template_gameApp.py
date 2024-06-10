@@ -116,7 +116,6 @@ private:
 void {self.projectName}::OnAttach() 
 {{
 	m_ActiveScene = Scene::Load("SceneDefault.lua");
-	m_ActiveScene->OnSimulationStart();
 }}
 
 

@@ -48,6 +48,12 @@ namespace Cober {
 		return scene;
 	}
 
+
+	const std::unordered_map<UUID, Entity>& Scene::GetEntityMap()
+	{
+		return m_EntityMap;	
+	}
+
 	
 	Entity Scene::LoadPrefab(Scene* currentScene, std::string prefabName) 
 	{
@@ -56,24 +62,24 @@ namespace Cober {
 
 
 	template<typename... Component>
-	static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
+	static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, Entity>& enttMap)
 	{
 		([&]()
 		{
 			auto view = src.view<Component>();
 			for (auto srcEntity : view)
 			{
-				entt::entity dstEntity = enttMap.at(src.get<IDComponent>(srcEntity).ID);
+				Entity dstEntity = enttMap.at(src.get<IDComponent>(srcEntity).ID);
 
 				auto& srcComponent = src.get<Component>(srcEntity);
-				dst.emplace_or_replace<Component>(dstEntity, srcComponent);
+				dst.emplace_or_replace<Component>((entt::entity)dstEntity, srcComponent);
 			}
 		}(), ...);
 	}
 
 
 	template<typename... Component>
-	static void CopyComponent(ComponentGroup<Component...>, entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
+	static void CopyComponent(ComponentGroup<Component...>, entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, Entity>& enttMap)
 	{
 		CopyComponent<Component...>(dst, src, enttMap);
 	}
@@ -106,7 +112,7 @@ namespace Cober {
 
 		auto& srcSceneRegistry = baseScene->m_Registry;
 		auto& dstSceneRegistry = newScene->m_Registry;
-		std::unordered_map<UUID, entt::entity> enttMap;
+		std::unordered_map<UUID, Entity> enttMap;
 
 		// Create entities in new scene
 		auto idView = srcSceneRegistry.view<IDComponent>();
@@ -115,13 +121,37 @@ namespace Cober {
 			UUID uuid = srcSceneRegistry.get<IDComponent>(e).ID;
 			const auto& name = srcSceneRegistry.get<TagComponent>(e).tag;
 			Entity newEntity = newScene->CreateEntityWithUUID(uuid, name);
-			enttMap[uuid] = (entt::entity)newEntity;
+			enttMap[uuid] = newEntity;
 		}
 
 		// Copy components (except IDComponent and TagComponent)
 		CopyComponent(AllComponents{}, dstSceneRegistry, srcSceneRegistry, enttMap);
 
 		return newScene;
+	}
+
+	void Scene::Reload(Scene* sceneToBeReloaded, std::string scenePath)
+	{
+		Ref<Scene> newScene = SceneSerializer::Deserialize(scenePath);
+		auto& srcSceneRegistry = newScene->m_Registry;
+		auto& dstSceneRegistry = sceneToBeReloaded->m_Registry;
+
+		for (auto entt : sceneToBeReloaded->GetAllEntitiesWith<TransformComponent, Rigidbody2D>())
+		{
+			Entity entity = Entity((entt::entity)entt, sceneToBeReloaded );
+			Physics2D::DestroyBody((b2Body*)entity.GetComponent<Rigidbody2D>().runtimeBody);
+		}
+
+		CopyComponent(AllComponents{}, dstSceneRegistry, srcSceneRegistry, sceneToBeReloaded->GetEntityMap());
+
+		for (auto entt : sceneToBeReloaded->GetAllEntitiesWith<TransformComponent, Rigidbody2D>())
+		{
+			Entity entity = Entity((entt::entity)entt, sceneToBeReloaded );
+			Physics2D::InitEntityPhysics(entity);
+		}
+
+		sceneToBeReloaded->GetSystem<ScriptSystem>().FreeScripts(sceneToBeReloaded);
+		sceneToBeReloaded->GetSystem<ScriptSystem>().Start(sceneToBeReloaded);
 	}
 
 

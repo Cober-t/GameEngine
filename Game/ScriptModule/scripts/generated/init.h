@@ -21,6 +21,9 @@ namespace Cober {
 		if (entity.GetComponent<NativeScriptComponent>().className == "TestScript")
 		{
 			entity.AddComponent<TestScript>();
+			entity.GetComponent<TestScript>().entity = entity;
+			entity.GetComponent<TestScript>().scene = scene;
+			entity.GetComponent<TestScript>().OnStart();
 		}
 	}
 
@@ -39,7 +42,7 @@ namespace Cober {
 	{
 		if (entityA->HasComponent<TestScript>())
 			entityA->GetComponent<TestScript>().OnBeginContact(entityB);
-		else if (entityA->HasComponent<TestScript>())
+		else if (entityB->HasComponent<TestScript>())
 			entityB->GetComponent<TestScript>().OnBeginContact(entityA);
 	}
 

@@ -30,6 +30,7 @@ namespace Cober {
 			if (std::filesystem::exists(entity.GetComponent<AudioComponent>().audioPath))
 				Audio::LoadSound(entity.GetComponent<AudioComponent>().audioName);
 		}
+		LOG_INFO("Audio System Started!!");
 	}
 
 	void AudioSystem::Update(Scene* scene)

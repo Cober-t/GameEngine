@@ -10,7 +10,6 @@ Game::Game() : Layer("Game application")
 void Game::OnAttach() 
 {
 	m_ActiveScene = Scene::Load("SceneDefault.lua");
-	m_ActiveScene->OnSimulationStart();
 }
 
 

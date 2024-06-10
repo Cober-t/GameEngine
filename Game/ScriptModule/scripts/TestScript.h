@@ -14,7 +14,7 @@ public:
 	virtual void OnBeginContact(Entity* entityContact) override;
 	
 public:
-	float exampleVariable = 2.8;
+	bool gameStarted = false;
 };
 
 #endif
