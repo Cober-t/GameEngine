@@ -42,8 +42,22 @@ namespace Cober {
 	{
 		Log::ClearLogMessages();
 		Ref<Scene> scene = SceneSerializer::Deserialize(sceneName);
+
 		if (scene)
-			scene->OnRuntimeStart();
+		{
+			switch(EngineApp::Get().GetGameState())
+			{
+				case EngineApp::GameState::EDITOR:
+					scene->OnRuntimeStart(); 
+					break;
+				case EngineApp::GameState::RUNTIME_EDITOR:
+					scene->OnSimulationStart();
+					break;
+				case EngineApp::GameState::PLAY:
+					scene->OnSimulationStart();
+					break;
+			}
+		}
 			
 		return scene;
 	}
@@ -57,7 +71,10 @@ namespace Cober {
 	
 	Entity Scene::LoadPrefab(Scene* currentScene, std::string prefabName) 
 	{
-		return EntitySerializer::Deserialize(currentScene, prefabName);
+		Entity entity = EntitySerializer::Deserialize(currentScene, prefabName);
+		currentScene->m_EntityMap[entity.GetUUID()] = entity;
+
+		return entity;
 	}
 
 
@@ -132,18 +149,33 @@ namespace Cober {
 
 	void Scene::Reload(Scene* sceneToBeReloaded, std::string scenePath)
 	{
-		Ref<Scene> newScene = SceneSerializer::Deserialize(scenePath);
-		auto& srcSceneRegistry = newScene->m_Registry;
+		Ref<Scene> originalScene = SceneSerializer::Deserialize(scenePath);
+		auto& srcSceneRegistry = originalScene->m_Registry;
 		auto& dstSceneRegistry = sceneToBeReloaded->m_Registry;
 
+
+		// Destroy runtime bodies
 		for (auto entt : sceneToBeReloaded->GetAllEntitiesWith<TransformComponent, Rigidbody2D>())
 		{
 			Entity entity = Entity((entt::entity)entt, sceneToBeReloaded );
 			Physics2D::DestroyBody((b2Body*)entity.GetComponent<Rigidbody2D>().runtimeBody);
 		}
 
+		// Delete all entities that not exists in the original serialized scene
+		auto originalEntityMap = originalScene->GetEntityMap();
+		auto auxMap = sceneToBeReloaded->GetEntityMap();
+		for (auto entity : auxMap)
+		{
+			if (originalEntityMap.find(entity.first) == originalEntityMap.end())
+			{
+				sceneToBeReloaded->DestroyEntity(entity.second);
+			}
+		}
+
+		// Copy components from serialize scene to the runtime scene
 		CopyComponent(AllComponents{}, dstSceneRegistry, srcSceneRegistry, sceneToBeReloaded->GetEntityMap());
 
+		// Initialize new blank bodies
 		for (auto entt : sceneToBeReloaded->GetAllEntitiesWith<TransformComponent, Rigidbody2D>())
 		{
 			Entity entity = Entity((entt::entity)entt, sceneToBeReloaded );

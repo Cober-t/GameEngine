@@ -4,6 +4,8 @@
 void TestScript::OnStart()
 {
 	LOG_WARNING("START!");
+	entityAux = Scene::LoadPrefab(scene, "Pipe.lua");
+    entityAux.GetComponent<TransformComponent>().position.y = 1.5;
 }
 
 void TestScript::OnUpdate(float dt)

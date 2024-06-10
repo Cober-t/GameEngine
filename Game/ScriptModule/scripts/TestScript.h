@@ -15,6 +15,7 @@ public:
 	
 public:
 	bool gameStarted = false;
+	Entity entityAux;
 };
 
 #endif
