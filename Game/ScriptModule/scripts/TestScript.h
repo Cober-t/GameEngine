@@ -12,6 +12,7 @@ public:
 	virtual void OnStart() override;
 	virtual void OnUpdate(float dt) override;
 	virtual void OnBeginContact(Entity* entityContact) override;
+	virtual void OnEndContact(Entity* entityContact) override;
 	
 public:
 	bool gameStarted = false;

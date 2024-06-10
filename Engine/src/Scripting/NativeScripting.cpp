@@ -9,6 +9,7 @@ namespace Cober {
 		static InitScriptsFn m_InitScripts = nullptr;
 		static UpdateScriptFn m_UpdateScripts = nullptr;
 		static NotifyBeginContactFn m_NotifyBeginContact = nullptr;
+		static NotifyEndContactFn m_NotifyEndContact = nullptr;
 		static DeleteScriptsFn m_DeleteScripts = nullptr;
 
 		static bool m_IsLoaded = false;
@@ -18,6 +19,7 @@ namespace Cober {
 		static void InitScriptsStub(Scene* scene, Entity entity) {}
 		static void UpdateScriptStub(Scene* scene, float dt) {}
 		static void NotifyBeginContactStub(Entity* a, Entity* b) {}
+		static void NotifyEndContactStub(Entity* a, Entity* b) {}
 		static void DeleteScriptsStub(Scene* scene) {}
 
 		static FARPROC __stdcall TryLoadFunction(HMODULE module, const char* functionName)
@@ -44,6 +46,7 @@ namespace Cober {
 				m_InitScripts = (InitScriptsFn)TryLoadFunction(m_Module, "InitScripts");
 				m_UpdateScripts = (UpdateScriptFn)TryLoadFunction(m_Module, "UpdateScripts");
 				m_NotifyBeginContact = (NotifyBeginContactFn)TryLoadFunction(m_Module, "NotifyBeginContact");
+				m_NotifyEndContact = (NotifyEndContactFn)TryLoadFunction(m_Module, "NotifyEndContact");
 				m_DeleteScripts = (DeleteScriptsFn)TryLoadFunction(m_Module, "DeleteScripts");
 				m_IsLoaded = true;
 
@@ -75,6 +78,14 @@ namespace Cober {
 			}
 		}
 
+		void NotifyEndContact(Entity* entityA, Entity* entityB)
+		{
+			if (m_NotifyEndContact)
+			{
+				m_NotifyEndContact(entityA, entityB);
+			}
+		}
+
 		void DeleteScripts(Scene* scene)
 		{
 			if (m_DeleteScripts)
@@ -82,7 +93,6 @@ namespace Cober {
 				m_DeleteScripts(scene);
 			}
 		}
-
 
 		bool FreeScriptLibrary()
 		{
@@ -94,6 +104,7 @@ namespace Cober {
 			m_InitScripts = InitScriptsStub;
 			m_UpdateScripts = UpdateScriptStub;
 			m_NotifyBeginContact = NotifyBeginContactStub;
+			m_NotifyEndContact = NotifyEndContactStub;
 			m_DeleteScripts = DeleteScriptsStub;
 
 			if (!FreeLibrary(m_Module))

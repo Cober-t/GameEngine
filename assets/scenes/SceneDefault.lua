@@ -42,6 +42,7 @@ SceneDefault
 			density = 1.000000
 			friction = 0.500000
 			restitution = 0.999000
+			isSensor = 0
 		}
 
 		Render2DComponent
@@ -85,6 +86,7 @@ SceneDefault
 			density = 1.000000
 			friction = 0.500000
 			restitution = 0.999000
+			isSensor = 0
 		}
 
 		Render2DComponent

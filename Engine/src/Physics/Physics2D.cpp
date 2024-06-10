@@ -59,6 +59,8 @@ namespace Cober {
 			fixtureDef.density = boxEntity.density;
 			fixtureDef.friction = boxEntity.friction;
 			fixtureDef.restitution = boxEntity.restitution;
+            if (boxEntity.isSensor)
+                fixtureDef.isSensor = true;
 			body->CreateFixture(&fixtureDef);
 		}
 		else if (entity.HasComponent<CircleCollider2D>())
@@ -73,6 +75,8 @@ namespace Cober {
 			fixtureDef.density = circleEntity.density;
 			fixtureDef.friction = circleEntity.friction;
 			fixtureDef.restitution = circleEntity.restitution;
+            if (circleEntity.isSensor)
+                fixtureDef.isSensor = true;
 			body->CreateFixture(&fixtureDef);
 		}
 	}
@@ -158,6 +162,8 @@ namespace Cober {
 		{
             // LOG_WARNING("END CONTACT: {0}", reinterpret_cast<Entity*>(indexBodyB)->GetName());
 		}
+
+        NativeScriptFn::NotifyEndContact(reinterpret_cast<Entity*>(indexBodyA), reinterpret_cast<Entity*>(indexBodyB));
 	}
 
 

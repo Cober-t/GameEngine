@@ -138,6 +138,7 @@ namespace Cober {
 		glm::vec2 size =   { 1.0f, 1.0f };
 
 		b2PolygonShape shape;
+		bool isSensor = false;
 
 		BoxCollider2D() = default;
 		BoxCollider2D(const BoxCollider2D&) = default;
@@ -150,6 +151,7 @@ namespace Cober {
 		float radius = 0.5f;
 
 		b2CircleShape shape;
+		bool isSensor = false;
 
 		CircleCollider2D() = default;
 		CircleCollider2D(const CircleCollider2D&) = default;

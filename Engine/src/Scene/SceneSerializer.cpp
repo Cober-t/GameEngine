@@ -172,6 +172,7 @@ namespace Cober {
 			serializer["BoxCollider2D"]["density"].SetReal(bc2D.density);
 			serializer["BoxCollider2D"]["friction"].SetReal(bc2D.friction);
 			serializer["BoxCollider2D"]["restitution"].SetReal(bc2D.restitution);
+			serializer["BoxCollider2D"]["isSensor"].SetInt(bc2D.isSensor);
 		}
 	}
 	void SceneSerializer::SerializeCircleCollider2DComponent(Entity& entity, Utils::DataFile& serializer)
@@ -184,6 +185,7 @@ namespace Cober {
 			serializer["CircleCollider2D"]["density"].SetReal(bc2D.density);
 			serializer["CircleCollider2D"]["friction"].SetReal(bc2D.friction);
 			serializer["CircleCollider2D"]["restitution"].SetReal(bc2D.restitution);
+			serializer["CircleCollider2D"]["isSensor"].SetInt(bc2D.isSensor);
 		}
 	}
 	void SceneSerializer::SerializeRender2DComponent(Entity& entity, Utils::DataFile& serializer)
@@ -299,6 +301,7 @@ namespace Cober {
 			entity.GetComponent<BoxCollider2D>().density = bc2d["density"].GetReal();
 			entity.GetComponent<BoxCollider2D>().friction = bc2d["friction"].GetReal();
 			entity.GetComponent<BoxCollider2D>().restitution = bc2d["restitution"].GetReal();
+			entity.GetComponent<BoxCollider2D>().isSensor = bc2d["isSensor"].GetInt();
 		}
 	}
 
@@ -313,6 +316,7 @@ namespace Cober {
 			entity.GetComponent<CircleCollider2D>().density = bc2d["density"].GetReal();
 			entity.GetComponent<CircleCollider2D>().friction = bc2d["friction"].GetReal();
 			entity.GetComponent<CircleCollider2D>().restitution = bc2d["restitution"].GetReal();
+			entity.GetComponent<CircleCollider2D>().isSensor = bc2d["isSensor"].GetInt();
 		}
 	}
 

@@ -46,9 +46,13 @@ namespace Cober {
 			entityB->GetComponent<TestScript>().OnBeginContact(entityA);
 	}
 
-	// extern "C" CB_SCRIPT void NotifyEndContact(Entity* entityA, Entity* entityB)
-	// {
-	// }
+	extern "C" CB_SCRIPT void NotifyEndContact(Entity* entityA, Entity* entityB)
+	{
+		if (entityA->HasComponent<TestScript>())
+			entityA->GetComponent<TestScript>().OnEndContact(entityB);
+		else if (entityB->HasComponent<TestScript>())
+			entityB->GetComponent<TestScript>().OnEndContact(entityA);
+	}
 
 
 	extern "C" CB_SCRIPT void DeleteScripts(Scene* scene)

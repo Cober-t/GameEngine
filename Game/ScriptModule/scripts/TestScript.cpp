@@ -26,5 +26,10 @@ void TestScript::OnUpdate(float dt)
 
 void TestScript::OnBeginContact(Entity* entityContact) 
 {
-	LOG_WARNING("{0} COLLIDE ", entityContact->GetName());
+	LOG_WARNING("{0} BEGIN COLLIDE ", entityContact->GetName());
+}
+
+void TestScript::OnEndContact(Entity* entityContact) 
+{
+	LOG_WARNING("{0} END COLLIDE ", entityContact->GetName());
 }
