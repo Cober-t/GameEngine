@@ -120,14 +120,12 @@ namespace Cober {
 			if (ImGui::BeginDragDropSource()) 
             {
 				const wchar_t* itemPath = relativePath.c_str();
-				ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
-				ImGui::EndDragDropSource();
-			}
 
-			if (ImGui::BeginDragDropSource()) 
-            {
-				const wchar_t* itemPath = relativePath.c_str();
-				ImGui::SetDragDropPayload("CONTENT_BROWSER_PREFAB", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
+				if (relativePath.extension() == ".png" || relativePath.extension() == ".jpg" || relativePath.extension() == ".jpeg" || relativePath.extension() == ".wav" || relativePath.extension() == ".mp3")
+					ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
+				if (relativePath.extension() == ".lua")
+					ImGui::SetDragDropPayload("CONTENT_BROWSER_PREFAB", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
+
 				ImGui::EndDragDropSource();
 			}
 

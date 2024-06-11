@@ -209,36 +209,27 @@ namespace Cober {
 			{
 				const wchar_t* path = (const wchar_t*)payload->Data;
 				m_FilePath = (std::filesystem::current_path() / "assets" / path).string();
-				LOG_INFO(m_FilePath);
-				
-				//Textures
+
 				if (Editor::SelectedEntity() && Editor::SelectedEntity().HasComponent<Render2DComponent>()) 
 				{
-					auto lastDot = m_FilePath.find_last_of('.');
-					std::string format = lastDot != std::string::npos ? m_FilePath.substr(lastDot) : "null";
-					if (lastDot != std::string::npos && (format == ".png" || format == ".jpg" || format == ".jpeg"))
+					if (m_FilePath.extension() == ".png" || m_FilePath.extension() == ".jpg" || m_FilePath.extension() == ".jpeg")
 					{
-						auto textureHolder = Texture::Create(m_FilePath);
+						auto textureHolder = Texture::Create(m_FilePath.string());
 						Editor::SelectedEntity().GetComponent<Render2DComponent>().texture = textureHolder;
 						Editor::SelectedEntity().GetComponent<TransformComponent>().scale.x = textureHolder->GetWidth()*0.01;
 						Editor::SelectedEntity().GetComponent<TransformComponent>().scale.y = textureHolder->GetHeight()*0.01;
 					}
 				}
 			}
-			ImGui::EndDragDropTarget();
-		}
-
-		if (ImGui::BeginDragDropTarget())
-		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_PREFAB")) 
+			else if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_PREFAB")) 
 			{
 				const wchar_t* path = (const wchar_t*)payload->Data;
 				std::filesystem::path prefabPath = std::filesystem::current_path() / "assets" / path;
 				Scene::LoadPrefab(Editor::GetActiveScene().get(), prefabPath.filename().string());
 			}
+
 			ImGui::EndDragDropTarget();
 		}
-
 
 		///////////////////////////////
 		//Gizmos

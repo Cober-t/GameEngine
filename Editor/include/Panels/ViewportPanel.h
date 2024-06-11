@@ -49,7 +49,7 @@ namespace Cober {
 		bool m_MouseButtonHeld = false;
 		glm::vec2 m_Mouse{0.0f, 0.0f}, m_LastMousePos{ 0.0f, 0.0f };
 
-		std::string m_FilePath;
+		std::filesystem::path m_FilePath;
 		int m_GizmoType = -1;
 	};
 }
