@@ -9,8 +9,9 @@ namespace Cober {
     bool Physics2D::m_DebugActive = false;
     b2World* Physics2D::m_PhysicsWorld = nullptr;
     PhysicsSettings* Physics2D::m_PhysicsSettings = new PhysicsSettings();
+    std::vector<Entity> Physics2D::entitiesToInitPhysics;
 
-    void Physics2D::Init()
+    void Physics2D::Init(Scene* scene)
     {
         CreateWorld(m_PhysicsWorld);
         
@@ -21,9 +22,15 @@ namespace Cober {
 			m_PhysicsWorld->SetDebugDraw(reinterpret_cast<b2Draw*>(&Debug2DPhysics::Get()));
             m_DebugActive = true;
 		}
+
+        for (auto entt : scene->GetAllEntitiesWith<TransformComponent, Rigidbody2D>())
+		{
+			Entity entity = Entity((entt::entity)entt, scene );
+			Physics2D::InitEntity(entity);
+		}
     }
 
-    void Physics2D::InitEntityPhysics(Entity& entity)
+    void Physics2D::InitEntityPhysics(Entity entity)
 	{
 		auto& transform = entity.GetComponent<TransformComponent>();
 		auto& rb2d = entity.GetComponent<Rigidbody2D>();
@@ -82,6 +89,12 @@ namespace Cober {
 	}
 
 
+    void Physics2D::InitEntity(Entity entity)
+    {
+        entitiesToInitPhysics.push_back(entity);
+    }
+
+
     void Physics2D::SetBodyType(Entity& entity, BodyType type)
     {
         if (entity.HasComponent<Rigidbody2D>())
@@ -94,7 +107,7 @@ namespace Cober {
 
             if (EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR
                 || EngineApp::Get().GetGameState() == EngineApp::GameState::PLAY)
-                Physics2D::InitEntityPhysics(entity);
+                Physics2D::InitEntity(entity);
         }
     }
 
@@ -109,6 +122,33 @@ namespace Cober {
         m_PhysicsWorld->Step(m_PhysicsSettings->TimeStep, m_PhysicsSettings->VelocityIterations, m_PhysicsSettings->PositionIterations);
     }
 
+
+    void Physics2D::Update(Scene* scene)
+    {
+        if (entitiesToInitPhysics.size() > 0)
+        {
+            for (Entity& entity : entitiesToInitPhysics)
+            {
+                Physics2D::InitEntityPhysics(entity);
+            }
+            entitiesToInitPhysics.clear();
+        }
+
+        auto view = scene->GetAllEntitiesWith<TransformComponent, Rigidbody2D>();
+
+		for (auto entt : view) 
+        {
+			Entity entity = Entity((entt::entity)entt, scene );
+			auto& transform = entity.GetComponent<TransformComponent>();
+			auto& rb2d = entity.GetComponent<Rigidbody2D>();
+			
+			b2Body* body = (b2Body*)rb2d.runtimeBody;
+			const auto& position = body->GetPosition();
+			transform.position.x = position.x;
+			transform.position.y = position.y;
+			transform.rotation.z = rb2d.fixedRotation ? 0.0f : body->GetAngle();
+		}
+    }
 
     void Physics2D::DebugDraw()
     {
@@ -169,13 +209,11 @@ namespace Cober {
 
 	void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
 	{
-		// TODO: Implement me
 	}
 
 
 	void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
 	{
-		// TODO: Implement me
 	}
 
 

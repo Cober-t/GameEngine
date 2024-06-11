@@ -444,10 +444,11 @@ namespace Cober {
 				   (EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR
 					|| EngineApp::Get().GetGameState() == EngineApp::GameState::PLAY))
 				{
-					Physics2D::InitEntityPhysics(newEntity);
+					// FIXME: Add entity to a list for update entities on update
+					Physics2D::InitEntity(newEntity);
 				}
 
-				return scene->GetEntityByUUID(newEntity.GetUUID());
+				return newEntity;
 			}
 		}
 		

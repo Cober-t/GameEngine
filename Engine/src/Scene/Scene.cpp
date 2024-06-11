@@ -10,6 +10,8 @@
 #include "Scene/Systems/ScriptSystem.h"
 #include "Scene/Systems/AudioSystem.h"
 
+#include "Scripting/NativeScripting.h"
+
 #include <glm/glm.hpp>
 
 namespace Cober {
@@ -72,8 +74,7 @@ namespace Cober {
 	Entity Scene::LoadPrefab(Scene* currentScene, std::string prefabName) 
 	{
 		Entity entity = EntitySerializer::Deserialize(currentScene, prefabName);
-		currentScene->m_EntityMap[entity.GetUUID()] = entity;
-
+		// FIXME: Load prefabs scripts on runtime
 		return entity;
 	}
 
@@ -153,12 +154,13 @@ namespace Cober {
 		auto& srcSceneRegistry = originalScene->m_Registry;
 		auto& dstSceneRegistry = sceneToBeReloaded->m_Registry;
 
-
 		// Destroy runtime bodies
 		for (auto entt : sceneToBeReloaded->GetAllEntitiesWith<TransformComponent, Rigidbody2D>())
 		{
 			Entity entity = Entity((entt::entity)entt, sceneToBeReloaded );
-			Physics2D::DestroyBody((b2Body*)entity.GetComponent<Rigidbody2D>().runtimeBody);
+			b2Body* body = (b2Body*)entity.GetComponent<Rigidbody2D>().runtimeBody;
+			if (body)
+				Physics2D::DestroyBody(body);
 		}
 
 		// Delete all entities that not exists in the original serialized scene
@@ -179,7 +181,7 @@ namespace Cober {
 		for (auto entt : sceneToBeReloaded->GetAllEntitiesWith<TransformComponent, Rigidbody2D>())
 		{
 			Entity entity = Entity((entt::entity)entt, sceneToBeReloaded );
-			Physics2D::InitEntityPhysics(entity);
+			Physics2D::InitEntity(entity);
 		}
 
 		sceneToBeReloaded->GetSystem<ScriptSystem>().FreeScripts(sceneToBeReloaded);
@@ -320,7 +322,6 @@ namespace Cober {
 
 	Entity Scene::GetEntityByUUID(UUID uuid)
 	{
-		// TODO: Maybe should be assert
 		if (m_EntityMap.find(uuid) != m_EntityMap.end())
 			return { m_EntityMap.at(uuid), this };
 

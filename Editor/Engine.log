@@ -1,34 +1,386 @@
-[2024-06-10 19:04:30.715] [APP] [info] [EditorApp.cpp:36] Editor Constructor!
-[2024-06-10 19:04:30.716] [ENGINE] [info] [EngineApp.cpp:12] EngineApp Constructor!
-[2024-06-10 19:04:30.716] [ENGINE] [info] [EngineApp.cpp:21] Current Working Path: ./
-[2024-06-10 19:04:30.716] [ENGINE] [info] [Window.cpp:22] Window Created
-[2024-06-10 19:04:30.717] [ENGINE] [info] [Window.cpp:41] Creating window Cober Engine Application (1280, 720)
-[2024-06-10 19:04:31.012] [ENGINE] [info] [OpenGLContext.cpp:11] Window Context Created!!
-[2024-06-10 19:04:31.023] [ENGINE] [info] [OpenGLContext.cpp:26] OpenGL Info:
-[2024-06-10 19:04:31.023] [ENGINE] [info] [OpenGLContext.cpp:27]   Vendor: NVIDIA Corporation
-[2024-06-10 19:04:31.023] [ENGINE] [info] [OpenGLContext.cpp:28]   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
-[2024-06-10 19:04:31.024] [ENGINE] [info] [OpenGLContext.cpp:29]   Version: 4.6.0 NVIDIA 551.86
-[2024-06-10 19:04:31.024] [ENGINE] [info] [Timestep.h:18] Created Timer
-[2024-06-10 19:04:31.024] [ENGINE] [trace] [OpenGLRenderAPI.cpp:45] Render API init
-[2024-06-10 19:04:31.024] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-06-10 19:04:31.025] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-06-10 19:04:31.028] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2024-06-10 19:04:31.031] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Quad.glsl success
-[2024-06-10 19:04:31.031] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-06-10 19:04:31.031] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-06-10 19:04:31.032] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Line.glsl success
-[2024-06-10 19:04:31.032] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-06-10 19:04:31.033] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-06-10 19:04:31.034] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2024-06-10 19:04:31.035] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Circle.glsl success
-[2024-06-10 19:04:31.035] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2024-06-10 19:04:31.035] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2024-06-10 19:04:31.037] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2024-06-10 19:04:31.038] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Text.glsl success
-[2024-06-10 19:04:31.038] [ENGINE] [trace] [OpenGLBuffer.cpp:94] Render UniformBuffer success
-[2024-06-10 19:04:31.039] [APP] [info] [EditorCamera.cpp:44] Editor Camera Created!!
-[2024-06-10 19:04:31.071] [ENGINE] [info] [Font.cpp:77] Loaded 191 glyphs from font (out of 224)
-[2024-06-10 19:04:32.007] [ENGINE] [info] [Debug2DPhysics.cpp:19] Debug 2D Physics Constructor!
-[2024-06-10 19:04:32.009] [APP] [info] [Scene.cpp:19] Scene Created!!
-[2024-06-10 19:04:32.010] [APP] [info] [Scene.cpp:207] Created entity with ID 17731108172934002688 and name Entity1
-[2024-06-10 19:04:32.012] [ENGINE] [error] [ECS.h:42] Assertion Failed: Entity does not have component!
+[2024-06-11 07:45:33.687] [APP] [info] [EditorApp.cpp:36] Editor Constructor!
+[2024-06-11 07:45:33.689] [ENGINE] [info] [EngineApp.cpp:12] EngineApp Constructor!
+[2024-06-11 07:45:33.689] [ENGINE] [info] [EngineApp.cpp:21] Current Working Path: ./
+[2024-06-11 07:45:33.689] [ENGINE] [info] [Window.cpp:22] Window Created
+[2024-06-11 07:45:33.689] [ENGINE] [info] [Window.cpp:41] Creating window Cober Engine Application (1280, 720)
+[2024-06-11 07:45:34.032] [ENGINE] [info] [OpenGLContext.cpp:11] Window Context Created!!
+[2024-06-11 07:45:34.039] [ENGINE] [info] [OpenGLContext.cpp:26] OpenGL Info:
+[2024-06-11 07:45:34.040] [ENGINE] [info] [OpenGLContext.cpp:27]   Vendor: NVIDIA Corporation
+[2024-06-11 07:45:34.040] [ENGINE] [info] [OpenGLContext.cpp:28]   Renderer: NVIDIA GeForce RTX 3060/PCIe/SSE2
+[2024-06-11 07:45:34.040] [ENGINE] [info] [OpenGLContext.cpp:29]   Version: 4.6.0 NVIDIA 551.86
+[2024-06-11 07:45:34.040] [ENGINE] [info] [Timestep.h:18] Created Timer
+[2024-06-11 07:45:34.041] [ENGINE] [trace] [OpenGLRenderAPI.cpp:45] Render API init
+[2024-06-11 07:45:34.041] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-06-11 07:45:34.041] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-06-11 07:45:34.044] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
+[2024-06-11 07:45:34.046] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Quad.glsl success
+[2024-06-11 07:45:34.046] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-06-11 07:45:34.046] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-06-11 07:45:34.047] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Line.glsl success
+[2024-06-11 07:45:34.048] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-06-11 07:45:34.048] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-06-11 07:45:34.049] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
+[2024-06-11 07:45:34.050] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Circle.glsl success
+[2024-06-11 07:45:34.050] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
+[2024-06-11 07:45:34.050] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
+[2024-06-11 07:45:34.051] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
+[2024-06-11 07:45:34.052] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Text.glsl success
+[2024-06-11 07:45:34.052] [ENGINE] [trace] [OpenGLBuffer.cpp:94] Render UniformBuffer success
+[2024-06-11 07:45:34.053] [APP] [info] [EditorCamera.cpp:44] Editor Camera Created!!
+[2024-06-11 07:45:34.095] [ENGINE] [info] [Font.cpp:76] Loaded 191 glyphs from font (out of 224)
+[2024-06-11 07:45:35.015] [ENGINE] [info] [Debug2DPhysics.cpp:19] Debug 2D Physics Constructor!
+[2024-06-11 07:45:35.018] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:35.019] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:35.021] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:35.021] [APP] [info] [CameraSystem.cpp:8] Camera System Added to Registry!!
+[2024-06-11 07:45:35.022] [APP] [info] [RenderSystem.cpp:11] Render System Added to Registry!!
+[2024-06-11 07:45:35.022] [APP] [info] [CameraSystem.cpp:19] Camera System Started!!
+[2024-06-11 07:45:35.022] [APP] [info] [RenderSystem.cpp:22] Render System Started!!
+[2024-06-11 07:45:35.023] [APP] [info] [CameraSystem.cpp:8] Camera System Added to Registry!!
+[2024-06-11 07:45:35.023] [APP] [info] [CameraSystem.cpp:13] Camera System Removed from Registry
+[2024-06-11 07:45:35.024] [APP] [info] [RenderSystem.cpp:11] Render System Added to Registry!!
+[2024-06-11 07:45:35.024] [APP] [info] [RenderSystem.cpp:16] Render System Removed from Registry
+[2024-06-11 07:45:35.024] [APP] [info] [CameraSystem.cpp:19] Camera System Started!!
+[2024-06-11 07:45:35.025] [APP] [info] [RenderSystem.cpp:22] Render System Started!!
+[2024-06-11 07:45:35.922] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:35.923] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:35.923] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:35.924] [APP] [info] [CameraSystem.cpp:8] Camera System Added to Registry!!
+[2024-06-11 07:45:35.924] [APP] [info] [RenderSystem.cpp:11] Render System Added to Registry!!
+[2024-06-11 07:45:35.925] [APP] [info] [PhysicsSystem2D.cpp:9] Physics System Added to Registry!!
+[2024-06-11 07:45:35.925] [APP] [info] [ScriptSystem.cpp:11] Script System Added to Registry!!
+[2024-06-11 07:45:35.926] [APP] [info] [AudioSystem.cpp:9] Audio System Added to Registry!!
+[2024-06-11 07:45:35.926] [APP] [info] [CameraSystem.cpp:19] Camera System Started!!
+[2024-06-11 07:45:35.926] [APP] [info] [RenderSystem.cpp:22] Render System Started!!
+[2024-06-11 07:45:35.927] [APP] [info] [PhysicsSystem2D.cpp:25] Physics System Started!!
+[2024-06-11 07:45:35.932] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:35.932] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:35.966] [APP] [info] [AudioSystem.cpp:33] Audio System Started!!
+[2024-06-11 07:45:37.113] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:45:37.121] [APP] [info] [Scene.cpp:209] Created entity with ID 8245372313457082239 and name Pipe
+[2024-06-11 07:45:37.131] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:45:37.646] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:45:37.648] [APP] [info] [Scene.cpp:209] Created entity with ID 3009662233041179077 and name Pipe
+[2024-06-11 07:45:37.659] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:45:38.180] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:45:38.181] [APP] [info] [Scene.cpp:209] Created entity with ID 6493345729052289245 and name Pipe
+[2024-06-11 07:45:38.192] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:45:38.713] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:45:38.714] [APP] [info] [Scene.cpp:209] Created entity with ID 13170118512067189297 and name Pipe
+[2024-06-11 07:45:38.725] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:45:39.066] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:39.067] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:39.068] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:39.072] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:39.072] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:39.072] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:39.078] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:39.079] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:39.080] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:39.083] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:39.083] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:39.083] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:39.091] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:39.091] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:39.093] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:39.097] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:39.097] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:39.097] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:39.109] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:39.110] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:39.111] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:39.115] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:39.115] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:39.115] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:39.127] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:39.129] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:39.130] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:39.134] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:39.134] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:39.134] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:39.145] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:39.146] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:39.148] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:39.151] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:39.151] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:39.151] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:39.164] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:39.165] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:39.167] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:39.169] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:39.170] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:39.170] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:40.198] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:45:40.199] [APP] [info] [Scene.cpp:209] Created entity with ID 15580141072332690063 and name Pipe
+[2024-06-11 07:45:40.210] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:45:40.725] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:45:40.726] [APP] [info] [Scene.cpp:209] Created entity with ID 6845910167789376751 and name Pipe
+[2024-06-11 07:45:40.743] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:45:41.258] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:45:41.260] [APP] [info] [Scene.cpp:209] Created entity with ID 6274114671208773597 and name Pipe
+[2024-06-11 07:45:41.277] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:45:41.792] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:45:41.793] [APP] [info] [Scene.cpp:209] Created entity with ID 17972296675901315862 and name Pipe
+[2024-06-11 07:45:41.810] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:45:42.325] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:45:42.327] [APP] [info] [Scene.cpp:209] Created entity with ID 13440322038900896411 and name Pipe
+[2024-06-11 07:45:42.343] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:45:42.345] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:42.346] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:42.347] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:42.350] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:42.350] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:42.350] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:42.357] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:42.357] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:42.358] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:42.361] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:42.361] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:42.362] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:42.369] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:42.370] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:42.371] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:42.374] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:42.375] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:42.375] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:42.388] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:42.389] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:42.389] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:42.392] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:42.392] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:42.393] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:42.399] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:42.400] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:42.401] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:42.403] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:42.403] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:42.404] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:42.411] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:42.412] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:42.414] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:42.416] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:42.416] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:42.417] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:42.752] [APP] [info] [PhysicsSystem2D.cpp:17] Physics System Removed from Registry
+[2024-06-11 07:45:42.752] [APP] [info] [RenderSystem.cpp:16] Render System Removed from Registry
+[2024-06-11 07:45:42.753] [APP] [info] [CameraSystem.cpp:13] Camera System Removed from Registry
+[2024-06-11 07:45:42.756] [APP] [info] [AudioSystem.cpp:16] Audio System Removed from Registry
+[2024-06-11 07:45:42.757] [APP] [info] [ScriptSystem.cpp:17] Script System Removed from Registry
+[2024-06-11 07:45:42.757] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:45.740] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:45.740] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:45.741] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:45.742] [APP] [info] [CameraSystem.cpp:8] Camera System Added to Registry!!
+[2024-06-11 07:45:45.742] [APP] [info] [RenderSystem.cpp:11] Render System Added to Registry!!
+[2024-06-11 07:45:45.742] [APP] [info] [PhysicsSystem2D.cpp:9] Physics System Added to Registry!!
+[2024-06-11 07:45:45.743] [APP] [info] [ScriptSystem.cpp:11] Script System Added to Registry!!
+[2024-06-11 07:45:45.743] [APP] [info] [AudioSystem.cpp:9] Audio System Added to Registry!!
+[2024-06-11 07:45:45.744] [APP] [info] [CameraSystem.cpp:19] Camera System Started!!
+[2024-06-11 07:45:45.744] [APP] [info] [RenderSystem.cpp:22] Render System Started!!
+[2024-06-11 07:45:45.745] [APP] [info] [PhysicsSystem2D.cpp:25] Physics System Started!!
+[2024-06-11 07:45:45.747] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:45.770] [APP] [info] [AudioSystem.cpp:33] Audio System Started!!
+[2024-06-11 07:45:48.400] [APP] [info] [PhysicsSystem2D.cpp:17] Physics System Removed from Registry
+[2024-06-11 07:45:48.400] [APP] [info] [RenderSystem.cpp:16] Render System Removed from Registry
+[2024-06-11 07:45:48.400] [APP] [info] [CameraSystem.cpp:13] Camera System Removed from Registry
+[2024-06-11 07:45:48.404] [APP] [info] [AudioSystem.cpp:16] Audio System Removed from Registry
+[2024-06-11 07:45:48.404] [APP] [info] [ScriptSystem.cpp:17] Script System Removed from Registry
+[2024-06-11 07:45:48.405] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:52.418] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:52.418] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:52.419] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:52.420] [APP] [info] [CameraSystem.cpp:8] Camera System Added to Registry!!
+[2024-06-11 07:45:52.420] [APP] [info] [RenderSystem.cpp:11] Render System Added to Registry!!
+[2024-06-11 07:45:52.420] [APP] [info] [PhysicsSystem2D.cpp:9] Physics System Added to Registry!!
+[2024-06-11 07:45:52.421] [APP] [info] [ScriptSystem.cpp:11] Script System Added to Registry!!
+[2024-06-11 07:45:52.421] [APP] [info] [AudioSystem.cpp:9] Audio System Added to Registry!!
+[2024-06-11 07:45:52.422] [APP] [info] [CameraSystem.cpp:19] Camera System Started!!
+[2024-06-11 07:45:52.422] [APP] [info] [RenderSystem.cpp:22] Render System Started!!
+[2024-06-11 07:45:52.423] [APP] [info] [PhysicsSystem2D.cpp:25] Physics System Started!!
+[2024-06-11 07:45:52.425] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:52.425] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:52.448] [APP] [info] [AudioSystem.cpp:33] Audio System Started!!
+[2024-06-11 07:45:53.010] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:45:53.011] [APP] [info] [Scene.cpp:209] Created entity with ID 16264398791698925844 and name Pipe
+[2024-06-11 07:45:53.028] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:45:53.543] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:45:53.545] [APP] [info] [Scene.cpp:209] Created entity with ID 9620603896134933796 and name Pipe
+[2024-06-11 07:45:53.561] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:45:53.850] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:53.851] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:53.852] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:53.855] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:53.855] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:53.856] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:53.866] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:53.867] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:53.868] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:53.871] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:53.871] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:53.871] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:53.878] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:53.879] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:53.880] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:53.882] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:53.882] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:53.883] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:53.890] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:53.891] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:53.892] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:53.895] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:53.896] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:53.897] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:53.909] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:53.909] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:53.911] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:53.913] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:53.914] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:53.915] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:54.567] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:45:54.569] [APP] [info] [Scene.cpp:209] Created entity with ID 11165141325070951438 and name Pipe
+[2024-06-11 07:45:54.585] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:45:55.095] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:45:55.096] [APP] [info] [Scene.cpp:209] Created entity with ID 14590632546387266288 and name Pipe
+[2024-06-11 07:45:55.113] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:45:55.628] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:45:55.630] [APP] [info] [Scene.cpp:209] Created entity with ID 6743766378499664700 and name Pipe
+[2024-06-11 07:45:55.646] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:45:56.161] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:45:56.163] [APP] [info] [Scene.cpp:209] Created entity with ID 3804523472589795664 and name Pipe
+[2024-06-11 07:45:56.180] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:45:56.695] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:45:56.696] [APP] [info] [Scene.cpp:209] Created entity with ID 7604660194695512411 and name Pipe
+[2024-06-11 07:45:56.713] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:45:57.229] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:45:57.230] [APP] [info] [Scene.cpp:209] Created entity with ID 3713375091127245970 and name Pipe
+[2024-06-11 07:45:57.246] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:45:57.762] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:45:57.763] [APP] [info] [Scene.cpp:209] Created entity with ID 11326965606270671337 and name Pipe
+[2024-06-11 07:45:57.780] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:45:57.812] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:57.813] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:57.814] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:57.817] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:57.817] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:57.817] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:57.823] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:57.824] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:57.825] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:57.828] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:57.828] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:57.829] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:57.836] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:57.837] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:57.837] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:57.840] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:57.840] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:57.840] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:57.848] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:57.849] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:57.849] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:57.852] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:57.852] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:57.853] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:45:57.860] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:45:57.861] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:45:57.862] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:45:57.864] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:45:57.865] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:45:57.866] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:46:00.592] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:46:00.593] [APP] [info] [Scene.cpp:209] Created entity with ID 11676870292833921389 and name Pipe
+[2024-06-11 07:46:00.610] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:46:01.125] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:46:01.126] [APP] [info] [Scene.cpp:209] Created entity with ID 1858934515858138224 and name Pipe
+[2024-06-11 07:46:01.143] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:46:01.658] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:46:01.660] [APP] [info] [Scene.cpp:209] Created entity with ID 2249018011254581308 and name Pipe
+[2024-06-11 07:46:01.677] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:46:02.192] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:46:02.193] [APP] [info] [Scene.cpp:209] Created entity with ID 16689958032628506832 and name Pipe
+[2024-06-11 07:46:02.210] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:46:02.339] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:46:02.340] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:46:02.340] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:46:02.343] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:46:02.344] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:46:02.344] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:46:02.350] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:46:02.351] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:46:02.352] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:46:02.354] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:46:02.354] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:46:02.355] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:46:02.363] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:46:02.364] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:46:02.365] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:46:02.368] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:46:02.368] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:46:02.368] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:46:02.375] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:46:02.376] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:46:02.377] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:46:02.379] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:46:02.379] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:46:02.379] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:46:02.388] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:46:02.389] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:46:02.390] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:46:02.393] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:46:02.393] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:46:02.394] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:46:02.405] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:46:02.406] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:46:02.407] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:46:02.410] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:46:02.410] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:46:02.410] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:46:03.810] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:46:03.811] [APP] [info] [Scene.cpp:209] Created entity with ID 4311279704308081644 and name Pipe
+[2024-06-11 07:46:03.828] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:46:04.030] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:46:04.031] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:46:04.032] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:46:04.035] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:46:04.035] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:46:04.036] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:46:04.041] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:46:04.042] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:46:04.043] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:46:04.046] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:46:04.046] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:46:04.046] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:46:04.054] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:46:04.054] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:46:04.055] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:46:04.057] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:46:04.057] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:46:04.058] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:46:05.446] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:46:05.447] [APP] [info] [Scene.cpp:209] Created entity with ID 15082657970038040345 and name Pipe
+[2024-06-11 07:46:05.458] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:46:05.980] [APP] [warning] [TestScript.cpp:34] Entity0 BEGIN COLLIDE 
+[2024-06-11 07:46:05.981] [APP] [info] [Scene.cpp:209] Created entity with ID 6865116051127504784 and name Pipe
+[2024-06-11 07:46:05.992] [APP] [warning] [TestScript.cpp:39] Entity0 END COLLIDE 
+[2024-06-11 07:46:06.326] [APP] [info] [Scene.cpp:21] Scene Created!!
+[2024-06-11 07:46:06.327] [APP] [info] [Scene.cpp:209] Created entity with ID 17731108172934002688 and name Entity1
+[2024-06-11 07:46:06.328] [APP] [info] [Scene.cpp:209] Created entity with ID 15790550996833163264 and name Entity0
+[2024-06-11 07:46:06.331] [APP] [warning] [TestScript.cpp:6] START!
+[2024-06-11 07:46:06.332] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
+[2024-06-11 07:46:06.332] [APP] [info] [Scene.cpp:27] Scene Destroyed!!
+[2024-06-11 07:46:14.035] [ENGINE] [trace] [OpenGLBuffer.cpp:100] Render UniformBuffer cleaned up
+[2024-06-11 07:46:14.035] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
+[2024-06-11 07:46:14.035] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
+[2024-06-11 07:46:14.035] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
+[2024-06-11 07:46:14.036] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
+[2024-06-11 07:46:14.036] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
+[2024-06-11 07:46:14.036] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
+[2024-06-11 07:46:14.036] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
+[2024-06-11 07:46:14.036] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
+[2024-06-11 07:46:14.037] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
+[2024-06-11 07:46:14.037] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
+[2024-06-11 07:46:14.037] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up
+[2024-06-11 07:46:14.037] [ENGINE] [trace] [OpenGLShader.cpp:50] Render Shader cleaned up
+[2024-06-11 07:46:14.037] [ENGINE] [trace] [OpenGLVertexArray.cpp:37] Render VertexArray cleaned up
+[2024-06-11 07:46:14.037] [ENGINE] [trace] [OpenGLBuffer.cpp:72] Render IndexBuffer cleaned up
+[2024-06-11 07:46:14.038] [ENGINE] [trace] [OpenGLBuffer.cpp:30] Render VertexBuffer cleaned up

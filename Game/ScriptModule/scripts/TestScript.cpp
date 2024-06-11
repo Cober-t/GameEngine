@@ -4,8 +4,6 @@
 void TestScript::OnStart()
 {
 	LOG_WARNING("START!");
-	entityAux = Scene::LoadPrefab(scene, "Pipe.lua");
-    entityAux.GetComponent<TransformComponent>().position.y = 1.5;
 }
 
 void TestScript::OnUpdate(float dt)
@@ -26,6 +24,7 @@ void TestScript::OnUpdate(float dt)
 
 void TestScript::OnBeginContact(Entity* entityContact) 
 {
+	Scene::LoadPrefab(scene, "Pipe.lua");
 	LOG_WARNING("{0} BEGIN COLLIDE ", entityContact->GetName());
 }
 

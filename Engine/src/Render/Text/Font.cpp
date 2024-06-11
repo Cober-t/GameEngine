@@ -45,7 +45,6 @@ namespace Cober {
 		
 		std::string fileString = filepath.string();
 
-		// TODO: msdfgen::loadFontData loads from memory buffer which we'll need 
 		msdfgen::FontHandle* font = msdfgen::loadFont(ft, fileString.c_str());
 		if (!font)
 		{

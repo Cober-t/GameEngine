@@ -52,7 +52,7 @@ namespace Cober {
 
 				uint32_t IndexCount = 0;
 
-				static const uint32_t MaxTextureSlots = 32; // TODO: RenderCaps
+				static const uint32_t MaxTextureSlots = 32;
 				std::array<Ref<Texture>, MaxTextureSlots> TextureSlots;
 				uint32_t TextureSlotIndex = 1; // 0 = white texture
 				

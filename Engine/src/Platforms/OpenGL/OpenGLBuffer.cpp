@@ -89,7 +89,7 @@ namespace Cober {
 	OpenGLUniformBuffer::OpenGLUniformBuffer(uint32_t size, uint32_t binding)
 	{
 		glCreateBuffers(1, &m_RenderID);
-		glNamedBufferData(m_RenderID, size, nullptr, GL_DYNAMIC_DRAW); // TODO: investigate usage hit
+		glNamedBufferData(m_RenderID, size, nullptr, GL_DYNAMIC_DRAW);
 		glBindBufferBase(GL_UNIFORM_BUFFER, binding, m_RenderID);
 		LOG_CORE_TRACE("Render UniformBuffer success");
 	}

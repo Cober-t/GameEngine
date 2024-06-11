@@ -41,8 +41,6 @@ namespace Cober  {
                 glm::vec4 Color;
                 glm::vec2 TexCoord;
 
-                // TODO: bg color for outline/bg
-
                 int EntityID;
 			};
 

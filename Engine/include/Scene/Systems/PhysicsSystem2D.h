@@ -26,8 +26,6 @@ namespace Cober {
 		void Start(Scene* scene);
 		void Update(Scene* scene, Unique<Timestep>& ts);
 
-		void InitEntityPhysics(Entity entity);
-        
 		//void OnEvent(Event& event);
 	
 	private:
