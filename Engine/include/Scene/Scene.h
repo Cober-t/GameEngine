@@ -39,7 +39,7 @@ namespace Cober {
 		template<typename... Components>
 		inline auto GetAllEntitiesWith() { return m_Registry.view<Components...>(); }
 		inline entt::registry* GetRegistry() { return &m_Registry; }
-		const std::unordered_map<UUID, Entity>& GetEntityMap();
+		const std::unordered_map<UUID, Entity>& GetEntityMap() { return m_EntityMap; };
 		
 		std::vector<Entity> GetSceneEntities();
 
@@ -50,12 +50,14 @@ namespace Cober {
 		void Step(int step = 1) { m_StepFrames = step; };
 		void Pause() { m_IsPaused = m_IsPaused == true ? false : true; };
 		static bool Save(const Ref<Scene>& scene, std::string sceneName = "Scene1");
-		static void Reload(Scene* sceneToBeReloaded, std::string scenePath = "SceneDefault.lua");
+
+		static void Reload(Scene* scene);
 		static Ref<Scene> Load(std::string scenePath = "SceneDefault.lua");
 		static Entity LoadPrefab(Scene* currentScene, std::string prefabName = "EntityDefault.lua");
 		static Ref<Scene> Copy(Ref<Scene> scene);
 
 	private:
+
 		template<typename T, typename ...TArgs> 			
         void AddSystem(TArgs&& ...args);
 
@@ -78,7 +80,9 @@ namespace Cober {
 		std::unordered_map<UUID, Entity> m_EntityMap;
 
 		int m_StepFrames;
+		std::string m_SceneName;
 		bool m_IsPaused = false;
+		bool m_ReloadScripts = false;
 
 		friend class Entity;
 		friend class System;

@@ -114,18 +114,21 @@ namespace Cober {
 			{
 				case GLFW_PRESS:
 				{
+					Input::UpdateKeyState((KeyCode)key, KeyState::Pressed);
 					KeyPressedEvent event((KeyCode)key, 0);
 					data.EventCallback(event);
 					break;
 				}
 				case GLFW_RELEASE:
 				{
+					Input::UpdateKeyState((KeyCode)key, KeyState::Released);
 					KeyReleasedEvent event((KeyCode)key);
 					data.EventCallback(event);
 					break;
 				}
 				case GLFW_REPEAT:
 				{
+					Input::UpdateKeyState((KeyCode)key, KeyState::Held);
 					KeyPressedEvent event((KeyCode)key, true);
 					data.EventCallback(event);
 					break;
@@ -149,12 +152,14 @@ namespace Cober {
 			{
 				case GLFW_PRESS:
 				{
+					Input::UpdateButtonState((MouseButton)button, KeyState::Pressed);
 					MouseButtonPressedEvent event((MouseButton)button);
 					data.EventCallback(event);
 					break;
 				}
 				case GLFW_RELEASE:
 				{
+					Input::UpdateButtonState((MouseButton)button, KeyState::Released);
 					MouseButtonReleasedEvent event((MouseButton)button);
 					data.EventCallback(event);
 					break;
@@ -183,6 +188,7 @@ namespace Cober {
 	void Window::OnUpdate()
 	{
 		glfwPollEvents();
+		Input::Update();
 		m_Context->SwapBuffers();
 	}
 

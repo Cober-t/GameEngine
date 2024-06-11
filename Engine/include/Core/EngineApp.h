@@ -2,6 +2,7 @@
 #define ENGINNE_APP_H
 
 #include "Core.h"
+#include "Input.h"
 
 #include "Window.h"
 #include "Timestep.h"

@@ -44,6 +44,7 @@ namespace Cober {
 	{
 		Log::ClearLogMessages();
 		Ref<Scene> scene = SceneSerializer::Deserialize(sceneName);
+		scene->m_SceneName = sceneName;
 
 		if (scene)
 		{
@@ -64,18 +65,10 @@ namespace Cober {
 		return scene;
 	}
 
-
-	const std::unordered_map<UUID, Entity>& Scene::GetEntityMap()
-	{
-		return m_EntityMap;	
-	}
-
 	
 	Entity Scene::LoadPrefab(Scene* currentScene, std::string prefabName) 
 	{
-		Entity entity = EntitySerializer::Deserialize(currentScene, prefabName);
-		// FIXME: Load prefabs scripts on runtime
-		return entity;
+		return EntitySerializer::Deserialize(currentScene, prefabName);
 	}
 
 
@@ -128,6 +121,7 @@ namespace Cober {
 		newScene->m_ViewportWidth = baseScene->m_ViewportWidth;
 		newScene->m_ViewportHeight = baseScene->m_ViewportHeight;
 
+		newScene->m_SceneName = baseScene->m_SceneName;
 		auto& srcSceneRegistry = baseScene->m_Registry;
 		auto& dstSceneRegistry = newScene->m_Registry;
 		std::unordered_map<UUID, Entity> enttMap;
@@ -148,44 +142,29 @@ namespace Cober {
 		return newScene;
 	}
 
-	void Scene::Reload(Scene* sceneToBeReloaded, std::string scenePath)
+
+	void Scene::Reload(Scene* sceneToBeReloaded)
 	{
-		Ref<Scene> originalScene = SceneSerializer::Deserialize(scenePath);
-		auto& srcSceneRegistry = originalScene->m_Registry;
-		auto& dstSceneRegistry = sceneToBeReloaded->m_Registry;
+		// FIXME: Permit only one reload at a time
+		Ref<Scene> originalScene = SceneSerializer::Deserialize(sceneToBeReloaded->m_SceneName);
 
-		// Destroy runtime bodies
-		for (auto entt : sceneToBeReloaded->GetAllEntitiesWith<TransformComponent, Rigidbody2D>())
-		{
-			Entity entity = Entity((entt::entity)entt, sceneToBeReloaded );
-			b2Body* body = (b2Body*)entity.GetComponent<Rigidbody2D>().runtimeBody;
-			if (body)
-				Physics2D::DestroyBody(body);
-		}
-
-		// Delete all entities that not exists in the original serialized scene
 		auto originalEntityMap = originalScene->GetEntityMap();
 		auto auxMap = sceneToBeReloaded->GetEntityMap();
-		for (auto entity : auxMap)
+		for (auto& entity : auxMap)
 		{
-			if (originalEntityMap.find(entity.first) == originalEntityMap.end())
-			{
-				sceneToBeReloaded->DestroyEntity(entity.second);
-			}
+			sceneToBeReloaded->DestroyEntity(entity.second);
 		}
 
-		// Copy components from serialize scene to the runtime scene
-		CopyComponent(AllComponents{}, dstSceneRegistry, srcSceneRegistry, sceneToBeReloaded->GetEntityMap());
-
-		// Initialize new blank bodies
-		for (auto entt : sceneToBeReloaded->GetAllEntitiesWith<TransformComponent, Rigidbody2D>())
+		for (auto& entity : originalEntityMap)
 		{
-			Entity entity = Entity((entt::entity)entt, sceneToBeReloaded );
-			Physics2D::InitEntity(entity);
+			Entity ent = sceneToBeReloaded->CreateEntityWithUUID(entity.first, entity.second.GetName());
+			CopyComponentIfExists(AllComponents{}, ent, originalEntityMap.at(entity.first));
+			Physics2D::InitEntity(ent);
 		}
 
+		// Load and init scripts for the new scene
 		sceneToBeReloaded->GetSystem<ScriptSystem>().FreeScripts(sceneToBeReloaded);
-		sceneToBeReloaded->GetSystem<ScriptSystem>().Start(sceneToBeReloaded);
+		sceneToBeReloaded->m_ReloadScripts = true;
 	}
 
 
@@ -214,6 +193,8 @@ namespace Cober {
 
 	void Scene::DestroyEntity(Entity entity)
 	{
+		Physics2D::DestroyBody(entity);
+
 		m_EntityMap.erase(entity.GetUUID());
 		m_Registry.destroy(entity);
 	}
@@ -256,7 +237,7 @@ namespace Cober {
         GetSystem<RenderSystem>().Start();
 	}
 
-
+ 
     void Scene::OnRuntimeStop()
 	{
 		RemoveSystem<CameraSystem>();
@@ -281,8 +262,14 @@ namespace Cober {
             }
 		}
 
-		GetSystem<ScriptSystem>().Update(this, ts->GetDeltaTime());
 		GetSystem<AudioSystem>().Update(this);
+
+		if (m_ReloadScripts)
+		{
+			GetSystem<ScriptSystem>().Start(this);
+			m_ReloadScripts = false;
+		}
+		GetSystem<ScriptSystem>().Update(this, ts->GetDeltaTime());
 	}
 
 
@@ -334,6 +321,17 @@ namespace Cober {
 		std::string name = entity.GetName();
 		Entity newEntity = CreateEntity(name);
 		CopyComponentIfExists(AllComponents{}, newEntity, entity);
+
+		if (EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR || 
+		EngineApp::Get().GetGameState() == EngineApp::GameState::PLAY)
+		{
+			// Necessary for the Physics World body count
+			Physics2D::InitEntity(newEntity);
+
+			if (newEntity.HasComponent<NativeScriptComponent>())
+				NativeScriptFn::InitEntity(this, newEntity);
+		}
+		
 		return newEntity;
 	}
 

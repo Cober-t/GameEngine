@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Core/Core.h"
+#include "Core/Input.h"
 #include "Render/GraphicsContext.h"
 
 #include "Events/Event.h"

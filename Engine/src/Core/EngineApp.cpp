@@ -91,6 +91,11 @@ namespace Cober {
 
     void EngineApp::Run(Unique<Timestep>& ts)
     {
+        //Process Events
+        Input::TransitionPressedKeys();
+		Input::TransitionPressedButtons();
+        m_Window->OnUpdate();
+
         if(!m_Minimized) 
         {
             for (Layer* layer : m_LayerStack)
@@ -106,8 +111,6 @@ namespace Cober {
 
             m_GuiLayer->End();
         }
-
-        m_Window->OnUpdate();
     }
 
 

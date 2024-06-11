@@ -9,11 +9,12 @@ namespace Cober {
     bool Physics2D::m_DebugActive = false;
     b2World* Physics2D::m_PhysicsWorld = nullptr;
     PhysicsSettings* Physics2D::m_PhysicsSettings = new PhysicsSettings();
-    std::vector<Entity> Physics2D::entitiesToInitPhysics;
+    std::vector<Entity> Physics2D::m_EntitiesToInitPhysics;
+    std::vector<b2Body*> Physics2D::m_BodiesToBeDestroyed;
 
     void Physics2D::Init(Scene* scene)
     {
-        CreateWorld(m_PhysicsWorld);
+        CreateWorld();
         
         m_PhysicsWorld->SetContactListener(new ContactListener());
 
@@ -30,7 +31,7 @@ namespace Cober {
 		}
     }
 
-    void Physics2D::InitEntityPhysics(Entity entity)
+    void Physics2D::InitEntityPhysics(Entity& entity)
 	{
 		auto& transform = entity.GetComponent<TransformComponent>();
 		auto& rb2d = entity.GetComponent<Rigidbody2D>();
@@ -45,8 +46,10 @@ namespace Cober {
 		bodyDef.userData.pointer = (uintptr_t)staticRef;
 
         if (rb2d.runtimeBody)
+        {
             m_PhysicsWorld->DestroyBody((b2Body*)rb2d.runtimeBody);
-            
+        }
+
 		b2Body* body = Physics2D::CreateBody(bodyDef);
 
 		body->SetFixedRotation(rb2d.fixedRotation);
@@ -89,9 +92,21 @@ namespace Cober {
 	}
 
 
-    void Physics2D::InitEntity(Entity entity)
+    void Physics2D::InitEntity(Entity& entity)
     {
-        entitiesToInitPhysics.push_back(entity);
+        if (entity.HasComponent<Rigidbody2D>())
+            m_EntitiesToInitPhysics.push_back(entity);
+    }
+
+
+    void Physics2D::DestroyBody(Entity entity)
+    {
+        if (entity.HasComponent<Rigidbody2D>())
+        {
+            b2Body* body = (b2Body*)entity.GetComponent<Rigidbody2D>().runtimeBody;
+            if (body)
+                m_BodiesToBeDestroyed.push_back(body);
+        }
     }
 
 
@@ -107,11 +122,14 @@ namespace Cober {
 
             if (EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR
                 || EngineApp::Get().GetGameState() == EngineApp::GameState::PLAY)
+            {
                 Physics2D::InitEntity(entity);
+            }
         }
     }
 
-    void Physics2D::CreateWorld(const b2World* physicsWorld)
+
+    void Physics2D::CreateWorld()
     {
         m_PhysicsWorld = new b2World({ 0.0f, m_PhysicsSettings->Gravity });
     }
@@ -125,13 +143,22 @@ namespace Cober {
 
     void Physics2D::Update(Scene* scene)
     {
-        if (entitiesToInitPhysics.size() > 0)
+        if (m_BodiesToBeDestroyed.size() > 0)
         {
-            for (Entity& entity : entitiesToInitPhysics)
+            for (b2Body* body : m_BodiesToBeDestroyed)
+            {
+                m_PhysicsWorld->DestroyBody(body);
+            }
+            m_BodiesToBeDestroyed.clear();
+        }
+
+        if (m_EntitiesToInitPhysics.size() > 0)
+        {
+            for (Entity& entity : m_EntitiesToInitPhysics)
             {
                 Physics2D::InitEntityPhysics(entity);
             }
-            entitiesToInitPhysics.clear();
+            m_EntitiesToInitPhysics.clear();
         }
 
         auto view = scene->GetAllEntitiesWith<TransformComponent, Rigidbody2D>();
@@ -143,10 +170,13 @@ namespace Cober {
 			auto& rb2d = entity.GetComponent<Rigidbody2D>();
 			
 			b2Body* body = (b2Body*)rb2d.runtimeBody;
-			const auto& position = body->GetPosition();
-			transform.position.x = position.x;
-			transform.position.y = position.y;
-			transform.rotation.z = rb2d.fixedRotation ? 0.0f : body->GetAngle();
+            if (body)
+            {
+			    const auto& position = body->GetPosition();
+			    transform.position.x = position.x;
+			    transform.position.y = position.y;
+			    transform.rotation.z = rb2d.fixedRotation ? 0.0f : body->GetAngle();
+            }
 		}
     }
 
@@ -249,6 +279,9 @@ namespace Cober {
 
     void Physics2D::Move(b2Body* body, float x, float y)
     {
+        if (body == nullptr)
+            return;
+
         b2Vec2 velocity(x, y);
         if (body->GetLinearVelocity() == velocity)
             return;

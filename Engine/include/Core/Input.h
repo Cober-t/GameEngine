@@ -1,8 +1,11 @@
 #ifndef INPUT_H
 #define INPUT_H
 
+#include <map>
+#include <vector>
+
+#include "Core.h"
 #include "Events/KeyCodes.h"
-#include "Scene/Systems/ScriptSystem.h"
 
 #include <glm/glm.hpp>
 

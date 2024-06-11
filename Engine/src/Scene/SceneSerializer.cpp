@@ -29,7 +29,6 @@ namespace Cober {
         {
 			auto& entityToBeSaved = sceneSaver[name]["Entity" + std::to_string(numEntity++)];
 			SerializeAllComponents(entity, entityToBeSaved);
-		
 		}
 		
 		std::filesystem::path scenePath = "assets/scenes/" + sceneName;
@@ -446,11 +445,11 @@ namespace Cober {
 				   (EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR
 					|| EngineApp::Get().GetGameState() == EngineApp::GameState::PLAY))
 				{
-					// FIXME: Add entity to a list for update entities on update
 					Physics2D::InitEntity(newEntity);
 				}
 
-				NativeScriptFn::InitEntity(scene, newEntity);
+				if (newEntity.HasComponent<NativeScriptComponent>())
+					NativeScriptFn::InitEntity(scene, newEntity);
 
 				return newEntity;
 			}
