@@ -53,12 +53,20 @@ namespace Cober {
 				if (m_InitScripts)
 				{
 					auto view = scene->GetAllEntitiesWith<NativeScriptComponent>();
-					for (auto entt : view) 
+					for (auto entt : view)
 					{
 						Entity entity = Entity(entt, scene);
 						m_InitScripts(scene, entity);
 					}
 				}
+			}
+		}
+
+		void InitEntity(Scene* scene, Entity entity)
+		{
+			if (m_InitScripts)
+			{
+				m_InitScripts(scene, entity);
 			}
 		}
 

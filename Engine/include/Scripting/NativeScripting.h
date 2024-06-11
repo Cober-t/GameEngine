@@ -14,6 +14,7 @@ namespace Cober {
     namespace NativeScriptFn 
 	{
 	    CB_API void Init(Scene* scene);
+		CB_API void InitEntity(Scene* scene, Entity entity);
         CB_API void Update(Scene* scene, float dt);
 		CB_API void NotifyBeginContact(Entity* entityA, Entity* entityB);
 		CB_API void NotifyEndContact(Entity* entityA, Entity* entityB);

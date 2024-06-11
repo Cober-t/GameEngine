@@ -1,6 +1,7 @@
 #include <pch.h>
 #include "Scene/SceneSerializer.h"
 #include "Physics/Physics2D.h"
+#include "Scripting/NativeScripting.h"
 
 namespace Cober {
 
@@ -351,6 +352,7 @@ namespace Cober {
 			{
 				std::string texturePath = loader["Render2DComponent"]["texture"].GetString();
 				entity.GetComponent<Render2DComponent>().shapeType = Shape2D::Sprite;
+				// FIXME: Create texture asset manager to avoid repeated textures
 				entity.GetComponent<Render2DComponent>().texture = Texture::Create(texturePath);
 			}
 		}
@@ -447,6 +449,8 @@ namespace Cober {
 					// FIXME: Add entity to a list for update entities on update
 					Physics2D::InitEntity(newEntity);
 				}
+
+				NativeScriptFn::InitEntity(scene, newEntity);
 
 				return newEntity;
 			}
