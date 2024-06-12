@@ -22,9 +22,9 @@ void TestScript::OnBeginContact(Entity* entityContact)
 	if (entityContact->GetName() == "Entity0")
 	{
 		LOG_WARNING(entityContact->GetName());
-		Scene::Reload(scene);
+		Physics2D::MoveTo(Scene::LoadPrefab(scene, "Pipe.lua"), 2, 0);
+		Audio::Play(entity.GetComponent<AudioComponent>().audioName);
 	}
-	// Scene::LoadPrefab(scene, "Pipe.lua");
 	// LOG_WARNING("{0} BEGIN COLLIDE ", entityContact->GetName());
 }
 

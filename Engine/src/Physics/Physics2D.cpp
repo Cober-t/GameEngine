@@ -288,5 +288,12 @@ namespace Cober {
 
         body->SetLinearVelocity(velocity);
     }
-    
+
+
+    void Physics2D::MoveTo(Entity& entity, float x, float y)
+    {
+        entity.GetComponent<TransformComponent>().position.x = x;
+        entity.GetComponent<TransformComponent>().position.y = y;
+        Physics2D::InitEntity(entity);
+    }
 }

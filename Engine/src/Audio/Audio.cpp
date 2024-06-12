@@ -117,10 +117,13 @@ namespace Cober {
     }
 
 
-    bool Audio::PlaySound(std::string soundName) 
+    bool Audio::Play(std::string soundName, bool loop) 
     {
         if (!&m_Engine)
             return false;
+
+        if (sounds.find(soundName) == sounds.end())
+            LoadSound(soundName);
     
         if (sounds.find(soundName) != sounds.end())
             m_Result = ma_sound_start(&sounds.find(soundName)->second);
@@ -130,6 +133,8 @@ namespace Cober {
             LOG_WARNING("Failed to start sound.");
             return false;
         }
+
+        LoopSound(soundName, loop);
 
         return true;
     }

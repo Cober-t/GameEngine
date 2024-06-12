@@ -205,14 +205,14 @@ namespace Cober {
 		AddSystem<CameraSystem>();
 		AddSystem<RenderSystem>();
 		AddSystem<PhysicsSystem2D>();
-		AddSystem<ScriptSystem>();
 		AddSystem<AudioSystem>();
+		AddSystem<ScriptSystem>();
 
 		GetSystem<CameraSystem>().Start(this);
         GetSystem<RenderSystem>().Start();
 		GetSystem<PhysicsSystem2D>().Start(this);
-		GetSystem<ScriptSystem>().Start(this);
 		GetSystem<AudioSystem>().Start(this);
+		GetSystem<ScriptSystem>().Start(this);
 	}
 
 

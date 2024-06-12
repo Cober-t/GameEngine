@@ -102,7 +102,7 @@ namespace Cober {
 		InitDockspace();
 
 		ViewportPanel::Get().OnGuiRender(m_EditorCamera, m_CameraActive);
-		DataPanel::Get().OnGuiRender();
+		DataPanel::Get().OnGuiRender(m_ActiveScene);
 		ConsolePanel::Get().OnImGuiRender();
 		SceneHierarchyPanel::Get().OnGuiRender();
 		ContentBrowserPanel::Get().OnGuiRender();

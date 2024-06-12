@@ -40,6 +40,7 @@ namespace Cober {
 		inline auto GetAllEntitiesWith() { return m_Registry.view<Components...>(); }
 		inline entt::registry* GetRegistry() { return &m_Registry; }
 		const std::unordered_map<UUID, Entity>& GetEntityMap() { return m_EntityMap; };
+		inline uint64_t GetEntityCount() { return m_EntityMap.size(); };
 		
 		std::vector<Entity> GetSceneEntities();
 

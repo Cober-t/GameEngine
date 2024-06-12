@@ -11,7 +11,7 @@ namespace Cober {
         static void Init();
         static void Exit();
 
-        static bool PlaySound(std::string soundName);
+        static bool Play(std::string soundName, bool loop = false);
         static void StopSound(std::string soundName);
         static bool LoadSound(std::string soundName);
         static void LoopSound(std::string soundName, bool loop);

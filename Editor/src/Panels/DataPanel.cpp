@@ -21,19 +21,22 @@ namespace Cober {
 	}
 
 
-	void DataPanel::OnGuiRender() 
+	void DataPanel::OnGuiRender(const Ref<Scene>& scene) 
     {
 		// Data
 		ImGui::Begin("Data");
 
-		ImGui::Text("Frames: %d", EngineApp::Get().GetFrames());
+		ImGui::Text("Frames: %i", EngineApp::Get().GetFrames());
 		ImGui::Text("DeltaTime: %.3f", EngineApp::Get().GetTimer()->GetDeltaTimePerSecond());
 		ImGui::Text("Update: %i", EngineApp::Get().GetTimer()->GetUpdates());
-		ImGui::Text("Draw Calls: %d", Render2D::GetStats().DrawCalls);
-		ImGui::Text("Quads: %d", Render2D::GetStats().QuadCount);
-		ImGui::Text("Lines: %d", Render2D::GetStats().LineCount);
-		ImGui::Text("Circles: %d", Render2D::GetStats().CircleCount);
-		ImGui::Text("Text: %d", Render2D::GetStats().TextCount);
+		ImGui::Text("Draw Calls: %i", Render2D::GetStats().DrawCalls);
+		ImGui::Text("Quads: %i", Render2D::GetStats().QuadCount);
+		ImGui::Text("Lines: %i", Render2D::GetStats().LineCount);
+		ImGui::Text("Circles: %i", Render2D::GetStats().CircleCount);
+		ImGui::Text("Text: %i", Render2D::GetStats().TextCount);
+		ImGui::Spacing();
+		ImGui::Text("Entities: %i", scene->GetEntityCount());
+		ImGui::Text("Physics Bodies: %i", Physics2D::GetBodyCount());
 		ImGui::Spacing();
 		ImGui::Text("Screen size:\nX: %i Y: %i", EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight());
 		ImGui::Text("Mouse Coords:\nX: %i Y: %i", mouseX, mouseY);
