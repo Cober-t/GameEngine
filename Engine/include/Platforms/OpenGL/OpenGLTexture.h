@@ -9,6 +9,25 @@ typedef unsigned int GLenum;
 
 namespace Cober {
 
+	struct TextureData
+	{
+		stbi_uc* data;
+		int width;
+		int height;
+		int channels;
+		uint64_t references = 0;
+
+		TextureData() = default;
+		TextureData(stbi_uc* d, int w, int h, int c) :
+		 data(d), width(w), height(h), channels(c) {}
+		
+		~TextureData()
+		{
+			if (--references <= 0)
+				stbi_image_free(data);
+		}
+	};
+
 	class OpenGLTexture : public Texture
 	{
 
@@ -28,7 +47,6 @@ namespace Cober {
 		
 		virtual void SetData(void* data, uint32_t size) override;
 		virtual void Bind(uint32_t slot = 0) const override;
-		virtual bool IsLoaded() const override { return m_IsLoaded; }
 
 		virtual bool operator==(const Texture& other) const override
 		{
@@ -43,6 +61,7 @@ namespace Cober {
 		uint32_t m_Width, m_Height;
 		uint32_t m_RendererID;
 		GLenum m_InternalFormat, m_DataFormat;
+		static std::unordered_map<std::string, TextureData> m_TexturesDataHolder;
 	};
 }
 

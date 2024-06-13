@@ -12,8 +12,6 @@ namespace Cober {
 
 	PhysicsSystem2D::~PhysicsSystem2D()
 	{
-		delete m_PhysicsWorld;
-		m_PhysicsWorld = nullptr;
 		LOG_INFO("Physics System Removed from Registry");
 	}
 

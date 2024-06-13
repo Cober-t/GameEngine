@@ -195,10 +195,21 @@ namespace Cober {
 	{
 		Physics2D::DestroyBody(entity);
 
-		m_EntityMap.erase(entity.GetUUID());
-		m_Registry.destroy(entity);
+		m_EntitiesToBeDestroyed.push_back(entity);
 	}
 
+	void Scene::CleanUp()
+	{
+		if (m_EntitiesToBeDestroyed.size() > 0)
+		{
+			for (auto& entity : m_EntitiesToBeDestroyed)
+			{
+				m_EntityMap.erase(entity.GetUUID());
+				m_Registry.destroy(entity);
+			}
+			m_EntitiesToBeDestroyed.clear();
+		}
+	}
 
 	void Scene::OnSimulationStart()
 	{
@@ -247,6 +258,9 @@ namespace Cober {
 
 	void Scene::OnUpdateSimulation(Unique<Timestep>& ts, Ref<Camera>& camera)
 	{
+		// Must be at start
+		Scene::CleanUp();
+
 		Render2D::ResetStats();
 		Render2D::BeginScene(camera);
 		GetSystem<CameraSystem>().Update(ts, camera, this);
@@ -275,6 +289,9 @@ namespace Cober {
 
 	void Scene::OnUpdateRuntime(Unique<Timestep>& ts, Ref<Camera>& camera)
 	{	
+		// Must be at start
+		Scene::CleanUp();
+
 		Render2D::ResetStats();
 		Render2D::BeginScene(camera);
 		GetSystem<CameraSystem>().Update(ts, camera, this);

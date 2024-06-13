@@ -143,14 +143,7 @@ namespace Cober {
 
     void Physics2D::Update(Scene* scene)
     {
-        if (m_BodiesToBeDestroyed.size() > 0)
-        {
-            for (b2Body* body : m_BodiesToBeDestroyed)
-            {
-                m_PhysicsWorld->DestroyBody(body);
-            }
-            m_BodiesToBeDestroyed.clear();
-        }
+		Physics2D::CleanUp();
 
         if (m_EntitiesToInitPhysics.size() > 0)
         {
@@ -178,6 +171,18 @@ namespace Cober {
 			    transform.rotation.z = rb2d.fixedRotation ? 0.0f : body->GetAngle();
             }
 		}
+    }
+
+    void Physics2D::CleanUp()
+    {
+        if (m_BodiesToBeDestroyed.size() > 0)
+        {
+            for (b2Body* body : m_BodiesToBeDestroyed)
+            {
+                m_PhysicsWorld->DestroyBody(body);
+            }
+            m_BodiesToBeDestroyed.clear();
+        }
     }
 
     void Physics2D::DebugDraw()

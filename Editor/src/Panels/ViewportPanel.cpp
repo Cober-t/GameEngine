@@ -145,6 +145,7 @@ namespace Cober {
 		m_ViewportHovered = ImGui::IsWindowHovered();
 		EngineApp::Get().GetImGuiLayer()->BlockEvents(!m_ViewportHovered);
 
+		// Center GameCamera
 		if (dynamic_cast<GameCamera*>(Editor::GetActiveCamera().get()) != nullptr)
 		{
 			float screenWidth  = EngineApp::Get().GetWindow().GetWidth();
@@ -283,48 +284,6 @@ namespace Cober {
 
 		ImGui::PopStyleVar();
 		ImGui::End();
-
-
-		// ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
-		// ImGui::Begin("Game");
-
-		// // START CONSTRAIN VIEWPORT SCENE
-		// float screenWidth  = EngineApp::Get().GetWindow().GetWidth();
-		// float screenHeight = EngineApp::Get().GetWindow().GetHeight();
-		
-		// if (viewportPanelSize.x >= viewportPanelSize.y)
-		// 	m_ViewportSize = { m_ViewportSize.y * screenWidth / screenHeight  , m_ViewportSize.y };
-		// else if (viewportPanelSize.x < viewportPanelSize.y)
-		// 	m_ViewportSize = { m_ViewportSize.x, m_ViewportSize.x * screenHeight / screenWidth };
-		
-		// if (m_ViewportSize.x >= viewportPanelSize.x) 
-		// {
-		// 	m_ViewportSize.x = viewportPanelSize.x;
-		// 	m_ViewportSize.y = m_ViewportSize.x * screenHeight / screenWidth;
-		// 	m_ViewportMargin.y = (viewportPanelSize.y - m_ViewportSize.y) / 2;
-		// 	m_ViewportMargin.x = 0.0f;
-		// }
-
-		// if (m_ViewportSize.y >= viewportPanelSize.y) 
-		// {
-		// 	m_ViewportSize.y = viewportPanelSize.y;
-		// 	m_ViewportSize.x = m_ViewportSize.y * screenWidth / screenHeight;
-		// 	m_ViewportMargin.x = (viewportPanelSize.x - m_ViewportSize.x) / 2;
-		// 	m_ViewportMargin.y = 0.0f;
-		// }
-		// // END CONSTRAIN VIEWPORT SCENE
-
-		// /////////////////////////
-		// // Center Viewport Image
-		// ImVec2 gameContentRegionSize{ (viewportPanelSize.x - m_ViewportSize.x) * 0.5f,
-		// 						  (viewportPanelSize.y - m_ViewportSize.y) * 0.5f };
-		// ImGui::SetCursorPos(gameContentRegionSize);
-
-		// uint32_t textureGameID = m_Fbo->GetColorAttachmentRenderID();
-		// ImGui::Image(reinterpret_cast<void*>(textureGameID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
-		
-		// ImGui::PopStyleVar();
-		// ImGui::End();
 	}
 
 

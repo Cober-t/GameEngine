@@ -23,12 +23,12 @@ void TestScript::OnBeginContact(Entity* entityContact)
 	{
 		LOG_WARNING(entityContact->GetName());
 		Physics2D::MoveTo(Scene::LoadPrefab(scene, "Pipe.lua"), 2, 0);
-		Audio::Play(entity.GetComponent<AudioComponent>().audioName);
+		// Audio::Play(entity.GetComponent<AudioComponent>().audioName);
 	}
 	// LOG_WARNING("{0} BEGIN COLLIDE ", entityContact->GetName());
 }
 
 void TestScript::OnEndContact(Entity* entityContact) 
 {
-	// LOG_WARNING("{0} END COLLIDE ", entityContact->GetName());
+	Scene::Reload(scene);
 }

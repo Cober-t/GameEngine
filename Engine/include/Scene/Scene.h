@@ -72,6 +72,7 @@ namespace Cober {
         T& GetSystem() const;
 
         std::map<std::type_index, Ref<System>> GetSystems() { return m_Systems; }
+		void CleanUp();
 
 	private:
 		entt::registry m_Registry;
@@ -79,6 +80,7 @@ namespace Cober {
 
         std::map<std::type_index, Ref<System>> m_Systems;
 		std::unordered_map<UUID, Entity> m_EntityMap;
+		std::vector<Entity> m_EntitiesToBeDestroyed;
 
 		int m_StepFrames;
 		std::string m_SceneName;

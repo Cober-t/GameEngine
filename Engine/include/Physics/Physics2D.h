@@ -39,7 +39,9 @@ namespace Cober {
 
         inline static b2World& PhysicsWorld() {return *m_PhysicsWorld; }
         inline static PhysicsSettings& GetSettings() {return *m_PhysicsSettings; }
+        static void CleanUp();
 
+        // Move to Scripting System
         static void ApplyForceX(b2Body* body, float x);
         static void ApplyForceY(b2Body* body, float y);
         static void ApplyForce(b2Body* body,float x, float y);

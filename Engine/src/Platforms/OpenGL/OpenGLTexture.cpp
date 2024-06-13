@@ -33,6 +33,8 @@ namespace Cober {
 
 	}
 
+	std::unordered_map<std::string, TextureData> OpenGLTexture::m_TexturesDataHolder;
+
 
 	OpenGLTexture::OpenGLTexture(const TextureSpecification& specification)
 		: m_Specification(specification), m_Width(m_Specification.Width), m_Height(m_Specification.Height)
@@ -54,14 +56,26 @@ namespace Cober {
 	OpenGLTexture::OpenGLTexture(const std::string& path)
 		: m_Path(path)
 	{
+		stbi_uc* data = nullptr;
 		int width, height, channels;
-		
-		stbi_set_flip_vertically_on_load(1);
+		if (m_TexturesDataHolder.find(path) != m_TexturesDataHolder.end())
+		{
+			data = m_TexturesDataHolder[path].data;
+			width = m_TexturesDataHolder[path].width;
+			height = m_TexturesDataHolder[path].height;
+			channels = m_TexturesDataHolder[path].channels;
+		}
+		else
+		{
+			stbi_set_flip_vertically_on_load(1);
+			data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 
-		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+			m_TexturesDataHolder[path] = TextureData(data, width, height, channels);
+			m_IsLoaded = true;
+		}
+		
 		if (data)
 		{
-			m_IsLoaded = true;
 
 			m_Width = width;
 			m_Height = height;
@@ -94,8 +108,6 @@ namespace Cober {
 			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 			glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
-
-			stbi_image_free(data);
 		}
 	}
 

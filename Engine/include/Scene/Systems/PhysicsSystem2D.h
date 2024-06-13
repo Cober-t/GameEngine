@@ -29,7 +29,6 @@ namespace Cober {
 		//void OnEvent(Event& event);
 	
 	private:
-		b2World* m_PhysicsWorld = nullptr;
 	};
 }
 
