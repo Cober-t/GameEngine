@@ -198,6 +198,11 @@ namespace Cober {
 		float fade = 0.005f;
 
 		Ref<Texture> texture = nullptr;
+		Ref<SubTexture> subTexture = CreateRef<SubTexture>();
+		bool isSubTexture;
+		glm::vec2 subTextureIndex = { 0, 0 };
+		glm::vec2 subTextureCellSize = { 16, 16 };
+		glm::vec2 subTextureSpriteSize = { 1, 1 };
 
 		Render2DComponent() = default;
 		Render2DComponent(const Render2DComponent&) = default;

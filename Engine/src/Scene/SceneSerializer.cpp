@@ -193,25 +193,32 @@ namespace Cober {
 		if (entity.HasComponent<Render2DComponent>()) 
 		{
 			auto& bc2D = entity.GetComponent<Render2DComponent>();
-			serializer["Render2DComponent"]["color"].SetVec4(entity.GetComponent<Render2DComponent>().color);
-			switch (entity.GetComponent<Render2DComponent>().shapeType)
+			serializer["Render2DComponent"]["color"].SetVec4(bc2D.color);
+			switch (bc2D.shapeType)
 			{
 			case Shape2D::Line:
 				serializer["Render2DComponent"]["shape2D"].SetString("Line");
-				serializer["Render2DComponent"]["thickness"].SetReal(entity.GetComponent<Render2DComponent>().thickness);
+				serializer["Render2DComponent"]["thickness"].SetReal(bc2D.thickness);
 				break;
 			case Shape2D::Quad:
 				serializer["Render2DComponent"]["shape2D"].SetString("Quad");
-				serializer["Render2DComponent"]["fill"].SetInt(entity.GetComponent<Render2DComponent>().fill);
+				serializer["Render2DComponent"]["fill"].SetInt(bc2D.fill);
 				break;
 			case Shape2D::Circle:
 				serializer["Render2DComponent"]["shape2D"].SetString("Circle");
-				serializer["Render2DComponent"]["thickness"].SetReal(entity.GetComponent<Render2DComponent>().thickness);
-				serializer["Render2DComponent"]["fade"].SetReal(entity.GetComponent<Render2DComponent>().fade);
+				serializer["Render2DComponent"]["thickness"].SetReal(bc2D.thickness);
+				serializer["Render2DComponent"]["fade"].SetReal(bc2D.fade);
 				break;
 			case Shape2D::Sprite:
 				serializer["Render2DComponent"]["shape2D"].SetString("Sprite");
-				serializer["Render2DComponent"]["texture"].SetString(entity.GetComponent<Render2DComponent>().texture->GetPath());
+				serializer["Render2DComponent"]["texture"].SetString(bc2D.texture->GetPath());
+				serializer["Render2DComponent"]["issubtexture"].SetReal(bc2D.isSubTexture);
+				if (bc2D.isSubTexture)
+				{
+					serializer["Render2DComponent"]["subtexture"]["indices"].SetVec2(bc2D.subTextureIndex);
+					serializer["Render2DComponent"]["subtexture"]["cellsize"].SetVec2(bc2D.subTextureCellSize);
+					serializer["Render2DComponent"]["subtexture"]["spritesize"].SetVec2(bc2D.subTextureSpriteSize);
+				}
 				break;
 			}
 		}
@@ -261,21 +268,21 @@ namespace Cober {
 		if (loader.HasProperty("CameraComponent")) 
 		{
 			auto camera = loader["CameraComponent"];
-			entity.AddComponent<CameraComponent>();
-			entity.GetComponent<CameraComponent>().distance = camera["distance"].GetReal();
-			entity.GetComponent<CameraComponent>().width = camera["width"].GetInt();
-			entity.GetComponent<CameraComponent>().height = camera["height"].GetInt();
+			auto& component = entity.AddComponent<CameraComponent>();
+			component.distance = camera["distance"].GetReal();
+			component.width = camera["width"].GetInt();
+			component.height = camera["height"].GetInt();
 
-			entity.GetComponent<CameraComponent>().nearClip = camera["nearClip"].GetReal();
-			entity.GetComponent<CameraComponent>().farClip = camera["farClip"].GetReal();
-			entity.GetComponent<CameraComponent>().fov = camera["fov"].GetReal();
+			component.nearClip = camera["nearClip"].GetReal();
+			component.farClip = camera["farClip"].GetReal();
+			component.fov = camera["fov"].GetReal();
 
-			entity.GetComponent<CameraComponent>().perspective = camera["perspective"].GetInt();
-			entity.GetComponent<CameraComponent>().debug = camera["debug"].GetInt();
+			component.perspective = camera["perspective"].GetInt();
+			component.debug = camera["debug"].GetInt();
 
-			entity.GetComponent<CameraComponent>().mainCamera = camera["mainCamera"].GetInt();
-			entity.GetComponent<CameraComponent>().UpdateCameraValues();
-			entity.GetComponent<CameraComponent>().camera->SetViewportSize(camera["width"].GetInt(), camera["height"].GetInt());
+			component.mainCamera = camera["mainCamera"].GetInt();
+			component.UpdateCameraValues();
+			component.camera->SetViewportSize(camera["width"].GetInt(), camera["height"].GetInt());
 		}
 	}
 
@@ -284,9 +291,9 @@ namespace Cober {
 		if (loader.HasProperty("Rigidbody2D")) 
 		{
 			auto rb2d = loader["Rigidbody2D"];
-			entity.AddComponent<Rigidbody2D>();
-			entity.GetComponent<Rigidbody2D>().type = BodyType((int)rb2d["bodyType"].GetInt());
-			entity.GetComponent<Rigidbody2D>().fixedRotation = (int)rb2d["fixedRotation"].GetInt();
+			auto& component = entity.AddComponent<Rigidbody2D>();
+			component.type = BodyType((int)rb2d["bodyType"].GetInt());
+			component.fixedRotation = (int)rb2d["fixedRotation"].GetInt();
 		}
 	}
 
@@ -295,13 +302,13 @@ namespace Cober {
 		if (loader.HasProperty("BoxCollider2D")) 
 		{
 			auto bc2d = loader["BoxCollider2D"];
-			entity.AddComponent<BoxCollider2D>();
-			entity.GetComponent<BoxCollider2D>().offset = bc2d["offset"].GetVec2();
-			entity.GetComponent<BoxCollider2D>().size = bc2d["size"].GetVec2();
-			entity.GetComponent<BoxCollider2D>().density = bc2d["density"].GetReal();
-			entity.GetComponent<BoxCollider2D>().friction = bc2d["friction"].GetReal();
-			entity.GetComponent<BoxCollider2D>().restitution = bc2d["restitution"].GetReal();
-			entity.GetComponent<BoxCollider2D>().isSensor = bc2d["isSensor"].GetInt();
+			auto& component = entity.AddComponent<BoxCollider2D>();
+			component.offset = bc2d["offset"].GetVec2();
+			component.size = bc2d["size"].GetVec2();
+			component.density = bc2d["density"].GetReal();
+			component.friction = bc2d["friction"].GetReal();
+			component.restitution = bc2d["restitution"].GetReal();
+			component.isSensor = bc2d["isSensor"].GetInt();
 		}
 	}
 
@@ -310,13 +317,13 @@ namespace Cober {
 		if (loader.HasProperty("CircleCollider2D")) 
 		{
 			auto bc2d = loader["CircleCollider2D"];
-			entity.AddComponent<CircleCollider2D>();
-			entity.GetComponent<CircleCollider2D>().offset = bc2d["offset"].GetVec2();
-			entity.GetComponent<CircleCollider2D>().radius = bc2d["radius"].GetReal();
-			entity.GetComponent<CircleCollider2D>().density = bc2d["density"].GetReal();
-			entity.GetComponent<CircleCollider2D>().friction = bc2d["friction"].GetReal();
-			entity.GetComponent<CircleCollider2D>().restitution = bc2d["restitution"].GetReal();
-			entity.GetComponent<CircleCollider2D>().isSensor = bc2d["isSensor"].GetInt();
+			auto& component = entity.AddComponent<CircleCollider2D>();
+			component.offset = bc2d["offset"].GetVec2();
+			component.radius = bc2d["radius"].GetReal();
+			component.density = bc2d["density"].GetReal();
+			component.friction = bc2d["friction"].GetReal();
+			component.restitution = bc2d["restitution"].GetReal();
+			component.isSensor = bc2d["isSensor"].GetInt();
 		}
 	}
 
@@ -325,34 +332,47 @@ namespace Cober {
 		if (loader.HasProperty("Render2DComponent")) 
 		{
 			auto bc2d = loader["Render2DComponent"];
-			entity.AddComponent<Render2DComponent>();
-			entity.GetComponent<Render2DComponent>().color = loader["Render2DComponent"]["color"].GetVec4();
+			auto& component = entity.AddComponent<Render2DComponent>();
+			component.color = loader["Render2DComponent"]["color"].GetVec4();
 
 			std::string shapeType = loader["Render2DComponent"]["shape2D"].GetString();
 			if (shapeType == "Line")
 			{
-				entity.GetComponent<Render2DComponent>().shapeType = Shape2D::Line;
-				entity.GetComponent<Render2DComponent>().thickness = loader["Render2DComponent"]["thickness"].GetReal();
+				component.shapeType = Shape2D::Line;
+				component.thickness = loader["Render2DComponent"]["thickness"].GetReal();
 			}
 
 			if (shapeType == "Quad")
 			{
-				entity.GetComponent<Render2DComponent>().shapeType = Shape2D::Quad;
-				entity.GetComponent<Render2DComponent>().fill = loader["Render2DComponent"]["fill"].GetInt();
+				component.shapeType = Shape2D::Quad;
+				component.fill = loader["Render2DComponent"]["fill"].GetInt();
 			}
 
 			if (shapeType == "Circle")
 			{
-				entity.GetComponent<Render2DComponent>().shapeType = Shape2D::Circle;
-				entity.GetComponent<Render2DComponent>().thickness = loader["Render2DComponent"]["thickness"].GetReal();
-				entity.GetComponent<Render2DComponent>().fade = loader["Render2DComponent"]["fade"].GetReal();
+				component.shapeType = Shape2D::Circle;
+				component.thickness = loader["Render2DComponent"]["thickness"].GetReal();
+				component.fade = loader["Render2DComponent"]["fade"].GetReal();
 			}
 			if (shapeType == "Sprite")
 			{
 				std::string texturePath = loader["Render2DComponent"]["texture"].GetString();
-				entity.GetComponent<Render2DComponent>().shapeType = Shape2D::Sprite;
-				// FIXME: Create texture asset manager to avoid repeated textures
-				entity.GetComponent<Render2DComponent>().texture = Texture::Create(texturePath);
+				component.shapeType = Shape2D::Sprite;
+				component.texture = Texture::Create(texturePath);
+				component.isSubTexture = loader["Render2DComponent"]["issubtexture"].GetReal();
+				component.subTexture = CreateRef<SubTexture>();
+
+				if (component.isSubTexture)
+				{
+					component.subTextureIndex = loader["Render2DComponent"]["subtexture"]["indices"].GetVec2();
+					component.subTextureCellSize = loader["Render2DComponent"]["subtexture"]["cellsize"].GetVec2();
+					component.subTextureSpriteSize = loader["Render2DComponent"]["subtexture"]["spritesize"].GetVec2();
+
+					component.subTexture = SubTexture::CreateFromCoords(component.texture, 
+																		component.subTextureIndex, 
+																		component.subTextureCellSize,
+																		component.subTextureSpriteSize);
+				}
 			}
 		}
 	}
@@ -362,8 +382,8 @@ namespace Cober {
 		if (loader.HasProperty("NativeScriptComponent")) 
 		{
 			auto script = loader["NativeScriptComponent"];
-			entity.AddComponent<NativeScriptComponent>();
-			entity.GetComponent<NativeScriptComponent>().className = script["className"].GetString();
+			auto& component = entity.AddComponent<NativeScriptComponent>();
+			component.className = script["className"].GetString();
 		}
 	}
 
@@ -372,10 +392,10 @@ namespace Cober {
 		if (loader.HasProperty("AudioComponent")) 
 		{
 			auto audio = loader["AudioComponent"];
-			entity.AddComponent<AudioComponent>();
-			entity.GetComponent<AudioComponent>().audioName = audio["audioName"].GetString();
-			entity.GetComponent<AudioComponent>().audioPath = audio["audioPath"].GetString();
-			entity.GetComponent<AudioComponent>().loop = audio["loop"].GetInt();
+			auto& component = entity.AddComponent<AudioComponent>();
+			component.audioName = audio["audioName"].GetString();
+			component.audioPath = audio["audioPath"].GetString();
+			component.loop = audio["loop"].GetInt();
 		}
 	}
 
@@ -384,11 +404,11 @@ namespace Cober {
 		if (loader.HasProperty("TextComponent")) 
 		{
 			auto text = loader["TextComponent"];
-			entity.AddComponent<TextComponent>();
-			entity.GetComponent<TextComponent>().Text = text["text"].GetString();
-			entity.GetComponent<TextComponent>().Color = text["color"].GetVec4();
-			entity.GetComponent<TextComponent>().Kerning = text["kerning"].GetReal();
-			entity.GetComponent<TextComponent>().LineSpacing = text["lineSpacing"].GetReal();
+			auto& component = entity.AddComponent<TextComponent>();
+			component.Text = text["text"].GetString();
+			component.Color = text["color"].GetVec4();
+			component.Kerning = text["kerning"].GetReal();
+			component.LineSpacing = text["lineSpacing"].GetReal();
 		}
 	}
 

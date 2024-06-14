@@ -546,6 +546,21 @@ namespace Cober {
 						}
 						ImGui::EndDragDropTarget();
 					}
+
+					ImGui::Checkbox("SubTexture", &component.isSubTexture);
+					if (component.isSubTexture)
+					{
+						ImGui::DragFloat2("Index", glm::value_ptr(component.subTextureIndex), 0);
+						ImGui::DragFloat2("Cell size", glm::value_ptr(component.subTextureCellSize), 16);
+						ImGui::DragFloat2("Sprite size", glm::value_ptr(component.subTextureSpriteSize), 1);
+						if (component.texture)
+						{
+							component.subTexture = SubTexture::CreateFromCoords(component.texture, 
+																				component.subTextureIndex, 
+																				component.subTextureCellSize,
+																				component.subTextureSpriteSize);
+						}
+					}
 				}
 			});
 

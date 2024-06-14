@@ -66,7 +66,7 @@ namespace Cober {
 			channels = m_TexturesDataHolder[path].channels;
 		}
 		else
-		{
+		{ 
 			stbi_set_flip_vertically_on_load(1);
 			data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 
@@ -76,7 +76,6 @@ namespace Cober {
 		
 		if (data)
 		{
-
 			m_Width = width;
 			m_Height = height;
 
