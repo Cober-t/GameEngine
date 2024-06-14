@@ -372,6 +372,31 @@ namespace Cober {
 																		component.subTextureIndex, 
 																		component.subTextureCellSize,
 																		component.subTextureSpriteSize);
+					// FIXME: Refactor
+					float x = 1.0f;
+					float y = 1.0f;
+					float textWidth = component.subTextureCellSize.x * component.subTextureSpriteSize.x;
+					float textHeight = component.subTextureCellSize.y * component.subTextureSpriteSize.y;
+					
+					if (textWidth > textHeight)
+					{
+						x = textWidth / textWidth;
+						y = textHeight / textWidth;
+					}
+					else if (textWidth < textHeight)
+					{
+						x = textWidth / textHeight;
+						y = textHeight / textHeight;
+					}
+
+					component.vertices[0][0] = -x;
+					component.vertices[0][1] = -y;
+					component.vertices[1][0] =  x;
+					component.vertices[1][1] = -y;
+					component.vertices[2][0] =  x;
+					component.vertices[2][1] =  y;
+					component.vertices[3][0] = -x;
+					component.vertices[3][1] =  y;
 				}
 			}
 		}

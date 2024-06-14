@@ -542,23 +542,214 @@ namespace Cober {
 							format = lastDot != std::string::npos ? format.substr(lastDot) : "null";
 
 							if (lastDot != std::string::npos && (format == ".png" || format == ".jpg" || format == ".jpeg"))
+							{
 								component.texture = Texture::Create(texturePath.string());
+
+								float textWidth = component.texture->GetWidth();
+								float textHeight = component.texture->GetHeight();
+								if (component.isSubTexture && component.texture)
+								{
+									component.subTexture = SubTexture::CreateFromCoords(component.texture, 
+																						component.subTextureIndex, 
+																						component.subTextureCellSize,
+																						component.subTextureSpriteSize);
+
+									textWidth = component.subTextureCellSize.x * component.subTextureSpriteSize.x;
+									textHeight = component.subTextureCellSize.y * component.subTextureSpriteSize.y;
+								}
+
+								// FIXME: Refactor
+								float x = 1.0f;
+								float y = 1.0f;
+								
+								if (textWidth > textHeight)
+								{
+									x = textWidth / textWidth;
+									y = textHeight / textWidth;
+								}
+								else if (textWidth < textHeight)
+								{
+									x = textWidth / textHeight;
+									y = textHeight / textHeight;
+								}
+
+								component.vertices[0][0] = -x;
+								component.vertices[0][1] = -y;
+								component.vertices[1][0] =  x;
+								component.vertices[1][1] = -y;
+								component.vertices[2][0] =  x;
+								component.vertices[2][1] =  y;
+								component.vertices[3][0] = -x;
+								component.vertices[3][1] =  y;
+							}
 						}
 						ImGui::EndDragDropTarget();
 					}
 
-					ImGui::Checkbox("SubTexture", &component.isSubTexture);
-					if (component.isSubTexture)
+					if(ImGui::Checkbox("SubTexture", &component.isSubTexture))
 					{
-						ImGui::DragFloat2("Index", glm::value_ptr(component.subTextureIndex), 0);
-						ImGui::DragFloat2("Cell size", glm::value_ptr(component.subTextureCellSize), 16);
-						ImGui::DragFloat2("Sprite size", glm::value_ptr(component.subTextureSpriteSize), 1);
-						if (component.texture)
+						if (component.texture == nullptr)
+						{
+							// FIXME: Refactor
+							float x = 1.0f;
+							float y = 1.0f;
+							float textWidth = component.texture->GetWidth();
+							float textHeight = component.texture->GetHeight();
+							
+							if (textWidth > textHeight)
+							{
+								x = textWidth / textWidth;
+								y = textHeight / textWidth;
+							}
+							else if (textWidth < textHeight)
+							{
+								x = textWidth / textHeight;
+								y = textHeight / textHeight;
+							}
+
+							component.vertices[0][0] = -x;
+							component.vertices[0][1] = -y;
+							component.vertices[1][0] =  x;
+							component.vertices[1][1] = -y;
+							component.vertices[2][0] =  x;
+							component.vertices[2][1] =  y;
+							component.vertices[3][0] = -x;
+							component.vertices[3][1] =  y;
+						}
+						else if (component.isSubTexture == false)
+						{
+							component.subTexture = CreateRef<SubTexture>();
+
+							float x = 1.0f;
+							float y = 1.0f;
+							float textWidth = component.texture->GetWidth();
+							float textHeight = component.texture->GetHeight();
+							
+							if (textWidth > textHeight)
+							{
+								x = textWidth / textWidth;
+								y = textHeight / textWidth;
+							}
+							else if (textWidth < textHeight)
+							{
+								x = textWidth / textHeight;
+								y = textHeight / textHeight;
+							}
+
+							component.vertices[0][0] = -x;
+							component.vertices[0][1] = -y;
+							component.vertices[1][0] =  x;
+							component.vertices[1][1] = -y;
+							component.vertices[2][0] =  x;
+							component.vertices[2][1] =  y;
+							component.vertices[3][0] = -x;
+							component.vertices[3][1] =  y;
+						}
+						else if (component.isSubTexture && component.texture)
 						{
 							component.subTexture = SubTexture::CreateFromCoords(component.texture, 
 																				component.subTextureIndex, 
 																				component.subTextureCellSize,
 																				component.subTextureSpriteSize);
+							// FIXME: Refactor
+							float x = 1.0f;
+							float y = 1.0f;
+							float textWidth = component.subTextureCellSize.x * component.subTextureSpriteSize.x;
+							float textHeight = component.subTextureCellSize.y * component.subTextureSpriteSize.y;
+							
+							if (textWidth > textHeight)
+							{
+								x = textWidth / textWidth;
+								y = textHeight / textWidth;
+							}
+							else if (textWidth < textHeight)
+							{
+								x = textWidth / textHeight;
+								y = textHeight / textHeight;
+							}
+
+							component.vertices[0][0] = -x;
+							component.vertices[0][1] = -y;
+							component.vertices[1][0] =  x;
+							component.vertices[1][1] = -y;
+							component.vertices[2][0] =  x;
+							component.vertices[2][1] =  y;
+							component.vertices[3][0] = -x;
+							component.vertices[3][1] =  y;
+						}
+					}
+					if (component.isSubTexture)
+					{
+						if (ImGui::DragFloat2("Index", glm::value_ptr(component.subTextureIndex), 0, 0))
+						{
+							component.subTexture = SubTexture::CreateFromCoords(component.texture, 
+																				component.subTextureIndex, 
+																				component.subTextureCellSize,
+																				component.subTextureSpriteSize);
+						}
+						if (ImGui::DragFloat2("Cell size", glm::value_ptr(component.subTextureCellSize), 16, 0))
+						{
+							component.subTexture = SubTexture::CreateFromCoords(component.texture, 
+																				component.subTextureIndex, 
+																				component.subTextureCellSize,
+																				component.subTextureSpriteSize);
+							// FIXME: Refactor
+							float x = 1.0f;
+							float y = 1.0f;
+							float textWidth = component.subTextureCellSize.x * component.subTextureSpriteSize.x;
+							float textHeight = component.subTextureCellSize.y * component.subTextureSpriteSize.y;
+							
+							if (textWidth > textHeight)
+							{
+								x = textWidth / textWidth;
+								y = textHeight / textWidth;
+							}
+							else if (textWidth < textHeight)
+							{
+								x = textWidth / textHeight;
+								y = textHeight / textHeight;
+							}
+
+							component.vertices[0][0] = -x;
+							component.vertices[0][1] = -y;
+							component.vertices[1][0] =  x;
+							component.vertices[1][1] = -y;
+							component.vertices[2][0] =  x;
+							component.vertices[2][1] =  y;
+							component.vertices[3][0] = -x;
+							component.vertices[3][1] =  y;
+						}
+						if (ImGui::DragFloat2("Sprite size", glm::value_ptr(component.subTextureSpriteSize), 1, 1))
+						{
+							component.subTexture = SubTexture::CreateFromCoords(component.texture, 
+																				component.subTextureIndex, 
+																				component.subTextureCellSize,
+																				component.subTextureSpriteSize);
+							// FIXME: Refactor
+							float x = 1.0f;
+							float y = 1.0f;
+							float textWidth = component.subTextureCellSize.x * component.subTextureSpriteSize.x;
+							float textHeight = component.subTextureCellSize.y * component.subTextureSpriteSize.y;
+							
+							if (textWidth > textHeight)
+							{
+								x = textWidth / textWidth;
+								y = textHeight / textWidth;
+							}
+							else if (textWidth < textHeight)
+							{
+								x = textWidth / textHeight;
+								y = textHeight / textHeight;
+							}
+
+							component.vertices[0][0] = -x;
+							component.vertices[0][1] = -y;
+							component.vertices[1][0] =  x;
+							component.vertices[1][1] = -y;
+							component.vertices[2][0] =  x;
+							component.vertices[2][1] =  y;
+							component.vertices[3][0] = -x;
+							component.vertices[3][1] =  y;
 						}
 					}
 				}

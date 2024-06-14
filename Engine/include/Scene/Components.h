@@ -198,6 +198,13 @@ namespace Cober {
 		float fade = 0.005f;
 
 		Ref<Texture> texture = nullptr;
+		glm::vec4 vertices[4]
+        {
+            { -1.0f, -1.0f, 0.0f, 1.0f },
+            {  1.0f, -1.0f, 0.0f, 1.0f },
+            {  1.0f,  1.0f, 0.0f, 1.0f },
+            { -1.0f,  1.0f, 0.0f, 1.0f }
+        };
 		Ref<SubTexture> subTexture = CreateRef<SubTexture>();
 		bool isSubTexture;
 		glm::vec2 subTextureIndex = { 0, 0 };

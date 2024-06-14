@@ -58,11 +58,44 @@ namespace Cober {
 		if (entity.HasComponent<BoxCollider2D>()) 
 		{
 			auto& boxEntity = entity.GetComponent<BoxCollider2D>();
+            
+            float hx = (abs(boxEntity.size.x) * abs(transform.scale.x));
+            float hy = (abs(boxEntity.size.y) * abs(transform.scale.y));
 
-			boxEntity.shape.SetAsBox((abs(boxEntity.size.x) * abs(transform.scale.x)), 
-								(abs(boxEntity.size.y) * abs(transform.scale.y)),
-								(b2Vec2(boxEntity.offset.x, boxEntity.offset.y)),
-								0.0f);
+            if (entity.HasComponent<Render2DComponent>() && 
+                entity.GetComponent<Render2DComponent>().shapeType == Shape2D::Sprite &&
+                entity.GetComponent<Render2DComponent>().texture)
+            {
+                auto& renderComponent = entity.GetComponent<Render2DComponent>();
+                if (renderComponent.isSubTexture && renderComponent.subTexture)
+                {
+                    float subTextureWidth = renderComponent.subTextureCellSize.x * renderComponent.subTextureSpriteSize.x;
+                    float subTextureHeight = renderComponent.subTextureCellSize.y * renderComponent.subTextureSpriteSize.y;
+                    if (subTextureWidth > subTextureHeight)
+                    {
+                        hy *= abs(renderComponent.vertices[0].y);
+                    }
+                    else if (subTextureWidth < subTextureHeight)
+                    {
+                        hx *= abs(renderComponent.vertices[0].x);
+                    }
+                }
+                else
+                {
+                    if (renderComponent.texture->GetWidth() > renderComponent.texture->GetHeight())
+                    {
+                        hy *= abs(renderComponent.vertices[0].y);
+                    }
+                    else if (renderComponent.texture->GetWidth() < renderComponent.texture->GetHeight())
+                    {
+                        hx *= abs(renderComponent.vertices[0].x);
+                    }
+                }
+            }
+
+            b2Vec2 center = b2Vec2(boxEntity.offset.x, boxEntity.offset.y);
+            float angle = entity.GetComponent<TransformComponent>().rotation.z;
+			boxEntity.shape.SetAsBox(hx,  hy, center, angle);
 
 			b2FixtureDef fixtureDef;
 			fixtureDef.shape = &boxEntity.shape;

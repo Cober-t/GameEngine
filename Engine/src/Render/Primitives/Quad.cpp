@@ -119,7 +119,31 @@ namespace Cober {
 			glm::vec4 color = entity.GetComponent<Render2DComponent>().color;
 			glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
-			SetAttributes(transform, color, textureIndex, textureCoords, 1.0f, (int)entity);
+			glm::vec4 vertices[4]
+			{
+				{ -1.0f, -1.0f, 0.0f, 1.0f },
+				{  1.0f, -1.0f, 0.0f, 1.0f },
+				{  1.0f,  1.0f, 0.0f, 1.0f },
+				{ -1.0f,  1.0f, 0.0f, 1.0f },
+			};
+
+			if (data.IndexCount >= Render2D::GetStats().MaxIndices)
+			NextBatch();
+
+			for (size_t i = 0; i < 4; i++) 
+			{
+				data.VertexBufferPtr->Position = enttTrans.GetTransform() * vertices[i];
+				data.VertexBufferPtr->Color = color;
+				data.VertexBufferPtr->TexCoord = textureCoords[i];
+				data.VertexBufferPtr->TexIndex = textureIndex;
+				data.VertexBufferPtr->TilingFactor = tilingFactor;
+				data.VertexBufferPtr->EntityID = (int)entity;
+				data.VertexBufferPtr++;
+			}
+
+			data.IndexCount += 6;
+
+			Render2D::GetStats().QuadCount++;
 		}
 
 
@@ -151,7 +175,23 @@ namespace Cober {
 				}
 			}
 
-			SetAttributes(enttTrans.GetTransform(), color, textureIndex, textureCoords, 1.0f, (int)entity);
+			if (data.IndexCount >= Render2D::GetStats().MaxIndices)
+			NextBatch();
+
+			for (size_t i = 0; i < 4; i++) 
+			{
+				data.VertexBufferPtr->Position = enttTrans.GetTransform() * entity.GetComponent<Render2DComponent>().vertices[i];
+				data.VertexBufferPtr->Color = color;
+				data.VertexBufferPtr->TexCoord = textureCoords[i];
+				data.VertexBufferPtr->TexIndex = textureIndex;
+				data.VertexBufferPtr->TilingFactor = tilingFactor;
+				data.VertexBufferPtr->EntityID = (int)entity;
+				data.VertexBufferPtr++;
+			}
+
+			data.IndexCount += 6;
+
+			Render2D::GetStats().QuadCount++;
 		}
 
 		
@@ -161,7 +201,7 @@ namespace Cober {
             glm::mat4 transform = entity.GetComponent<TransformComponent>().GetTransform();
             glm::vec3 lineVertices[4];
             for (size_t i = 0; i < 4; i++)
-                lineVertices[i] = transform * Render2D::GetStats().QuadVertexPositions[i];
+                lineVertices[i] = transform * entity.GetComponent<Render2DComponent>().vertices[i];
 
             Line::Draw(lineVertices[0], lineVertices[1], color, (int)entity);
             Line::Draw(lineVertices[1], lineVertices[2], color, (int)entity);
@@ -196,24 +236,24 @@ namespace Cober {
 
 		void Quad::SetAttributes(const glm::mat4& transform, const glm::vec4& color, float textureIndex, const glm::vec2* textureCoords, float tilingFactor, int entityID) 
 		{
-			if (data.IndexCount >= Render2D::GetStats().MaxIndices)
-				NextBatch();
+			// if (data.IndexCount >= Render2D::GetStats().MaxIndices)
+			// 	NextBatch();
 
-			// size_t VertexCount = sizeof(Render2D::GetStats().QuadVertexPositions) / sizeof(Render2D::GetStats().QuadVertexPositions[0]);
-			for (size_t i = 0; i < 4; i++) 
-			{
-				data.VertexBufferPtr->Position = transform * Render2D::GetStats().QuadVertexPositions[i];
-				data.VertexBufferPtr->Color = color;
-				data.VertexBufferPtr->TexCoord = textureCoords[i];
-				data.VertexBufferPtr->TexIndex = textureIndex;
-				data.VertexBufferPtr->TilingFactor = tilingFactor;
-				data.VertexBufferPtr->EntityID = entityID;
-				data.VertexBufferPtr++;
-			}
+			// // size_t VertexCount = sizeof(Render2D::GetStats().QuadVertexPositions) / sizeof(Render2D::GetStats().QuadVertexPositions[0]);
+			// for (size_t i = 0; i < 4; i++) 
+			// {
+			// 	data.VertexBufferPtr->Position = transform * Render2D::GetStats().QuadVertexPositions[i];
+			// 	data.VertexBufferPtr->Color = color;
+			// 	data.VertexBufferPtr->TexCoord = textureCoords[i];
+			// 	data.VertexBufferPtr->TexIndex = textureIndex;
+			// 	data.VertexBufferPtr->TilingFactor = tilingFactor;
+			// 	data.VertexBufferPtr->EntityID = entityID;
+			// 	data.VertexBufferPtr++;
+			// }
 
-			data.IndexCount += 6;
+			// data.IndexCount += 6;
 
-			Render2D::GetStats().QuadCount++;
+			// Render2D::GetStats().QuadCount++;
 		}
 	}
 }

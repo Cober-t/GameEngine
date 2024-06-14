@@ -216,9 +216,45 @@ namespace Cober {
 					if (m_FilePath.extension() == ".png" || m_FilePath.extension() == ".jpg" || m_FilePath.extension() == ".jpeg")
 					{
 						auto textureHolder = Texture::Create(m_FilePath.string());
-						Editor::SelectedEntity().GetComponent<Render2DComponent>().texture = textureHolder;
-						Editor::SelectedEntity().GetComponent<TransformComponent>().scale.x = textureHolder->GetWidth()*0.01;
-						Editor::SelectedEntity().GetComponent<TransformComponent>().scale.y = textureHolder->GetHeight()*0.01;
+						auto& renderComponent = Editor::SelectedEntity().GetComponent<Render2DComponent>();
+						renderComponent.texture = textureHolder;
+
+						float textWidth = textureHolder->GetWidth();
+						float textHeight = textureHolder->GetHeight();
+						if (renderComponent.isSubTexture && renderComponent.texture)
+						{
+							renderComponent.subTexture = SubTexture::CreateFromCoords(renderComponent.texture, 
+																				renderComponent.subTextureIndex, 
+																				renderComponent.subTextureCellSize,
+																				renderComponent.subTextureSpriteSize);
+
+							textWidth = renderComponent.subTextureCellSize.x * renderComponent.subTextureSpriteSize.x;
+							textHeight = renderComponent.subTextureCellSize.y * renderComponent.subTextureSpriteSize.y;
+						}
+
+						// FIXME: Refactor
+						float x = 1.0f;
+						float y = 1.0f;
+						
+						if (textWidth > textHeight)
+						{
+							x = textWidth / textWidth;
+							y = textHeight / textWidth;
+						}
+						else if (textWidth < textHeight)
+						{
+							x = textWidth / textHeight;
+							y = textHeight / textHeight;
+						}
+
+						renderComponent.vertices[0][0] = -x;
+						renderComponent.vertices[0][1] = -y;
+						renderComponent.vertices[1][0] =  x;
+						renderComponent.vertices[1][1] = -y;
+						renderComponent.vertices[2][0] =  x;
+						renderComponent.vertices[2][1] =  y;
+						renderComponent.vertices[3][0] = -x;
+						renderComponent.vertices[3][1] =  y;
 					}
 				}
 			}

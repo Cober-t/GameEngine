@@ -99,6 +99,7 @@ namespace Cober {
 
         float LineThickness = 1.0f;
 
+        // FIXME: Move from settings to Primitive Data
         glm::vec4 QuadVertexPositions[4] 
         {
             { -1.0f, -1.0f, 0.0f, 1.0f },
