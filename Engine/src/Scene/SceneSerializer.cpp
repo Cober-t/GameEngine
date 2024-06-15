@@ -368,35 +368,10 @@ namespace Cober {
 					component.subTextureCellSize = loader["Render2DComponent"]["subtexture"]["cellsize"].GetVec2();
 					component.subTextureSpriteSize = loader["Render2DComponent"]["subtexture"]["spritesize"].GetVec2();
 
-					component.subTexture = SubTexture::CreateFromCoords(component.texture, 
-																		component.subTextureIndex, 
-																		component.subTextureCellSize,
-																		component.subTextureSpriteSize);
-					// FIXME: Refactor
-					float x = 1.0f;
-					float y = 1.0f;
-					float textWidth = component.subTextureCellSize.x * component.subTextureSpriteSize.x;
-					float textHeight = component.subTextureCellSize.y * component.subTextureSpriteSize.y;
-					
-					if (textWidth > textHeight)
-					{
-						x = textWidth / textWidth;
-						y = textHeight / textWidth;
-					}
-					else if (textWidth < textHeight)
-					{
-						x = textWidth / textHeight;
-						y = textHeight / textHeight;
-					}
-
-					component.vertices[0][0] = -x;
-					component.vertices[0][1] = -y;
-					component.vertices[1][0] =  x;
-					component.vertices[1][1] = -y;
-					component.vertices[2][0] =  x;
-					component.vertices[2][1] =  y;
-					component.vertices[3][0] = -x;
-					component.vertices[3][1] =  y;
+					component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																	component.subTextureIndex, 
+																	component.subTextureCellSize,
+																	component.subTextureSpriteSize);					
 				}
 			}
 		}

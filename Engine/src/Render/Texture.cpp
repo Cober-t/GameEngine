@@ -50,8 +50,29 @@ namespace Cober {
 	}
 
 
-    Ref<SubTexture> SubTexture::CreateFromCoords(const Ref<Texture> texture, const glm::vec2 &coords, const glm::vec2 &cellSize, const glm::vec2 &spriteSize)
+    Ref<SubTexture> SubTexture::UpdateCoords(const Ref<Texture> texture, glm::mat4& vertices, const glm::vec2 &coords, const glm::vec2 &cellSize, const glm::vec2 &spriteSize)
     {
+		// FIXME: Export to Settings and Editor
+		float scaleFactor = 100;
+
+		float textWidth = cellSize.x;
+		float textHeight = cellSize.y;
+
+		if (spriteSize.x != 1.0f || spriteSize.y != 1.0f)
+		{
+			textWidth = cellSize.x * spriteSize.x;
+			textHeight = cellSize.y * spriteSize.y;
+		}
+
+		// Handle the size of the entity rendered and his rigidbody collider's size
+		vertices = 
+		{
+			{ -textWidth/2/scaleFactor, -textHeight/2/scaleFactor, 0.0f, 1.0f },
+			{  textWidth/2/scaleFactor, -textHeight/2/scaleFactor, 0.0f, 1.0f },
+			{  textWidth/2/scaleFactor,  textHeight/2/scaleFactor, 0.0f, 1.0f },
+			{ -textWidth/2/scaleFactor,  textHeight/2/scaleFactor, 0.0f, 1.0f }
+		};
+
 		glm::vec2 min = { 
 			(coords.x * cellSize.x) / texture->GetWidth(), 
 			(coords.y * cellSize.y) / texture->GetHeight() 

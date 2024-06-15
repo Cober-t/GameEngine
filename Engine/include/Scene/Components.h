@@ -198,7 +198,7 @@ namespace Cober {
 		float fade = 0.005f;
 
 		Ref<Texture> texture = nullptr;
-		glm::vec4 vertices[4]
+		glm::mat4 vertices
         {
             { -1.0f, -1.0f, 0.0f, 1.0f },
             {  1.0f, -1.0f, 0.0f, 1.0f },

@@ -58,7 +58,7 @@ namespace Cober {
 		const Ref<Texture> GetTexture() const { return m_Texture; }
 		const glm::vec2* GetTexCoords() const { return m_TexCoords; }
 
-		static Ref<SubTexture> CreateFromCoords(const Ref<Texture> texture, const glm::vec2& coords, const glm::vec2& cellSize, const glm::vec2& spriteSize = {1, 1});
+		static Ref<SubTexture> UpdateCoords(const Ref<Texture> texture, glm::mat4& vertices, const glm::vec2& coords, const glm::vec2& cellSize, const glm::vec2& spriteSize = {1, 1});
 
 	private:
 		Ref<Texture> m_Texture;

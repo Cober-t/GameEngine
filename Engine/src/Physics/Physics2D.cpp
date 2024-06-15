@@ -62,34 +62,13 @@ namespace Cober {
             float hx = (abs(boxEntity.size.x) * abs(transform.scale.x));
             float hy = (abs(boxEntity.size.y) * abs(transform.scale.y));
 
-            if (entity.HasComponent<Render2DComponent>() && 
-                entity.GetComponent<Render2DComponent>().shapeType == Shape2D::Sprite &&
-                entity.GetComponent<Render2DComponent>().texture)
+            if (entity.HasComponent<Render2DComponent>())
             {
                 auto& renderComponent = entity.GetComponent<Render2DComponent>();
-                if (renderComponent.isSubTexture && renderComponent.subTexture)
+                if (renderComponent.shapeType == Shape2D::Sprite && renderComponent.texture)
                 {
-                    float subTextureWidth = renderComponent.subTextureCellSize.x * renderComponent.subTextureSpriteSize.x;
-                    float subTextureHeight = renderComponent.subTextureCellSize.y * renderComponent.subTextureSpriteSize.y;
-                    if (subTextureWidth > subTextureHeight)
-                    {
-                        hy *= abs(renderComponent.vertices[0].y);
-                    }
-                    else if (subTextureWidth < subTextureHeight)
-                    {
-                        hx *= abs(renderComponent.vertices[0].x);
-                    }
-                }
-                else
-                {
-                    if (renderComponent.texture->GetWidth() > renderComponent.texture->GetHeight())
-                    {
-                        hy *= abs(renderComponent.vertices[0].y);
-                    }
-                    else if (renderComponent.texture->GetWidth() < renderComponent.texture->GetHeight())
-                    {
-                        hx *= abs(renderComponent.vertices[0].x);
-                    }
+                    hx *= abs(renderComponent.vertices[0].x);
+                    hy *= abs(renderComponent.vertices[0].y);
                 }
             }
 

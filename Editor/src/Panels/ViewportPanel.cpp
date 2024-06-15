@@ -216,45 +216,22 @@ namespace Cober {
 					if (m_FilePath.extension() == ".png" || m_FilePath.extension() == ".jpg" || m_FilePath.extension() == ".jpeg")
 					{
 						auto textureHolder = Texture::Create(m_FilePath.string());
-						auto& renderComponent = Editor::SelectedEntity().GetComponent<Render2DComponent>();
-						renderComponent.texture = textureHolder;
+						auto& component = Editor::SelectedEntity().GetComponent<Render2DComponent>();
+						component.texture = textureHolder;
 
-						float textWidth = textureHolder->GetWidth();
-						float textHeight = textureHolder->GetHeight();
-						if (renderComponent.isSubTexture && renderComponent.texture)
+						if (component.isSubTexture)
 						{
-							renderComponent.subTexture = SubTexture::CreateFromCoords(renderComponent.texture, 
-																				renderComponent.subTextureIndex, 
-																				renderComponent.subTextureCellSize,
-																				renderComponent.subTextureSpriteSize);
-
-							textWidth = renderComponent.subTextureCellSize.x * renderComponent.subTextureSpriteSize.x;
-							textHeight = renderComponent.subTextureCellSize.y * renderComponent.subTextureSpriteSize.y;
+							component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																			component.subTextureIndex, 
+																			component.subTextureCellSize,
+																			component.subTextureSpriteSize);
 						}
-
-						// FIXME: Refactor
-						float x = 1.0f;
-						float y = 1.0f;
-						
-						if (textWidth > textHeight)
+						else
 						{
-							x = textWidth / textWidth;
-							y = textHeight / textWidth;
+							component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																			{0, 0}, 
+																			{component.texture->GetWidth(), component.texture->GetHeight()});
 						}
-						else if (textWidth < textHeight)
-						{
-							x = textWidth / textHeight;
-							y = textHeight / textHeight;
-						}
-
-						renderComponent.vertices[0][0] = -x;
-						renderComponent.vertices[0][1] = -y;
-						renderComponent.vertices[1][0] =  x;
-						renderComponent.vertices[1][1] = -y;
-						renderComponent.vertices[2][0] =  x;
-						renderComponent.vertices[2][1] =  y;
-						renderComponent.vertices[3][0] = -x;
-						renderComponent.vertices[3][1] =  y;
 					}
 				}
 			}
