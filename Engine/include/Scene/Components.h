@@ -283,7 +283,8 @@ namespace Cober {
 		std::unordered_map<uint32_t, Particle> particlePool;
 		std::vector<uint32_t> freeIndices;
 		std::vector<Particle> particlesToBeRemoved;
-		glm::vec2 position;
+
+		glm::vec2 position, positionVariation;
 		glm::vec2 velocity, velocityVariation;
 		glm::vec4 colorBegin{ 1.0f }, colorEnd{ 1.0f };
 		float rotation = 0.0f;

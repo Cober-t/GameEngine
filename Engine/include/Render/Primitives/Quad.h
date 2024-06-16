@@ -19,7 +19,8 @@ namespace Cober {
 			static void CleanVertexBuffer();
 
 			static void Draw(Entity& entity);
-			static void Draw(const glm::mat4& transform, const glm::vec4& color);
+			// static void Draw(const glm::mat4& transform, const glm::vec4& color);
+			static void Draw(const glm::mat4& transform, const glm::vec4& color, const Ref<SubTexture>& subTexture);
 			static void Draw(const std::vector<glm::vec3> vertices, int vertexCount, const glm::vec4& color);
 			static void DrawRect(Entity& entity);
 			// static void DrawRect(glm::vec3 position, glm::vec3 rotation, float width, float height, Entity& entityID, glm::vec4 color = glm::vec4(1.0f));

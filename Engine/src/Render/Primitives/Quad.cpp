@@ -146,19 +146,43 @@ namespace Cober {
 			Render2D::GetStats().QuadCount++;
 		}
 
-		void Quad::Draw(const glm::mat4& transform, const glm::vec4& color) 
+
+		void Quad::Draw(const glm::mat4& transform, const glm::vec4& color, const Ref<SubTexture>& subTexture) 
 		{
 			constexpr float tilingFactor = 1.0f;
 			float textureIndex = 0.0f; // White Texture
-			glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+			const glm::vec2* textureCoords;
+			glm::vec2 baseTextureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+			textureCoords = baseTextureCoords;
 
-			glm::vec4 vertices[4]
+			glm::mat4 vertices
 			{
 				{ -1.0f, -1.0f, 0.0f, 1.0f },
 				{  1.0f, -1.0f, 0.0f, 1.0f },
 				{  1.0f,  1.0f, 0.0f, 1.0f },
 				{ -1.0f,  1.0f, 0.0f, 1.0f },
 			};
+
+			if (subTexture && subTexture->GetTexture())
+			{
+				vertices = subTexture->GetTexture()->GetTextureVertices();
+				textureCoords = subTexture->GetTexCoords();
+				for (uint32_t i = 1; i < data.TextureSlotIndex; i++) 
+				{
+					if (*data.TextureSlots[i] == *subTexture->GetTexture()) 
+					{
+						textureIndex = (float)i;
+						break;
+					}
+				}
+
+				if (textureIndex == 0.0f) 
+				{
+					textureIndex = (float)data.TextureSlotIndex;
+					data.TextureSlots[data.TextureSlotIndex] = subTexture->GetTexture();
+					data.TextureSlotIndex++;
+				}
+			}
 
 			if (data.IndexCount >= Render2D::GetStats().MaxIndices)
 			NextBatch();
@@ -230,11 +254,18 @@ namespace Cober {
 		
         void Quad::DrawRect(Entity& entity)
         {
+			glm::mat4 vertices
+			{
+				{ -1.0f, -1.0f, 0.0f, 1.0f },
+				{  1.0f, -1.0f, 0.0f, 1.0f },
+				{  1.0f,  1.0f, 0.0f, 1.0f },
+				{ -1.0f,  1.0f, 0.0f, 1.0f },
+			};
 			glm::vec4 color = entity.GetComponent<Render2DComponent>().color;
             glm::mat4 transform = entity.GetComponent<TransformComponent>().GetTransform();
             glm::vec3 lineVertices[4];
             for (size_t i = 0; i < 4; i++)
-                lineVertices[i] = transform * entity.GetComponent<Render2DComponent>().vertices[i];
+                lineVertices[i] = transform * vertices[i];
 
             Line::Draw(lineVertices[0], lineVertices[1], color, (int)entity);
             Line::Draw(lineVertices[1], lineVertices[2], color, (int)entity);

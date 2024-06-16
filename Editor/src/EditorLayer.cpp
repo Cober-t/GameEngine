@@ -190,12 +190,6 @@ namespace Cober {
 		
 		ViewportPanel::Get().OnEvent(event);
 
-		// TEST PARTICLE SYSTEM
-		if (Input::IsKeyPressed(KeyCode::P))
-		{
-			ParticleEmitter::Emit(Editor::GetActiveScene().get());
-		}
-
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& event) { return OnKeyPressed(event); });
 	}
@@ -203,6 +197,12 @@ namespace Cober {
 
 	bool Editor::OnKeyPressed(KeyPressedEvent& event) 
 	{
+		// TEST PARTICLE SYSTEM
+		if (Input::IsKeyPressed(KeyCode::P))
+		{
+			ParticleEmitter::Emit(Editor::GetActiveScene().get());
+		}
+
 		if (Input::IsKeyDown(Key::LeftControl) && !Input::IsMouseButtonDown(MouseButton::Right))
 		{
 			switch (event.GetKeyCode())

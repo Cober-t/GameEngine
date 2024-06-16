@@ -22,7 +22,6 @@ namespace Cober
             else if (particleEmitter.lifeRemaining < 0.0f)
             {
                 particleEmitter.active == false;
-                return false;
             }
         }
 
@@ -31,13 +30,13 @@ namespace Cober
             auto& particle = particleMap.second;
 
             if (particle.lifeRemaining < 0.0f && particle.active)
-            {
+            {   
                 ParticleEmitter::RemoveParticle(particle, particleEmitter);
                 continue;
             }
             particle.lifeRemaining -= ts->GetConsistentTimer();
             particle.position += particle.velocity * (float)ts->GetDeltaTime();
-            particle.rotation += 0.01 * (float)ts->GetDeltaTime();
+            particle.rotation += particleEmitter.rotation / 10 * (float)ts->GetDeltaTime();
         }
 
         particleEmitter.position.x = entity.GetComponent<TransformComponent>().position.x;
@@ -65,7 +64,10 @@ namespace Cober
                 * glm::rotate(glm::mat4(1.0f), particle.rotation, { 0.0f, 0.0f, 1.0f })
                 * glm::scale(glm::mat4(1.0f), { size, size, 1.0f });
     
-            Render2D::DrawQuad(transform, color);
+            if (entity.HasComponent<Render2DComponent>() && entity.GetComponent<Render2DComponent>().texture)
+                Render2D::DrawQuad(transform, color, entity.GetComponent<Render2DComponent>().subTexture);
+            else
+                Render2D::DrawQuad(transform, color);
         }
     }
 
@@ -84,19 +86,32 @@ namespace Cober
 
     void ParticleEmitter::Emit(ParticleEmitterComponent& particleEmitter)
     {
+        if (particleEmitter.active == false || particleEmitter.loop == false && particleEmitter.lifeRemaining < 0.0f)
+            return;
+            
         for (int i = 0; i < particleEmitter.rate; i++)
         {
-            if (particleEmitter.loop == false && particleEmitter.lifeRemaining < 0.0f)
-                return;
-
             Particle& particle = GenParticle(particleEmitter);
 
             particle.position = particleEmitter.position;
+            if (particleEmitter.positionVariation.x != 0)
+            {
+                float variation = Random::Value(0, abs(particleEmitter.positionVariation.x)) / 10 / 2;
+                if (Random::Value(0, 1) == 0)
+                    variation *= -1;
+                particle.position.x += variation;
+            }
+            if (particleEmitter.positionVariation.y != 0)
+            {
+                float variation = Random::Value(0, abs(particleEmitter.positionVariation.y)) / 10 / 2;
+                if (Random::Value(0, 1) == 0)
+                    variation *= -1;
+                particle.position.y += variation;
+            }
+
             particle.velocity = particleEmitter.velocity;
-            float randomX = Random::Value(0, 10);
-            float randomY = Random::Value(0, 10);
-            particle.velocity.x += particleEmitter.velocityVariation.x * (randomX / 10 - 0.5f);
-            particle.velocity.y += particleEmitter.velocityVariation.y * (randomY / 10 - 0.5f);
+            particle.velocity.x += particleEmitter.velocityVariation.x * (Random::Value(0, 10) / 10 - 0.5f);
+            particle.velocity.y += particleEmitter.velocityVariation.y * (Random::Value(0, 10) / 10 - 0.5f);
 
             particle.colorBegin = particleEmitter.colorBegin;
             particle.colorEnd = particleEmitter.colorEnd;

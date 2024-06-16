@@ -72,6 +72,7 @@ namespace Cober {
 			{  textWidth/2/scaleFactor,  textHeight/2/scaleFactor, 0.0f, 1.0f },
 			{ -textWidth/2/scaleFactor,  textHeight/2/scaleFactor, 0.0f, 1.0f }
 		};
+		texture->SetTextureVertices(vertices);
 
 		glm::vec2 min = { 
 			(coords.x * cellSize.x) / texture->GetWidth(), 

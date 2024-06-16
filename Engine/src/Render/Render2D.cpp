@@ -115,9 +115,11 @@ namespace Cober {
 			Primitive::Quad::DrawRect(entity);
 		}
 	}
-	void Render2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
+
+	
+	void Render2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color, const Ref<SubTexture>& subTexture)
 	{
-		Primitive::Quad::Draw(transform, color);
+		Primitive::Quad::Draw(transform, color, subTexture);
 	}
 
 

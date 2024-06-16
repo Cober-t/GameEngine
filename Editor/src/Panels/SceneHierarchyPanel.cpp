@@ -709,7 +709,8 @@ namespace Cober {
 		
 		DrawComponent<ParticleEmitterComponent>((std::string)ComponentNames::Particle, entity, [](auto& component, auto& entity)
 			{
-				ImGui::DragFloat("Rotation", &component.rotation, 1.0f, 0.0f);
+				ImGui::DragFloat2("Position Variation", glm::value_ptr(component.positionVariation), 0.1f, 0.0f);
+				ImGui::DragFloat("Rotation", &component.rotation, 0.01f, 0.0f, 1.0f);
 				ImGui::DragFloat("Size Begin", &component.sizeBegin, 0.01f, 1.0f);
 				ImGui::DragFloat("Size End", &component.sizeEnd, 0.01f, 1.0f);
 				ImGui::DragFloat("Size variation", &component.sizeVariation, 0.01f, 0.0f);

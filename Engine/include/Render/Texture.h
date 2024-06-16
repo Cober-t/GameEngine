@@ -38,6 +38,8 @@ namespace Cober {
 		virtual std::string GetName()   const = 0;
 		virtual std::string GetFormat() const = 0;
 		virtual const std::string& GetPath() const = 0;
+		virtual const glm::mat4 GetTextureVertices() const = 0;
+		virtual void SetTextureVertices(const glm::mat4 vertices) = 0;
 
 		virtual void SetData(void* data, uint32_t size) = 0;
 		virtual void Bind(uint32_t slot = 0) const = 0;

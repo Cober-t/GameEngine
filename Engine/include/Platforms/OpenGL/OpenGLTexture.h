@@ -44,6 +44,8 @@ namespace Cober {
 		virtual std::string GetName()   const override;
 		virtual std::string GetFormat() const override;
 		virtual const std::string& GetPath() const override { return m_Path; }
+		virtual const glm::mat4 GetTextureVertices() const override { return m_TextureVertices;};
+		virtual void SetTextureVertices(const glm::mat4 vertices) { m_TextureVertices = vertices; };
 		
 		virtual void SetData(void* data, uint32_t size) override;
 		virtual void Bind(uint32_t slot = 0) const override;
@@ -62,6 +64,7 @@ namespace Cober {
 		uint32_t m_RendererID;
 		GLenum m_InternalFormat, m_DataFormat;
 		static std::unordered_map<std::string, TextureData> m_TexturesDataHolder;
+		glm::mat4 m_TextureVertices;
 	};
 }
 
