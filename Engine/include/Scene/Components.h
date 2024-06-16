@@ -277,7 +277,6 @@ namespace Cober {
 		uint32_t index = 0;
 		bool active = false;
 	};
-	
 	struct ParticleEmitterComponent
 	{
 		Particle particle;
@@ -296,37 +295,6 @@ namespace Cober {
 
 		bool active = false;
 		bool loop = false;
-
-
-		Particle& GenParticle() 
-		{ 
-			int newIndex = particlePool.size();
-			if (freeIndices.size() > 0)
-			{
-				newIndex = freeIndices.front();
-				freeIndices.erase(freeIndices.begin());
-			}
-			particlePool[newIndex] = particle;
-			particlePool[newIndex].index = newIndex;
-			return particlePool[newIndex];
-		}
-
-		void RemoveParticle(Particle& newParticle) 
-		{ 
-			newParticle.active = false;
-			particlesToBeRemoved.push_back(newParticle);
-		}
-
-		void CleanUpParticlePool()
-		{
-			for (auto& particle : particlesToBeRemoved)
-			{
-				freeIndices.push_back(particle.index);
-				particlePool.erase(particle.index);
-			}
-			
-			particlesToBeRemoved.clear();
-		}
 
 		void InitDefaultParticle()
 		{

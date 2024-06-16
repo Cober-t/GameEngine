@@ -440,6 +440,8 @@ namespace Cober {
 		{
 			auto particleEmitter = loader["ParticleEmitterComponent"];
 			auto& component = entity.AddComponent<ParticleEmitterComponent>();
+			component.position.x = entity.GetComponent<TransformComponent>().position.x;
+			component.position.y = entity.GetComponent<TransformComponent>().position.y;
 			component.rotation = particleEmitter["rotation"].GetReal();
 			component.sizeBegin = particleEmitter["sizeBegin"].GetReal();
 			component.sizeEnd = particleEmitter["sizeEnd"].GetReal();

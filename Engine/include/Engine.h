@@ -60,6 +60,7 @@
 // #include "Render/RenderAPI.h"
 // #include "Render/RenderGlobals.h"
 #include "Render/Render2D.h"
+#include "Render/ParticleEmitter.h"
 #include "Render/Buffer.h"
 #include "Render/VertexArray.h"
 #include "Render/Texture.h"
