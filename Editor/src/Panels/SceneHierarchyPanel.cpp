@@ -709,7 +709,6 @@ namespace Cober {
 		
 		DrawComponent<ParticleEmitterComponent>((std::string)ComponentNames::Particle, entity, [](auto& component, auto& entity)
 			{
-				ImGui::DragFloat2("Position", glm::value_ptr(component.position));
 				ImGui::DragFloat("Rotation", &component.rotation, 1.0f, 0.0f);
 				ImGui::DragFloat("Size Begin", &component.sizeBegin, 0.01f, 1.0f);
 				ImGui::DragFloat("Size End", &component.sizeEnd, 0.01f, 1.0f);
@@ -737,7 +736,7 @@ namespace Cober {
 				if (ImGui::Checkbox("Active", &component.active) ||
 					ImGui::Checkbox("Loop", &component.loop))
 				{
-					component.InitParticlesPool();
+					component.InitDefaultParticle();
 				}
 			});
 	}

@@ -105,6 +105,7 @@ namespace Cober {
 		SerializeNativeScriptComponent(entity, serializer);
 		SerializeAudioComponent(entity, serializer);
 		SerializeTextComponent(entity, serializer);
+		SerializeParticleEmitterComponent(entity, serializer);
 	}
 
 	void SceneSerializer::DeserializeAllComponents(Entity& entity, Utils::DataFile& loader)
@@ -118,6 +119,7 @@ namespace Cober {
 		DeserializeNativeScriptComponent(entity, loader);
 		DeserializeAudioComponent(entity, loader);
 		DeserializeTextComponent(entity, loader);
+		DeserializeParticleEmitterComponent(entity, loader);
 	}
 
 	//////////////////////////////////////////
@@ -250,6 +252,26 @@ namespace Cober {
 			serializer["TextComponent"]["color"].SetVec4(text.Color);
 			serializer["TextComponent"]["kerning"].SetReal(text.Kerning);
 			serializer["TextComponent"]["lineSpacing"].SetReal(text.LineSpacing);
+		}
+	}
+	void SceneSerializer::SerializeParticleEmitterComponent(Entity& entity, Utils::DataFile& serializer)
+	{
+		if (entity.HasComponent<ParticleEmitterComponent>())
+		{
+			auto& particleEmitter = entity.GetComponent<ParticleEmitterComponent>();
+			serializer["ParticleEmitterComponent"]["rotation"].SetReal(particleEmitter.rotation);
+			serializer["ParticleEmitterComponent"]["sizeBegin"].SetReal(particleEmitter.sizeBegin);
+			serializer["ParticleEmitterComponent"]["sizeEnd"].SetReal(particleEmitter.sizeEnd);
+			serializer["ParticleEmitterComponent"]["sizeVariation"].SetReal(particleEmitter.sizeVariation);
+			serializer["ParticleEmitterComponent"]["velocity"].SetVec2(particleEmitter.velocity);
+			serializer["ParticleEmitterComponent"]["velocityVariation"].SetVec2(particleEmitter.velocityVariation);
+			serializer["ParticleEmitterComponent"]["colorBegin"].SetVec4(particleEmitter.colorBegin);
+			serializer["ParticleEmitterComponent"]["colorEnd"].SetVec4(particleEmitter.colorEnd);
+			serializer["ParticleEmitterComponent"]["lifeTime"].SetReal(particleEmitter.lifeTime);
+			serializer["ParticleEmitterComponent"]["lifeRemaining"].SetReal(particleEmitter.lifeRemaining);
+			serializer["ParticleEmitterComponent"]["rate"].SetInt(particleEmitter.rate);
+			serializer["ParticleEmitterComponent"]["active"].SetInt(particleEmitter.active);
+			serializer["ParticleEmitterComponent"]["loop"].SetInt(particleEmitter.loop);
 		}
 	}
 
@@ -412,6 +434,29 @@ namespace Cober {
 		}
 	}
 
+	void SceneSerializer::DeserializeParticleEmitterComponent(Entity& entity, Utils::DataFile& loader)
+	{
+		if (loader.HasProperty("ParticleEmitterComponent"))
+		{
+			auto particleEmitter = loader["ParticleEmitterComponent"];
+			auto& component = entity.AddComponent<ParticleEmitterComponent>();
+			component.rotation = particleEmitter["rotation"].GetReal();
+			component.sizeBegin = particleEmitter["sizeBegin"].GetReal();
+			component.sizeEnd = particleEmitter["sizeEnd"].GetReal();
+			component.sizeVariation = particleEmitter["sizeVariation"].GetReal();
+			component.velocity = particleEmitter["velocity"].GetVec2();
+			component.velocityVariation = particleEmitter["velocityVariation"].GetVec2();
+			component.colorBegin = particleEmitter["colorBegin"].GetVec4();
+			component.colorEnd = particleEmitter["colorEnd"].GetVec4();
+			component.lifeTime = particleEmitter["lifeTime"].GetReal();
+			component.lifeRemaining = particleEmitter["lifeRemaining"].GetReal();
+			component.rate = particleEmitter["rate"].GetInt();
+			component.active = particleEmitter["active"].GetInt();
+			component.loop = particleEmitter["loop"].GetInt();
+			component.InitDefaultParticle();
+		}
+	}
+
 
 	bool EntitySerializer::Serialize(Entity& entity, const std::string& entityName)
 	{
@@ -491,6 +536,7 @@ namespace Cober {
 		SceneSerializer::SerializeNativeScriptComponent(entity, serializer);
 		SceneSerializer::SerializeAudioComponent(entity, serializer);
 		SceneSerializer::SerializeTextComponent(entity, serializer);
+		SceneSerializer::SerializeParticleEmitterComponent(entity, serializer);
 	}
 
 	void EntitySerializer::DeserializeAllComponents(Entity& entity, Utils::DataFile& loader)
@@ -504,6 +550,6 @@ namespace Cober {
 		SceneSerializer::DeserializeNativeScriptComponent(entity, loader);
 		SceneSerializer::DeserializeAudioComponent(entity, loader);
 		SceneSerializer::DeserializeTextComponent(entity, loader);
-		
+		SceneSerializer::DeserializeParticleEmitterComponent(entity, loader);
 	}
 }

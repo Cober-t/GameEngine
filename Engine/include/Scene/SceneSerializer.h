@@ -34,6 +34,7 @@ namespace Cober {
 		static void SerializeNativeScriptComponent(Entity& entity, Utils::DataFile& serializer);
 		static void SerializeAudioComponent(Entity& entity, Utils::DataFile& serializer);
 		static void SerializeTextComponent(Entity& entity, Utils::DataFile& serializer);
+		static void SerializeParticleEmitterComponent(Entity& entity, Utils::DataFile& serializer);
 
 		static void DeserializeTransformComponent(Entity& entity, Utils::DataFile& loader);
 		static void DeserializeCameraComponent(Entity& entity, Utils::DataFile& loader);
@@ -44,6 +45,7 @@ namespace Cober {
 		static void DeserializeNativeScriptComponent(Entity& entity, Utils::DataFile& loader);
 		static void DeserializeAudioComponent(Entity& entity, Utils::DataFile& loader);
 		static void DeserializeTextComponent(Entity& entity, Utils::DataFile& loader);
+		static void DeserializeParticleEmitterComponent(Entity& entity, Utils::DataFile& loader);
 	};
 
 

@@ -30,7 +30,7 @@ namespace Cober {
             Entity entity = Entity((entt::entity)entt, scene );
 
             auto& particleEmitter = entity.GetComponent<ParticleEmitterComponent>();
-            particleEmitter.InitParticlesPool();
+            particleEmitter.InitDefaultParticle();
         }
 
 		LOG_INFO("Particle System Started!!");
@@ -46,14 +46,13 @@ namespace Cober {
             Entity entity = Entity((entt::entity)entt, scene );
 
             auto& particleEmitter =  entity.GetComponent<ParticleEmitterComponent>();
+
+            // Script function
             if (Input::IsKeyPressed(KeyCode::P))
             {
                 // Emit Particles of the pool
-                particleEmitter.InitParticlesPool();
-                for (auto& particle : particleEmitter.particlePool)
-                {
-                    Emit(ts, particle, particleEmitter);
-                }
+                for (int i = 0; i < particleEmitter.rate; i++)
+                    Emit(particleEmitter);
             }
 
             // UPDATE
@@ -73,12 +72,17 @@ namespace Cober {
                 }
             }
 
+            particleEmitter.position.x = entity.GetComponent<TransformComponent>().position.x;
+            particleEmitter.position.y = entity.GetComponent<TransformComponent>().position.y;
+
             // RENDER
-            for (auto& particle : particleEmitter.particlePool)
+            for (auto& particleMap : particleEmitter.particlePool)
             {
-                if (particle.lifeRemaining < 0.0f)
+                auto& particle = particleMap.second;
+
+                if (particle.lifeRemaining < 0.0f && particle.active)
                 {
-                    particleEmitter.RemoveParticle();
+                    particleEmitter.RemoveParticle(particle);
                     continue;
                 }
                 particle.lifeRemaining -= ts->GetConsistentTimer();
@@ -98,12 +102,18 @@ namespace Cober {
 
                 Render2D::DrawQuad(transform, color);
             }
+
+            particleEmitter.CleanUpParticlePool();
 		}
 	}
 
 
-	void ParticleSystem::Emit(Unique<Timestep>& ts, Particle& particle,  ParticleEmitterComponent& particleEmitter)
+	void ParticleSystem::Emit(ParticleEmitterComponent& particleEmitter)
     {
+        if (particleEmitter.loop == false && particleEmitter.lifeRemaining < 0.0f)
+            return;
+
+        Particle& particle = particleEmitter.GenParticle();
         float randomX = Random::Value(0, 10);
         float randomY = Random::Value(0, 10);
         particle.velocity.x = particleEmitter.velocityVariation.x * (randomX / 10 - 0.5f);
@@ -117,5 +127,8 @@ namespace Cober {
 
         particle.sizeBegin = particleEmitter.sizeBegin + particleEmitter.sizeVariation * ((float)Random::Value(0, 10) / 10 - 0.5f);
         particle.sizeEnd = particleEmitter.sizeEnd;
+
+        particle.loop = particleEmitter.loop;
+        particle.active = true;
     }
 };

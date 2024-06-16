@@ -11,6 +11,7 @@
 #include <b2_polygon_shape.h>
 
 #include <filesystem>
+#include <unordered_map>
 
 #include <sol/sol.hpp>
 
@@ -272,11 +273,17 @@ namespace Cober {
 		float lifeRemaining = 0.0f;
 
 		bool loop = false;
+		// To delete the particle
+		uint32_t index = 0;
+		bool active = false;
 	};
 	
 	struct ParticleEmitterComponent
 	{
-		std::vector<Particle> particlePool;
+		Particle particle;
+		std::unordered_map<uint32_t, Particle> particlePool;
+		std::vector<uint32_t> freeIndices;
+		std::vector<Particle> particlesToBeRemoved;
 		glm::vec2 position;
 		glm::vec2 velocity, velocityVariation;
 		glm::vec4 colorBegin{ 1.0f }, colorEnd{ 1.0f };
@@ -290,35 +297,58 @@ namespace Cober {
 		bool active = false;
 		bool loop = false;
 
-		void AddParticle(Particle particle) { particlePool.push_back(particle); }
 
-		void RemoveParticle() { if (particlePool.size() > 0) particlePool.pop_back(); }
-
-		void InitParticlesPool()
-		{
-			particlePool.clear();
-			particlePool.resize(rate);
-			for (int i = 0; i < rate; i++)
+		Particle& GenParticle() 
+		{ 
+			int newIndex = particlePool.size();
+			if (freeIndices.size() > 0)
 			{
-				particlePool[i].position = position;
-				particlePool[i].rotation = rotation;
-
-				particlePool[i].velocity = velocity;
-
-				particlePool[i].sizeBegin = sizeBegin;
-				particlePool[i].sizeEnd = sizeEnd;
-
-				particlePool[i].sizeBegin = sizeBegin;
-				particlePool[i].sizeEnd = sizeEnd;
-
-				particlePool[i].colorBegin = colorBegin;
-				particlePool[i].colorEnd = colorEnd;
-
-				particlePool[i].lifeTime = lifeTime;
-				particlePool[i].lifeRemaining = lifeTime;
-
-				particlePool[i].loop = loop;
+				newIndex = freeIndices.front();
+				freeIndices.erase(freeIndices.begin());
 			}
+			particlePool[newIndex] = particle;
+			particlePool[newIndex].index = newIndex;
+			return particlePool[newIndex];
+		}
+
+		void RemoveParticle(Particle& newParticle) 
+		{ 
+			newParticle.active = false;
+			particlesToBeRemoved.push_back(newParticle);
+		}
+
+		void CleanUpParticlePool()
+		{
+			for (auto& particle : particlesToBeRemoved)
+			{
+				freeIndices.push_back(particle.index);
+				particlePool.erase(particle.index);
+			}
+			
+			particlesToBeRemoved.clear();
+		}
+
+		void InitDefaultParticle()
+		{
+			particle.position = position;
+			particle.rotation = rotation;
+
+			particle.velocity = velocity;
+
+			particle.sizeBegin = sizeBegin;
+			particle.sizeEnd = sizeEnd;
+
+			particle.sizeBegin = sizeBegin;
+			particle.sizeEnd = sizeEnd;
+
+			particle.colorBegin = colorBegin;
+			particle.colorEnd = colorEnd;
+
+			particle.lifeTime = lifeTime;
+			particle.lifeRemaining = lifeTime;
+
+			particle.loop = loop;
+			particle.active = true;
 		}
 	};
 
