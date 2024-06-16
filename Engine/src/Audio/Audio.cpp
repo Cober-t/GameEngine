@@ -116,6 +116,14 @@ namespace Cober {
         ma_resource_manager_uninit(&m_ResourceManager);
     }
 
+    void Audio::ClearSoundsPool() 
+    {
+        for (auto [key, value] : sounds)
+            ma_sound_uninit(&value);
+
+        sounds.clear();
+    }
+
 
     bool Audio::Play(std::string soundName, bool loop) 
     {

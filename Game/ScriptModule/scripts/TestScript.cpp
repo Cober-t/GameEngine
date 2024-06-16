@@ -12,23 +12,22 @@ void TestScript::OnUpdate(float dt)
 
 	if (Input::IsKeyPressed(KeyCode::Space))
 	{
+		Audio::Play("score.wav", true);
 		// Scene::LoadPrefab(scene, "Pipe.lua");
 		Physics2D::SetBodyType(entity, BodyType::Dynamic);
+		LOG_WARNING("NOW IS DYNAMIC");
+	}
+	
+	if (Input::IsKeyPressed(KeyCode::Up))
+	{
+		Scene::Reload(scene, "NewScene.lua");
 	}
 }
 
 void TestScript::OnBeginContact(Entity* entityContact) 
 {
-	if (entityContact->GetName() == "Entity0")
-	{
-		LOG_WARNING(entityContact->GetName());
-		Physics2D::MoveTo(Scene::LoadPrefab(scene, "Pipe.lua"), 2, 0);
-		// Audio::Play(entity.GetComponent<AudioComponent>().audioName);
-	}
-	// LOG_WARNING("{0} BEGIN COLLIDE ", entityContact->GetName());
 }
 
 void TestScript::OnEndContact(Entity* entityContact) 
 {
-	Scene::Reload(scene);
 }

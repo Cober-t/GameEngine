@@ -16,6 +16,7 @@ namespace Cober {
         static bool LoadSound(std::string soundName);
         static void LoopSound(std::string soundName, bool loop);
         static void SetVolume(int volume);
+        static void ClearSoundsPool();
     };
 }
 

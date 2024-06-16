@@ -144,10 +144,10 @@ namespace Cober {
 	}
 
 
-	void Scene::Reload(Scene* sceneToBeReloaded)
+	void Scene::Reload(Scene* sceneToBeReloaded, std::string name)
 	{
 		// FIXME: Permit only one reload at a time
-		Ref<Scene> originalScene = SceneSerializer::Deserialize(sceneToBeReloaded->m_SceneName);
+		Ref<Scene> originalScene = SceneSerializer::Deserialize(name);
 
 		auto originalEntityMap = originalScene->GetEntityMap();
 		auto auxMap = sceneToBeReloaded->GetEntityMap();
@@ -162,6 +162,9 @@ namespace Cober {
 			CopyComponentIfExists(AllComponents{}, ent, originalEntityMap.at(entity.first));
 			Physics2D::InitEntity(ent);
 		}
+
+		// Reload Audio
+		Audio::ClearSoundsPool();
 
 		// Load and init scripts for the new scene
 		sceneToBeReloaded->GetSystem<ScriptSystem>().FreeScripts(sceneToBeReloaded);

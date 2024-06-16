@@ -396,6 +396,12 @@ namespace Cober {
 																	component.subTextureCellSize,
 																	component.subTextureSpriteSize);					
 				}
+				else
+				{
+					component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																	{0 ,0}, 
+																	{component.texture->GetWidth(), component.texture->GetHeight()});
+				}
 			}
 		}
 	}
