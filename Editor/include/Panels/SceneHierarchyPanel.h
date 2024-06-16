@@ -22,6 +22,7 @@ namespace Cober {
 		constexpr std::string_view NativeScript = "Native Script Component";
 		constexpr std::string_view Audio = "Audio Component";
 		constexpr std::string_view Text = "Text Component";
+		constexpr std::string_view Particle = "Particle Component";
 	}
 
 	class SceneHierarchyPanel

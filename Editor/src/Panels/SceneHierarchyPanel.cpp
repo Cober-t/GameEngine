@@ -231,6 +231,7 @@ namespace Cober {
 				iconComponent = m_AssetIconMap["boxCollider2D"];
 			else if (name == ComponentNames::Render2DShape)
 				iconComponent = m_AssetIconMap["sprite"];
+			// TODO: Add icons for Audio, text, native scripting and particle components
 
 
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
@@ -295,6 +296,18 @@ namespace Cober {
                 {
 					m_SelectionContext.AddComponent<CameraComponent>();
 				}
+				else if (!m_SelectionContext.HasComponent<Render2DComponent>()) 
+                {
+					m_SelectionContext.AddComponent<Render2DComponent>();
+				}
+				else if (!m_SelectionContext.HasComponent<TextComponent>())
+				{
+					m_SelectionContext.AddComponent<TextComponent>();
+				}
+				else if (!m_SelectionContext.HasComponent<ParticleEmitterComponent>())
+				{
+					m_SelectionContext.AddComponent<ParticleEmitterComponent>();
+				}
 				if (!m_SelectionContext.HasComponent<Rigidbody2D>()) 
                 {
 					m_SelectionContext.AddComponent<Rigidbody2D>();
@@ -315,21 +328,13 @@ namespace Cober {
                 // {
 				// 	m_SelectionContext.AddComponent<PolygonCollider2D>();
 				// }
-				else if (!m_SelectionContext.HasComponent<Render2DComponent>()) 
-                {
-					m_SelectionContext.AddComponent<Render2DComponent>();
-				}
-				else if (!m_SelectionContext.HasComponent<NativeScriptComponent>())
-				{
-					m_SelectionContext.AddComponent<NativeScriptComponent>();
-				}
 				else if (!m_SelectionContext.HasComponent<AudioComponent>())
 				{
 					m_SelectionContext.AddComponent<AudioComponent>();
 				}
-				else if (!m_SelectionContext.HasComponent<TextComponent>())
+				else if (!m_SelectionContext.HasComponent<NativeScriptComponent>())
 				{
-					m_SelectionContext.AddComponent<TextComponent>();
+					m_SelectionContext.AddComponent<NativeScriptComponent>();
 				}
 			}
 			else
@@ -339,15 +344,16 @@ namespace Cober {
 		if (ImGui::BeginPopup("AddComponent")) 
 		{
 			AddIfHasComponent<CameraComponent>((std::string)ComponentNames::Camera);
+			AddIfHasComponent<Render2DComponent>((std::string)ComponentNames::Render2DShape);
+			AddIfHasComponent<TextComponent>((std::string)ComponentNames::Text);
+			AddIfHasComponent<ParticleEmitterComponent>((std::string)ComponentNames::Particle);
 			AddIfHasComponent<Rigidbody2D>((std::string)ComponentNames::Rigidbody2D);
 			AddIfHasComponent<BoxCollider2D>((std::string)ComponentNames::Box2DCollider);
 			AddIfHasComponent<CircleCollider2D>((std::string)ComponentNames::Circle2DCollider);
 			// AddIfHasComponent<EdgeCollider2D>("Edge Collider 2D Component");
 			// AddIfHasComponent<PolygonCollider2D>("Polygon Collider 2D Component");
-			AddIfHasComponent<Render2DComponent>((std::string)ComponentNames::Render2DShape);
-			AddIfHasComponent<NativeScriptComponent>((std::string)ComponentNames::NativeScript);
 			AddIfHasComponent<AudioComponent>((std::string)ComponentNames::Audio);
-			AddIfHasComponent<TextComponent>((std::string)ComponentNames::Text);
+			AddIfHasComponent<NativeScriptComponent>((std::string)ComponentNames::NativeScript);
 			// ...
 			// ...
 
@@ -699,6 +705,40 @@ namespace Cober {
 				ImGui::ColorEdit4("Color", glm::value_ptr(component.Color));
 				ImGui::DragFloat("Kerning", &component.Kerning, 0.025f);
 				ImGui::DragFloat("Line Spacing", &component.LineSpacing, 0.025f);
+			});
+		
+		DrawComponent<ParticleEmitterComponent>((std::string)ComponentNames::Particle, entity, [](auto& component, auto& entity)
+			{
+				ImGui::DragFloat2("Position", glm::value_ptr(component.position));
+				ImGui::DragFloat("Rotation", &component.rotation, 1.0f, 0.0f);
+				ImGui::DragFloat("Size Begin", &component.sizeBegin, 0.01f, 1.0f);
+				ImGui::DragFloat("Size End", &component.sizeEnd, 0.01f, 1.0f);
+				ImGui::DragFloat("Size variation", &component.sizeVariation, 0.01f, 0.0f);
+				ImGui::Separator();
+
+				ImGui::DragInt("Rate", &component.rate, 1, 1);
+				ImGui::Separator();
+
+				ImGui::DragFloat2("Velocity", glm::value_ptr(component.velocity), 0.01f, 1.0f);
+				ImGui::DragFloat2("Vel. variation", glm::value_ptr(component.velocityVariation), 0.01f, 0.0f);
+
+				ImGui::Separator();
+
+				ImGui::ColorEdit4("Color Begin", glm::value_ptr(component.colorBegin));
+				ImGui::ColorEdit4("Color End", glm::value_ptr(component.colorEnd));
+
+				ImGui::Separator();
+
+				ImGui::DragFloat("LifeTime", &component.lifeTime, 0.1f, 1.0f);
+				ImGui::DragFloat("LifeRemaining", &component.lifeRemaining, 0.1f, 0.0f);
+
+				ImGui::Separator();
+				
+				if (ImGui::Checkbox("Active", &component.active) ||
+					ImGui::Checkbox("Loop", &component.loop))
+				{
+					component.InitParticlesPool();
+				}
 			});
 	}
 }

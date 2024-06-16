@@ -59,6 +59,7 @@ namespace Cober {
 		}
 
 		operator float() const { return m_DeltaTime; }
+		float GetConsistentTimer() const { return (glfwGetTime() - m_Timer) / 100; }
 		float GetSeconds() const { return m_DeltaTime; }
 		float GetMilliseconds() const { return m_DeltaTime * 1000.0f; }
 

@@ -261,6 +261,68 @@ namespace Cober {
 	};
 
 
+	struct Particle
+	{
+		glm::vec2 position;
+		glm::vec2 velocity;
+		glm::vec4 colorBegin, colorEnd;
+		float rotation = 0.0f;
+		float sizeBegin, sizeEnd;
+		float lifeTime = 1.0f;
+		float lifeRemaining = 0.0f;
+
+		bool loop = false;
+	};
+	
+	struct ParticleEmitterComponent
+	{
+		std::vector<Particle> particlePool;
+		glm::vec2 position;
+		glm::vec2 velocity, velocityVariation;
+		glm::vec4 colorBegin{ 1.0f }, colorEnd{ 1.0f };
+		float rotation = 0.0f;
+		float sizeBegin, sizeEnd, sizeVariation;
+		int rate = 1;
+
+		float lifeTime = 1.0f;
+		float lifeRemaining = 0.0f;
+
+		bool active = false;
+		bool loop = false;
+
+		void AddParticle(Particle particle) { particlePool.push_back(particle); }
+
+		void RemoveParticle() { if (particlePool.size() > 0) particlePool.pop_back(); }
+
+		void InitParticlesPool()
+		{
+			particlePool.clear();
+			particlePool.resize(rate);
+			for (int i = 0; i < rate; i++)
+			{
+				particlePool[i].position = position;
+				particlePool[i].rotation = rotation;
+
+				particlePool[i].velocity = velocity;
+
+				particlePool[i].sizeBegin = sizeBegin;
+				particlePool[i].sizeEnd = sizeEnd;
+
+				particlePool[i].sizeBegin = sizeBegin;
+				particlePool[i].sizeEnd = sizeEnd;
+
+				particlePool[i].colorBegin = colorBegin;
+				particlePool[i].colorEnd = colorEnd;
+
+				particlePool[i].lifeTime = lifeTime;
+				particlePool[i].lifeRemaining = lifeTime;
+
+				particlePool[i].loop = loop;
+			}
+		}
+	};
+
+
 	/*
 	struct Animation2D {
 		int numFrames;
@@ -283,6 +345,7 @@ namespace Cober {
 
 	using AllComponents = ComponentGroup<TransformComponent, CameraComponent,
 		Render2DComponent,
+		ParticleEmitterComponent,
 		AudioComponent,
 		TextComponent,
 		Rigidbody2D, BoxCollider2D, CircleCollider2D, EdgeCollider2D, PolygonCollider2D,

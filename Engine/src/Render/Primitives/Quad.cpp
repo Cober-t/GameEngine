@@ -107,7 +107,7 @@ namespace Cober {
 		{
 			auto& enttTrans = entity.GetComponent<TransformComponent>();
 			
-			glm::vec3 position{ enttTrans.position.x, enttTrans.position.y, enttTrans.position.z + 0.001f };
+			glm::vec3 position{ enttTrans.position.x, enttTrans.position.y, enttTrans.position.z };
 			glm::vec3 scale{ enttTrans.scale.x, enttTrans.scale.y, 1.0f };
 
 			glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
@@ -138,6 +138,39 @@ namespace Cober {
 				data.VertexBufferPtr->TexIndex = textureIndex;
 				data.VertexBufferPtr->TilingFactor = tilingFactor;
 				data.VertexBufferPtr->EntityID = (int)entity;
+				data.VertexBufferPtr++;
+			}
+
+			data.IndexCount += 6;
+
+			Render2D::GetStats().QuadCount++;
+		}
+
+		void Quad::Draw(const glm::mat4& transform, const glm::vec4& color) 
+		{
+			constexpr float tilingFactor = 1.0f;
+			float textureIndex = 0.0f; // White Texture
+			glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+
+			glm::vec4 vertices[4]
+			{
+				{ -1.0f, -1.0f, 0.0f, 1.0f },
+				{  1.0f, -1.0f, 0.0f, 1.0f },
+				{  1.0f,  1.0f, 0.0f, 1.0f },
+				{ -1.0f,  1.0f, 0.0f, 1.0f },
+			};
+
+			if (data.IndexCount >= Render2D::GetStats().MaxIndices)
+			NextBatch();
+
+			for (size_t i = 0; i < 4; i++) 
+			{
+				data.VertexBufferPtr->Position = transform * vertices[i];
+				data.VertexBufferPtr->Color = color;
+				data.VertexBufferPtr->TexCoord = textureCoords[i];
+				data.VertexBufferPtr->TexIndex = textureIndex;
+				data.VertexBufferPtr->TilingFactor = tilingFactor;
+				data.VertexBufferPtr->EntityID = -1;
 				data.VertexBufferPtr++;
 			}
 

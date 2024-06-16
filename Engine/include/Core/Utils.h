@@ -2,12 +2,15 @@
 #define UTILS_H
 
 #include <map>
+#include <random>
+
 #include <glm/glm.hpp>
+
 #include "Core/EngineApp.h"
 
 namespace Cober::Random {
-
-	CB_API double Value(int min = 1, int max = 10);
+	
+	CB_API double Value(int min = 0, int max = 9);
 	CB_API void Seed(double seed = glfwGetTime());
 }
 
