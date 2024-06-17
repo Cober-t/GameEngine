@@ -64,8 +64,8 @@ namespace Cober
                 * glm::rotate(glm::mat4(1.0f), particle.rotation, { 0.0f, 0.0f, 1.0f })
                 * glm::scale(glm::mat4(1.0f), { size, size, 1.0f });
     
-            if (entity.HasComponent<Render2DComponent>() && entity.GetComponent<Render2DComponent>().texture)
-                Render2D::DrawQuad(transform, color, entity.GetComponent<Render2DComponent>().subTexture);
+            if (particleEmitter.texture)
+                Render2D::DrawQuad(transform, color, particleEmitter.subTexture);
             else
                 Render2D::DrawQuad(transform, color);
         }

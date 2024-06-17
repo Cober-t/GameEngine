@@ -297,6 +297,21 @@ namespace Cober {
 		bool active = false;
 		bool loop = false;
 
+		// Particle texture
+		Ref<Texture> texture = nullptr;
+		glm::mat4 vertices
+        {
+            { -1.0f, -1.0f, 0.0f, 1.0f },
+            {  1.0f, -1.0f, 0.0f, 1.0f },
+            {  1.0f,  1.0f, 0.0f, 1.0f },
+            { -1.0f,  1.0f, 0.0f, 1.0f }
+        };
+		Ref<SubTexture> subTexture = CreateRef<SubTexture>();
+		bool isSubTexture;
+		glm::vec2 subTextureIndex = { 0, 0 };
+		glm::vec2 subTextureCellSize = { 16, 16 };
+		glm::vec2 subTextureSpriteSize = { 1, 1 };
+
 		void InitDefaultParticle()
 		{
 			particle.position = position;

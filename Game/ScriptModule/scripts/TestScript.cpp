@@ -8,17 +8,14 @@ void TestScript::OnStart()
 
 void TestScript::OnUpdate(float dt)
 {
-	auto body = (b2Body*)entity.GetComponent<Rigidbody2D>().runtimeBody;
+	auto body = (b2Body*)entity.GetBody();
 
 	if (Input::IsKeyPressed(KeyCode::Space))
 	{
-		Audio::Play("score.wav", true);
-		// Scene::LoadPrefab(scene, "Pipe.lua");
 		Physics2D::SetBodyType(entity, BodyType::Dynamic);
-		LOG_WARNING("NOW IS DYNAMIC");
 	}
 	
-	if (Input::IsKeyPressed(KeyCode::Up))
+	if (Input::IsKeyPressed(KeyCode::R) && Input::IsKeyDown(KeyCode::LeftControl))
 	{
 		Scene::Reload(scene, "NewScene.lua");
 	}

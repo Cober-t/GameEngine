@@ -277,6 +277,78 @@ namespace Cober {
 		}
 	}
 
+	
+	template <typename T>
+	static void DropTextureButton(T& component)
+    {
+		std::string nameTexture = component.texture == nullptr ? "Texture" : component.texture->GetName();
+		ImGui::Button(nameTexture.c_str(), ImVec2(100.0f, 0.0f));
+
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
+				const wchar_t* path = (const wchar_t*)payload->Data;
+				std::filesystem::path texturePath = std::filesystem::current_path() / "assets" / path;
+
+				std::string format = texturePath.string();
+				auto lastDot = format.find_last_of('.');
+				format = lastDot != std::string::npos ? format.substr(lastDot) : "null";
+
+				if (lastDot != std::string::npos && (format == ".png" || format == ".jpg" || format == ".jpeg"))
+				{
+					component.texture = Texture::Create(texturePath.string());
+
+					if (component.isSubTexture)
+					{
+						component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																		component.subTextureIndex, 
+																		component.subTextureCellSize,
+																		component.subTextureSpriteSize);
+					}
+					else
+					{
+						component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																		{0 ,0}, 
+																		{component.texture->GetWidth(), component.texture->GetHeight()});
+					}
+				}
+			}
+			ImGui::EndDragDropTarget();
+		}
+
+		if(component.texture)
+		{
+			if (ImGui::Checkbox("SubTexture", &component.isSubTexture))
+			{
+				if (component.isSubTexture)
+				{
+					component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																	component.subTextureIndex, 
+																	component.subTextureCellSize,
+																	component.subTextureSpriteSize);
+				}
+				else
+				{
+					component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																	{0 ,0}, 
+																	{component.texture->GetWidth(), component.texture->GetHeight()});
+				}
+			}
+			if (component.isSubTexture)
+			{
+				if (ImGui::DragFloat2("Index", glm::value_ptr(component.subTextureIndex), 0, 0) ||
+					ImGui::DragFloat2("Cell size", glm::value_ptr(component.subTextureCellSize), 16, 0) ||
+					ImGui::DragFloat2("Sprite size", glm::value_ptr(component.subTextureSpriteSize), 1, 1))
+				{
+					component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																	component.subTextureIndex, 
+																	component.subTextureCellSize,
+																	component.subTextureSpriteSize);
+				}
+			}
+		}
+	}
+
 
 	void SceneHierarchyPanel::DrawComponents(Entity& entity)
 	{
@@ -534,72 +606,7 @@ namespace Cober {
 
 				if ((int)component.shapeType == (int)Shape2D::Sprite)
 				{
-					std::string nameTexture = component.texture == nullptr ? "Texture" : component.texture->GetName();
-					ImGui::Button(nameTexture.c_str(), ImVec2(100.0f, 0.0f));
-
-					if (ImGui::BeginDragDropTarget())
-					{
-						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
-							const wchar_t* path = (const wchar_t*)payload->Data;
-							std::filesystem::path texturePath = std::filesystem::current_path() / "assets" / path;
-
-							std::string format = texturePath.string();
-							auto lastDot = format.find_last_of('.');
-							format = lastDot != std::string::npos ? format.substr(lastDot) : "null";
-
-							if (lastDot != std::string::npos && (format == ".png" || format == ".jpg" || format == ".jpeg"))
-							{
-								component.texture = Texture::Create(texturePath.string());
-
-								if (component.isSubTexture)
-								{
-									component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
-																					component.subTextureIndex, 
-																					component.subTextureCellSize,
-																					component.subTextureSpriteSize);
-								}
-								else
-								{
-									component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
-																					{0 ,0}, 
-																					{component.texture->GetWidth(), component.texture->GetHeight()});
-								}
-							}
-						}
-						ImGui::EndDragDropTarget();
-					}
-
-					if(component.texture)
-					{
-						if (ImGui::Checkbox("SubTexture", &component.isSubTexture))
-						{
-							if (component.isSubTexture)
-							{
-								component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
-																				component.subTextureIndex, 
-																				component.subTextureCellSize,
-																				component.subTextureSpriteSize);
-							}
-							else
-							{
-								component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
-																				{0 ,0}, 
-																				{component.texture->GetWidth(), component.texture->GetHeight()});
-							}
-						}
-						if (component.isSubTexture)
-						{
-							if (ImGui::DragFloat2("Index", glm::value_ptr(component.subTextureIndex), 0, 0) ||
-								ImGui::DragFloat2("Cell size", glm::value_ptr(component.subTextureCellSize), 16, 0) ||
-								ImGui::DragFloat2("Sprite size", glm::value_ptr(component.subTextureSpriteSize), 1, 1))
-							{
-								component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
-																				component.subTextureIndex, 
-																				component.subTextureCellSize,
-																				component.subTextureSpriteSize);
-							}
-						}
-					}
+					DropTextureButton<Render2DComponent>(component);
 				}
 			});
 
@@ -734,11 +741,13 @@ namespace Cober {
 
 				ImGui::Separator();
 				
-				if (ImGui::Checkbox("Active", &component.active) ||
-					ImGui::Checkbox("Loop", &component.loop))
-				{
+				if (ImGui::Checkbox("Active", &component.active))
 					component.InitDefaultParticle();
-				}
+				ImGui::SameLine();
+				if (ImGui::Checkbox("Loop", &component.loop))
+					component.InitDefaultParticle();
+
+				DropTextureButton<ParticleEmitterComponent>(component);
 			});
 	}
 }

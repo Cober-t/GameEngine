@@ -273,6 +273,15 @@ namespace Cober {
 			serializer["ParticleEmitterComponent"]["rate"].SetInt(particleEmitter.rate);
 			serializer["ParticleEmitterComponent"]["active"].SetInt(particleEmitter.active);
 			serializer["ParticleEmitterComponent"]["loop"].SetInt(particleEmitter.loop);
+
+			serializer["ParticleEmitterComponent"]["texture"].SetString(particleEmitter.texture->GetPath());
+			serializer["ParticleEmitterComponent"]["issubtexture"].SetReal(particleEmitter.isSubTexture);
+			if (particleEmitter.isSubTexture)
+			{
+				serializer["ParticleEmitterComponent"]["subtexture"]["indices"].SetVec2(particleEmitter.subTextureIndex);
+				serializer["ParticleEmitterComponent"]["subtexture"]["cellsize"].SetVec2(particleEmitter.subTextureCellSize);
+				serializer["ParticleEmitterComponent"]["subtexture"]["spritesize"].SetVec2(particleEmitter.subTextureSpriteSize);
+			}
 		}
 	}
 
@@ -354,42 +363,42 @@ namespace Cober {
 	{
 		if (loader.HasProperty("Render2DComponent")) 
 		{
-			auto bc2d = loader["Render2DComponent"];
+			auto renderComponent = loader["Render2DComponent"];
 			auto& component = entity.AddComponent<Render2DComponent>();
-			component.color = loader["Render2DComponent"]["color"].GetVec4();
+			component.color = renderComponent["color"].GetVec4();
 
-			std::string shapeType = loader["Render2DComponent"]["shape2D"].GetString();
+			std::string shapeType = renderComponent["shape2D"].GetString();
 			if (shapeType == "Line")
 			{
 				component.shapeType = Shape2D::Line;
-				component.thickness = loader["Render2DComponent"]["thickness"].GetReal();
+				component.thickness = renderComponent["thickness"].GetReal();
 			}
 
 			if (shapeType == "Quad")
 			{
 				component.shapeType = Shape2D::Quad;
-				component.fill = loader["Render2DComponent"]["fill"].GetInt();
+				component.fill = renderComponent["fill"].GetInt();
 			}
 
 			if (shapeType == "Circle")
 			{
 				component.shapeType = Shape2D::Circle;
-				component.thickness = loader["Render2DComponent"]["thickness"].GetReal();
-				component.fade = loader["Render2DComponent"]["fade"].GetReal();
+				component.thickness = renderComponent["thickness"].GetReal();
+				component.fade = renderComponent["fade"].GetReal();
 			}
 			if (shapeType == "Sprite")
 			{
-				std::string texturePath = loader["Render2DComponent"]["texture"].GetString();
+				std::string texturePath = renderComponent["texture"].GetString();
 				component.shapeType = Shape2D::Sprite;
 				component.texture = Texture::Create(texturePath);
-				component.isSubTexture = loader["Render2DComponent"]["issubtexture"].GetReal();
+				component.isSubTexture = renderComponent["issubtexture"].GetReal();
 				component.subTexture = CreateRef<SubTexture>();
 
 				if (component.isSubTexture)
 				{
-					component.subTextureIndex = loader["Render2DComponent"]["subtexture"]["indices"].GetVec2();
-					component.subTextureCellSize = loader["Render2DComponent"]["subtexture"]["cellsize"].GetVec2();
-					component.subTextureSpriteSize = loader["Render2DComponent"]["subtexture"]["spritesize"].GetVec2();
+					component.subTextureIndex = renderComponent["subtexture"]["indices"].GetVec2();
+					component.subTextureCellSize = renderComponent["subtexture"]["cellsize"].GetVec2();
+					component.subTextureSpriteSize = renderComponent["subtexture"]["spritesize"].GetVec2();
 
 					component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
 																	component.subTextureIndex, 
@@ -464,6 +473,34 @@ namespace Cober {
 			component.active = particleEmitter["active"].GetInt();
 			component.loop = particleEmitter["loop"].GetInt();
 			component.InitDefaultParticle();
+			std::string texturePath = particleEmitter["texture"].GetString();
+			LOG_WARNING(texturePath);
+
+			if (texturePath == "")
+				return;
+
+			component.texture = Texture::Create(texturePath);
+			component.isSubTexture = particleEmitter["issubtexture"].GetReal();
+			component.subTexture = CreateRef<SubTexture>();
+
+			if (component.isSubTexture)
+			{
+				component.subTextureIndex = particleEmitter["subtexture"]["indices"].GetVec2();
+				component.subTextureCellSize = particleEmitter["subtexture"]["cellsize"].GetVec2();
+				component.subTextureSpriteSize = particleEmitter["subtexture"]["spritesize"].GetVec2();
+
+				component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																component.subTextureIndex, 
+																component.subTextureCellSize,
+																component.subTextureSpriteSize);					
+			}
+			else
+			{
+				component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																{0 ,0}, 
+																{component.texture->GetWidth(), component.texture->GetHeight()});
+			}
+			
 		}
 	}
 
