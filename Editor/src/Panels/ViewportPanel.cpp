@@ -317,7 +317,7 @@ namespace Cober {
 		float size = ImGui::GetWindowHeight() - 4.0f;
 		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 
-		if (ImGui::Button(icon)) 
+		if (ImGui::Button(icon) || Editor::GetActiveScene()->ExitFromRuntimeEditor())
         {
 			m_GizmoType = -1;
 			if (gameState == EngineApp::GameState::EDITOR) 
@@ -344,7 +344,20 @@ namespace Cober {
 			}
 		}
 
-		if (gameState == EngineApp::GameState::RUNTIME_EDITOR)
+		if (gameState == EngineApp::GameState::EXIT) 
+		{
+			Editor::GetActiveScene()->OnSimulationStop();
+
+			EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
+
+			Editor::SetActiveScene(Editor::GetEditorScene());
+			SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
+
+			// Provisional fix to avoid crash
+			NativeScriptFn::FreeScriptLibrary();
+			Editor::SetSelectedEntity();
+		}
+		else if (gameState == EngineApp::GameState::RUNTIME_EDITOR)
 		{
 			ImGui::SameLine();
 

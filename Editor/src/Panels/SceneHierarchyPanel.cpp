@@ -290,11 +290,8 @@ namespace Cober {
 				const wchar_t* path = (const wchar_t*)payload->Data;
 				std::filesystem::path texturePath = std::filesystem::current_path() / "assets" / path;
 
-				std::string format = texturePath.string();
-				auto lastDot = format.find_last_of('.');
-				format = lastDot != std::string::npos ? format.substr(lastDot) : "null";
-
-				if (lastDot != std::string::npos && (format == ".png" || format == ".jpg" || format == ".jpeg"))
+				std::string format = texturePath.extension().string();
+				if (format == ".png" || format == ".jpg" || format == ".jpeg")
 				{
 					component.texture = Texture::Create(texturePath.string());
 
@@ -708,6 +705,29 @@ namespace Cober {
 				if (ImGui::InputTextMultiline("##", buffer, sizeof(buffer)))
 				{
 					component.Text = (std::string)buffer;
+				}
+				if (component.FontAsset)
+				{
+					ImGui::Button(component.FontAsset->GetFontName().c_str(), ImVec2(100.0f, 0.0f));
+					if (ImGui::BeginDragDropTarget())
+					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+						{
+							const wchar_t* path = (const wchar_t*)payload->Data;
+
+							std::filesystem::path fontPath = std::filesystem::current_path() / "assets" / path;
+							LOG_WARNING("{0}", fontPath.string());
+							if (fontPath.extension().string() == ".ttf" && std::filesystem::exists(fontPath))
+							{
+								component.FontAsset = CreateRef<Font>(fontPath);
+							}
+						}
+						ImGui::EndDragDropTarget();
+					}
+				}
+				else
+				{
+					component.FontAsset->GetDefault();
 				}
 				ImGui::ColorEdit4("Color", glm::value_ptr(component.Color));
 				ImGui::DragFloat("Kerning", &component.Kerning, 0.025f);

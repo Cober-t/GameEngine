@@ -50,7 +50,10 @@ namespace Cober {
 
 		void Step(int step = 1) { m_StepFrames = step; };
 		void Pause() { m_IsPaused = m_IsPaused == true ? false : true; };
+		bool ExitFromRuntimeEditor() { return m_ExitFromRuntimeEditor; };
+
 		static bool Save(const Ref<Scene>& scene, std::string sceneName = "Scene1");
+		static void Exit(Scene* scene);
 
 		static void Reload(Scene* scene, std::string name);
 		static Ref<Scene> Load(std::string scenePath = "SceneDefault.lua");
@@ -86,6 +89,7 @@ namespace Cober {
 		std::string m_SceneName;
 		bool m_IsPaused = false;
 		bool m_ReloadScripts = false;
+		bool m_ExitFromRuntimeEditor = false;
 
 		friend class Entity;
 		friend class System;

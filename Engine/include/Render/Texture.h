@@ -17,11 +17,26 @@ namespace Cober {
 		RGBA32F
 	};
 
+	enum class ImageFilter
+	{
+		NEAREST = 0,
+		LINEAR,
+	};
+
+	enum class RepeatPattern
+	{
+		REPEAT = 0,
+		CLAM_TO_EDGE,
+		MIRRORED_REPEAT,
+	};
+
 	struct TextureSpecification
 	{
 		uint32_t Width = 1;
 		uint32_t Height = 1;
 		ImageFormat Format = ImageFormat::RGBA8;
+		ImageFilter Filter = ImageFilter::NEAREST;
+		RepeatPattern Pattern = RepeatPattern::REPEAT;
 		bool GenerateMips = true;
 	};
 

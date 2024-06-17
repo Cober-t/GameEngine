@@ -31,6 +31,31 @@ namespace Cober {
 			return 0;
 		}
 
+		static GLenum ImageFilterToGL(ImageFilter format)
+		{
+			switch (format)
+			{
+			case ImageFilter::NEAREST:  return GL_NEAREST;
+			case ImageFilter::LINEAR: return GL_LINEAR;
+			}
+
+			LOG_CORE_ASSERT(false, "Unknown internal texture format");
+			return 0;
+		}
+
+		static GLenum ImageRepeatPatternToGL(RepeatPattern format)
+		{
+			switch (format)
+			{
+			case RepeatPattern::REPEAT:  return GL_REPEAT;
+			case RepeatPattern::CLAM_TO_EDGE: return GL_CLAMP_TO_EDGE;
+			case RepeatPattern::MIRRORED_REPEAT: return GL_MIRRORED_REPEAT;
+			}
+
+			LOG_CORE_ASSERT(false, "Unknown internal texture format");
+			return 0;
+		}
+
 	}
 
 	std::unordered_map<std::string, TextureData> OpenGLTexture::m_TexturesDataHolder;
@@ -44,12 +69,12 @@ namespace Cober {
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Specification.Width, m_Specification.Height);
+		
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, Utils::ImageFilterToGL(m_Specification.Filter));
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, Utils::ImageFilterToGL(m_Specification.Filter));
 
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, Utils::ImageRepeatPatternToGL(m_Specification.Pattern));
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, Utils::ImageRepeatPatternToGL(m_Specification.Pattern));
 	}
 
 

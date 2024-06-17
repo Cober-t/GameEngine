@@ -248,6 +248,7 @@ namespace Cober {
 		if (entity.HasComponent<TextComponent>())
 		{
 			auto& text = entity.GetComponent<TextComponent>();
+			serializer["TextComponent"]["font"].SetString(text.FontAsset->GetFontPath().string());
 			serializer["TextComponent"]["text"].SetString(text.Text);
 			serializer["TextComponent"]["color"].SetVec4(text.Color);
 			serializer["TextComponent"]["kerning"].SetReal(text.Kerning);
@@ -443,6 +444,7 @@ namespace Cober {
 		{
 			auto text = loader["TextComponent"];
 			auto& component = entity.AddComponent<TextComponent>();
+			component.FontAsset = CreateRef<Font>(text["font"].GetString());
 			component.Text = text["text"].GetString();
 			component.Color = text["color"].GetVec4();
 			component.Kerning = text["kerning"].GetReal();

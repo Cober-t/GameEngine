@@ -17,12 +17,16 @@ namespace Cober {
 		~Font();
 
 		const MSDFData* GetMSDFData() const { return m_Data; }
+		const std::string GetFontName() const { return m_FontName; }
 		Ref<Texture> GetAtlasTexture() const { return m_AtlasTexture; }
+		std::filesystem::path GetFontPath() const { return m_FontPath; }
 
 		static Ref<Font> GetDefault();
 
 	private:
 		MSDFData* m_Data;
+		std::filesystem::path m_FontPath;
+		std::string m_FontName;
 		Ref<Texture> m_AtlasTexture;
 	};
 }

@@ -29,6 +29,8 @@ namespace Cober {
 		spec.Width = bitmap.width;
 		spec.Height = bitmap.height;
 		spec.Format = ImageFormat::RGB8;
+		spec.Filter = ImageFilter::LINEAR;
+		spec.Pattern = RepeatPattern::REPEAT;
 		spec.GenerateMips = false;
 
 		Ref<Texture> texture = Texture::Create(spec);
@@ -44,6 +46,8 @@ namespace Cober {
 		LOG_CORE_ASSERT(ft, "Cannot initialize Freetype");
 		
 		std::string fileString = filepath.string();
+		m_FontPath = filepath;
+		m_FontName = filepath.filename().string();
 
 		msdfgen::FontHandle* font = msdfgen::loadFont(ft, fileString.c_str());
 		if (!font)
@@ -150,7 +154,12 @@ namespace Cober {
 	{
 		static Ref<Font> DefaultFont;
 		if (!DefaultFont)
-			DefaultFont = CreateRef<Font>(std::filesystem::current_path()/"assets"/"fonts"/"opensans"/"OpenSans-Regular.ttf");
+		{
+			std::filesystem::path fontPath =std::filesystem::current_path()/"assets"/"fonts"/"opensans"/"OpenSans-Regular.ttf";
+			DefaultFont = CreateRef<Font>(fontPath);
+			DefaultFont->m_FontName = "OpenSans-Regular";
+			DefaultFont->m_FontPath = fontPath;
+		}
 
 		return DefaultFont;
 	}

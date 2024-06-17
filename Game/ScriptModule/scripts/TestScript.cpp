@@ -17,7 +17,8 @@ void TestScript::OnUpdate(float dt)
 	
 	if (Input::IsKeyPressed(KeyCode::R) && Input::IsKeyDown(KeyCode::LeftControl))
 	{
-		Scene::Reload(scene, "NewScene.lua");
+		Scene::Exit(scene);
+		// Scene::Reload(scene, "NewScene.lua");
 	}
 }
 
