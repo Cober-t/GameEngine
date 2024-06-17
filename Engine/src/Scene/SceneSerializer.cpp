@@ -476,7 +476,6 @@ namespace Cober {
 			component.loop = particleEmitter["loop"].GetInt();
 			component.InitDefaultParticle();
 			std::string texturePath = particleEmitter["texture"].GetString();
-			LOG_WARNING(texturePath);
 
 			if (texturePath == "")
 				return;

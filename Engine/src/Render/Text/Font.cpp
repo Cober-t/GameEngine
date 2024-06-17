@@ -10,6 +10,8 @@
 
 namespace Cober {
 
+	std::unordered_map<std::string, std::pair<Ref<Texture>, MSDFData*>> Font::m_AllFontPaths;
+
 	template<typename T, typename S, int N, msdf_atlas::GeneratorFunction<S, N> GenFunc>
 	static Ref<Texture> CreateAndCacheAtlas(const std::string& fontName, float fontSize, const std::vector<msdf_atlas::GlyphGeometry>& glyphs,
 		const msdf_atlas::FontGeometry& fontGeometry, uint32_t width, uint32_t height)
@@ -46,13 +48,25 @@ namespace Cober {
 		LOG_CORE_ASSERT(ft, "Cannot initialize Freetype");
 		
 		std::string fileString = filepath.string();
+
+		// FIXME: Change reuse texture to array of different textures to render
+		if (m_AllFontPaths.find(filepath.filename().string()) != m_AllFontPaths.end())
+		{
+			m_FontPath = filepath;
+			m_FontName = filepath.filename().string();
+
+			m_AtlasTexture = m_AllFontPaths[filepath.filename().string()].first;
+			m_Data = m_AllFontPaths[filepath.filename().string()].second;
+			return;
+		}
+
 		m_FontPath = filepath;
 		m_FontName = filepath.filename().string();
 
 		msdfgen::FontHandle* font = msdfgen::loadFont(ft, fileString.c_str());
 		if (!font)
 		{
-			LOG_CORE_ERROR("Failed to load font: {}", fileString);
+			LOG_CORE_ERROR("Failed to load font: {0}", fileString);
 			return;
 		}
 
@@ -122,6 +136,7 @@ namespace Cober {
 
 
 		m_AtlasTexture = CreateAndCacheAtlas<uint8_t, float, 3, msdf_atlas::msdfGenerator>("Test", (float)emSize, m_Data->Glyphs, m_Data->FontGeometry, width, height);
+		m_AllFontPaths[filepath.filename().string()] = std::make_pair(m_AtlasTexture, m_Data);
 
 
 #if 0

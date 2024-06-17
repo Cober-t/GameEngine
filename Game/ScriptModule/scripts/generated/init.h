@@ -5,9 +5,6 @@
 #include <iostream>
 #include <cstdlib>
 
-#include "Core/Core.h"
-#include "Scene/ECS.h"
-
 #include "../TestScript.h"
 
 #define ENTT_STANDARD_CPP
@@ -17,14 +14,11 @@
 namespace Cober {
 
 	extern "C" CB_SCRIPT void InitScripts(Scene* scene, Entity entity)
-	{
-		if (entity.GetComponent<NativeScriptComponent>().className == "TestScript")
-		{
-			entity.AddComponent<TestScript>();
-			entity.GetComponent<TestScript>().entity = entity;
-			entity.GetComponent<TestScript>().scene = scene;
-			entity.GetComponent<TestScript>().OnStart();
-		}
+	{		
+		auto& component = entity.AddComponent<TestScript>();
+		component.entity = entity;
+		component.scene = scene;
+		component.OnStart();
 	}
 
 	extern "C" CB_SCRIPT void UpdateScripts(Scene* scene, float dt)
@@ -54,6 +48,16 @@ namespace Cober {
 			entityB->GetComponent<TestScript>().OnEndContact(entityA);
 	}
 
+	extern "C" CB_SCRIPT void EventScripts(Scene* scene, Event& event)
+	{
+		auto testScriptView = scene->GetAllEntitiesWith<TestScript>();
+
+		for (auto entt : testScriptView)
+		{
+			Entity entity = Entity(entt, scene);
+			entity.GetComponent<TestScript>().OnEvent(event);
+		}
+	}
 
 	extern "C" CB_SCRIPT void DeleteScripts(Scene* scene)
 	{
@@ -85,12 +89,6 @@ namespace Cober {
 	// extern "C" CB_SCRIPT void ImGui(entt::registry& registryRef, Entity entity)
 	// {
 	// }
-
-	// extern "C" CB_SCRIPT void DeleteScripts()
-	// {
-	// 	// Log::Info("Deletink Scripts");
-	// }
-
 }
 
 BOOL WINAPI DllMain(

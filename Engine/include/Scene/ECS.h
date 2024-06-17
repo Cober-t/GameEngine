@@ -87,7 +87,6 @@ namespace Cober {
 	public:
 		System() = default;
 		~System() = default;
-
 	};
 }
 

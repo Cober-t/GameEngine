@@ -13,6 +13,7 @@ public:
 	virtual void OnUpdate(float dt) override;
 	virtual void OnBeginContact(Entity* entityContact) override;
 	virtual void OnEndContact(Entity* entityContact) override;
+	virtual void OnEvent(Event& event) override;
 	
 public:
 	Entity entityAux;

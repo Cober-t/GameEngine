@@ -33,4 +33,5 @@ void Game::OnUpdate(Unique<Timestep>& ts)
 void Game::OnEvent(Event& event) 
 {
 	m_DefaultCamera->OnEvent(event);
+	NativeScriptFn::OnEvent(m_ActiveScene.get(), event);
 }

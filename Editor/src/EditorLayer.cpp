@@ -189,6 +189,9 @@ namespace Cober {
 		}
 		
 		ViewportPanel::Get().OnEvent(event);
+		
+		if (gameState == EngineApp::GameState::RUNTIME_EDITOR)
+			NativeScriptFn::OnEvent(Editor::GetActiveScene().get(), event);
 
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& event) { return OnKeyPressed(event); });

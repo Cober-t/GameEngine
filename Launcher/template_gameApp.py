@@ -140,5 +140,6 @@ void {self.projectName}::OnUpdate(Unique<Timestep>& ts)
 void {self.projectName}::OnEvent(Event& event) 
 {{
 	m_Camera->OnEvent(event);
+    NativeScriptFn::OnEvent(m_ActiveScene.get(), event);
 }}
 """

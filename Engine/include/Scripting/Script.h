@@ -1,6 +1,7 @@
 #ifndef SCRIPT_H
 #define SCRIPT_H
 #include "Events/KeyCodes.h"
+#include "Events/Event.h"
 #include "Scene/ECS.h"
 
 namespace Cober {
@@ -16,6 +17,8 @@ namespace Cober {
 
 		virtual void OnBeginContact(Entity* other) = 0;
 		virtual void OnEndContact(Entity* other) = 0;
+
+		virtual void OnEvent(Event& event) = 0;
 	public:
 		Entity entity;
 		Scene* scene;

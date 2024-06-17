@@ -28,6 +28,7 @@ namespace Cober {
 		std::filesystem::path m_FontPath;
 		std::string m_FontName;
 		Ref<Texture> m_AtlasTexture;
+		static std::unordered_map<std::string, std::pair<Ref<Texture>, MSDFData*>> m_AllFontPaths;
 	};
 }
 

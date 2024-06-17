@@ -8,6 +8,7 @@ namespace Cober {
 	    // Internal variables
 		static InitScriptsFn m_InitScripts = nullptr;
 		static UpdateScriptFn m_UpdateScripts = nullptr;
+		static EventScriptFn m_EventScripts = nullptr;
 		static NotifyBeginContactFn m_NotifyBeginContact = nullptr;
 		static NotifyEndContactFn m_NotifyEndContact = nullptr;
 		static DeleteScriptsFn m_DeleteScripts = nullptr;
@@ -18,8 +19,9 @@ namespace Cober {
 		// Forward Declarations
 		static void InitScriptsStub(Scene* scene, Entity entity) {}
 		static void UpdateScriptStub(Scene* scene, float dt) {}
-		static void NotifyBeginContactStub(Entity* a, Entity* b) {}
-		static void NotifyEndContactStub(Entity* a, Entity* b) {}
+		static void EventScriptStub(Scene* scene, Event& event) {}
+		static void NotifyBeginContactScriptStub(Entity* a, Entity* b) {}
+		static void NotifyEndContactScriptStub(Entity* a, Entity* b) {}
 		static void DeleteScriptsStub(Scene* scene) {}
 
 		static FARPROC __stdcall TryLoadFunction(HMODULE module, const char* functionName)
@@ -27,7 +29,7 @@ namespace Cober {
 			auto func = GetProcAddress(module, functionName);
 			if (func == NULL)
 			{
-				LOG_WARNING("Could not load dll function '%s'", functionName);
+				LOG_WARNING("Could not load dll function '{0}'", functionName);
 			}
 
 			return func;
@@ -45,6 +47,7 @@ namespace Cober {
 			{
 				m_InitScripts = (InitScriptsFn)TryLoadFunction(m_Module, "InitScripts");
 				m_UpdateScripts = (UpdateScriptFn)TryLoadFunction(m_Module, "UpdateScripts");
+				m_EventScripts = (EventScriptFn)TryLoadFunction(m_Module, "EventScripts");
 				m_NotifyBeginContact = (NotifyBeginContactFn)TryLoadFunction(m_Module, "NotifyBeginContact");
 				m_NotifyEndContact = (NotifyEndContactFn)TryLoadFunction(m_Module, "NotifyEndContact");
 				m_DeleteScripts = (DeleteScriptsFn)TryLoadFunction(m_Module, "DeleteScripts");
@@ -75,6 +78,14 @@ namespace Cober {
 			if (m_UpdateScripts)
 			{
 				m_UpdateScripts(scene, dt);
+			}
+		}
+		
+		void OnEvent(Scene* scene, Event& event)
+		{
+			if (m_EventScripts)
+			{
+				m_EventScripts(scene, event);
 			}
 		}
 
@@ -111,8 +122,9 @@ namespace Cober {
 
 			m_InitScripts = InitScriptsStub;
 			m_UpdateScripts = UpdateScriptStub;
-			m_NotifyBeginContact = NotifyBeginContactStub;
-			m_NotifyEndContact = NotifyEndContactStub;
+			m_EventScripts = EventScriptStub;
+			m_NotifyBeginContact = NotifyBeginContactScriptStub;
+			m_NotifyEndContact = NotifyEndContactScriptStub;
 			m_DeleteScripts = DeleteScriptsStub;
 
 			if (!FreeLibrary(m_Module))

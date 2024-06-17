@@ -706,29 +706,22 @@ namespace Cober {
 				{
 					component.Text = (std::string)buffer;
 				}
-				if (component.FontAsset)
+				ImGui::Button(component.FontAsset->GetFontName().c_str(), ImVec2(100.0f, 0.0f));
+				if (ImGui::BeginDragDropTarget())
 				{
-					ImGui::Button(component.FontAsset->GetFontName().c_str(), ImVec2(100.0f, 0.0f));
-					if (ImGui::BeginDragDropTarget())
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 					{
-						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
-						{
-							const wchar_t* path = (const wchar_t*)payload->Data;
+						const wchar_t* path = (const wchar_t*)payload->Data;
 
-							std::filesystem::path fontPath = std::filesystem::current_path() / "assets" / path;
-							LOG_WARNING("{0}", fontPath.string());
-							if (fontPath.extension().string() == ".ttf" && std::filesystem::exists(fontPath))
-							{
-								component.FontAsset = CreateRef<Font>(fontPath);
-							}
+						std::filesystem::path fontPath = std::filesystem::current_path() / "assets" / path;
+						if (fontPath.extension().string() == ".ttf" && std::filesystem::exists(fontPath))
+						{
+							component.FontAsset = CreateRef<Font>(fontPath);
 						}
-						ImGui::EndDragDropTarget();
 					}
+					ImGui::EndDragDropTarget();
 				}
-				else
-				{
-					component.FontAsset->GetDefault();
-				}
+				
 				ImGui::ColorEdit4("Color", glm::value_ptr(component.Color));
 				ImGui::DragFloat("Kerning", &component.Kerning, 0.025f);
 				ImGui::DragFloat("Line Spacing", &component.LineSpacing, 0.025f);
