@@ -63,10 +63,14 @@ namespace Cober {
 		void OpenFileDialog();
 
 	private:
-		ImGui::FileBrowser* m_FileBrowser;
+		// ImGui::FileBrowser* m_FileBrowser;
 		std::string m_FilePath;
 		std::filesystem::path m_SaveFile;
 		std::filesystem::path m_LoadFile;
+
+		std::filesystem::path m_BuildFileCommand;
+		std::filesystem::path m_CompileFileCommand;
+		std::filesystem::path m_GamePath;
 
 		MenuOptions m_MenuFileOption;
 		Settings m_Settings;

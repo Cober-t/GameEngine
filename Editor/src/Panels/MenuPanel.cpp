@@ -22,8 +22,14 @@ namespace Cober {
 		s_Instance = this;
 		s_Font = Font::GetDefault();
 		m_ShotFontAtlas = false;
-		m_FileBrowser = new ImGui::FileBrowser();
+		// m_FileBrowser = new ImGui::FileBrowser();
 		m_Settings.Vsync = EngineApp::Get().GetWindow().GetVsync();
+
+		std::filesystem::path solutionDirPath = SOLUTION_DIR;
+		m_BuildFileCommand = solutionDirPath / "setup" / "Compile.bat";
+		m_CompileFileCommand = std::filesystem::current_path() / "ScriptModule" / "build.bat";
+		std::string exeName = EngineApp::Get().GetSpecification().Name + ".exe";
+		m_GamePath = std::filesystem::current_path() / "build" / "Debug-windows-x86_64" / exeName;
 	}
 
 	MenuPanel::~MenuPanel() 
@@ -35,12 +41,12 @@ namespace Cober {
 
 	void MenuPanel::OnGuiRender(Ref<EditorCamera>& editorCamera) 
 	{
-		m_FileBrowser->Display();
+		// m_FileBrowser->Display();
 
-		if (m_FileBrowser->HasSelected()) 
-		{
-			OpenFileDialog();
-		}
+		// if (m_FileBrowser->HasSelected()) 
+		// {
+		// 	OpenFileDialog();
+		// }
 
 		if (ImGui::BeginMenuBar()) 
 		{
@@ -61,16 +67,13 @@ namespace Cober {
 			if (ImGui::MenuItem(ICON_FA_DOWNLOAD "  Save Scene As..."))
 			{
 				m_MenuFileOption = MenuOptions::SAVE;
-				m_FileBrowser = new ImGui::FileBrowser(ImGuiFileBrowserFlags_EnterNewFilename);
-				m_FileBrowser->Open();
 			}
 			if (ImGui::MenuItem(ICON_FA_DOWNLOAD "  Save Scene"))
 			{
 				m_MenuFileOption = MenuOptions::SAVE;
 				if (m_SaveFile.empty())
 				{
-					m_FileBrowser = new ImGui::FileBrowser(ImGuiFileBrowserFlags_EnterNewFilename);
-					m_FileBrowser->Open();
+					
 				}
 				else
 				{
@@ -79,7 +82,6 @@ namespace Cober {
 			}
 			if (ImGui::MenuItem(ICON_FA_UPLOAD "  Load Scene")) 
 			{
-				m_FileBrowser->Open();
 				m_MenuFileOption = MenuOptions::LOAD;
 			}
 
@@ -93,13 +95,34 @@ namespace Cober {
 			if (ImGui::Checkbox("VSYNC", &m_Settings.Vsync))
 				EngineApp::Get().GetWindow().SetVSync(m_Settings.Vsync);
 
-			if (ImGui::MenuItem("Compile"))
+			if (ImGui::MenuItem("Build Game"))
 			{
-				std::filesystem::path solutionDirPath = SOLUTION_DIR;
-				std::filesystem::path compileCommand = solutionDirPath / "setup" / "Compile.bat";
-				std::string command = compileCommand.string() + " game " + "\"" + std::filesystem::current_path().string() + "\"";
+				std::string command = m_BuildFileCommand.string() + " game " + "\"" + std::filesystem::current_path().string() + "\"";
 				system(command.c_str());
 				LOG_CORE_INFO("Build command: {0}", command.c_str());
+				if (std::filesystem::exists(m_CompileFileCommand))
+				{
+					system(m_CompileFileCommand.string().c_str());
+					LOG_CORE_INFO("Compile command: {0}", m_CompileFileCommand.string().c_str());
+				}
+
+			}
+			if (ImGui::MenuItem("Compile Scripts"))
+			{
+				if (std::filesystem::exists(m_CompileFileCommand))
+				{
+					system(m_CompileFileCommand.string().c_str());
+					LOG_CORE_INFO("Compile command: {0}", m_CompileFileCommand.string().c_str());
+				}
+			}
+
+			if (ImGui::MenuItem("Play Game"))
+			{
+				if (std::filesystem::exists(m_GamePath))
+				{
+					system(m_GamePath.string().c_str());
+					LOG_CORE_INFO("Compile command: {0}", m_GamePath.string().c_str());
+				}
 			}
 
 			ImGui::EndMenu();
@@ -174,32 +197,32 @@ namespace Cober {
 
 	void MenuPanel::OpenFileDialog() 
     {
-		switch(m_MenuFileOption)
-		{
-			case MenuOptions::SAVE:
-				m_SaveFile = m_FileBrowser->GetSelected();
-				LOG_INFO(m_SaveFile.filename().string());
-				if (Scene::Save(Editor::GetActiveScene(), m_SaveFile.filename().string()) == false)
-					m_SaveFile.clear();
-				break;
+		// switch(m_MenuFileOption)
+		// {
+		// 	case MenuOptions::SAVE:
+		// 		m_SaveFile = m_FileBrowser->GetSelected();
+		// 		LOG_INFO(m_SaveFile.filename().string());
+		// 		if (Scene::Save(Editor::GetActiveScene(), m_SaveFile.filename().string()) == false)
+		// 			m_SaveFile.clear();
+		// 		break;
 
-			case MenuOptions::LOAD:
-				m_LoadFile = m_FileBrowser->GetSelected();
+		// 	case MenuOptions::LOAD:
+		// 		m_LoadFile = m_FileBrowser->GetSelected();
 
-				if (m_LoadFile.string().rfind(".lua") != std::string::npos)
-				{
-					Editor::SetEditorScene(Scene::Load(m_LoadFile.filename().string()));
-					if (Editor::GetEditorScene())
-					{
-						m_SaveFile = m_LoadFile;
-						Editor::SelectedEntity();
-						Editor::SetActiveScene(Editor::GetEditorScene());
-						EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
-						SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
-					}
-				}
-				break;
-		}
-		m_FileBrowser->ClearSelected();
+		// 		if (m_LoadFile.string().rfind(".lua") != std::string::npos)
+		// 		{
+		// 			Editor::SetEditorScene(Scene::Load(m_LoadFile.filename().string()));
+		// 			if (Editor::GetEditorScene())
+		// 			{
+		// 				m_SaveFile = m_LoadFile;
+		// 				Editor::SelectedEntity();
+		// 				Editor::SetActiveScene(Editor::GetEditorScene());
+		// 				EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
+		// 				SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
+		// 			}
+		// 		}
+		// 		break;
+		// }
+		// m_FileBrowser->ClearSelected();
 	}
 }

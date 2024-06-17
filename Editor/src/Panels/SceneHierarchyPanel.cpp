@@ -281,7 +281,7 @@ namespace Cober {
 	template <typename T>
 	static void DropTextureButton(T& component)
     {
-		std::string nameTexture = component.texture == nullptr ? "Texture" : component.texture->GetName();
+		std::string nameTexture = component.texture == nullptr ? "##" : component.texture->GetName();
 		ImGui::Button(nameTexture.c_str(), ImVec2(100.0f, 0.0f));
 
 		if (ImGui::BeginDragDropTarget())
@@ -311,6 +311,13 @@ namespace Cober {
 				}
 			}
 			ImGui::EndDragDropTarget();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button(ICON_FA_TIMES))
+		{
+			component.texture = nullptr;
+			component.isSubTexture = false;
+			component.subTexture = CreateRef<SubTexture>();
 		}
 
 		if(component.texture)
