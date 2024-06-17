@@ -512,9 +512,10 @@ namespace Cober {
 			{
 				const char* bodyTypeStrings[] = { "Static", "Kinematic", "Dynamic" };
 				const char* currentBodyTypeString = bodyTypeStrings[(int)component.type];
-				if (ImGui::BeginCombo("Body Type", currentBodyTypeString)) {
-
-					for (int i = 0; i < 3; i++) {
+				if (ImGui::BeginCombo("Body Type", currentBodyTypeString)) 
+				{
+					for (int i = 0; i < 3; i++) 
+					{
 						bool isSelected = currentBodyTypeString == bodyTypeStrings[i];
 						if (ImGui::Selectable(bodyTypeStrings[i], isSelected)) 
 						{

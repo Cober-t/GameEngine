@@ -340,6 +340,12 @@ namespace Cober {
 	}
 
 
+	std::string Scene::GetName()
+	{ 
+		return m_SceneName;
+	}
+
+
 	Entity Scene::FindEntityByName(std::string_view name)
 	{
 		auto view = m_Registry.view<TagComponent>();

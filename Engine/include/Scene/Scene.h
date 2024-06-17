@@ -43,6 +43,8 @@ namespace Cober {
 		inline uint64_t GetEntityCount() { return m_EntityMap.size(); };
 		
 		std::vector<Entity> GetSceneEntities();
+		std::string GetName();
+
 
 		Entity FindEntityByName(std::string_view name);
 		Entity GetEntityByUUID(UUID uuid);

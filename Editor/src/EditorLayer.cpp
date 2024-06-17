@@ -215,19 +215,10 @@ namespace Cober {
 					// 	NewScene();
 					break;
 				}
-				case Key::O: 
-				{
-					m_SelectedEntity = Entity();
-					m_EditorScene = Scene::Load("SceneDefault.lua"); // Test Scene
-					m_ActiveScene = m_EditorScene;
-					EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
-					SceneHierarchyPanel::Get().SetContext(m_ActiveScene);
-					break;
-				}
 				case Key::S: 
 				{
 					if (EngineApp::Get().GetGameState() == EngineApp::GameState::EDITOR)
-						Scene::Save(m_ActiveScene, "SceneDefault.lua");
+						Scene::Save(m_ActiveScene, m_ActiveScene->GetName());
 					break;
 				}
 				case Key::D:

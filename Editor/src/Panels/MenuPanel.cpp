@@ -28,8 +28,11 @@ namespace Cober {
 		std::filesystem::path solutionDirPath = SOLUTION_DIR;
 		m_BuildFileCommand = solutionDirPath / "setup" / "Compile.bat";
 		m_CompileFileCommand = std::filesystem::current_path() / "ScriptModule" / "build.bat";
+
 		std::string exeName = EngineApp::Get().GetSpecification().Name + ".exe";
 		m_GamePath = std::filesystem::current_path() / "build" / "Debug-windows-x86_64" / exeName;
+
+		m_ScenesPath = std::filesystem::current_path() / "assets" / "scenes";
 	}
 
 	MenuPanel::~MenuPanel() 
@@ -66,23 +69,38 @@ namespace Cober {
 		{
 			if (ImGui::MenuItem(ICON_FA_DOWNLOAD "  Save Scene As..."))
 			{
-				m_MenuFileOption = MenuOptions::SAVE;
 			}
 			if (ImGui::MenuItem(ICON_FA_DOWNLOAD "  Save Scene"))
 			{
-				m_MenuFileOption = MenuOptions::SAVE;
-				if (m_SaveFile.empty())
-				{
-					
-				}
-				else
-				{
-					Scene::Save(Editor::GetActiveScene(), m_SaveFile.filename().string());
-				}
+				Scene::Save(Editor::GetActiveScene(), Editor::GetActiveScene()->GetName());
 			}
-			if (ImGui::MenuItem(ICON_FA_UPLOAD "  Load Scene")) 
+
+
+			const char* sceneHandler = Editor::GetActiveScene()->GetName().c_str();
+			if (ImGui::BeginCombo(ICON_FA_UPLOAD "  Load Scene", Editor::GetActiveScene()->GetName().c_str()))
 			{
-				m_MenuFileOption = MenuOptions::LOAD;
+				std::vector<std::filesystem::path> scenes;
+				for (const auto & entry : std::filesystem::directory_iterator(m_ScenesPath))
+					scenes.push_back(entry.path());
+					
+				for (int i = 0; i < scenes.size(); i++)
+				{
+					bool isSelected = sceneHandler == scenes[i].filename().string().c_str();
+					if (ImGui::Selectable(scenes[i].filename().string().c_str(), isSelected)) 
+					{
+						sceneHandler = scenes[i].filename().string().c_str();
+						Editor::SetEditorScene(Scene::Load(scenes[i].filename().string()));
+						if (Editor::SetEditorScene)
+						{
+							Editor::SelectedEntity();
+							Editor::SetActiveScene(Editor::GetEditorScene());
+							EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
+							SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
+						}
+					}
+				}
+
+				ImGui::EndCombo();
 			}
 
 			if (ImGui::MenuItem(ICON_FA_TIMES "  Exit"))

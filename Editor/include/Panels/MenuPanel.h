@@ -71,8 +71,8 @@ namespace Cober {
 		std::filesystem::path m_BuildFileCommand;
 		std::filesystem::path m_CompileFileCommand;
 		std::filesystem::path m_GamePath;
+		std::filesystem::path m_ScenesPath;
 
-		MenuOptions m_MenuFileOption;
 		Settings m_Settings;
 		bool m_ShotFontAtlas;
         
