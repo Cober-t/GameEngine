@@ -69,7 +69,6 @@ namespace Cober {
 				// Bind textures
 				for (uint32_t i = 0; i < data.TextureSlotIndex; i++)
 				{
-					// LOG_WARNING("{0} {1} {2}", (float)i, data.TextureSlotIndex, data.TextureSlots[i]->GetName());
 					data.TextureSlots[i]->Bind(i);
 				}
 
@@ -128,7 +127,7 @@ namespace Cober {
 			};
 
 			if (data.IndexCount >= Render2D::GetStats().MaxIndices)
-			NextBatch();
+				NextBatch();
 
 			for (size_t i = 0; i < 4; i++) 
 			{
@@ -178,14 +177,15 @@ namespace Cober {
 
 				if (textureIndex == 0.0f) 
 				{
+					if (data.IndexCount >= Render2D::GetStats().MaxIndices)
+						NextBatch();
+
 					textureIndex = (float)data.TextureSlotIndex;
 					data.TextureSlots[data.TextureSlotIndex] = subTexture->GetTexture();
 					data.TextureSlotIndex++;
 				}
 			}
 
-			if (data.IndexCount >= Render2D::GetStats().MaxIndices)
-			NextBatch();
 
 			for (size_t i = 0; i < 4; i++) 
 			{
@@ -226,14 +226,14 @@ namespace Cober {
 
 				if (textureIndex == 0.0f) 
 				{
+					if (data.IndexCount >= Render2D::GetStats().MaxIndices)
+						NextBatch();
+
 					textureIndex = (float)data.TextureSlotIndex;
 					data.TextureSlots[data.TextureSlotIndex] = entity.GetComponent<Render2DComponent>().texture;
 					data.TextureSlotIndex++;
 				}
 			}
-
-			if (data.IndexCount >= Render2D::GetStats().MaxIndices)
-			NextBatch();
 
 			for (size_t i = 0; i < 4; i++) 
 			{

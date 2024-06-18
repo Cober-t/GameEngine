@@ -161,6 +161,7 @@ namespace Cober {
 	{
 		// FIXME: Permit only one reload at a time
 		Ref<Scene> originalScene = SceneSerializer::Deserialize(name);
+		sceneToBeReloaded->m_SceneName = name;
 
 		auto originalEntityMap = originalScene->GetEntityMap();
 		auto auxMap = sceneToBeReloaded->GetEntityMap();

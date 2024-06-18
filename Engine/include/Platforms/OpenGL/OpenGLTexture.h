@@ -59,11 +59,10 @@ namespace Cober {
 		TextureSpecification m_Specification;
 
 		std::string m_Path;
-		bool m_IsLoaded = false;
 		uint32_t m_Width, m_Height;
 		uint32_t m_RendererID;
 		GLenum m_InternalFormat, m_DataFormat;
-		static std::unordered_map<std::string, TextureData> m_TexturesDataHolder;
+		
 		glm::mat4 m_TextureVertices;
 	};
 }

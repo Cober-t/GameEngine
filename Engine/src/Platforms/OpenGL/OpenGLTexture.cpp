@@ -58,8 +58,6 @@ namespace Cober {
 
 	}
 
-	std::unordered_map<std::string, TextureData> OpenGLTexture::m_TexturesDataHolder;
-
 
 	OpenGLTexture::OpenGLTexture(const TextureSpecification& specification)
 		: m_Specification(specification), m_Width(m_Specification.Width), m_Height(m_Specification.Height)
@@ -83,22 +81,10 @@ namespace Cober {
 	{
 		stbi_uc* data = nullptr;
 		int width, height, channels;
-		if (m_TexturesDataHolder.find(path) != m_TexturesDataHolder.end())
-		{
-			data = m_TexturesDataHolder[path].data;
-			width = m_TexturesDataHolder[path].width;
-			height = m_TexturesDataHolder[path].height;
-			channels = m_TexturesDataHolder[path].channels;
-		}
-		else
-		{ 
-			stbi_set_flip_vertically_on_load(1);
-			data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 
-			m_TexturesDataHolder[path] = TextureData(data, width, height, channels);
-			m_IsLoaded = true;
-		}
-		
+		stbi_set_flip_vertically_on_load(1);
+		data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+
 		if (data)
 		{
 			m_Width = width;

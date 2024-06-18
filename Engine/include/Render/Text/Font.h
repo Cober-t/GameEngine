@@ -20,6 +20,7 @@ namespace Cober {
 		const std::string GetFontName() const { return m_FontName; }
 		Ref<Texture> GetAtlasTexture() const { return m_AtlasTexture; }
 		std::filesystem::path GetFontPath() const { return m_FontPath; }
+		static int GetFontLoadedCount() { return m_AllFontPaths.size(); }
 
 		static Ref<Font> GetDefault();
 
