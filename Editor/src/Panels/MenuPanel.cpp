@@ -14,15 +14,13 @@
 
 namespace Cober {
 
-	static Ref<Font> s_Font;
 	MenuPanel* MenuPanel::s_Instance = nullptr;
 
 	MenuPanel::MenuPanel() 
 	{
 		s_Instance = this;
-		s_Font = Font::GetDefault();
-		m_ShotFontAtlas = false;
-		// m_FileBrowser = new ImGui::FileBrowser();
+		m_Reload = false;
+
 		m_Settings.Vsync = EngineApp::Get().GetWindow().GetVsync();
 
 		std::filesystem::path solutionDirPath = SOLUTION_DIR;
@@ -44,16 +42,10 @@ namespace Cober {
 
 	void MenuPanel::OnGuiRender(Ref<EditorCamera>& editorCamera) 
 	{
-		// m_FileBrowser->Display();
-
-		// if (m_FileBrowser->HasSelected()) 
-		// {
-		// 	OpenFileDialog();
-		// }
+		ManageSceneReloadingIfExists();
 
 		if (ImGui::BeginMenuBar()) 
 		{
-
 			FileMenu(editorCamera);
 
 			OptionsMenu(editorCamera);
@@ -67,14 +59,10 @@ namespace Cober {
 	{
 		if (ImGui::BeginMenu(ICON_FA_FILE  "  File")) 
 		{
-			if (ImGui::MenuItem(ICON_FA_DOWNLOAD "  Save Scene As..."))
-			{
-			}
 			if (ImGui::MenuItem(ICON_FA_DOWNLOAD "  Save Scene"))
 			{
 				Scene::Save(Editor::GetActiveScene(), Editor::GetActiveScene()->GetName());
 			}
-
 
 			const char* sceneHandler = Editor::GetActiveScene()->GetName().c_str();
 			if (ImGui::BeginCombo(ICON_FA_UPLOAD "  Load Scene", Editor::GetActiveScene()->GetName().c_str()))
@@ -82,30 +70,20 @@ namespace Cober {
 				std::vector<std::filesystem::path> scenes;
 				for (const auto & entry : std::filesystem::directory_iterator(m_ScenesPath))
 					scenes.push_back(entry.path());
-					
+
 				for (int i = 0; i < scenes.size(); i++)
 				{
 					bool isSelected = sceneHandler == scenes[i].filename().string().c_str();
 					if (ImGui::Selectable(scenes[i].filename().string().c_str(), isSelected)) 
 					{
-						sceneHandler = scenes[i].filename().string().c_str();
-						Editor::SetEditorScene(Scene::Load(scenes[i].filename().string()));
-						if (Editor::SetEditorScene)
-						{
-							Editor::SelectedEntity();
-							Editor::SetActiveScene(Editor::GetEditorScene());
-							EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
-							SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
-						}
+						m_Reload = true;
+						m_SceneToReload = scenes[i].filename().string();
+						EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
 					}
 				}
 
 				ImGui::EndCombo();
 			}
-
-			if (ImGui::MenuItem(ICON_FA_TIMES "  Exit"))
-				EngineApp::Get().Close();
-
 
 			if (ImGui::Checkbox("Fullscreen", &m_Settings.Fullscreen))
 				EngineApp::Get().GetWindow().ChangeFullScreen();
@@ -204,43 +182,18 @@ namespace Cober {
 				}
 			}
 			
-			ImGui::Checkbox(ICON_FA_FILE_TEXT_O  "  Font Atlas", &m_ShotFontAtlas);
-			if (m_ShotFontAtlas)
-				ImGui::Image((ImTextureID)s_Font->GetAtlasTexture()->GetRendererID(), { 512,512 }, {0, 1}, {1, 0});
-			
 			ImGui::EndMenu();
 		}
 	}
 
-
-	void MenuPanel::OpenFileDialog() 
-    {
-		// switch(m_MenuFileOption)
-		// {
-		// 	case MenuOptions::SAVE:
-		// 		m_SaveFile = m_FileBrowser->GetSelected();
-		// 		LOG_INFO(m_SaveFile.filename().string());
-		// 		if (Scene::Save(Editor::GetActiveScene(), m_SaveFile.filename().string()) == false)
-		// 			m_SaveFile.clear();
-		// 		break;
-
-		// 	case MenuOptions::LOAD:
-		// 		m_LoadFile = m_FileBrowser->GetSelected();
-
-		// 		if (m_LoadFile.string().rfind(".lua") != std::string::npos)
-		// 		{
-		// 			Editor::SetEditorScene(Scene::Load(m_LoadFile.filename().string()));
-		// 			if (Editor::GetEditorScene())
-		// 			{
-		// 				m_SaveFile = m_LoadFile;
-		// 				Editor::SelectedEntity();
-		// 				Editor::SetActiveScene(Editor::GetEditorScene());
-		// 				EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
-		// 				SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
-		// 			}
-		// 		}
-		// 		break;
-		// }
-		// m_FileBrowser->ClearSelected();
+	void MenuPanel::ManageSceneReloadingIfExists()
+	{
+		if (m_Reload)
+		{
+			m_Reload = false;
+			Editor::SetEditorScene(Scene::Load(m_SceneToReload));
+			Editor::SetActiveScene(Editor::GetEditorScene());
+			SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
+		}
 	}
 }

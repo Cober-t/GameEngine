@@ -60,10 +60,9 @@ namespace Cober {
 	private:
 		void FileMenu(Ref<EditorCamera>& editorCamera);
 		void OptionsMenu(Ref<EditorCamera>& editorCamera);
-		void OpenFileDialog();
+		void ManageSceneReloadingIfExists();
 
 	private:
-		// ImGui::FileBrowser* m_FileBrowser;
 		std::string m_FilePath;
 		std::filesystem::path m_SaveFile;
 		std::filesystem::path m_LoadFile;
@@ -73,8 +72,10 @@ namespace Cober {
 		std::filesystem::path m_GamePath;
 		std::filesystem::path m_ScenesPath;
 
+
 		Settings m_Settings;
-		bool m_ShotFontAtlas;
+		std::string m_SceneToReload;
+		bool m_Reload;
         
 	private:
 		static MenuPanel* s_Instance;

@@ -68,11 +68,9 @@ namespace Cober {
 
 	void Scene::Exit(Scene* scene)
 	{
-		
 		if (EngineApp::Get().GetGameState() == EngineApp::GameState::PLAY)
 		{
 			EngineApp::Get().SetGameState(EngineApp::GameState::EXIT);
-			scene->OnSimulationStop();
 			NativeScriptFn::FreeScriptLibrary();
 		}
 		else if (EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR)

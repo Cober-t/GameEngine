@@ -94,7 +94,7 @@ namespace Cober {
 		ImGui::End();
 
 		ImGui::Begin("Properties");
-		if (m_SelectionContext != m_NullEntityContext)
+		if ((bool)m_SelectionContext && m_SelectionContext.HasComponent<TagComponent>() && m_SelectionContext != m_NullEntityContext)
 			DrawComponents(m_SelectionContext);
 			
 		ImGui::End();

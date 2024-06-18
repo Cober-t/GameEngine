@@ -41,11 +41,11 @@ namespace Cober {
 		ImGui::Text("Screen size:\nX: %i Y: %i", EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight());
 		ImGui::Text("Mouse Coords:\nX: %i Y: %i", mouseX, mouseY);
 
-		std::string name = "None";
-        if ((bool)Editor::SelectedEntity())
-            name =  Editor::SelectedEntity().GetName().c_str();
+		 std::string name = "None";
+         if ((bool)Editor::SelectedEntity() && Editor::SelectedEntity().HasComponent<TagComponent>())
+             name =  Editor::SelectedEntity().GetName().c_str();
 			
-		ImGui::Text("Hovered Entity: %s", name.c_str());
+		 ImGui::Text("Hovered Entity: %s", name.c_str());
 
 		ImGui::End();
 	}

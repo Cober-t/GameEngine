@@ -263,6 +263,9 @@ namespace Cober {
 
 	Entity& Editor::SelectedEntity()
 	{
+		if ((bool)m_SelectedEntity && m_SelectedEntity.HasComponent<TagComponent>() == false)
+			m_SelectedEntity = Entity();
+
 		return m_SelectedEntity;
 	}
 

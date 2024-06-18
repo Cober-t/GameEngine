@@ -161,7 +161,11 @@ namespace Cober {
 
 	Font::~Font()
 	{
-		delete m_Data;
+		if (m_Data && m_Data->Glyphs.size() > 0)
+		{
+			delete m_AllFontPaths[m_FontPath.string()].second;
+			m_AllFontPaths.erase(m_FontPath.string());
+		}
 	}
 
 
