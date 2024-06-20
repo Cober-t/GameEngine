@@ -8,12 +8,14 @@ namespace Cober {
 
 	ParticleSystem::ParticleSystem()
 	{
+		ParticleEmitter::ForceCleanUPParticlePool();
 		LOG_INFO("Particle System Added to Registry!!");
 	}
 
 
 	ParticleSystem::~ParticleSystem()
 	{
+		ParticleEmitter::ForceCleanUPParticlePool();
 		LOG_INFO("Particle System Removed from Registry");
 	}
 
@@ -42,13 +44,9 @@ namespace Cober {
         {
             Entity entity = Entity((entt::entity)entt, scene );
 
-            auto& particleEmitterComponent = entity.GetComponent<ParticleEmitterComponent>();
+            ParticleEmitter::Update(ts, entity);
 
-            bool suitableToBeRendered = ParticleEmitter::Update(ts, entity, particleEmitterComponent);
-            if (suitableToBeRendered)
-                ParticleEmitter::Render(entity);
-
-            ParticleEmitter::CleanUpParticlePool(particleEmitterComponent);
+			ParticleEmitter::Render();
 		}
 	}
 };

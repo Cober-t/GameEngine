@@ -273,16 +273,11 @@ namespace Cober {
 		float lifeRemaining = 0.0f;
 
 		bool loop = false;
-		// To delete the particle
-		uint32_t index = 0;
-		bool active = false;
+		Ref<SubTexture> subTexture = nullptr;
 	};
 	struct ParticleEmitterComponent
 	{
 		Particle particle;
-		std::unordered_map<uint32_t, Particle> particlePool;
-		std::vector<uint32_t> freeIndices;
-		std::vector<Particle> particlesToBeRemoved;
 
 		glm::vec2 position, positionVariation;
 		glm::vec2 velocity, velocityVariation;
@@ -332,7 +327,9 @@ namespace Cober {
 			particle.lifeRemaining = lifeTime;
 
 			particle.loop = loop;
-			particle.active = true;
+
+			if (texture)
+				particle.subTexture = subTexture;
 		}
 	};
 

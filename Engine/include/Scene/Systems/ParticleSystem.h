@@ -14,8 +14,6 @@ namespace Cober {
 
 		void Start(Scene* scene);
 		void Update(Unique<Timestep>& ts, Scene* scene);
-
-        // void Emit(ParticleEmitterComponent& particleEmitter);
 	};
 }
 

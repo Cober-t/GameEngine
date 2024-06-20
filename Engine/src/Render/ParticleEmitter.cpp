@@ -6,12 +6,17 @@
 
 #include "Render/ParticleEmitter.h"
 
-namespace Cober
-{
-    bool ParticleEmitter::Update(Unique<Timestep>& ts, Entity& entity, ParticleEmitterComponent& particleEmitter)
+namespace Cober {
+
+    std::vector<Particle> ParticleEmitter::m_ParticlePool;
+
+    
+    void ParticleEmitter::Update(Unique<Timestep>& ts, Entity& entity)
     {
+        auto& particleEmitter = entity.GetComponent<ParticleEmitterComponent>();
+
         if (particleEmitter.active == false)
-            return false;
+            return;
 
         if (particleEmitter.loop == false)
         {
@@ -25,47 +30,30 @@ namespace Cober
             }
         }
 
-        for (auto& particleMap : particleEmitter.particlePool)
-        {
-            auto& particle = particleMap.second;
-
-            if (particle.lifeRemaining < 0.0f && particle.active)
-            {   
-                ParticleEmitter::RemoveParticle(particle, particleEmitter);
-                continue;
-            }
-            particle.lifeRemaining -= ts->GetConsistentTimer();
-            particle.position += particle.velocity * (float)ts->GetDeltaTime();
-            particle.rotation += particleEmitter.rotation / 10 * (float)ts->GetDeltaTime();
-        }
+        CleanUpParticlePool(ts, entity.GetComponent<ParticleEmitterComponent>());
 
         particleEmitter.position.x = entity.GetComponent<TransformComponent>().position.x;
         particleEmitter.position.y = entity.GetComponent<TransformComponent>().position.y;
-
-        return true;
     }
     
 
-    void ParticleEmitter::Render(Entity& entity)
+    void ParticleEmitter::Render()
     {
-        auto& particleEmitter = entity.GetComponent<ParticleEmitterComponent>();
-
-        for (auto& particleMap : particleEmitter.particlePool)
+        for (std::vector<Particle>::reverse_iterator particle = m_ParticlePool.rbegin(); particle != m_ParticlePool.rend(); ++particle)
         {
-            auto& particle = particleMap.second;
             // Fade away particle
-            float life = particle.lifeRemaining / particle.lifeTime;
-            glm::vec4 color = glm::lerp(particle.colorEnd, particle.colorBegin, life);
+            float life = particle->lifeRemaining / particle->lifeTime;
+            glm::vec4 color = glm::lerp(particle->colorEnd, particle->colorBegin, life);
             color.a = color.a * life;
 
-            float size = glm::lerp(particle.sizeEnd, particle.sizeBegin, life);
+            float size = glm::lerp(particle->sizeEnd, particle->sizeBegin, life);
 
-            glm::mat4 transform = glm::translate(glm::mat4(1.0f), { particle.position.x, particle.position.y, 0.0f })
-                * glm::rotate(glm::mat4(1.0f), particle.rotation, { 0.0f, 0.0f, 1.0f })
+            glm::mat4 transform = glm::translate(glm::mat4(1.0f), { particle->position.x, particle->position.y, 0.0f })
+                * glm::rotate(glm::mat4(1.0f), particle->rotation, { 0.0f, 0.0f, 1.0f })
                 * glm::scale(glm::mat4(1.0f), { size, size, 1.0f });
     
-            if (particleEmitter.texture)
-                Render2D::DrawQuad(transform, color, particleEmitter.subTexture);
+            if (particle->subTexture)
+                Render2D::DrawQuad(transform, color, particle->subTexture);
             else
                 Render2D::DrawQuad(transform, color);
         }
@@ -88,76 +76,71 @@ namespace Cober
     {
         if (particleEmitter.active == false || particleEmitter.loop == false && particleEmitter.lifeRemaining < 0.0f)
             return;
-            
-        for (int i = 0; i < particleEmitter.rate; i++)
-        {
-            Particle& particle = GenParticle(particleEmitter);
 
-            particle.position = particleEmitter.position;
+        int sizeBeforeAddNewParticles = m_ParticlePool.size();
+        m_ParticlePool.resize(m_ParticlePool.size() + particleEmitter.rate);
+            
+        for (int i = sizeBeforeAddNewParticles; i < m_ParticlePool.size(); i++)
+        {
+            m_ParticlePool[i].position = particleEmitter.position;
             if (particleEmitter.positionVariation.x != 0)
             {
                 float variation = Random::Value(0, abs(particleEmitter.positionVariation.x)) / 10 / 2;
                 if (Random::Value(0, 1) == 0)
                     variation *= -1;
-                particle.position.x += variation;
+
+                m_ParticlePool[i].position.x += variation;
             }
             if (particleEmitter.positionVariation.y != 0)
             {
                 float variation = Random::Value(0, abs(particleEmitter.positionVariation.y)) / 10 / 2;
                 if (Random::Value(0, 1) == 0)
                     variation *= -1;
-                particle.position.y += variation;
+                
+                m_ParticlePool[i].position.y += variation;
             }
 
-            particle.velocity = particleEmitter.velocity;
-            particle.velocity.x += particleEmitter.velocityVariation.x * (Random::Value(0, 10) / 10 - 0.5f);
-            particle.velocity.y += particleEmitter.velocityVariation.y * (Random::Value(0, 10) / 10 - 0.5f);
+            m_ParticlePool[i].velocity = particleEmitter.velocity;
+            m_ParticlePool[i].velocity.x += particleEmitter.velocityVariation.x * (Random::Value(0, 10) / 10 - 0.5f);
+            m_ParticlePool[i].velocity.y += particleEmitter.velocityVariation.y * (Random::Value(0, 10) / 10 - 0.5f);
 
-            particle.colorBegin = particleEmitter.colorBegin;
-            particle.colorEnd = particleEmitter.colorEnd;
+            m_ParticlePool[i].colorBegin = particleEmitter.colorBegin;
+            m_ParticlePool[i].colorEnd = particleEmitter.colorEnd;
 
-            particle.lifeTime = particleEmitter.lifeTime;
-            particle.lifeRemaining = particleEmitter.lifeTime;
+            m_ParticlePool[i].lifeTime = particleEmitter.lifeTime;
+            m_ParticlePool[i].lifeRemaining = particleEmitter.lifeTime;
 
-            particle.sizeBegin = particleEmitter.sizeBegin + particleEmitter.sizeVariation * ((float)Random::Value(0, 10) / 10 - 0.5f);
-            particle.sizeEnd = particleEmitter.sizeEnd;
+            m_ParticlePool[i].sizeBegin = particleEmitter.sizeBegin + particleEmitter.sizeVariation * ((float)Random::Value(0, 10) / 10 - 0.5f);
+            m_ParticlePool[i].sizeEnd = particleEmitter.sizeEnd;
 
-            particle.loop = particleEmitter.loop;
-            particle.active = true;
+            m_ParticlePool[i].loop = particleEmitter.loop;
+
+            if (particleEmitter.texture)
+                m_ParticlePool[i].subTexture = particleEmitter.subTexture;
         }
     }
 
 
-    Particle& ParticleEmitter::GenParticle(ParticleEmitterComponent& particleEmitter)
+    void ParticleEmitter::CleanUpParticlePool(Unique<Timestep>& ts, ParticleEmitterComponent& particleEmitter)
     {
-        int newIndex = particleEmitter.particlePool.size();
-        if (particleEmitter.freeIndices.size() > 0)
+
+        int particlesCount = m_ParticlePool.size();
+        for (int i = 0; i < m_ParticlePool.size(); i++)
         {
-            newIndex = particleEmitter.freeIndices.front();
-            particleEmitter.freeIndices.erase(particleEmitter.freeIndices.begin());
+            if (m_ParticlePool[i].lifeRemaining < 0.0f)
+            {   
+                m_ParticlePool.erase(m_ParticlePool.begin() + i--);
+                continue;
+            }
+            m_ParticlePool[i].lifeRemaining -= ts->GetConsistentTimer();
+            m_ParticlePool[i].position += m_ParticlePool[i].velocity * (float)ts->GetDeltaTime();
+            m_ParticlePool[i].rotation += particleEmitter.rotation / 10 * (float)ts->GetDeltaTime();
         }
-        Particle particle;
-        particleEmitter.particlePool[newIndex] = particle;
-        particleEmitter.particlePool[newIndex].index = newIndex;
-        return particleEmitter.particlePool[newIndex];
     }
 
 
-    void ParticleEmitter::RemoveParticle(Particle& newParticle, ParticleEmitterComponent& particleEmitter)
+    void ParticleEmitter::ForceCleanUPParticlePool()
     {
-        newParticle.active = false;
-        particleEmitter.particlesToBeRemoved.push_back(newParticle);
-    }
-
-
-    void ParticleEmitter::CleanUpParticlePool(ParticleEmitterComponent& particleEmitter)
-    {
-        for (auto& particle : particleEmitter.particlesToBeRemoved)
-        {
-            particleEmitter.freeIndices.push_back(particle.index);
-            particleEmitter.particlePool.erase(particle.index);
-        }
-        
-        particleEmitter.particlesToBeRemoved.clear();
+        m_ParticlePool.clear();
     }
 }
