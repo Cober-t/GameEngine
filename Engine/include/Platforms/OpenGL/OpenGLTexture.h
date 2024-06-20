@@ -32,7 +32,7 @@ namespace Cober {
 	{
 
 	public:
-		OpenGLTexture(const std::string& path);
+		OpenGLTexture(const std::filesystem::path& path);
 		OpenGLTexture(const TextureSpecification& specification);
 		virtual ~OpenGLTexture();
 
@@ -43,7 +43,7 @@ namespace Cober {
 		virtual uint32_t GetHeight() const override { return m_Height; }
 		virtual std::string GetName()   const override;
 		virtual std::string GetFormat() const override;
-		virtual const std::string& GetPath() const override { return m_Path; }
+		virtual const std::filesystem::path& GetPath() const override { return m_Path; }
 		virtual const glm::mat4 GetTextureVertices() const override { return m_TextureVertices;};
 		virtual void SetTextureVertices(const glm::mat4 vertices) { m_TextureVertices = vertices; };
 		
@@ -58,7 +58,7 @@ namespace Cober {
 	private:
 		TextureSpecification m_Specification;
 
-		std::string m_Path;
+		std::filesystem::path m_Path;
 		uint32_t m_Width, m_Height;
 		uint32_t m_RendererID;
 		GLenum m_InternalFormat, m_DataFormat;

@@ -215,7 +215,7 @@ namespace Cober {
 				{
 					if (m_FilePath.extension() == ".png" || m_FilePath.extension() == ".jpg" || m_FilePath.extension() == ".jpeg")
 					{
-						auto textureHolder = Texture::Create(m_FilePath.string());
+						auto textureHolder = Texture::Create(m_FilePath);
 						auto& component = Editor::SelectedEntity().GetComponent<Render2DComponent>();
 						component.texture = textureHolder;
 

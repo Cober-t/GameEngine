@@ -213,13 +213,16 @@ namespace Cober {
 				break;
 			case Shape2D::Sprite:
 				serializer["Render2DComponent"]["shape2D"].SetString("Sprite");
-				serializer["Render2DComponent"]["texture"].SetString(bc2D.texture->GetPath());
-				serializer["Render2DComponent"]["issubtexture"].SetReal(bc2D.isSubTexture);
-				if (bc2D.isSubTexture)
+				if (bc2D.texture)
 				{
-					serializer["Render2DComponent"]["subtexture"]["indices"].SetVec2(bc2D.subTextureIndex);
-					serializer["Render2DComponent"]["subtexture"]["cellsize"].SetVec2(bc2D.subTextureCellSize);
-					serializer["Render2DComponent"]["subtexture"]["spritesize"].SetVec2(bc2D.subTextureSpriteSize);
+					serializer["Render2DComponent"]["texture"].SetString(bc2D.texture->GetPath().string());
+					serializer["Render2DComponent"]["issubtexture"].SetReal(bc2D.isSubTexture);
+					if (bc2D.isSubTexture)
+					{
+						serializer["Render2DComponent"]["subtexture"]["indices"].SetVec2(bc2D.subTextureIndex);
+						serializer["Render2DComponent"]["subtexture"]["cellsize"].SetVec2(bc2D.subTextureCellSize);
+						serializer["Render2DComponent"]["subtexture"]["spritesize"].SetVec2(bc2D.subTextureSpriteSize);
+					}
 				}
 				break;
 			}
@@ -275,13 +278,16 @@ namespace Cober {
 			serializer["ParticleEmitterComponent"]["active"].SetInt(particleEmitter.active);
 			serializer["ParticleEmitterComponent"]["loop"].SetInt(particleEmitter.loop);
 
-			serializer["ParticleEmitterComponent"]["texture"].SetString(particleEmitter.texture->GetPath());
-			serializer["ParticleEmitterComponent"]["issubtexture"].SetReal(particleEmitter.isSubTexture);
-			if (particleEmitter.isSubTexture)
+			if (particleEmitter.texture)
 			{
-				serializer["ParticleEmitterComponent"]["subtexture"]["indices"].SetVec2(particleEmitter.subTextureIndex);
-				serializer["ParticleEmitterComponent"]["subtexture"]["cellsize"].SetVec2(particleEmitter.subTextureCellSize);
-				serializer["ParticleEmitterComponent"]["subtexture"]["spritesize"].SetVec2(particleEmitter.subTextureSpriteSize);
+				serializer["ParticleEmitterComponent"]["texture"].SetString(particleEmitter.texture->GetPath().string());
+				serializer["ParticleEmitterComponent"]["issubtexture"].SetReal(particleEmitter.isSubTexture);
+				if (particleEmitter.isSubTexture)
+				{
+					serializer["ParticleEmitterComponent"]["subtexture"]["indices"].SetVec2(particleEmitter.subTextureIndex);
+					serializer["ParticleEmitterComponent"]["subtexture"]["cellsize"].SetVec2(particleEmitter.subTextureCellSize);
+					serializer["ParticleEmitterComponent"]["subtexture"]["spritesize"].SetVec2(particleEmitter.subTextureSpriteSize);
+				}
 			}
 		}
 	}
@@ -362,7 +368,7 @@ namespace Cober {
 
 	void SceneSerializer::DeserializeRender2DComponent(Entity& entity, Utils::DataFile& loader)
 	{
-		if (loader.HasProperty("Render2DComponent")) 
+		if (loader.HasProperty("Render2DComponent"))
 		{
 			auto renderComponent = loader["Render2DComponent"];
 			auto& component = entity.AddComponent<Render2DComponent>();
@@ -389,9 +395,14 @@ namespace Cober {
 			}
 			if (shapeType == "Sprite")
 			{
-				std::string texturePath = renderComponent["texture"].GetString();
 				component.shapeType = Shape2D::Sprite;
+
+				std::filesystem::path texturePath = renderComponent["texture"].GetString();
+				if (std::filesystem::exists(texturePath) == false)
+					return;
+					
 				component.texture = Texture::Create(texturePath);
+
 				component.isSubTexture = renderComponent["issubtexture"].GetReal();
 				component.subTexture = CreateRef<SubTexture>();
 

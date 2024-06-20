@@ -73,17 +73,20 @@ namespace Cober {
 
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, Utils::ImageRepeatPatternToGL(m_Specification.Pattern));
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, Utils::ImageRepeatPatternToGL(m_Specification.Pattern));
+
+		uint32_t whiteTextureData = 0xffffffff;
+		SetData(&whiteTextureData, sizeof(uint32_t));
 	}
 
 
-	OpenGLTexture::OpenGLTexture(const std::string& path)
+	OpenGLTexture::OpenGLTexture(const std::filesystem::path& path)
 		: m_Path(path)
 	{
 		stbi_uc* data = nullptr;
 		int width, height, channels;
 
 		stbi_set_flip_vertically_on_load(1);
-		data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+		data = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
 
 		if (data)
 		{
@@ -130,27 +133,19 @@ namespace Cober {
 
 	std::string OpenGLTexture::GetName() const  
 	{
-		auto lastSlash = m_Path.find_last_of("/\\");
-		
-        LOG_CORE_ASSERT(lastSlash != std::string::npos, "Texture Path is invalid or does not exist!");
-		
-		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
-		auto lastDot = m_Path.rfind('.');
-		
-        LOG_CORE_ASSERT(lastDot != std::string::npos, "Texture Name is invalid or does not exist!");
-		
-		auto count = lastDot == std::string::npos ? m_Path.size() - lastSlash : lastDot - lastSlash;
-		std::string name = m_Path.substr(lastSlash, count);
-		return name;
+		if (std::filesystem::exists(m_Path))
+			return m_Path.filename().string();
+		else;
+			return "";
 	}
 
 
 	std::string OpenGLTexture::GetFormat() const 
 	{
-		auto lastDot = m_Path.rfind('.');
-		// auto count = lastDot != std::string::npos ? m_Path.size() - lastDot : m_Path.size();
-		std::string format = lastDot != std::string::npos ? m_Path.substr(lastDot) : "null";
-		return format;
+		if (std::filesystem::exists(m_Path))
+			return m_Path.extension().string();
+		else;
+			return "null";
 	}
 
 

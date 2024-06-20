@@ -6,7 +6,7 @@
 
 namespace Cober {
 
-	static std::unordered_map<std::string, Ref<Texture>> m_TexturesDataHolder;
+	std::unordered_map<std::filesystem::path, Ref<Texture>> Texture::m_TexturesDataHolder;
 
 	Ref<Texture> Texture::Create(const TextureSpecification& specification)
 	{
@@ -21,14 +21,16 @@ namespace Cober {
 	}
 
 
-	Ref<Texture> Texture::Create(const std::string& path)
+	Ref<Texture> Texture::Create(const std::filesystem::path& path)
 	{
 		switch (RenderAPI::GetAPI())
 		{
 			case RenderAPI::API::None:      LOG_CORE_WARNING("RendererAPI::None is currently not supported!"); return nullptr;
 			case RenderAPI::API::OpenGL:    
 				if (m_TexturesDataHolder.find(path) == m_TexturesDataHolder.end())
+				{
 					m_TexturesDataHolder[path] = CreateRef<OpenGLTexture>(path);
+				}
 				return m_TexturesDataHolder[path];
 			default:	LOG_CORE_ASSERT(false, "Unknown RendererAPI!"); break;
 		}

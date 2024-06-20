@@ -8,7 +8,7 @@
 
 class Render2D;
 
-namespace Cober {
+namespace Cober  {
 
 	namespace Primitive {
 
@@ -32,7 +32,6 @@ namespace Cober {
 			static void EndBatch();
 
 		public:
-
 			struct Attributes
 			{
 				glm::vec3 Position;
@@ -62,8 +61,6 @@ namespace Cober {
 				Attributes* VertexBufferPtr = nullptr;
 			};
 
-		private:
-			static void SetAttributes(const glm::mat4& transform, const glm::vec4& color, float textureIndex, const glm::vec2* textureCoords, float tilingFactor, int entityID);
 		};
 	}
 }

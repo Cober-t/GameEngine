@@ -96,6 +96,7 @@ namespace Cober {
 
         uint32_t MaxLines = 20000;
         uint32_t MaxLineVertices = MaxLines * 2;
+        uint32_t TexturesLoadedOnScene = 0;
 
         float LineThickness = 1.0f;
 

@@ -11,6 +11,7 @@ namespace Cober {
     PhysicsSettings* Physics2D::m_PhysicsSettings = new PhysicsSettings();
     std::vector<Entity> Physics2D::m_EntitiesToInitPhysics;
     std::vector<b2Body*> Physics2D::m_BodiesToBeDestroyed;
+    std::vector<std::pair<BodyChangesType, BodyValues>> Physics2D::m_ApplyBodyChangesPool;
 
     void Physics2D::Init(Scene* scene)
     {
@@ -73,8 +74,7 @@ namespace Cober {
             }
 
             b2Vec2 center = b2Vec2(boxEntity.offset.x, boxEntity.offset.y);
-            float angle = entity.GetComponent<TransformComponent>().rotation.z;
-			boxEntity.shape.SetAsBox(hx,  hy, center, angle);
+			boxEntity.shape.SetAsBox(hx,  hy, center, 0.0f);
 
 			b2FixtureDef fixtureDef;
 			fixtureDef.shape = &boxEntity.shape;
@@ -166,6 +166,8 @@ namespace Cober {
             m_EntitiesToInitPhysics.clear();
         }
 
+        ApplyBodyChanges();
+
         auto view = scene->GetAllEntitiesWith<TransformComponent, Rigidbody2D>();
 
 		for (auto entt : view) 
@@ -185,6 +187,34 @@ namespace Cober {
 		}
     }
 
+
+    void Physics2D::ApplyBodyChanges()
+    {
+        if (m_ApplyBodyChangesPool.size() == 0)
+            return;
+
+        for (auto& bodyChanges : m_ApplyBodyChangesPool)
+        {
+            auto& bodyValues = bodyChanges.second;
+            auto& body = bodyChanges.second.body;
+
+            switch(bodyChanges.first)
+            {
+                case BodyChangesType::MOVE:
+                    body->SetLinearVelocity(bodyValues.velocity);
+                    break;
+                case BodyChangesType::APPLY_LINEAR_IMPULSE:
+                    body->ApplyLinearImpulse(bodyValues.impulse, body->GetWorldCenter(), true);
+                    break;
+                case BodyChangesType::APPLY_FORCE:
+                    body->ApplyForce(bodyValues.force, body->GetWorldCenter(), true);
+                    break;
+            }
+        }
+        m_ApplyBodyChangesPool.clear();
+    } 
+
+
     void Physics2D::CleanUp()
     {
         if (m_BodiesToBeDestroyed.size() > 0)
@@ -196,6 +226,7 @@ namespace Cober {
             m_BodiesToBeDestroyed.clear();
         }
     }
+
 
     void Physics2D::DebugDraw()
     {
@@ -217,40 +248,26 @@ namespace Cober {
     void ContactListener::BeginContact(b2Contact* contact)
 	{
 		b2Fixture* fixtureA = contact->GetFixtureA();
-        uintptr_t indexBodyA = fixtureA->GetBody()->GetUserData().pointer;
-		if (indexBodyA)
-		{
-            // LOG_WARNING("BEGIN CONTACT! {0}", reinterpret_cast<Entity*>(indexBodyA)->GetName());
-		}
-	
 		b2Fixture* fixtureB = contact->GetFixtureB();
+        uintptr_t indexBodyA = fixtureA->GetBody()->GetUserData().pointer;
         uintptr_t indexBodyB = fixtureB->GetBody()->GetUserData().pointer;
-		if (indexBodyB)
+		if (indexBodyA || indexBodyB)
 		{
-            // LOG_WARNING("BEGIN CONTACT: {0}", reinterpret_cast<Entity*>(indexBodyB)->GetName());
+            NativeScriptFn::NotifyBeginContact(reinterpret_cast<Entity*>(indexBodyA), reinterpret_cast<Entity*>(indexBodyB));
 		}
-
-        NativeScriptFn::NotifyBeginContact(reinterpret_cast<Entity*>(indexBodyA), reinterpret_cast<Entity*>(indexBodyB));
 	}
 
 
 	void ContactListener::EndContact(b2Contact* contact)
 	{
 		b2Fixture* fixtureA = contact->GetFixtureA();
-		uintptr_t indexBodyA = fixtureA->GetBody()->GetUserData().pointer;
-		if (indexBodyA)
-		{
-            // LOG_WARNING("END CONTACT: {0}", reinterpret_cast<Entity*>(indexBodyA)->GetName());
-		}
-	
 		b2Fixture* fixtureB = contact->GetFixtureB();
+		uintptr_t indexBodyA = fixtureA->GetBody()->GetUserData().pointer;
 		uintptr_t indexBodyB = fixtureB->GetBody()->GetUserData().pointer;
-		if (indexBodyB)
+		if (indexBodyA || indexBodyB)
 		{
-            // LOG_WARNING("END CONTACT: {0}", reinterpret_cast<Entity*>(indexBodyB)->GetName());
+            NativeScriptFn::NotifyEndContact(reinterpret_cast<Entity*>(indexBodyA), reinterpret_cast<Entity*>(indexBodyB));
 		}
-
-        NativeScriptFn::NotifyEndContact(reinterpret_cast<Entity*>(indexBodyA), reinterpret_cast<Entity*>(indexBodyB));
 	}
 
 
@@ -264,34 +281,46 @@ namespace Cober {
 	}
 
 
+    //////////////////////
+    // SCRIPT FUNCTIONS //
     void Physics2D::ApplyForceX(b2Body* body, float x)
     {
-        body->ApplyForce(b2Vec2(x, 0), body->GetWorldCenter(), true);
+        Physics2D::ApplyForce(body, x, 0);
     }
 
     void Physics2D::ApplyForceY(b2Body* body, float y)
     {
-        body->ApplyForce(b2Vec2(0, y), body->GetWorldCenter(), true);
+        Physics2D::ApplyForce(body, 0, y);
     }
 
     void Physics2D::ApplyForce(b2Body* body,float x, float y)
     {
-        body->ApplyForce(b2Vec2(x, y), body->GetWorldCenter(), true);
+        BodyValues bodyValues;
+        bodyValues.body = body;
+        bodyValues.force = b2Vec2(x, y);
+        auto& bodyChangesToApply = std::make_pair(BodyChangesType::APPLY_FORCE, bodyValues);
+
+        m_ApplyBodyChangesPool.push_back(bodyChangesToApply);
     }
 
     void Physics2D::ApplyImpulseX(b2Body* body,float x)
     {
-        body->ApplyLinearImpulse(b2Vec2(x, 0), body->GetWorldCenter(), true);
+        Physics2D::ApplyImpulse(body, x, 0);
     }
 
     void Physics2D::ApplyImpulseY(b2Body* body, float y)
     {
-        body->ApplyLinearImpulse(b2Vec2(0, y), body->GetWorldCenter(), true);
+        Physics2D::ApplyImpulse(body, y, 0);
     }
     
     void Physics2D::ApplyImpulse(b2Body* body, float x, float y)
     {
-        body->ApplyLinearImpulse(b2Vec2(x, y), body->GetWorldCenter(), true);
+        BodyValues bodyValues;
+        bodyValues.body = body;
+        bodyValues.impulse = b2Vec2(x, y);
+        auto& bodyChangesToApply = std::make_pair(BodyChangesType::APPLY_LINEAR_IMPULSE, bodyValues);
+
+        m_ApplyBodyChangesPool.push_back(bodyChangesToApply);
     }
 
     void Physics2D::Move(b2Body* body, float x, float y)
@@ -303,7 +332,12 @@ namespace Cober {
         if (body->GetLinearVelocity() == velocity)
             return;
 
-        body->SetLinearVelocity(velocity);
+        BodyValues bodyValues;
+        bodyValues.body = body;
+        bodyValues.velocity = b2Vec2(x, y);
+        auto& bodyChangesToApply = std::make_pair(BodyChangesType::MOVE, bodyValues);
+
+        m_ApplyBodyChangesPool.push_back(bodyChangesToApply);
     }
 
 

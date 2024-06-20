@@ -1,5 +1,5 @@
-#ifndef QUAD_H
-#define QUAD_H
+#ifndef PARTICLE_EMITTER_H
+#define PARTICLE_EMITTER_H
 #endif
 
 #include <unordered_map>

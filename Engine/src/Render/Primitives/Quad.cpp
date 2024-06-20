@@ -39,11 +39,7 @@ namespace Cober {
 			data.VertexArray->SetIndexBuffer(quadIB);
 			delete[] quadIndices;
 
-			// TEXTURE
 			data.WhiteTexture = Texture::Create(TextureSpecification());
-			uint32_t whiteTextureData = 0xffffffff;
-			data.WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
-			
 
 			int32_t samplers[data.MaxTextureSlots];
 			for (uint32_t i = 0; i < data.MaxTextureSlots; i++)
@@ -233,6 +229,7 @@ namespace Cober {
 					data.TextureSlots[data.TextureSlotIndex] = entity.GetComponent<Render2DComponent>().texture;
 					data.TextureSlotIndex++;
 				}
+				Render2D::GetStats().TexturesLoadedOnScene = data.TextureSlotIndex - 1;
 			}
 
 			for (size_t i = 0; i < 4; i++) 
@@ -295,29 +292,6 @@ namespace Cober {
 			data.IndexCount += 6;
 
 			Render2D::GetStats().QuadCount++;
-		}
-
-
-		void Quad::SetAttributes(const glm::mat4& transform, const glm::vec4& color, float textureIndex, const glm::vec2* textureCoords, float tilingFactor, int entityID) 
-		{
-			// if (data.IndexCount >= Render2D::GetStats().MaxIndices)
-			// 	NextBatch();
-
-			// // size_t VertexCount = sizeof(Render2D::GetStats().QuadVertexPositions) / sizeof(Render2D::GetStats().QuadVertexPositions[0]);
-			// for (size_t i = 0; i < 4; i++) 
-			// {
-			// 	data.VertexBufferPtr->Position = transform * Render2D::GetStats().QuadVertexPositions[i];
-			// 	data.VertexBufferPtr->Color = color;
-			// 	data.VertexBufferPtr->TexCoord = textureCoords[i];
-			// 	data.VertexBufferPtr->TexIndex = textureIndex;
-			// 	data.VertexBufferPtr->TilingFactor = tilingFactor;
-			// 	data.VertexBufferPtr->EntityID = entityID;
-			// 	data.VertexBufferPtr++;
-			// }
-
-			// data.IndexCount += 6;
-
-			// Render2D::GetStats().QuadCount++;
 		}
 	}
 }

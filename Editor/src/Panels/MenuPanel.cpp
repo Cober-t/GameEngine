@@ -193,6 +193,7 @@ namespace Cober {
 			m_Reload = false;
 			Editor::SetEditorScene(Scene::Load(m_SceneToReload));
 			Editor::SetActiveScene(Editor::GetEditorScene());
+			Editor::SetSelectedEntity(Entity());
 			SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
 		}
 	}

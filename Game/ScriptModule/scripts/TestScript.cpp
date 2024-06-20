@@ -9,13 +9,14 @@ void TestScript::OnStart()
 void TestScript::OnUpdate(float dt)
 {
 	auto body = (b2Body*)entity.GetBody();
-	if (Input::IsKeyPressed(KeyCode::Space))
+	if (gameStarted == false)
 	{
-		Physics2D::SetBodyType(entity, BodyType::Dynamic);
-	}
-	if (Input::IsKeyPressed(KeyCode::R) && Input::IsKeyDown(KeyCode::LeftControl))
-	{
-		Scene::Reload(scene, "NewScene.lua");
+		Physics2D::MoveTo(entity, -1, 0);
+		if (Input::IsKeyDown(KeyCode::Space))
+		{
+			gameStarted = true;
+			Physics2D::Move(body, 0.75f, 0.75f);
+		}
 	}
 }
 

@@ -105,9 +105,9 @@ namespace Cober {
 				if (relativePath.extension() == ".png" || relativePath.extension() == ".jpg")
 				{
 					std::filesystem::path texturePath = m_CurrentDirectory / filenameString;
-					if (m_TextureFolderContentHolder.find(texturePath.string()) == m_TextureFolderContentHolder.end())
+					if (m_TextureFolderContentHolder.find(texturePath) == m_TextureFolderContentHolder.end())
 					{
-						m_TextureFolderContentHolder[texturePath.string()] = Texture::Create(texturePath.string());
+						m_TextureFolderContentHolder[texturePath] = Texture::Create(texturePath);
 					}
 					ImGui::ImageButton((ImTextureID)m_TextureFolderContentHolder[texturePath.string()]->GetRendererID(), 
 						{ thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });

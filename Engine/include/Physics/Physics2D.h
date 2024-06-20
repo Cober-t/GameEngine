@@ -19,6 +19,22 @@ namespace Cober {
 		void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) override;
 	};
 
+    enum class BodyChangesType
+    {
+        MOVE = 0,
+        APPLY_LINEAR_IMPULSE,
+        APPLY_FORCE,
+    };
+
+    struct BodyValues
+    {
+        b2Body* body = nullptr;
+        float x = 0.0f;
+        float y = 0.0f;
+        b2Vec2 impulse = b2Vec2(0, 0);
+        b2Vec2 force = b2Vec2(0, 0);
+        b2Vec2 velocity = b2Vec2(0, 0);
+    };
 
     class CB_API Physics2D
     {
@@ -53,6 +69,7 @@ namespace Cober {
 
     private:
         static void InitEntityPhysics(Entity& entity);
+        static void ApplyBodyChanges();
         static void CreateWorld();
         
     private:
@@ -61,6 +78,7 @@ namespace Cober {
         static PhysicsSettings* m_PhysicsSettings;
         static std::vector<Entity> m_EntitiesToInitPhysics;
         static std::vector<b2Body*> m_BodiesToBeDestroyed;
+        static std::vector<std::pair<BodyChangesType, BodyValues>> m_ApplyBodyChangesPool;
     };
 }
 

@@ -5,37 +5,40 @@
 
 namespace Cober {
 
-	static Cube::Data data;
+    namespace Primitive {
 
-    void Cube::CleanVertexBuffer() 
-    {
-	}
+        static Cube::Data data;
 
-	void Cube::Init() 
-    {
-	}
+        void Cube::CleanVertexBuffer() 
+        {
+        }
 
-    void Cube::Flush()
-    {
+        void Cube::Init() 
+        {
+        }
+
+        void Cube::Flush()
+        {
+        }
+        
+        void Cube::NextBatch()
+        {
+        }
+
+        void Cube::EndBatch()
+        {
+        }
+
+        void Cube::StartBatch()
+        {
+        }
+
+        void Cube::Draw(Entity& entity) 
+        {
+        }
+
+        void Cube::SetAttributes(const glm::mat4& transform, const glm::vec4& color, int textureIndex, const glm::vec2* textureCoords, float tilingFactor, int entityID) 
+        {
+        }
     }
-    
-    void Cube::NextBatch()
-    {
-    }
-
-    void Cube::EndBatch()
-    {
-    }
-
-    void Cube::StartBatch()
-    {
-    }
-
-	void Cube::Draw(Entity& entity) 
-    {
-	}
-
-	void Cube::SetAttributes(const glm::mat4& transform, const glm::vec4& color, int textureIndex, const glm::vec2* textureCoords, float tilingFactor, int entityID) 
-    {
-	}
 }
