@@ -228,17 +228,76 @@ namespace Cober {
     }
 
 
-    void Physics2D::DebugDraw()
+    void Physics2D::DebugDraw(Scene* scene)
     {
 		if (EngineApp::Get().IsDebugMode())
         {
-            if (!m_DebugActive)
+            // Simulation / Runtime State
+            if ((EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR || 
+                EngineApp::Get().GetGameState() == EngineApp::GameState::PLAY) &&
+                m_PhysicsWorld) 
             {
-                m_DebugActive = true;
-                m_PhysicsWorld->SetDebugDraw(reinterpret_cast<b2Draw*>(&Debug2DPhysics::Get()));
-            }
+                if (!m_DebugActive)
+                {
+                    m_DebugActive = true;
+                    m_PhysicsWorld->SetDebugDraw(reinterpret_cast<b2Draw*>(&Debug2DPhysics::Get()));
+                }
 
-            m_PhysicsWorld->DebugDraw();
+                m_PhysicsWorld->DebugDraw();
+            }
+            // Editor State
+            else if (EngineApp::Get().GetGameState() == EngineApp::GameState::EDITOR)
+            {
+                glm::vec4 color{ 0.0f, 0.0f, 0.0f, 0.45f };
+
+                // Debug Box Colliders
+                auto boxColliderView = scene->GetAllEntitiesWith<TransformComponent, BoxCollider2D>();
+
+                for (auto& ent : boxColliderView)
+                {
+                    Entity entity = Entity((entt::entity)ent, scene);
+                    auto& entTrans = entity.GetComponent<TransformComponent>();
+                    auto& bc2d = entity.GetComponent<BoxCollider2D>();
+
+                    glm::vec3 position(entTrans.position.x + bc2d.offset.x, entTrans.position.y + bc2d.offset.y, entTrans.position.z + 0.01f);
+                    glm::vec3 rotation(0.0f, 0.0f, entTrans.rotation.z);
+                    glm::vec3 scale(abs(entTrans.scale.x * bc2d.size.x), abs(entTrans.scale.y * bc2d.size.y), 1.0f);
+
+                    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+                        * glm::toMat4(glm::quat(rotation))
+                        * glm::scale(glm::mat4(1.0f), scale);
+
+                    if (entity.HasComponent<Render2DComponent>() && entity.GetComponent<Render2DComponent>().texture)
+                        Render2D::DrawQuad(transform, color, entity.GetComponent<Render2DComponent>().subTexture, (int)entity);
+                    else
+                        Render2D::DrawQuad(transform, color, nullptr, (int)entity);
+                }
+
+                // Debug Circle Colliders
+                auto circleColliderView = scene->GetAllEntitiesWith<TransformComponent, CircleCollider2D>();
+
+                for (auto& ent : circleColliderView)
+                {
+                    Entity entity = Entity((entt::entity)ent, scene);
+                    auto& entTrans = entity.GetComponent<TransformComponent>();
+                    auto& cc2d = entity.GetComponent<CircleCollider2D>();
+
+                    float thickness = 1.0f;
+                    float radius = cc2d.radius * 2;
+                    if (entity.HasComponent<Render2DComponent>())
+                        thickness = entity.GetComponent<Render2DComponent>().thickness;
+
+                    glm::vec3 position(entTrans.position.x + cc2d.offset.x, entTrans.position.y + cc2d.offset.y, entTrans.position.z + 0.01f);
+                    glm::vec3 rotation(0.0f, 0.0f, entTrans.rotation.z);
+                    glm::vec3 scale(abs(entTrans.scale.x * radius), abs(entTrans.scale.y * radius), 1.0f);
+
+                    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+                        * glm::toMat4(glm::quat(rotation))
+                        * glm::scale(glm::mat4(1.0f), scale);
+
+                    Render2D::DrawCircle(transform, color, thickness, (int)entity);
+                }
+            }
         }
         else
             m_DebugActive = false;

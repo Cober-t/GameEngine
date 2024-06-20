@@ -11,16 +11,16 @@ void TestScript::OnUpdate(float dt)
 	auto body = (b2Body*)entity.GetBody();
 	if (gameStarted == false)
 	{
-		Physics2D::MoveTo(entity, -1, 0);
-		if (Input::IsKeyDown(KeyCode::Space))
+		// Physics2D::MoveTo(entity, -1, 0);
+		if (Input::IsKeyPressed(KeyCode::Space))
 		{
 			gameStarted = true;
-			Physics2D::Move(body, 0.75f, 0.75f);
+			// Physics2D::Move(body, 0.75f, 0.75f);
 
 			auto& renderComponent = entity.GetComponent<Render2DComponent>();
 			if (renderComponent.texture && renderComponent.isSubTexture)
 			{
-				SubTexture::ChangeIndices(renderComponent.subTexture, {0, 5});
+				Scene::Reload(scene);
 			}
 		}
 	}

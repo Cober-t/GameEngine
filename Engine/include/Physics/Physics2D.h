@@ -40,7 +40,7 @@ namespace Cober {
     {
     public:
         static void Init(Scene* scene);
-        static void DebugDraw();
+        static void DebugDraw(Scene* scene);
         static void Step();
         
         static void Update(Scene* scene);

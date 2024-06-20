@@ -117,16 +117,10 @@ namespace Cober {
 	}
 
 	
-	void Render2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color, const Ref<SubTexture>& subTexture)
+	void Render2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color, const Ref<SubTexture>& subTexture, int entityID)
 	{
-		Primitive::Quad::Draw(transform, color, subTexture);
+		Primitive::Quad::Draw(transform, color, subTexture, entityID);
 	}
-
-
-	// void Render2D::DrawRect(glm::vec3 position, glm::vec3 rotation, float width, float height, Entity& entityID, glm::vec4 color)
-	// {
-	// 	Primitive::Quad::DrawRect(position, rotation, width, height, entityID, color);
-	// }
 
 
 	void Render2D::DrawLine(Entity& entity) 
@@ -138,6 +132,12 @@ namespace Cober {
 	void Render2D::DrawCircle(Entity& entity) 
 	{
 		Primitive::Circle::Draw(entity);
+	}
+
+
+	void Render2D::DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness, int entityID)
+	{
+		Primitive::Circle::Draw(transform, color, thickness, entityID);
 	}
 
 

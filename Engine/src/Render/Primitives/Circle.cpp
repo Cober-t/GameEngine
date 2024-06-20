@@ -99,9 +99,9 @@ namespace Cober {
 		}
 
 
-		void Circle::Draw(const glm::mat4& transform, const glm::vec4& color, float thickness)
+		void Circle::Draw(const glm::mat4& transform, const glm::vec4& color, float thickness, int entityID)
 		{
-			SetAttributes(transform, color, thickness, 0, -1);
+			SetAttributes(transform, color, thickness, 0, entityID);
 		}
 
 

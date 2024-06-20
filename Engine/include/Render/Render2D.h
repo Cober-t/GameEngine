@@ -36,10 +36,11 @@ namespace Cober {
 		static void NextBatch();
 
 		static void DrawQuad(Entity& entity);
-		static void DrawQuad(const glm::mat4& transform, const glm::vec4& color, const Ref<SubTexture>& subTexture = nullptr);
-		// static void DrawRect(glm::vec3 position, glm::vec3 rotation, float width, float height, Entity& entityID, glm::vec4 color = glm::vec4(1.0f));
+		static void DrawQuad(const glm::mat4& transform, const glm::vec4& color, const Ref<SubTexture>& subTexture = nullptr, int entityID = -1);
 		static void DrawLine(Entity& entity);
 		static void DrawCircle(Entity& entity);
+		static void DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness, int entityID);
+
 		static void DrawSprite(Entity& entity);
 		static void DrawText(Entity& entity);
 

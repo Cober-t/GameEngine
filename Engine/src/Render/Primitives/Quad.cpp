@@ -141,8 +141,8 @@ namespace Cober {
 			Render2D::GetStats().QuadCount++;
 		}
 
-
-		void Quad::Draw(const glm::mat4& transform, const glm::vec4& color, const Ref<SubTexture>& subTexture) 
+		
+		void Quad::Draw(const glm::mat4& transform, const glm::vec4& color, const Ref<SubTexture>& subTexture, int entityID) 
 		{
 			constexpr float tilingFactor = 1.0f;
 			float textureIndex = 0.0f; // White Texture
@@ -190,7 +190,7 @@ namespace Cober {
 				data.VertexBufferPtr->TexCoord = textureCoords[i];
 				data.VertexBufferPtr->TexIndex = textureIndex;
 				data.VertexBufferPtr->TilingFactor = tilingFactor;
-				data.VertexBufferPtr->EntityID = -1;
+				data.VertexBufferPtr->EntityID = entityID;
 				data.VertexBufferPtr++;
 			}
 

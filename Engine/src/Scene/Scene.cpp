@@ -159,6 +159,9 @@ namespace Cober {
 
 	void Scene::Reload(Scene* sceneToBeReloaded, std::string name)
 	{
+		if (name == "")
+			name = sceneToBeReloaded->GetName();
+			
 		// FIXME: Permit only one reload at a time
 		Ref<Scene> originalScene = SceneSerializer::Deserialize(name);
 		sceneToBeReloaded->m_SceneName = name;

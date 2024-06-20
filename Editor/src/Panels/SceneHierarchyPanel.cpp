@@ -545,7 +545,7 @@ namespace Cober {
 		DrawComponent<CircleCollider2D>((std::string)ComponentNames::Circle2DCollider, entity, [](auto& component, auto& entity)
 			{
 				ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
-				ImGui::DragFloat("Radius", &component.radius, 1.0f, 0.0f, 100.0f);
+				ImGui::DragFloat("Radius", &component.radius, 0.5f, 0.0f, 100.0f);
 				ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
 				ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
 				ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
