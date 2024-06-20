@@ -319,10 +319,13 @@ namespace Cober {
 
 		if (ImGui::Button(icon) || Editor::GetActiveScene()->ExitFromRuntimeEditor())
         {
+			ImGuiIO& io = ImGui::GetIO(); (void)io;
 			m_GizmoType = -1;
 			if (gameState == EngineApp::GameState::EDITOR) 
             {
 				Log::ClearLogMessages();	
+				io.ConfigFlags ^= ImGuiConfigFlags_NavEnableKeyboard; 
+				
 				EngineApp::Get().SetGameState(EngineApp::GameState::RUNTIME_EDITOR);
 
 				Editor::SetActiveScene(Scene::Copy(Editor::GetEditorScene()));
@@ -331,6 +334,7 @@ namespace Cober {
 			}
 			else if (gameState == EngineApp::GameState::RUNTIME_EDITOR) 
             {
+				io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; 
 				Editor::GetActiveScene()->OnSimulationStop();
 
 				EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
@@ -344,6 +348,7 @@ namespace Cober {
 			}
 		}
 
+		// If inside the game we want to quit, the state of the editor will exit from Runtime
 		if (gameState == EngineApp::GameState::EXIT) 
 		{
 			Editor::GetActiveScene()->OnSimulationStop();
