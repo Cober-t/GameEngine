@@ -44,7 +44,7 @@ namespace Cober {
 		virtual std::string GetName()   const override;
 		virtual std::string GetFormat() const override;
 		virtual const std::filesystem::path& GetPath() const override { return m_Path; }
-		virtual const glm::mat4 GetTextureVertices() const override { return m_TextureVertices;};
+		virtual glm::mat4 GetTextureVertices() override { return m_TextureVertices; };
 		virtual void SetTextureVertices(const glm::mat4 vertices) { m_TextureVertices = vertices; };
 		
 		virtual void SetData(void* data, uint32_t size) override;

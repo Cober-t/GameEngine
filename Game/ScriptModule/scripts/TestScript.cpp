@@ -16,6 +16,12 @@ void TestScript::OnUpdate(float dt)
 		{
 			gameStarted = true;
 			Physics2D::Move(body, 0.75f, 0.75f);
+
+			auto& renderComponent = entity.GetComponent<Render2DComponent>();
+			if (renderComponent.texture && renderComponent.isSubTexture)
+			{
+				SubTexture::ChangeIndices(renderComponent.subTexture, {0, 5});
+			}
 		}
 	}
 }

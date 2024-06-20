@@ -47,13 +47,17 @@ namespace Cober {
 		m_TexCoords[3] = { 0.0f, 1.0f };
 	}
 
-	SubTexture::SubTexture(const Ref<Texture>& texture, const glm::vec2& min, const glm::vec2& max)
+	SubTexture::SubTexture(const Ref<Texture>& texture, const glm::vec2& min, const glm::vec2& max, const glm::vec2& coords, const glm::vec2& cellSize, const glm::vec2& spriteSize)
 		: m_Texture(texture)
 	{
 		m_TexCoords[0] = { min.x, min.y };
 		m_TexCoords[1] = { max.x, min.y };
 		m_TexCoords[2] = { max.x, max.y };
 		m_TexCoords[3] = { min.x, max.y };
+
+		subTextureIndex = coords;
+		subTextureCellSize = cellSize;
+		subTextureSpriteSize = spriteSize;
 	}
 
 
@@ -79,6 +83,7 @@ namespace Cober {
 			{  textWidth/2/scaleFactor,  textHeight/2/scaleFactor, 0.0f, 1.0f },
 			{ -textWidth/2/scaleFactor,  textHeight/2/scaleFactor, 0.0f, 1.0f }
 		};
+
 		texture->SetTextureVertices(vertices);
 
 		glm::vec2 min = { 
@@ -90,6 +95,16 @@ namespace Cober {
 			((coords.y + spriteSize.y) * cellSize.y) / texture->GetHeight() 
 		};
 
-		return CreateRef<SubTexture>(texture, min, max);
+		return CreateRef<SubTexture>(texture, min, max, coords, cellSize, spriteSize);
     }
+
+
+	void SubTexture::ChangeIndices(Ref<SubTexture>& subTexture, glm::vec2 newIndices)
+	{
+		subTexture = SubTexture::UpdateCoords(subTexture->GetTexture(), 
+								 subTexture->GetTexture()->GetTextureVertices(), 
+								 newIndices, 
+								 subTexture->subTextureCellSize, 
+								 subTexture->subTextureSpriteSize);
+	}
 }

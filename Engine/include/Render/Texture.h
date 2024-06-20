@@ -55,7 +55,7 @@ namespace Cober {
 		virtual std::string GetName()   const = 0;
 		virtual std::string GetFormat() const = 0;
 		virtual const std::filesystem::path& GetPath() const = 0;
-		virtual const glm::mat4 GetTextureVertices() const = 0;
+		virtual glm::mat4 GetTextureVertices() = 0;
 		virtual void SetTextureVertices(const glm::mat4 vertices) = 0;
 
 		static int GetTexturesLoadedCount() { return m_TexturesDataHolder.size(); };
@@ -77,16 +77,22 @@ namespace Cober {
 	{
 	public:
 		SubTexture();
-		SubTexture(const Ref<Texture>& texture, const glm::vec2& min, const glm::vec2& max);
+		SubTexture(const Ref<Texture>& texture, const glm::vec2& min, const glm::vec2& max, const glm::vec2& coords, const glm::vec2& cellSize, const glm::vec2& spriteSize);
 
 		const Ref<Texture> GetTexture() const { return m_Texture; }
 		const glm::vec2* GetTexCoords() const { return m_TexCoords; }
 
 		static Ref<SubTexture> UpdateCoords(const Ref<Texture> texture, glm::mat4& vertices, const glm::vec2& coords, const glm::vec2& cellSize, const glm::vec2& spriteSize = {1, 1});
+		static void ChangeIndices(Ref<SubTexture>& subTexture, glm::vec2 newIndices);
 
 	private:
+		glm::vec2 subTextureIndex = { 0, 0 };
+		glm::vec2 subTextureCellSize = { 16, 16 };
+		glm::vec2 subTextureSpriteSize = { 1, 1 };
+
 		Ref<Texture> m_Texture;
 		glm::vec2 m_TexCoords[4];
+
 	};
 }
 

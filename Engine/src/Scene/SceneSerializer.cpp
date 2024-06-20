@@ -194,34 +194,34 @@ namespace Cober {
 	{
 		if (entity.HasComponent<Render2DComponent>()) 
 		{
-			auto& bc2D = entity.GetComponent<Render2DComponent>();
-			serializer["Render2DComponent"]["color"].SetVec4(bc2D.color);
-			switch (bc2D.shapeType)
+			auto& renderComponent = entity.GetComponent<Render2DComponent>();
+			serializer["Render2DComponent"]["color"].SetVec4(renderComponent.color);
+			switch (renderComponent.shapeType)
 			{
 			case Shape2D::Line:
 				serializer["Render2DComponent"]["shape2D"].SetString("Line");
-				serializer["Render2DComponent"]["thickness"].SetReal(bc2D.thickness);
+				serializer["Render2DComponent"]["thickness"].SetReal(renderComponent.thickness);
 				break;
 			case Shape2D::Quad:
 				serializer["Render2DComponent"]["shape2D"].SetString("Quad");
-				serializer["Render2DComponent"]["fill"].SetInt(bc2D.fill);
+				serializer["Render2DComponent"]["fill"].SetInt(renderComponent.fill);
 				break;
 			case Shape2D::Circle:
 				serializer["Render2DComponent"]["shape2D"].SetString("Circle");
-				serializer["Render2DComponent"]["thickness"].SetReal(bc2D.thickness);
-				serializer["Render2DComponent"]["fade"].SetReal(bc2D.fade);
+				serializer["Render2DComponent"]["thickness"].SetReal(renderComponent.thickness);
+				serializer["Render2DComponent"]["fade"].SetReal(renderComponent.fade);
 				break;
 			case Shape2D::Sprite:
 				serializer["Render2DComponent"]["shape2D"].SetString("Sprite");
-				if (bc2D.texture)
+				if (renderComponent.texture)
 				{
-					serializer["Render2DComponent"]["texture"].SetString(bc2D.texture->GetPath().string());
-					serializer["Render2DComponent"]["issubtexture"].SetReal(bc2D.isSubTexture);
-					if (bc2D.isSubTexture)
+					serializer["Render2DComponent"]["texture"].SetString(renderComponent.texture->GetPath().string());
+					serializer["Render2DComponent"]["issubtexture"].SetReal(renderComponent.isSubTexture);
+					if (renderComponent.isSubTexture)
 					{
-						serializer["Render2DComponent"]["subtexture"]["indices"].SetVec2(bc2D.subTextureIndex);
-						serializer["Render2DComponent"]["subtexture"]["cellsize"].SetVec2(bc2D.subTextureCellSize);
-						serializer["Render2DComponent"]["subtexture"]["spritesize"].SetVec2(bc2D.subTextureSpriteSize);
+						serializer["Render2DComponent"]["subtexture"]["indices"].SetVec2(renderComponent.subTextureIndex);
+						serializer["Render2DComponent"]["subtexture"]["cellsize"].SetVec2(renderComponent.subTextureCellSize);
+						serializer["Render2DComponent"]["subtexture"]["spritesize"].SetVec2(renderComponent.subTextureSpriteSize);
 					}
 				}
 				break;
