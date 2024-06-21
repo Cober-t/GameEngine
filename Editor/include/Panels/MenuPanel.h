@@ -75,6 +75,7 @@ namespace Cober {
 
 		Settings m_Settings;
 		std::string m_SceneToReload;
+		std::string m_NewSceneName;
 		bool m_Reload;
         
 	private:

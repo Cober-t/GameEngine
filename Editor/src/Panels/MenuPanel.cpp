@@ -59,12 +59,50 @@ namespace Cober {
 	{
 		if (ImGui::BeginMenu(ICON_FA_FILE  "  File")) 
 		{
+			char buffer[256];
+			memset(buffer, 0, sizeof(buffer));
+			ImGui::PushItemWidth(130.0f);
+			if (ImGui::InputText("##NewScene", buffer, sizeof(buffer)))
+			{
+				m_NewSceneName = (std::string)buffer;
+			}
+			ImGui::PopItemWidth();
+
+			ImGui::SameLine();
+
+			if (ImGui::Button(ICON_FA_FILE  "  New Scene"))
+			{
+				std::filesystem::path newScenePath = std::filesystem::current_path() / "assets" / "scenes";
+    			std::ofstream ofs(newScenePath / m_NewSceneName);
+			}
+
+			const char* sceneHandler = Editor::GetActiveScene()->GetName().c_str();
+			ImGui::PushItemWidth(150.0f);
+			if (ImGui::BeginCombo(ICON_FA_DOWNLOAD, "  Save Scene As..."))
+			{
+				std::vector<std::filesystem::path> scenes;
+				for (const auto & entry : std::filesystem::directory_iterator(m_ScenesPath))
+					scenes.push_back(entry.path());
+
+				for (int i = 0; i < scenes.size(); i++)
+				{
+					bool isSelected = sceneHandler == scenes[i].filename().string().c_str();
+					if (ImGui::Selectable(scenes[i].filename().string().c_str(), isSelected)) 
+					{
+						Scene::Save(Editor::GetActiveScene(), scenes[i].filename().string());
+					}
+				}
+
+				ImGui::EndCombo();
+			}
+			ImGui::PopItemWidth();
+			
 			if (ImGui::MenuItem(ICON_FA_DOWNLOAD "  Save Scene"))
 			{
 				Scene::Save(Editor::GetActiveScene(), Editor::GetActiveScene()->GetName());
 			}
 
-			const char* sceneHandler = Editor::GetActiveScene()->GetName().c_str();
+			ImGui::PushItemWidth(150.0f);
 			if (ImGui::BeginCombo(ICON_FA_UPLOAD "  Load Scene", Editor::GetActiveScene()->GetName().c_str()))
 			{
 				std::vector<std::filesystem::path> scenes;
@@ -84,6 +122,8 @@ namespace Cober {
 
 				ImGui::EndCombo();
 			}
+			ImGui::PopItemWidth();
+			
 
 			if (ImGui::Checkbox("Fullscreen", &m_Settings.Fullscreen))
 				EngineApp::Get().GetWindow().ChangeFullScreen();
