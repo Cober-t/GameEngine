@@ -178,16 +178,16 @@ namespace Cober {
 			}
 
 			ImGui::SetNextItemWidth(120.0f);
-			ImGui::InputFloat("Physics Timestep", &Physics2D::GetSettings().TimeStep);
+			ImGui::InputFloat("Physics Timestep", &physicsSettings.TimeStep);
 
 			ImGui::SetNextItemWidth(120.0f);
-			ImGui::InputFloat("Physics Gravity", &Physics2D::GetSettings().Gravity);
+			ImGui::InputFloat("Physics Gravity", &physicsSettings.Gravity);
 
 			ImGui::SetNextItemWidth(120.0f);
-			ImGui::InputInt("Physics Velocity Iterations", &Physics2D::GetSettings().VelocityIterations);
+			ImGui::InputInt("Physics Velocity Iterations", &physicsSettings.VelocityIterations);
 
 			ImGui::SetNextItemWidth(120.0f);
-			ImGui::InputInt("Physics Position Iterations", &Physics2D::GetSettings().PositionIterations);
+			ImGui::InputInt("Physics Position Iterations", &physicsSettings.PositionIterations);
 
 			ImGui::SetNextItemWidth(120.0f);
 			if (ImGui::Checkbox(ICON_FA_CAMERA  "  Camera Perspective", &editorCamera->IsPerspective()))

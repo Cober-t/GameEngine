@@ -24,7 +24,7 @@ namespace Cober {
 	}
 
 
-	void PhysicsSystem2D::Update(Scene* scene, Unique<Timestep>& ts)
+	void PhysicsSystem2D::Update(Scene* scene)
 	{
 		Physics2D::Step();
 

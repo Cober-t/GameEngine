@@ -162,10 +162,11 @@ namespace Cober {
 	{
 		if (name == "")
 			name = sceneToBeReloaded->GetName();
+		else
+			sceneToBeReloaded->m_SceneName = name;
 			
 		// FIXME: Permit only one reload at a time
 		Ref<Scene> originalScene = SceneSerializer::Deserialize(name);
-		sceneToBeReloaded->m_SceneName = name;
 
 		auto originalEntityMap = originalScene->GetEntityMap();
 		auto auxMap = sceneToBeReloaded->GetEntityMap();
@@ -300,11 +301,11 @@ namespace Cober {
 
 		if (!m_IsPaused || m_StepFrames-- > 0.0f)
 		{
-			while(ts->GetDeltaTime() >= 1.0f)
-            {
-				GetSystem<PhysicsSystem2D>().Update(this, ts);
-                ts->Update();
-            }
+			while (ts->GetAccumulatedTime() >= physicsSettings.TimeStep)
+			{
+				GetSystem<PhysicsSystem2D>().Update(this);
+				ts->GetAccumulatedTime() -= physicsSettings.TimeStep;
+			}
 		}
 
 		GetSystem<AudioSystem>().Update(this);

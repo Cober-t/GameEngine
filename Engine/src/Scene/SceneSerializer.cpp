@@ -85,13 +85,13 @@ namespace Cober {
 	{
 		// Change to enum in the future
 		serializer["SceneType"].SetString("2D");
-		serializer["Gravity"].SetReal(Physics2D::GetSettings().Gravity);
+		serializer["Gravity"].SetReal(physicsSettings.Gravity);
 		serializer["Perspective"].SetInt(GlobalCamera::perspective);
 	}
 
 	void SceneSerializer::DeserializeSceneSettings(Utils::DataFile& loader)
 	{
-		Physics2D::GetSettings().Gravity = loader["Gravity"].GetReal();
+		physicsSettings.Gravity = loader["Gravity"].GetReal();
 		GlobalCamera::perspective = loader["Perspective"].GetInt();
 	}
 

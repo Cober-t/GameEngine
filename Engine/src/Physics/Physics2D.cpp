@@ -8,7 +8,6 @@ namespace Cober {
 
     bool Physics2D::m_DebugActive = false;
     b2World* Physics2D::m_PhysicsWorld = nullptr;
-    PhysicsSettings* Physics2D::m_PhysicsSettings = new PhysicsSettings();
     std::vector<Entity> Physics2D::m_EntitiesToInitPhysics;
     std::vector<b2Body*> Physics2D::m_BodiesToBeDestroyed;
     std::vector<std::pair<BodyChangesType, BodyValues>> Physics2D::m_ApplyBodyChangesPool;
@@ -143,13 +142,13 @@ namespace Cober {
 
     void Physics2D::CreateWorld()
     {
-        m_PhysicsWorld = new b2World({ 0.0f, m_PhysicsSettings->Gravity });
+        m_PhysicsWorld = new b2World({ 0.0f, physicsSettings.Gravity });
     }
 
 
     void Physics2D::Step()
     {
-        m_PhysicsWorld->Step(m_PhysicsSettings->TimeStep, m_PhysicsSettings->VelocityIterations, m_PhysicsSettings->PositionIterations);
+        m_PhysicsWorld->Step(physicsSettings.TimeStep, physicsSettings.VelocityIterations, physicsSettings.PositionIterations);
     }
 
 

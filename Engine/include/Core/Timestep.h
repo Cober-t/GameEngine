@@ -13,7 +13,7 @@ namespace Cober {
 	public:
 		Timestep() 
 		 : m_DeltaTime(0), m_NowTime(0), m_LastFrameTime(glfwGetTime()), m_Timer(0),
-		  m_Frames(0), m_Updates(0), m_LimitFPS(1.0f / 60.0f) 
+		  m_Frames(0), m_Updates(0), m_AccumulatedTime(0), m_LimitFPS(1.0f / 60.0f) 
 		{ 
 			LOG_CORE_INFO("Created Timer");
 		}
@@ -30,8 +30,9 @@ namespace Cober {
 		inline void Start()
 		{
 			m_NowTime = glfwGetTime();
-			m_DeltaTime += (m_NowTime - m_LastFrameTime) / m_LimitFPS;
+			m_DeltaTime = m_NowTime - m_LastFrameTime;
 			m_LastFrameTime = m_NowTime;
+			m_AccumulatedTime += m_DeltaTime;
 
 			m_Frames++;
 		}
@@ -59,12 +60,17 @@ namespace Cober {
 		}
 
 		operator float() const { return m_DeltaTime; }
-		float GetConsistentTimer() const { return (glfwGetTime() - m_Timer) / 100; }
+		float GetConsistentTimer() const { return m_DeltaTime; }
+		float GetSecondsFromNow() const { return m_DeltaTime; }
+
+		float GetTime() const { return m_Timer; }
+		double& GetAccumulatedTime() { return m_AccumulatedTime; }
+
 		float GetSeconds() const { return m_DeltaTime; }
 		float GetMilliseconds() const { return m_DeltaTime * 1000.0f; }
 
 	private:
-		double m_DeltaTime, m_NowTime, m_LastFrameTime, m_Timer;
+		double m_DeltaTime, m_NowTime, m_LastFrameTime, m_Timer, m_AccumulatedTime;
 		float m_LimitFPS;
 		int m_Frames, m_Updates;
 		float m_DeltaPerSecond = 0;

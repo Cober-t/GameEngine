@@ -54,7 +54,6 @@ namespace Cober {
         inline static int32 GetBodyCount() { return m_PhysicsWorld ? m_PhysicsWorld->GetBodyCount() : 0; };
 
         inline static b2World& PhysicsWorld() {return *m_PhysicsWorld; }
-        inline static PhysicsSettings& GetSettings() {return *m_PhysicsSettings; }
         static void CleanUp();
 
         // Move to Scripting System
@@ -75,7 +74,6 @@ namespace Cober {
     private:
         static b2World* m_PhysicsWorld;
         static bool m_DebugActive;
-        static PhysicsSettings* m_PhysicsSettings;
         static std::vector<Entity> m_EntitiesToInitPhysics;
         static std::vector<b2Body*> m_BodiesToBeDestroyed;
         static std::vector<std::pair<BodyChangesType, BodyValues>> m_ApplyBodyChangesPool;

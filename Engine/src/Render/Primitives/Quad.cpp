@@ -40,6 +40,8 @@ namespace Cober {
 			delete[] quadIndices;
 
 			data.WhiteTexture = Texture::Create(TextureSpecification());
+			uint32_t whiteTextureData = 0xffffffff;
+			data.WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
 
 			int32_t samplers[data.MaxTextureSlots];
 			for (uint32_t i = 0; i < data.MaxTextureSlots; i++)

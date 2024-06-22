@@ -335,6 +335,9 @@ namespace Cober {
 				
 				EngineApp::Get().SetGameState(EngineApp::GameState::RUNTIME_EDITOR);
 
+				// Reset for physics
+				EngineApp::Get().GetTimer()->GetAccumulatedTime() = 0.0f;
+
 				Editor::SetActiveScene(Scene::Copy(Editor::GetEditorScene()));
 				Editor::GetActiveScene()->OnSimulationStart();
 				SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());

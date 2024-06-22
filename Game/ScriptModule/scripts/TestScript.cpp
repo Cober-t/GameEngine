@@ -8,21 +8,10 @@ void TestScript::OnStart()
 
 void TestScript::OnUpdate(float dt)
 {
-	auto body = (b2Body*)entity.GetBody();
-	if (gameStarted == false)
+	if (gameStarted == false && Input::IsKeyPressed(KeyCode::Space))
 	{
-		// Physics2D::MoveTo(entity, -1, 0);
-		if (Input::IsKeyPressed(KeyCode::Space))
-		{
-			gameStarted = true;
-			// Physics2D::Move(body, 0.75f, 0.75f);
-
-			auto& renderComponent = entity.GetComponent<Render2DComponent>();
-			if (renderComponent.texture && renderComponent.isSubTexture)
-			{
-				Scene::Reload(scene);
-			}
-		}
+		gameStarted = true;
+		Scene::Reload(scene);
 	}
 }
 

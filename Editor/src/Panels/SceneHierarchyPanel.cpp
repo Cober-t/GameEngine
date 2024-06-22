@@ -315,9 +315,15 @@ namespace Cober {
 		ImGui::SameLine();
 		if (ImGui::Button(ICON_FA_TIMES))
 		{
-			component.texture = nullptr;
 			component.isSubTexture = false;
 			component.subTexture = CreateRef<SubTexture>();
+			component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+															{0 ,0}, 
+															{component.texture->GetWidth(), component.texture->GetHeight()});
+
+			component.texture = Texture::Create(TextureSpecification());
+			uint32_t whiteTextureData = 0xffffffff;
+			component.texture->SetData(&whiteTextureData, sizeof(uint32_t));
 		}
 
 		if(component.texture)
@@ -714,7 +720,14 @@ namespace Cober {
 				{
 					component.Text = (std::string)buffer;
 				}
-				ImGui::Button(component.FontAsset->GetFontName().c_str(), ImVec2(100.0f, 0.0f));
+				char buf[256];
+				memset(buf, 0, sizeof(buf));
+				if (component.FontAsset)
+					strcpy_s(buf, sizeof(buf), component.FontAsset->GetFontName().c_str());
+				else
+					strcpy_s(buf, sizeof(buf), "##");
+				
+				ImGui::Button(buf, ImVec2(100.0f, 0.0f));
 				if (ImGui::BeginDragDropTarget())
 				{
 					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))

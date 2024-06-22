@@ -73,9 +73,6 @@ namespace Cober {
 
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, Utils::ImageRepeatPatternToGL(m_Specification.Pattern));
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, Utils::ImageRepeatPatternToGL(m_Specification.Pattern));
-
-		uint32_t whiteTextureData = 0xffffffff;
-		SetData(&whiteTextureData, sizeof(uint32_t));
 	}
 
 
