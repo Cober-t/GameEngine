@@ -172,7 +172,10 @@ namespace Cober {
 		auto auxMap = sceneToBeReloaded->GetEntityMap();
 		for (auto& entity : auxMap)
 		{
-			sceneToBeReloaded->DestroyEntity(entity.second);
+			// Not using DestroyEntity function to destroy it immediately
+			Physics2D::DestroyBody(entity.second);
+			sceneToBeReloaded->m_EntityMap.erase(entity.second.GetUUID());
+			sceneToBeReloaded->m_Registry.destroy(entity.second);
 		}
 
 		for (auto& entity : originalEntityMap)
