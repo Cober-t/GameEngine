@@ -90,6 +90,8 @@ namespace Cober {
 
 		void UpdateCameraValues()
 		{
+			camera->SetMainCamera(mainCamera);
+
 			camera->GetSettings().distance = distance;
 			camera->GetSettings().width = width;
 			camera->GetSettings().height = height;
@@ -100,8 +102,6 @@ namespace Cober {
 			
 			camera->GetSettings().perspectiveProjection = perspective;
 		}
-
-		void SetMain(bool isMain) { mainCamera = isMain; }
 	};
 
 

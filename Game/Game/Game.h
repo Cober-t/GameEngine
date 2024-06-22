@@ -17,6 +17,7 @@ public:
 
 	void OnUpdate(Unique<Timestep>& ts) override;
 	void OnEvent(Event& event) override;
+	
 private:
 	Ref<Scene> m_ActiveScene;
 	Ref<Camera> m_DefaultCamera;

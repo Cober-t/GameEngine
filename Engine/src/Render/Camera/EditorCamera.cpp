@@ -56,6 +56,9 @@ namespace Cober {
 		if (IsMainCamera() == false)
 			return;
 
+		m_ViewportWidth = width;
+		m_ViewportHeight = height;
+
 		auto& m_EditorCamera = GetSettings();
 		if (IsPerspective())
 		{
@@ -63,16 +66,36 @@ namespace Cober {
 		}
 		else
 		{
-			m_EditorCamera.aspectRatio = (float)width / (float)height;
-			SetOrthoProjectionMatrix(m_EditorCamera.aspectRatio * m_EditorCamera.distance, // Left
-									 m_EditorCamera.aspectRatio * m_EditorCamera.distance,// Right
-									 m_EditorCamera.distance,	// Bottom 
-									 m_EditorCamera.distance,	// Top
-									 m_EditorCamera.nearClip, m_EditorCamera.farClip);
+			float srcAspectRatio = m_EditorCamera.width / m_EditorCamera.height;
+			float dstAspectRatio = width / height;
+			float newWidth = m_EditorCamera.width*0.01/2.0f;
+			float newHeight = m_EditorCamera.height*0.01/2.0f;
+			// Check if the viewport is wider or taller
+			if (dstAspectRatio >= srcAspectRatio)
+			{
+				SetOrthoProjectionMatrix(dstAspectRatio/srcAspectRatio * newWidth, newHeight,
+										m_EditorCamera.nearClip, m_EditorCamera.farClip);
+			} 
+			else 
+			{
+				SetOrthoProjectionMatrix(newWidth, srcAspectRatio/dstAspectRatio * newHeight,
+										m_EditorCamera.nearClip, m_EditorCamera.farClip);
+			}
 		}
+	
+		UpdateCameraView();
+		m_EditorCamera.aspectRatio = width / height;
+
+		if (EngineApp::Get().GetGameState() != EngineApp::GameState::PLAY)
+        {
+			RenderGlobals::SetViewport(m_ViewportWidth, m_ViewportHeight);
+        }
+	}
+
 		
-		m_ViewportWidth = width;
-		m_ViewportHeight = height;
+	void EditorCamera::SetPerspective(bool persp)
+	{
+		GetSettings().perspectiveProjection = persp;
 		UpdateCameraView();
 	}
 
@@ -138,15 +161,6 @@ namespace Cober {
 	{
 		// Becasue the distance is involve and needs to be updated
 		auto& m_EditorCamera = GetSettings();
-		if (IsPerspective() == false)
-		{
-			SetOrthoProjectionMatrix(m_EditorCamera.aspectRatio * m_EditorCamera.distance, // Left
-									 m_EditorCamera.aspectRatio * m_EditorCamera.distance,// Right
-									 m_EditorCamera.distance,	// Bottom 
-									 m_EditorCamera.distance,	// Top
-									 m_EditorCamera.nearClip, m_EditorCamera.farClip);
-		}
-		
 		m_EditorCamera.distance -= delta * ZoomSpeed();
 
 		if (m_EditorCamera.distance < 1.0f)
@@ -219,41 +233,33 @@ namespace Cober {
 
 		if (m_IsActive == false || IsMainCamera() == false)
 		{
-			// if (!EngineApp::Get().GetImGuiLayer()->IsInputEnabled())
+			// if (EngineApp::Get().GetImGuiLayer()->IsInputEnabled() == false)
 			// 	EngineApp::Get().GetImGuiLayer()->SetInputEnabled(true);
 
 			return;
 		}
 
-		if (Input::IsKeyDown(KeyCode::LeftAlt))
+		// PERSP Controls
+		if (IsPerspective() == true && Input::IsKeyDown(KeyCode::LeftAlt))
 		{
-			// PERSP Controls
-			if (IsPerspective() == true)
+			if (Input::IsMouseButtonDown(MouseButton::Middle))
 			{
-				if (Input::IsMouseButtonDown(MouseButton::Middle))
-				{
-					DisableMouse();
-					MousePan(delta);
-				}
-				else if (Input::IsMouseButtonDown(MouseButton::Left))
-				{
-					DisableMouse();
-					MouseRotate(delta);
-				}
-				else
-					EnableMouse();
+				DisableMouse();
+				MousePan(delta);
 			}
-			// ORTHO Controls
-			else if (IsPerspective() == false)
+			else if (Input::IsMouseButtonDown(MouseButton::Left))
 			{
-				if (Input::IsMouseButtonDown(MouseButton::Left))
-				{
-					DisableMouse();
-					MousePan(delta);
-				}
-				else
-					EnableMouse();
+				DisableMouse();
+				MouseRotate(delta);
 			}
+			else
+				EnableMouse();
+		}
+		// ORTHO Controls
+		else if (IsPerspective() == false && Input::IsMouseButtonDown(MouseButton::Right))
+		{
+			DisableMouse();
+			MousePan(delta);
 		}
 		else
 		{

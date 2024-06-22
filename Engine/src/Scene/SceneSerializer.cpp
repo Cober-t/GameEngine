@@ -2,6 +2,7 @@
 #include "Scene/SceneSerializer.h"
 #include "Physics/Physics2D.h"
 #include "Scripting/NativeScripting.h"
+#include "Render/Camera/GlobalCamera.h"
 
 namespace Cober {
 
@@ -85,11 +86,13 @@ namespace Cober {
 		// Change to enum in the future
 		serializer["SceneType"].SetString("2D");
 		serializer["Gravity"].SetReal(Physics2D::GetSettings().Gravity);
+		serializer["Perspective"].SetInt(GlobalCamera::perspective);
 	}
 
 	void SceneSerializer::DeserializeSceneSettings(Utils::DataFile& loader)
 	{
 		Physics2D::GetSettings().Gravity = loader["Gravity"].GetReal();
+		GlobalCamera::perspective = loader["Perspective"].GetInt();
 	}
 
 	void SceneSerializer::SerializeAllComponents(Entity& entity, Utils::DataFile& serializer)

@@ -11,6 +11,7 @@
 #include "Scene/Systems/ScriptSystem.h"
 #include "Scene/Systems/AudioSystem.h"
 
+#include "Render/Camera/GlobalCamera.h"
 #include "Scripting/NativeScripting.h"
 
 #include <glm/glm.hpp>
@@ -328,6 +329,12 @@ namespace Cober {
 		GetSystem<RenderSystem>().Update(this);
 		GetSystem<ParticleSystem>().Update(ts, this);
 		Render2D::EndScene();
+	}
+
+
+	void Scene::OnEvent(Event& event, const Ref<Camera>& camera)
+	{
+		GetSystem<CameraSystem>().OnEvent(event, camera);
 	}
 
 

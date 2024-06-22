@@ -15,7 +15,7 @@
 // #include "Core/Window.h"
 // #include "Core/UUID.h"
 #include "Core/Utils.h"
-#include "Core/Settings.h"
+#include "Core/EngineSettings.h"
 
 
 //[++++++++++++++++++++++++++]
@@ -67,6 +67,7 @@
 #include "Render/Shader.h"
 #include "Render/Framebuffer.h"
 #include "Render/Camera/Camera.h"
+#include "Render/Camera/GlobalCamera.h"
 #include "Render/Camera/GameCamera.h"
 #include "Render/Camera/EditorCamera.h"
 #include "Render/Primitives/Line.h"

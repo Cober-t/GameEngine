@@ -18,9 +18,10 @@ namespace Cober {
 		CameraSystem();
 		~CameraSystem();
 
-		void Start(const Scene* scene);
+		void Start(Scene* scene);
 
 		void Update(Unique<Timestep>& ts, Ref<Camera>& defaultCamera, Scene* scene);
+		void OnEvent(Event& event, const Ref<Camera>& camera);
 		// void UpdateRuntime(Unique<Timestep>& ts, Ref<Camera>& defaultCamera, Scene* scene);
 		// void UpdateSimulation(Unique<Timestep>& ts, const Ref<Camera>& defaultCamera, Scene* scene);
 

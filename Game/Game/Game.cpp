@@ -3,7 +3,7 @@
 
 Game::Game() : Layer("Game application") 
 {
-	m_DefaultCamera = CreateRef<GameCamera>(45.0f, EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight(), 0.01f, 1000.0f);
+	m_DefaultCamera = CreateRef<GameCamera>(45.0f, EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight(), 0.01f, 1000.0f, GlobalCamera::perspective);
 }
 
 
@@ -24,7 +24,7 @@ void Game::OnDetach()
 
 void Game::OnUpdate(Unique<Timestep>& ts) 
 {
-	RenderGlobals::SetClearColor(0, 0, 0);
+	RenderGlobals::SetClearColor(20.0f, 70.0f, 150.0f);
 	RenderGlobals::Clear();
 	m_ActiveScene->OnUpdateSimulation(ts, m_DefaultCamera);
 }
@@ -32,6 +32,6 @@ void Game::OnUpdate(Unique<Timestep>& ts)
 
 void Game::OnEvent(Event& event) 
 {
-	m_DefaultCamera->OnEvent(event);
+	m_ActiveScene->OnEvent(event, m_DefaultCamera);
 	NativeScriptFn::OnEvent(m_ActiveScene.get(), event);
 }

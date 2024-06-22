@@ -23,6 +23,7 @@ namespace Cober  {
 			static void Draw(const glm::mat4& transform, const glm::vec4& color, const Ref<SubTexture>& subTexture = nullptr, int entityID = -1);
 			static void Draw(const std::vector<glm::vec3> vertices, int vertexCount, const glm::vec4& color);
 			static void DrawRect(Entity& entity);
+			static void DrawRect(const glm::vec3& position, const glm::vec3& rotation, uint32_t width, uint32_t height, const glm::vec4& color, int entityID = -1);
 			// static void DrawRect(glm::vec3 position, glm::vec3 rotation, float width, float height, Entity& entityID, glm::vec4 color = glm::vec4(1.0f));
 			static void DrawTexture(Entity& entity);
 

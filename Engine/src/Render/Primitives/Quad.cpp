@@ -270,6 +270,30 @@ namespace Cober {
             Line::Draw(lineVertices[3], lineVertices[0], color, (int)entity);
         }
 
+
+		void Quad::DrawRect(const glm::vec3& position, const glm::vec3& rotation, uint32_t width, uint32_t height, const glm::vec4& color, int entityID)
+		{
+			glm::mat4 vertices
+			{
+				{ -1.0f, -1.0f, 0.0f, 1.0f },
+				{  1.0f, -1.0f, 0.0f, 1.0f },
+				{  1.0f,  1.0f, 0.0f, 1.0f },
+				{ -1.0f,  1.0f, 0.0f, 1.0f },
+			};
+			glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+					* glm::toMat4(glm::quat(rotation))
+					* glm::scale(glm::mat4(1.0f), glm::vec3(width, height, 1.0f));
+
+            glm::vec3 lineVertices[4];
+            for (size_t i = 0; i < 4; i++)
+                lineVertices[i] = transform * vertices[i];
+
+            Line::Draw(lineVertices[0], lineVertices[1], color, entityID);
+            Line::Draw(lineVertices[1], lineVertices[2], color, entityID);
+            Line::Draw(lineVertices[2], lineVertices[3], color, entityID);
+            Line::Draw(lineVertices[3], lineVertices[0], color, entityID);
+		}
+
 		
 		void Quad::Draw(const std::vector<glm::vec3> vertices, int vertexCount, const glm::vec4& color) 
 		{

@@ -77,6 +77,7 @@ namespace Cober {
 		std::string m_SceneToReload;
 		std::string m_NewSceneName;
 		bool m_Reload;
+		bool m_ShowDemoWindow;
         
 	private:
 		static MenuPanel* s_Instance;

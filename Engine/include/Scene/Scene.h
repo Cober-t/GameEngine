@@ -33,6 +33,8 @@ namespace Cober {
 		void OnSimulationStart();
 		void OnSimulationStop();
 
+		void OnEvent(Event& event, const Ref<Camera>& camera);
+
 		void OnUpdateRuntime(Unique<Timestep>& ts, Ref<Camera>& camera);
 		void OnUpdateSimulation(Unique<Timestep>& ts, Ref<Camera>& camera);
 

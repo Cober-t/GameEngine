@@ -20,6 +20,7 @@ namespace Cober {
 	{
 		s_Instance = this;
 		m_Reload = false;
+		m_ShowDemoWindow = false;
 
 		m_Settings.Vsync = EngineApp::Get().GetWindow().GetVsync();
 
@@ -191,6 +192,8 @@ namespace Cober {
 			ImGui::SetNextItemWidth(120.0f);
 			if (ImGui::Checkbox(ICON_FA_CAMERA  "  Camera Perspective", &editorCamera->IsPerspective()))
 			{
+				GlobalCamera::perspective = (bool)editorCamera->IsPerspective();
+				
 				if (editorCamera->IsMainCamera())
 				{
 					if (editorCamera->IsPerspective() == false)
@@ -200,7 +203,7 @@ namespace Cober {
 						editorCamera->GetSettings().pitch = 0.0;
 						editorCamera->GetSettings().roll = 0.0f;
 					}
-						
+					
 					ViewportPanel::Get().MustResize();
 				}
 			}
@@ -221,9 +224,14 @@ namespace Cober {
 						Debug2DPhysics::Get().UpdateFlags();
 				}
 			}
+
+			ImGui::Checkbox("Show Demo Window", &m_ShowDemoWindow);
 			
 			ImGui::EndMenu();
 		}
+		
+		if (m_ShowDemoWindow)
+			ImGui::ShowDemoWindow();
 	}
 
 	void MenuPanel::ManageSceneReloadingIfExists()
@@ -235,6 +243,9 @@ namespace Cober {
 			Editor::SetActiveScene(Editor::GetEditorScene());
 			Editor::SetSelectedEntity(Entity());
 			SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
+
+			Editor::GetActiveCamera()->SetPerspective(GlobalCamera::perspective);
+			ViewportPanel::Get().MustResize();
 		}
 	}
 }

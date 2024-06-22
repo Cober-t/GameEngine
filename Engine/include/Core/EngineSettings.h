@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <glm/glm.hpp>
 
+#include "Render/Camera/Camera.h"
+
 namespace Cober {
 
     struct DebugSettings

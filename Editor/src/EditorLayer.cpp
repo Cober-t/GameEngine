@@ -11,7 +11,7 @@ namespace Cober {
 
 	Editor::Editor() : Layer("Editor")
 	{
-		m_EditorCamera = CreateUnique<EditorCamera>(45.0f, EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight(), 0.01f, 1000.0f);
+		m_EditorCamera = CreateUnique<EditorCamera>(45.0f, EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight(), 0.01f, 1000.0f, GlobalCamera::perspective);
 		m_CameraActive = m_EditorCamera;
 
 		EditorResources::Init();
@@ -30,7 +30,6 @@ namespace Cober {
 	void Editor::OnAttach() 
 	{
 		m_ActiveScene = Scene::Load(EngineApp::Get().GetSpecification().LastScene);
-		m_CameraActive->SetViewportSize(m_CameraActive->GetSettings().width, m_CameraActive->GetSettings().height);
 
 		m_ActiveScene->OnRuntimeStart();
 		m_EditorScene = m_ActiveScene;

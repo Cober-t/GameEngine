@@ -21,6 +21,7 @@ namespace Cober {
 		void OnEvent(Event& event) override;
 
 		void SetViewportSize(float width, float height) override;
+		virtual void SetPerspective(bool persp = true) override;
 
 		bool IsActive() const { return m_IsActive; }
 		void SetActive(bool active) { m_IsActive = active; }

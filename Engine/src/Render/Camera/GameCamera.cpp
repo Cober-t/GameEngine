@@ -30,9 +30,6 @@ namespace Cober {
 		m_GameCamera.yaw = 0.0f;
 		m_GameCamera.pitch = 0.0f;
 		m_GameCamera.roll = 0.0f;
-		// m_GameCamera.yaw = 3.0f * glm::pi<float>() / 4.0f;
-		// m_GameCamera.pitch = glm::pi<float>() / 4.0f;
-		// m_GameCamera.roll = 0.0f;
 
 		m_GameCamera.position = CalculatePosition();
 		const glm::quat orientation = GetOrientation();
@@ -68,25 +65,50 @@ namespace Cober {
 			return;
 
 		auto& m_GameCamera = GetSettings();
-
+		m_ViewportWidth = width;
+		m_ViewportHeight = height;
+	
 		if (IsPerspective())
 		{
-			SetPerspectiveProjectionMatrix(glm::radians(m_GameCamera.fov), (float)width, (float)height, m_GameCamera.nearClip, m_GameCamera.farClip);
+			SetPerspectiveProjectionMatrix(glm::radians(m_GameCamera.fov), 
+										  m_ViewportWidth, m_ViewportHeight, 
+										  m_GameCamera.nearClip, m_GameCamera.farClip);
 		}
 		else
 		{
-			// m_GameCamera.aspectRatio = (float)width / (float)height;
-			float screenWidth = EngineApp::Get().GetWindow().GetWidth();
-			float screenHeight = EngineApp::Get().GetWindow().GetHeight();
-			float aspectRatio = screenWidth / screenHeight; 
-			SetOrthoProjectionMatrix(screenWidth * 0.001 * m_GameCamera.distance, // Left
-									 screenWidth * 0.001 * m_GameCamera.distance,// Right
-									 m_GameCamera.distance,	// Bottom 
-									 m_GameCamera.distance,	// Top
-									 m_GameCamera.nearClip, m_GameCamera.farClip);
+			float srcAspectRatio = m_GameCamera.width / m_GameCamera.height;
+			float dstAspectRatio = width / height;
+			float newWidth = m_GameCamera.width*0.01/2.0f;
+			float newHeight = m_GameCamera.height*0.01/2.0f;
+
+			// Check if the viewport is wider or taller
+			if (dstAspectRatio >= srcAspectRatio) 
+			{
+				SetOrthoProjectionMatrix(dstAspectRatio/srcAspectRatio * newWidth, newHeight,
+										m_GameCamera.nearClip, m_GameCamera.farClip);
+			}
+			else 
+			{
+				SetOrthoProjectionMatrix(newWidth, srcAspectRatio/dstAspectRatio * newHeight,
+										m_GameCamera.nearClip, m_GameCamera.farClip);
+			}
 		}
-		m_ViewportWidth = width;
-		m_ViewportHeight = height;
+
+		UpdateCameraView();
+		m_GameCamera.aspectRatio = width / height;
+
+		// In the Editor mode the game camera is managed by the viewporIn Play mode the viewport is manage by the camera
+        // In the rest, the viewport is managed by the Editor Viewport
+        if (EngineApp::Get().GetGameState() == EngineApp::GameState::PLAY)
+        {
+			RenderGlobals::SetViewport(m_ViewportWidth, m_ViewportHeight);
+        }
+	}
+
+
+	void GameCamera::SetPerspective(bool persp)
+	{
+		GetSettings().perspectiveProjection = persp;
 		UpdateCameraView();
 	}
 
@@ -137,12 +159,31 @@ namespace Cober {
 
 		if (event.GetEventType() == EventType::WindowResize)
 		{
-			SetViewportSize(static_cast<WindowResizeEvent&>(event).GetWidth(), static_cast<WindowResizeEvent&>(event).GetHeight());
+			float screenWidth = static_cast<WindowResizeEvent&>(event).GetWidth();
+			float screenHeight = static_cast<WindowResizeEvent&>(event).GetHeight();
+			SetViewportSize(screenWidth, screenHeight);
 		}
 
-		if (Input::IsKeyDown(KeyCode::LeftControl) && Input::IsKeyDown(KeyCode::F))
+		if (Input::IsKeyDown(KeyCode::LeftControl) && Input::IsKeyPressed(KeyCode::F))
 		{
 			EngineApp::Get().GetWindow().ChangeFullScreen();
+		}
+
+
+		// Test
+		if (Input::IsKeyDown(KeyCode::Up))
+			GetSettings().distance -= 0.2;
+		if (Input::IsKeyDown(KeyCode::Down))
+			GetSettings().distance += 0.2;
+
+		if (Input::IsKeyDown(KeyCode::LeftControl) && Input::IsKeyPressed(KeyCode::P))
+		{
+			float screenWidth = EngineApp::Get().GetWindow().GetWidth();
+			float screenHeight = EngineApp::Get().GetWindow().GetHeight();
+			float aspectRatio = screenWidth / screenHeight;
+			LOG_WARNING("SWidth {0} - SHeight {1} - Ratio {2} - Persp {3}", screenWidth, screenHeight, aspectRatio, IsPerspective());
+			// LOG_WARNING("CamWidth {0} - CamHeight {1} - Ratio {2} - Persp {3}", GetSettings().width, GetSettings().height, 
+			// 	GetSettings().width / GetSettings().height, GetSettings().perspectiveProjection);
 		}
 	}
 }

@@ -18,6 +18,7 @@ namespace Cober {
 		void OnEvent(Event& event) override;
 
 		void SetViewportSize(float width, float height) override;
+		virtual void SetPerspective(bool persp = true) override;
 
 		glm::quat GetOrientation() const;
 		glm::vec3 GetUpDirection() const;

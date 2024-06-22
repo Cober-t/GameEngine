@@ -44,9 +44,10 @@ namespace Cober {
 		virtual void OnEvent(Event& event) = 0;
 		virtual void SetViewportSize(float width, float height) = 0;
 
-		bool IsMainCamera(){ return m_IsMainCamera; }
-		void SetMainCamera(bool main = true){ m_IsMainCamera = main ; }
+		bool IsMainCamera() { return m_IsMainCamera; }
+		void SetMainCamera(bool main = true) { m_IsMainCamera = main ; }
 		bool& IsPerspective() { return m_CameraSettings.perspectiveProjection; }
+		virtual void SetPerspective(bool persp = true) = 0;
 
 		CameraSettings& GetSettings() { return m_CameraSettings; }
 		CameraSettings GetSettings() const { return m_CameraSettings; }
@@ -65,9 +66,9 @@ namespace Cober {
 			m_ProjectionMatrix = glm::perspectiveFov(radFov, width, height, nearClip, farClip);
 		}
 
-		void SetOrthoProjectionMatrix(float width, float height, float nearClip, float farClip)
+		void SetOrthoProjectionMatrix(float leftRight, float topBottom, float nearClip, float farClip)
 		{
-			m_ProjectionMatrix = glm::ortho(-width, width, -height, height, nearClip, farClip);
+			m_ProjectionMatrix = glm::ortho(-leftRight, leftRight, -topBottom, topBottom, nearClip, farClip);
 		}
 
 		void SetOrthoProjectionMatrix(float left, float right, float bottom, float top, float nearClip, float farClip)
