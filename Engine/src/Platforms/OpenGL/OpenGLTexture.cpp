@@ -159,4 +159,10 @@ namespace Cober {
 	{
 		glBindTextureUnit(slot, m_RendererID);
 	}
+	
+
+	void OpenGLTexture::BindSingleTexture(uint32_t data) const
+	{
+		glBindTexture(GL_TEXTURE_2D, data);
+	}
 }

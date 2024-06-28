@@ -186,7 +186,7 @@ class ProjectAPI():
             settings = json.load(file)
         # Change to "./Editor.exe" when building for Projects
         subprocess.Popen(f"..\\bin\\Debug-windows-x86_64\\Editor\\Editor.exe \
-            {settings['name']} {settings['assetsPath']} 1920 1080")
+            {settings['name']} {settings['assetsPath']} 1280 720")
         return
 
 

@@ -140,6 +140,7 @@ namespace Cober {
 
 		glCreateFramebuffers(1, &m_RenderID);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RenderID);
+		glEnable(GL_DEPTH_TEST);
 
 		bool multisample = m_Specification.Samples > 1;
 

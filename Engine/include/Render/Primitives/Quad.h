@@ -16,6 +16,7 @@ namespace Cober  {
 		{
 		public:
 			static void Init();
+			static void InitFramebuffer();
 			static void CleanVertexBuffer();
 
 			static void Draw(Entity& entity);
@@ -26,6 +27,7 @@ namespace Cober  {
 			static void DrawRect(const glm::vec3& position, const glm::vec3& rotation, uint32_t width, uint32_t height, const glm::vec4& color, int entityID = -1);
 			// static void DrawRect(glm::vec3 position, glm::vec3 rotation, float width, float height, Entity& entityID, glm::vec4 color = glm::vec4(1.0f));
 			static void DrawTexture(Entity& entity);
+			static void DrawFramebuffer(const Ref<Framebuffer>& framebuffer);
 
 			static void Flush();
 			static void StartBatch();
@@ -47,10 +49,15 @@ namespace Cober  {
 
 			struct Data
 			{
+				Ref<VertexArray> FramebufferVAO;
+				Ref<VertexBuffer> FramebufferVBO;
+				Ref<Shader> FramebufferShader;
+				Ref<Texture> FramebufferTexture;
+
 				Ref<VertexArray> VertexArray;
 				Ref<VertexBuffer> VertexBuffer;
 				Ref<Shader> Shader;
-				Ref<Texture> WhiteTexture;
+				Ref<Texture> QuadTexture;
 
 				uint32_t IndexCount = 0;
 
@@ -61,7 +68,6 @@ namespace Cober  {
 				Attributes* VertexBufferBase = nullptr;
 				Attributes* VertexBufferPtr = nullptr;
 			};
-
 		};
 	}
 }

@@ -49,6 +49,7 @@ namespace Cober {
 		
 		virtual void SetData(void* data, uint32_t size) override;
 		virtual void Bind(uint32_t slot = 0) const override;
+		virtual void BindSingleTexture(uint32_t data) const override;
 
 		virtual bool operator==(const Texture& other) const override
 		{

@@ -10,6 +10,8 @@ Game::Game() : Layer("Game application")
 void Game::OnAttach() 
 {
 	m_ActiveScene = Scene::Load("SceneDefault.lua");
+
+	// Create Framebuffer...
 }
 
 
@@ -24,9 +26,21 @@ void Game::OnDetach()
 
 void Game::OnUpdate(Unique<Timestep>& ts) 
 {
-	RenderGlobals::SetClearColor(20.0f, 70.0f, 150.0f);
+	// Resize Framebuffer...
+	// Bind Framebuffer...
+
+	RenderGlobals::SetClearColor(20, 70, 150);
 	RenderGlobals::Clear();
+
+	// Clear Framebuffer Attachments...
+
 	m_ActiveScene->OnUpdateSimulation(ts, m_DefaultCamera);
+
+	// Get Selected Entity...
+
+	// Unbind Framebuffer...
+
+	// Render Framebuffer Attachment (scene generated texture)...
 }
 
 

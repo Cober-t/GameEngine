@@ -36,6 +36,12 @@ namespace Cober {
 		RenderGlobals::m_Api->Clear();
 	}
 
+	
+	void RenderGlobals::DrawTriangles(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
+	{
+		RenderGlobals::m_Api->DrawTriangles(vertexArray, vertexCount);
+	}
+
 
 	void RenderGlobals::DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
 	{

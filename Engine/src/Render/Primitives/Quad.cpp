@@ -15,6 +15,11 @@ namespace Cober {
 		void Quad::CleanVertexBuffer()
 		{
 			delete[] data.VertexBufferBase;
+			data.VertexArray->Unbind();
+			data.VertexBuffer->Unbind();
+
+			data.FramebufferVAO->Unbind();
+			data.FramebufferVBO->Unbind();
 		}
 
 		void Quad::Init() 
@@ -39,9 +44,9 @@ namespace Cober {
 			data.VertexArray->SetIndexBuffer(quadIB);
 			delete[] quadIndices;
 
-			data.WhiteTexture = Texture::Create(TextureSpecification());
+			data.QuadTexture = Texture::Create(TextureSpecification());
 			uint32_t whiteTextureData = 0xffffffff;
-			data.WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+			data.QuadTexture->SetData(&whiteTextureData, sizeof(uint32_t));
 
 			int32_t samplers[data.MaxTextureSlots];
 			for (uint32_t i = 0; i < data.MaxTextureSlots; i++)
@@ -53,9 +58,65 @@ namespace Cober {
 			data.Shader->SetIntArray("u_Textures", samplers, data.MaxTextureSlots);
 
 			// Set first texture slot to 0
-			data.TextureSlots[0] = data.WhiteTexture;
+			data.TextureSlots[0] = data.QuadTexture;
 		}
 
+
+		void Quad::InitFramebuffer() 
+		{
+			if (data.FramebufferVAO != nullptr)
+				return;
+
+			data.FramebufferVAO = VertexArray::Create();
+
+			// Normalized Vertex Attributes for a quad that fills the entire screen
+			float screenQuadVertices[4 * 6] = 
+			{
+				// positions   // texCoords
+				-1.0f,  1.0f,  0.0f, 1.0f,
+				-1.0f, -1.0f,  0.0f, 0.0f,
+				 1.0f, -1.0f,  1.0f, 0.0f,
+
+				-1.0f,  1.0f,  0.0f, 1.0f,
+				 1.0f, -1.0f,  1.0f, 0.0f,
+				 1.0f,  1.0f,  1.0f, 1.0f
+			};
+
+			data.FramebufferVBO = VertexBuffer::Create(screenQuadVertices, sizeof(screenQuadVertices));
+			data.FramebufferVBO->SetLayout(
+			{
+			 	{ ShaderDataType::Float2, "a_Position"	},
+			 	{ ShaderDataType::Float2, "a_TexCoord"	},
+			});
+			data.FramebufferVAO->AddVertexBuffer(data.FramebufferVBO);
+
+			TextureSpecification textureSpec;
+			textureSpec.Filter = ImageFilter::LINEAR;
+			data.QuadTexture = Texture::Create(textureSpec);
+			uint32_t whiteTextureData = 0xffffffff;
+			data.QuadTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+
+			data.FramebufferShader = Shader::Create("ScreenTexture.glsl");
+			data.FramebufferShader->Bind();
+			data.FramebufferShader->SetInt("u_ScreenTexture", 0);
+		}
+
+
+		void Quad::DrawFramebuffer(const Ref<Framebuffer>& framebuffer)
+		{
+			InitFramebuffer();
+			
+			glDisable(GL_DEPTH_TEST);
+			RenderGlobals::SetClearColor(40, 120, 150);
+			glClear(GL_COLOR_BUFFER_BIT);
+
+			data.FramebufferShader->Bind();
+
+			data.QuadTexture->BindSingleTexture(framebuffer->GetColorAttachmentRenderID());
+
+			RenderGlobals::DrawTriangles(data.FramebufferVAO, (uint32_t)6);
+		}
+	
 
 		void Quad::Flush()
 		{

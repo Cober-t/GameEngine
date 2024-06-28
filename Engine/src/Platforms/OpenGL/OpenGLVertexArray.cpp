@@ -64,8 +64,42 @@ namespace Cober {
 			switch (element.type)
 			{
 				case ShaderDataType::Float:
+				{
+					glEnableVertexAttribArray(m_VertexBufferIndex);
+					glVertexAttribPointer(m_VertexBufferIndex,
+						element.GetComponentCount(),
+						ShaderDataTypeToOpenGLBaseType(element.type),
+						element.normalized ? GL_TRUE : GL_FALSE,
+						layout.GetStride(),
+						(const void*)element.offset);
+					m_VertexBufferIndex++;
+					break;
+				}
 				case ShaderDataType::Float2:
+				{
+					glEnableVertexAttribArray(m_VertexBufferIndex);
+					glVertexAttribPointer(m_VertexBufferIndex,
+						element.GetComponentCount(),
+						ShaderDataTypeToOpenGLBaseType(element.type),
+						element.normalized ? GL_TRUE : GL_FALSE,
+						layout.GetStride(),
+						(const void*)element.offset);
+					m_VertexBufferIndex++;
+					// LOG_WARNING();
+					break;
+				}
 				case ShaderDataType::Float3:
+				{
+					glEnableVertexAttribArray(m_VertexBufferIndex);
+					glVertexAttribPointer(m_VertexBufferIndex,
+						element.GetComponentCount(),
+						ShaderDataTypeToOpenGLBaseType(element.type),
+						element.normalized ? GL_TRUE : GL_FALSE,
+						layout.GetStride(),
+						(const void*)element.offset);
+					m_VertexBufferIndex++;
+					break;
+				}
 				case ShaderDataType::Float4:
 				{
 					glEnableVertexAttribArray(m_VertexBufferIndex);
@@ -79,6 +113,17 @@ namespace Cober {
 					break;
 				}
 				case ShaderDataType::Int:
+				{
+					glEnableVertexAttribArray(m_VertexBufferIndex);
+					glVertexAttribPointer(m_VertexBufferIndex,
+						element.GetComponentCount(),
+						ShaderDataTypeToOpenGLBaseType(element.type),
+						element.normalized ? GL_TRUE : GL_FALSE,
+						layout.GetStride(),
+						(const void*)element.offset);
+					m_VertexBufferIndex++;
+					break;
+				}
 				case ShaderDataType::Int2:
 				case ShaderDataType::Int3:
 				case ShaderDataType::Int4:

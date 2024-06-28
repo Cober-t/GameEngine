@@ -152,8 +152,13 @@ namespace Cober {
 	}
 
 	
-	void Render2D::DrawText(Entity& entity) 
+	void Render2D::DrawText(Entity& entity)
 	{		
 		Primitive::Text::Draw(entity);
+	}
+
+	void Render2D::DrawFramebuffer(const Ref<Framebuffer>& framebuffer)
+	{
+		Primitive::Quad::DrawFramebuffer(framebuffer);
 	}
 }

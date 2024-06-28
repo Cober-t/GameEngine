@@ -85,6 +85,12 @@ namespace Cober {
 		glDrawArrays(GL_LINES, 0, vertexCount);
 	}
 
+	void OpenGLRenderAPI::DrawTriangles(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
+	{
+		vertexArray->Bind();
+		glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+	}
+
 	void OpenGLRenderAPI::SetLineWidth(float width)
 	{
 		glLineWidth(width);

@@ -8,6 +8,7 @@
 #include "Render/Texture.h"
 #include "Render/Camera/Camera.h"
 #include "Render/RenderGlobals.h"
+#include "Render/Framebuffer.h"
 
 #include "Physics/Debug2DPhysics.h"
 
@@ -41,6 +42,8 @@ namespace Cober {
 		static void DrawLine(Entity& entity);
 		static void DrawCircle(Entity& entity);
 		static void DrawCircle(const glm::mat4& transform, const glm::vec4& color, float thickness, int entityID);
+
+		static void DrawFramebuffer(const Ref<Framebuffer>& framebuffer);
 
 		static void DrawSprite(Entity& entity);
 		static void DrawText(Entity& entity);
