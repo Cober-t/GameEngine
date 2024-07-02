@@ -21,6 +21,9 @@ public:
 private:
 	Ref<Scene> m_ActiveScene;
 	Ref<Camera> m_DefaultCamera;
+
+	Ref<Framebuffer> m_Fbo;
+	glm::vec2 m_MousePosition;
 };
 
 #endif
