@@ -1,6 +1,6 @@
 /.vs
 /.vscode
-/assets
+# /assets
 bin/
 bin-int/
 .idea/

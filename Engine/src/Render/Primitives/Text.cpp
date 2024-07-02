@@ -39,6 +39,7 @@ namespace Cober {
 			delete[] textIndices;
 
 			data.Shader = Shader::Create("Text.glsl");
+			data.Shader->Bind();
 		}
 
 

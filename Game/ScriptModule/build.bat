@@ -2,7 +2,8 @@
 
 call %~pd0..\..\libraries\premake\premake5.exe vs2022 --file=%~pd0premake5.lua
 
-call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat"
+set VS_PATH = "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7"
+call %VS_PATH%"\Tools\VsDevCmd.bat"
 
 msbuild /t:Build /p:Configuration=Debug /p:Platform=x64 %~pd0ScriptingWorkspace.sln
 
