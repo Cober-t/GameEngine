@@ -5,12 +5,14 @@ namespace Cober {
 
 	static Ref<Scene> m_ActiveScene;
 	static Ref<Scene> m_EditorScene;
+	static Ref<Camera> m_CameraActive;
+	static Ref<EditorCamera> m_EditorCamera;
 	static Entity m_SelectedEntity;
 
 	Editor::Editor() : Layer("Editor")
 	{
-		m_EditorCamera = CreateUnique<EditorCamera>(45.0f, EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight(), 0.01f, 1000.0f);
-		m_EditorCamera->SetActive(true);
+		m_EditorCamera = CreateUnique<EditorCamera>(45.0f, EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight(), 0.01f, 1000.0f, GlobalCamera::perspective);
+		m_CameraActive = m_EditorCamera;
 
 		EditorResources::Init();
 
@@ -46,6 +48,7 @@ namespace Cober {
 		m_ActiveScene  = nullptr;
 		m_EditorScene  = nullptr;
 		m_EditorCamera = nullptr;
+		m_CameraActive = nullptr;
 
 		EditorResources::Shutdown();
 
@@ -55,8 +58,7 @@ namespace Cober {
 
 	void Editor::OnUpdate(Unique<Timestep>& ts) 
 	{
-		bool projectMode = false;
-		ViewportPanel::Get().ResizeViewport(m_EditorCamera, projectMode);
+		ViewportPanel::Get().ResizeViewport(m_CameraActive);
 		ViewportPanel::Get().BindFramebuffer();
 		// ViewportPanel::Get().RenderSkybox();
 
@@ -75,8 +77,7 @@ namespace Cober {
 			{
 				colors[ImGuiCol_WindowBg] = ImGui::ColorConvertU32ToFloat4(Colors::Theme::titlebar);
 				m_EditorCamera->SetActive(ViewportPanel::Get().AllowViewportCameraEvents());
-				m_EditorCamera->OnUpdate(ts);
-				m_ActiveScene->OnUpdateRuntime(ts, m_EditorCamera);
+				m_ActiveScene->OnUpdateRuntime(ts, m_CameraActive);
 				// Commented because of a problem with the framebuffer and camera depth
 				// Primitive::Grid::Draw(m_EditorCamera);
 				break;
@@ -84,7 +85,7 @@ namespace Cober {
 			case EngineApp::GameState::RUNTIME_EDITOR: 
 			{
 				colors[ImGuiCol_WindowBg] = ImVec4(0, 0.0, 0.0, 0.268f);
-				m_ActiveScene->OnUpdateSimulation(ts, m_EditorCamera);
+				m_ActiveScene->OnUpdateSimulation(ts, m_CameraActive);
 				break;
 			}
 		}
@@ -99,8 +100,8 @@ namespace Cober {
 	{
 		InitDockspace();
 
-		ViewportPanel::Get().OnGuiRender(m_EditorCamera);
-		DataPanel::Get().OnGuiRender();
+		ViewportPanel::Get().OnGuiRender(m_EditorCamera, m_CameraActive);
+		DataPanel::Get().OnGuiRender(m_ActiveScene);
 		ConsolePanel::Get().OnImGuiRender();
 		SceneHierarchyPanel::Get().OnGuiRender();
 		ContentBrowserPanel::Get().OnGuiRender();
@@ -183,10 +184,13 @@ namespace Cober {
 		if (gameState == EngineApp::GameState::EDITOR || gameState == EngineApp::GameState::RUNTIME_EDITOR)
 		{
 			if (m_AllowViewportCameraEvents)
-				m_EditorCamera->OnEvent(event);
+				m_CameraActive->OnEvent(event);
 		}
 		
 		ViewportPanel::Get().OnEvent(event);
+		
+		if (gameState == EngineApp::GameState::RUNTIME_EDITOR)
+			NativeScriptFn::OnEvent(Editor::GetActiveScene().get(), event);
 
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& event) { return OnKeyPressed(event); });
@@ -195,6 +199,12 @@ namespace Cober {
 
 	bool Editor::OnKeyPressed(KeyPressedEvent& event) 
 	{
+		// TEST PARTICLE SYSTEM
+		if (Input::IsKeyPressed(KeyCode::P))
+		{
+			ParticleEmitter::Emit(Editor::GetActiveScene().get());
+		}
+
 		if (Input::IsKeyDown(Key::LeftControl) && !Input::IsMouseButtonDown(MouseButton::Right))
 		{
 			switch (event.GetKeyCode())
@@ -204,19 +214,10 @@ namespace Cober {
 					// 	NewScene();
 					break;
 				}
-				case Key::O: 
-				{
-					m_SelectedEntity = Entity();
-					m_EditorScene = Scene::Load("SceneDefault.lua"); // Test Scene
-					m_ActiveScene = m_EditorScene;
-					EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
-					SceneHierarchyPanel::Get().SetContext(m_ActiveScene);
-					break;
-				}
 				case Key::S: 
 				{
 					if (EngineApp::Get().GetGameState() == EngineApp::GameState::EDITOR)
-						Scene::Save(m_ActiveScene, "SceneDefault.lua");
+						Scene::Save(m_ActiveScene, m_ActiveScene->GetName());
 					break;
 				}
 				case Key::D:
@@ -253,9 +254,17 @@ namespace Cober {
 		return m_EditorScene;
 	}
 
+	Ref<EditorCamera>& Editor::GetEditorCamera()
+	{
+		return m_EditorCamera;
+	}
+
 
 	Entity& Editor::SelectedEntity()
 	{
+		if ((bool)m_SelectedEntity && m_SelectedEntity.HasComponent<TagComponent>() == false)
+			m_SelectedEntity = Entity();
+
 		return m_SelectedEntity;
 	}
 
@@ -275,5 +284,26 @@ namespace Cober {
 	void Editor::SetSelectedEntity(Entity& entity)
 	{
 		m_SelectedEntity = entity;
+	}
+
+	Ref<Camera>& Editor::GetActiveCamera()
+	{
+		return m_CameraActive;
+	}
+
+	void Editor::SetMainCamera(Ref<Camera>& camera)
+	{
+		m_EditorCamera->SetMainCamera(false);
+
+		m_CameraActive = camera;
+		m_CameraActive->SetMainCamera(true);
+	}
+
+	void Editor::SetMainCamera(Ref<EditorCamera>& camera)
+	{
+		m_EditorCamera->SetMainCamera(false);
+
+		m_CameraActive = camera;
+		m_CameraActive->SetMainCamera(true);
 	}
 }

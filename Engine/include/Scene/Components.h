@@ -10,10 +10,15 @@
 #include <b2_circle_shape.h>
 #include <b2_polygon_shape.h>
 
+#include <filesystem>
+#include <unordered_map>
+
 #include <sol/sol.hpp>
 
 #include "Core/Core.h"
 #include "Render/Texture.h"
+#include "Render/Camera/GameCamera.h"
+#include "Render/Text/Font.h"
 
 namespace Cober {
 	
@@ -62,6 +67,44 @@ namespace Cober {
 	};
 
 
+	struct CameraComponent
+    {
+		float distance	= 5.0f;
+		int width = 1280;
+		int height = 720;
+		float nearClip = 0.01f;
+		float farClip = 1000.0f;
+		float fov = 45.0f;
+
+		bool perspective = true;
+		bool mainCamera = false;
+		bool debug = true;
+		Ref<Camera> camera = CreateRef<GameCamera>(45.0f, width, height, 0.01f, 1000.0f);
+
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
+		CameraComponent(float f, int w, int h)
+		 : fov(f), width(w), height(h) 
+		{
+		}
+
+		void UpdateCameraValues()
+		{
+			camera->SetMainCamera(mainCamera);
+
+			camera->GetSettings().distance = distance;
+			camera->GetSettings().width = width;
+			camera->GetSettings().height = height;
+			
+			camera->GetSettings().nearClip = nearClip;
+			camera->GetSettings().farClip = farClip;
+			camera->GetSettings().fov = fov;
+			
+			camera->GetSettings().perspectiveProjection = perspective;
+		}
+	};
+
+
 	enum class BodyType { Static = 0, Kinematic, Dynamic };
 
 	struct Rigidbody2D 
@@ -96,6 +139,7 @@ namespace Cober {
 		glm::vec2 size =   { 1.0f, 1.0f };
 
 		b2PolygonShape shape;
+		bool isSensor = false;
 
 		BoxCollider2D() = default;
 		BoxCollider2D(const BoxCollider2D&) = default;
@@ -108,6 +152,7 @@ namespace Cober {
 		float radius = 0.5f;
 
 		b2CircleShape shape;
+		bool isSensor = false;
 
 		CircleCollider2D() = default;
 		CircleCollider2D(const CircleCollider2D&) = default;
@@ -154,6 +199,18 @@ namespace Cober {
 		float fade = 0.005f;
 
 		Ref<Texture> texture = nullptr;
+		glm::mat4 vertices
+        {
+            { -1.0f, -1.0f, 0.0f, 1.0f },
+            {  1.0f, -1.0f, 0.0f, 1.0f },
+            {  1.0f,  1.0f, 0.0f, 1.0f },
+            { -1.0f,  1.0f, 0.0f, 1.0f }
+        };
+		Ref<SubTexture> subTexture = CreateRef<SubTexture>();
+		bool isSubTexture;
+		glm::vec2 subTextureIndex = { 0, 0 };
+		glm::vec2 subTextureCellSize = { 16, 16 };
+		glm::vec2 subTextureSpriteSize = { 1, 1 };
 
 		Render2DComponent() = default;
 		Render2DComponent(const Render2DComponent&) = default;
@@ -184,6 +241,99 @@ namespace Cober {
 	};
 
 
+	struct AudioComponent
+	{
+		std::filesystem::path audioPath;
+		std::string audioName = "None";
+		bool loop = false;
+
+		AudioComponent() = default;
+		AudioComponent(const AudioComponent&) = default;
+	};
+
+
+	struct TextComponent
+	{
+		std::string Text;
+		Ref<Font> FontAsset = Font::GetDefault();
+		glm::vec4 Color{ 1.0f };
+		float Kerning = 0.0f;
+		float LineSpacing = 0.0f;
+	};
+
+
+	struct Particle
+	{
+		glm::vec2 position;
+		glm::vec2 velocity;
+		glm::vec4 colorBegin, colorEnd;
+		float rotation = 0.0f;
+		float sizeBegin, sizeEnd;
+		float lifeTime = 1.0f;
+		float lifeRemaining = 0.0f;
+
+		bool loop = false;
+		Ref<SubTexture> subTexture = nullptr;
+	};
+	struct ParticleEmitterComponent
+	{
+		Particle particle;
+
+		glm::vec2 position, positionVariation;
+		glm::vec2 velocity, velocityVariation;
+		glm::vec4 colorBegin{ 1.0f }, colorEnd{ 1.0f };
+		float rotation = 0.0f;
+		float sizeBegin, sizeEnd, sizeVariation;
+		int rate = 1;
+
+		float lifeTime = 1.0f;
+		float lifeRemaining = 0.0f;
+
+		bool active = false;
+		bool loop = false;
+
+		// Particle texture
+		Ref<Texture> texture = nullptr;
+		glm::mat4 vertices
+        {
+            { -1.0f, -1.0f, 0.0f, 1.0f },
+            {  1.0f, -1.0f, 0.0f, 1.0f },
+            {  1.0f,  1.0f, 0.0f, 1.0f },
+            { -1.0f,  1.0f, 0.0f, 1.0f }
+        };
+		Ref<SubTexture> subTexture = CreateRef<SubTexture>();
+		bool isSubTexture;
+		glm::vec2 subTextureIndex = { 0, 0 };
+		glm::vec2 subTextureCellSize = { 16, 16 };
+		glm::vec2 subTextureSpriteSize = { 1, 1 };
+
+		void InitDefaultParticle()
+		{
+			particle.position = position;
+			particle.rotation = rotation;
+
+			particle.velocity = velocity;
+
+			particle.sizeBegin = sizeBegin;
+			particle.sizeEnd = sizeEnd;
+
+			particle.sizeBegin = sizeBegin;
+			particle.sizeEnd = sizeEnd;
+
+			particle.colorBegin = colorBegin;
+			particle.colorEnd = colorEnd;
+
+			particle.lifeTime = lifeTime;
+			particle.lifeRemaining = lifeTime;
+
+			particle.loop = loop;
+
+			if (texture)
+				particle.subTexture = subTexture;
+		}
+	};
+
+
 	/*
 	struct Animation2D {
 		int numFrames;
@@ -204,8 +354,13 @@ namespace Cober {
 	{
 	};
 
-	using AllComponents = ComponentGroup<TransformComponent, ScriptComponent, Render2DComponent, 
-		ScriptComponent, NativeScriptComponent, Rigidbody2D, BoxCollider2D, CircleCollider2D, EdgeCollider2D, PolygonCollider2D>;
+	using AllComponents = ComponentGroup<TransformComponent, CameraComponent,
+		Render2DComponent,
+		ParticleEmitterComponent,
+		AudioComponent,
+		TextComponent,
+		Rigidbody2D, BoxCollider2D, CircleCollider2D, EdgeCollider2D, PolygonCollider2D,
+		ScriptComponent, NativeScriptComponent>;
 }
 
 #endif

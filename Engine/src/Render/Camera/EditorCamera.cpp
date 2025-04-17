@@ -11,13 +11,18 @@
 
 namespace Cober {
 
-	EditorCamera::EditorCamera(float fov, float width, float height, float nearClip, float farClip, bool ortho)
-		: Camera(glm::perspectiveFov(glm::radians(fov), width, height, farClip, nearClip), glm::perspectiveFov(glm::radians(fov), width, height, nearClip, farClip)),
-		m_EditorCamera(CameraSettings(fov, width, height, nearClip, farClip, ortho))
+	EditorCamera::EditorCamera(float fov, float width, float height, float nearClip, float farClip, bool persp)
+		: Camera(glm::perspectiveFov(glm::radians(fov), width, height, farClip, nearClip), glm::perspectiveFov(glm::radians(fov), width, height, nearClip, farClip))
 	{
+		auto& m_EditorCamera = GetSettings();
+		m_EditorCamera.fov = fov;
+		m_EditorCamera.width = width;
+		m_EditorCamera.height = height;
+
 		m_EditorCamera.focalPoint = glm::vec3(0.0f, 0.0f, -1.0f);
 		m_EditorCamera.nearClip = nearClip;
 		m_EditorCamera.farClip = farClip;
+		m_EditorCamera.perspectiveProjection = persp;
 
 		m_EditorCamera.distance = glm::distance(m_EditorCamera.position, m_EditorCamera.focalPoint);
 
@@ -48,19 +53,56 @@ namespace Cober {
 
 	void EditorCamera::SetViewportSize(float width, float height)
 	{
-		if (m_ViewportWidth == width && m_ViewportHeight == height)
-				return;
-		SetPerspectiveProjectionMatrix(glm::radians(m_EditorCamera.fov), (float)width, (float)height, m_EditorCamera.nearClip, m_EditorCamera.farClip);
+		if (IsMainCamera() == false)
+			return;
+
 		m_ViewportWidth = width;
 		m_ViewportHeight = height;
 
-		// In the future, to change between ortho and perspective
-		// UpdateCameraView();
+		auto& m_EditorCamera = GetSettings();
+		if (IsPerspective())
+		{
+			SetPerspectiveProjectionMatrix(glm::radians(m_EditorCamera.fov), (float)width, (float)height, m_EditorCamera.nearClip, m_EditorCamera.farClip);
+		}
+		else
+		{
+			float srcAspectRatio = m_EditorCamera.width / m_EditorCamera.height;
+			float dstAspectRatio = width / height;
+			float newWidth = m_EditorCamera.width*0.01/2.0f;
+			float newHeight = m_EditorCamera.height*0.01/2.0f;
+			// Check if the viewport is wider or taller
+			if (dstAspectRatio >= srcAspectRatio)
+			{
+				SetOrthoProjectionMatrix(dstAspectRatio/srcAspectRatio * newWidth, newHeight,
+										m_EditorCamera.nearClip, m_EditorCamera.farClip);
+			} 
+			else 
+			{
+				SetOrthoProjectionMatrix(newWidth, srcAspectRatio/dstAspectRatio * newHeight,
+										m_EditorCamera.nearClip, m_EditorCamera.farClip);
+			}
+		}
+	
+		UpdateCameraView();
+		m_EditorCamera.aspectRatio = width / height;
+
+		if (EngineApp::Get().GetGameState() != EngineApp::GameState::PLAY)
+        {
+			RenderGlobals::SetViewport(m_ViewportWidth, m_ViewportHeight);
+        }
+	}
+
+		
+	void EditorCamera::SetPerspective(bool persp)
+	{
+		GetSettings().perspectiveProjection = persp;
+		UpdateCameraView();
 	}
 
 
 	void EditorCamera::UpdateCameraView() 
 	{
+		auto& m_EditorCamera = GetSettings();
 		m_EditorCamera.position = CalculatePosition();
 		glm::quat orientation = GetOrientation();
 		glm::mat4 viewMatrix = glm::translate(glm::mat4(1.0f), m_EditorCamera.position) * glm::toMat4(orientation);
@@ -82,7 +124,7 @@ namespace Cober {
 
 	float EditorCamera::ZoomSpeed() const 
 	{
-		float distance = m_EditorCamera.distance * 0.2f;
+		float distance = GetSettings().distance * 0.2f;
 		float speed = distance * distance;
 		speed = std::min(speed, 100.0f);	// max speed = 100
 
@@ -98,6 +140,8 @@ namespace Cober {
 	void EditorCamera::MousePan(const glm::vec2& delta)
 	{
 		auto [xSpeed, ySpeed] = PanSpeed();
+		auto& m_EditorCamera = GetSettings();
+
 		m_EditorCamera.focalPoint -= GetRightDirection() * delta.x * xSpeed * m_EditorCamera.distance;
 		m_EditorCamera.focalPoint += GetUpDirection() * delta.y * ySpeed * m_EditorCamera.distance;
 	}
@@ -106,6 +150,8 @@ namespace Cober {
 	void EditorCamera::MouseRotate(const glm::vec2& delta)
 	{
 		const float yawSign = GetUpDirection().y < 0.0f ? -1.0f : 1.0f;
+		auto& m_EditorCamera = GetSettings();
+
 		m_EditorCamera.yaw += yawSign * delta.x * RotationSpeed();
 		m_EditorCamera.pitch += delta.y * RotationSpeed();
 	}
@@ -113,6 +159,8 @@ namespace Cober {
 
 	void EditorCamera::MouseZoom(float delta)
 	{
+		// Becasue the distance is involve and needs to be updated
+		auto& m_EditorCamera = GetSettings();
 		m_EditorCamera.distance -= delta * ZoomSpeed();
 
 		if (m_EditorCamera.distance < 1.0f)
@@ -120,6 +168,7 @@ namespace Cober {
 			m_EditorCamera.focalPoint += GetForwardDirection();
 			m_EditorCamera.distance = 1.0f;
 		}
+		UpdateCameraView();
 	}
 	
 
@@ -155,13 +204,13 @@ namespace Cober {
 
 	glm::vec3 EditorCamera::CalculatePosition() const 
 	{
-		return m_EditorCamera.focalPoint - GetForwardDirection() * m_EditorCamera.distance;
+		return GetSettings().focalPoint - GetForwardDirection() * GetSettings().distance;
 	}
 
 
 	glm::quat EditorCamera::GetOrientation() const
 	{
-		return glm::quat(glm::vec3(-m_EditorCamera.pitch, -m_EditorCamera.yaw, -m_EditorCamera.roll));
+		return glm::quat(glm::vec3(-GetSettings().pitch, -GetSettings().yaw, -GetSettings().roll));
 	}
 
 
@@ -182,15 +231,16 @@ namespace Cober {
 		const glm::vec2& mouse{ Input::GetMouseX(), Input::GetMouseY() };
 		const glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.003f;
 
-		if (!m_IsActive)
+		if (m_IsActive == false || IsMainCamera() == false)
 		{
-			// if (!EngineApp::Get().GetImGuiLayer()->IsInputEnabled())
+			// if (EngineApp::Get().GetImGuiLayer()->IsInputEnabled() == false)
 			// 	EngineApp::Get().GetImGuiLayer()->SetInputEnabled(true);
 
 			return;
 		}
 
-		if (Input::IsKeyDown(KeyCode::LeftAlt))
+		// PERSP Controls
+		if (IsPerspective() == true && Input::IsKeyDown(KeyCode::LeftAlt))
 		{
 			if (Input::IsMouseButtonDown(MouseButton::Middle))
 			{
@@ -202,13 +252,14 @@ namespace Cober {
 				DisableMouse();
 				MouseRotate(delta);
 			}
-			else if (Input::IsMouseButtonDown(MouseButton::Right))
-			{
-				DisableMouse();
-				MouseZoom(delta.y);
-			}
 			else
 				EnableMouse();
+		}
+		// ORTHO Controls
+		else if (IsPerspective() == false && Input::IsMouseButtonDown(MouseButton::Right))
+		{
+			DisableMouse();
+			MousePan(delta);
 		}
 		else
 		{
@@ -223,6 +274,9 @@ namespace Cober {
 	
 	void EditorCamera::OnEvent(Event& event) 
 	{
+		if (IsMainCamera() == false)
+			return;
+
 		EventDispatcher dispatcher(event);
 		dispatcher.Dispatch<MouseScrolledEvent>([this](MouseScrolledEvent& e) { return OnMouseScroll(e); });
 	}
@@ -232,8 +286,6 @@ namespace Cober {
 	{
 		MouseZoom(event.GetYOffset() * 0.1f);
 		UpdateCameraView();
-
 		return true;
 	}
-
 }

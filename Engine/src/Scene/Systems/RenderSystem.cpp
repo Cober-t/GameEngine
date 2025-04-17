@@ -2,6 +2,7 @@
 #include "Scene/Systems/RenderSystem.h"
 #include "Physics/Physics2D.h"
 #include "Scene/Systems/PhysicsSystem2D.h"
+#include "Scene/Systems/CameraSystem.h"
 
 namespace Cober {
 
@@ -22,11 +23,8 @@ namespace Cober {
 	}
 
 
-	void RenderSystem::Update(Unique<Timestep>& ts, const Ref<Camera>& camera, Scene* scene)
+	void RenderSystem::Update(Scene* scene)
 	{
-		Render2D::ResetStats();
-		Render2D::BeginScene(camera);
-
 		auto view = scene->GetAllEntitiesWith<TransformComponent, TagComponent, Render2DComponent>();
 
 		for (auto& entt : view)
@@ -50,9 +48,13 @@ namespace Cober {
 			}
 		}
 
-		if (EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR)
-			Physics2D::DebugDraw();
+		auto viewText = scene->GetAllEntitiesWith<TransformComponent, TagComponent, TextComponent>();
+		for (auto& entt : viewText)
+        {
+			Entity entity = Entity((entt::entity)entt, scene );
+			Render2D::DrawText(entity);
+		}
 
-		Render2D::EndScene();
+		Physics2D::DebugDraw(scene);
 	}
 }

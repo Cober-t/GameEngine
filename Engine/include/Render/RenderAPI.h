@@ -24,6 +24,7 @@ namespace Cober {
 		virtual void SetClearColor(glm::vec4 color) = 0;
 		virtual void SetClearColor(float red, float green, float blue, float black = 255.0f) = 0;
 
+		virtual void DrawTriangles(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) = 0;
 		virtual void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) = 0;
 		virtual void SetLineWidth(float width) = 0;
 

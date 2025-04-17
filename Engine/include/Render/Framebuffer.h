@@ -27,7 +27,6 @@ namespace Cober {
 			: TextureFormat(format) {}
 
 		FramebufferTextureFormat TextureFormat = FramebufferTextureFormat::None;
-		// TODO: filtering/wrap
 	};
 
 

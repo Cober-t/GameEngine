@@ -17,9 +17,13 @@ public:
 
 	void OnUpdate(Unique<Timestep>& ts) override;
 	void OnEvent(Event& event) override;
+	
 private:
 	Ref<Scene> m_ActiveScene;
-	Ref<GameCamera> m_Camera;
+	Ref<Camera> m_DefaultCamera;
+
+	Ref<Framebuffer> m_Fbo;
+	glm::vec2 m_MousePosition;
 };
 
 #endif

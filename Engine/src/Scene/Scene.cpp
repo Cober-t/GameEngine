@@ -4,9 +4,15 @@
 #include "Scene/ECS.h"
 #include "Scene/Components.h"
 #include "Scene/SceneSerializer.h"
+#include "Scene/Systems/CameraSystem.h"
 #include "Scene/Systems/RenderSystem.h"
+#include "Scene/Systems/ParticleSystem.h"
 #include "Scene/Systems/PhysicsSystem2D.h"
 #include "Scene/Systems/ScriptSystem.h"
+#include "Scene/Systems/AudioSystem.h"
+
+#include "Render/Camera/GlobalCamera.h"
+#include "Scripting/NativeScripting.h"
 
 #include <glm/glm.hpp>
 
@@ -40,32 +46,66 @@ namespace Cober {
 	{
 		Log::ClearLogMessages();
 		Ref<Scene> scene = SceneSerializer::Deserialize(sceneName);
+		scene->m_SceneName = sceneName;
+
 		if (scene)
-			scene->OnRuntimeStart();
+		{
+			switch(EngineApp::Get().GetGameState())
+			{
+				case EngineApp::GameState::EDITOR:
+					scene->OnRuntimeStart(); 
+					break;
+				case EngineApp::GameState::RUNTIME_EDITOR:
+					scene->OnSimulationStart();
+					break;
+				case EngineApp::GameState::PLAY:
+					scene->OnSimulationStart();
+					break;
+			}
+		}
 			
 		return scene;
 	}
 
+	void Scene::Exit(Scene* scene)
+	{
+		if (EngineApp::Get().GetGameState() == EngineApp::GameState::PLAY)
+		{
+			EngineApp::Get().SetGameState(EngineApp::GameState::EXIT);
+			NativeScriptFn::FreeScriptLibrary();
+		}
+		else if (EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR)
+		{
+			scene->m_ExitFromRuntimeEditor = true;
+		}
+	}
+
+	
+	Entity Scene::LoadPrefab(Scene* currentScene, std::string prefabName) 
+	{
+		return EntitySerializer::Deserialize(currentScene, prefabName);
+	}
+
 
 	template<typename... Component>
-	static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
+	static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, Entity>& enttMap)
 	{
 		([&]()
 		{
 			auto view = src.view<Component>();
 			for (auto srcEntity : view)
 			{
-				entt::entity dstEntity = enttMap.at(src.get<IDComponent>(srcEntity).ID);
+				Entity dstEntity = enttMap.at(src.get<IDComponent>(srcEntity).ID);
 
 				auto& srcComponent = src.get<Component>(srcEntity);
-				dst.emplace_or_replace<Component>(dstEntity, srcComponent);
+				dst.emplace_or_replace<Component>((entt::entity)dstEntity, srcComponent);
 			}
 		}(), ...);
 	}
 
 
 	template<typename... Component>
-	static void CopyComponent(ComponentGroup<Component...>, entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
+	static void CopyComponent(ComponentGroup<Component...>, entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, Entity>& enttMap)
 	{
 		CopyComponent<Component...>(dst, src, enttMap);
 	}
@@ -96,9 +136,10 @@ namespace Cober {
 		newScene->m_ViewportWidth = baseScene->m_ViewportWidth;
 		newScene->m_ViewportHeight = baseScene->m_ViewportHeight;
 
+		newScene->m_SceneName = baseScene->m_SceneName;
 		auto& srcSceneRegistry = baseScene->m_Registry;
 		auto& dstSceneRegistry = newScene->m_Registry;
-		std::unordered_map<UUID, entt::entity> enttMap;
+		std::unordered_map<UUID, Entity> enttMap;
 
 		// Create entities in new scene
 		auto idView = srcSceneRegistry.view<IDComponent>();
@@ -107,13 +148,49 @@ namespace Cober {
 			UUID uuid = srcSceneRegistry.get<IDComponent>(e).ID;
 			const auto& name = srcSceneRegistry.get<TagComponent>(e).tag;
 			Entity newEntity = newScene->CreateEntityWithUUID(uuid, name);
-			enttMap[uuid] = (entt::entity)newEntity;
+			enttMap[uuid] = newEntity;
 		}
 
 		// Copy components (except IDComponent and TagComponent)
 		CopyComponent(AllComponents{}, dstSceneRegistry, srcSceneRegistry, enttMap);
 
 		return newScene;
+	}
+
+
+	void Scene::Reload(Scene* sceneToBeReloaded, std::string name)
+	{
+		if (name == "")
+			name = sceneToBeReloaded->GetName();
+		else
+			sceneToBeReloaded->m_SceneName = name;
+			
+		// FIXME: Permit only one reload at a time
+		Ref<Scene> originalScene = SceneSerializer::Deserialize(name);
+
+		auto originalEntityMap = originalScene->GetEntityMap();
+		auto auxMap = sceneToBeReloaded->GetEntityMap();
+		for (auto& entity : auxMap)
+		{
+			// Not using DestroyEntity function to destroy it immediately
+			Physics2D::DestroyBody(entity.second);
+			sceneToBeReloaded->m_EntityMap.erase(entity.second.GetUUID());
+			sceneToBeReloaded->m_Registry.destroy(entity.second);
+		}
+
+		for (auto& entity : originalEntityMap)
+		{
+			Entity ent = sceneToBeReloaded->CreateEntityWithUUID(entity.first, entity.second.GetName());
+			CopyComponentIfExists(AllComponents{}, ent, originalEntityMap.at(entity.first));
+			Physics2D::InitEntity(ent);
+		}
+
+		// Reload Audio
+		Audio::ClearSoundsPool();
+
+		// Load and init scripts for the new scene
+		sceneToBeReloaded->GetSystem<ScriptSystem>().FreeScripts(sceneToBeReloaded);
+		sceneToBeReloaded->m_ReloadScripts = true;
 	}
 
 
@@ -142,19 +219,40 @@ namespace Cober {
 
 	void Scene::DestroyEntity(Entity entity)
 	{
-		m_EntityMap.erase(entity.GetUUID());
-		m_Registry.destroy(entity);
+		Physics2D::DestroyBody(entity);
+
+		m_EntitiesToBeDestroyed.push_back(entity);
 	}
 
+	void Scene::CleanUp()
+	{
+		if (m_EntitiesToBeDestroyed.size() > 0)
+		{
+			for (auto& entity : m_EntitiesToBeDestroyed)
+			{
+				m_EntityMap.erase(entity.GetUUID());
+				m_Registry.destroy(entity);
+			}
+			m_EntitiesToBeDestroyed.clear();
+		}
+
+		m_ExitFromRuntimeEditor = false;
+	}
 
 	void Scene::OnSimulationStart()
 	{
+		AddSystem<CameraSystem>();
 		AddSystem<RenderSystem>();
+		AddSystem<ParticleSystem>();
 		AddSystem<PhysicsSystem2D>();
+		AddSystem<AudioSystem>();
 		AddSystem<ScriptSystem>();
 
+		GetSystem<CameraSystem>().Start(this);
         GetSystem<RenderSystem>().Start();
+		GetSystem<ParticleSystem>().Start(this);
 		GetSystem<PhysicsSystem2D>().Start(this);
+		GetSystem<AudioSystem>().Start(this);
 		GetSystem<ScriptSystem>().Start(this);
 	}
 
@@ -163,6 +261,10 @@ namespace Cober {
 	{
 		RemoveSystem<PhysicsSystem2D>();
 		RemoveSystem<RenderSystem>();
+		RemoveSystem<ParticleSystem>();
+		RemoveSystem<CameraSystem>();
+		RemoveSystem<AudioSystem>();
+
 		GetSystem<ScriptSystem>().FreeScripts(this);
 		RemoveSystem<ScriptSystem>();
 	}
@@ -170,38 +272,73 @@ namespace Cober {
 
 	void Scene::OnRuntimeStart()
 	{
+		AddSystem<CameraSystem>();
 		AddSystem<RenderSystem>();
+		AddSystem<ParticleSystem>();
 
+		GetSystem<CameraSystem>().Start(this);
         GetSystem<RenderSystem>().Start();
+		GetSystem<ParticleSystem>().Start(this);
 	}
 
-
+ 
     void Scene::OnRuntimeStop()
 	{
+		RemoveSystem<CameraSystem>();
 		RemoveSystem<RenderSystem>();
+		RemoveSystem<ParticleSystem>();
 	}
 
 
-	void Scene::OnUpdateSimulation(Unique<Timestep>& ts, const Ref<Camera>& camera)
+	void Scene::OnUpdateSimulation(Unique<Timestep>& ts, Ref<Camera>& camera)
 	{
-		GetSystem<RenderSystem>().Update(ts, camera, this);
+		// Must be at start
+		Scene::CleanUp();
+
+		Render2D::ResetStats();
+		Render2D::BeginScene(camera);
+		GetSystem<CameraSystem>().Update(ts, camera, this);
+		GetSystem<RenderSystem>().Update(this);
+		GetSystem<ParticleSystem>().Update(ts, this);
+		Render2D::EndScene();
 
 		if (!m_IsPaused || m_StepFrames-- > 0.0f)
 		{
-			while(ts->GetDeltaTime() >= 1.0f)
-            {
-				GetSystem<PhysicsSystem2D>().Update(this, ts);
-                ts->Update();
-            }
+			while (ts->GetAccumulatedTime() >= physicsSettings.TimeStep)
+			{
+				GetSystem<PhysicsSystem2D>().Update(this);
+				ts->GetAccumulatedTime() -= physicsSettings.TimeStep;
+			}
 		}
 
+		GetSystem<AudioSystem>().Update(this);
+
+		if (m_ReloadScripts)
+		{
+			GetSystem<ScriptSystem>().Start(this);
+			m_ReloadScripts = false;
+		}
 		GetSystem<ScriptSystem>().Update(this, ts->GetDeltaTime());
 	}
 
 
-	void Scene::OnUpdateRuntime(Unique<Timestep>& ts, const Ref<Camera>& camera)
+	void Scene::OnUpdateRuntime(Unique<Timestep>& ts, Ref<Camera>& camera)
 	{	
-		GetSystem<RenderSystem>().Update(ts, camera, this);
+		// Must be at start
+		Scene::CleanUp();
+
+		Render2D::ResetStats();
+		Render2D::BeginScene(camera);
+		GetSystem<CameraSystem>().Update(ts, camera, this);
+		GetSystem<RenderSystem>().Update(this);
+		GetSystem<ParticleSystem>().Update(ts, this);
+		Render2D::EndScene();
+	}
+
+
+	void Scene::OnEvent(Event& event, const Ref<Camera>& camera)
+	{
+		GetSystem<CameraSystem>().OnEvent(event, camera);
 	}
 
 
@@ -213,6 +350,12 @@ namespace Cober {
 			entities.emplace_back( Entity{ entity, this } );
 
 		return entities;
+	}
+
+
+	std::string Scene::GetName()
+	{ 
+		return m_SceneName;
 	}
 
 
@@ -231,7 +374,6 @@ namespace Cober {
 
 	Entity Scene::GetEntityByUUID(UUID uuid)
 	{
-		// TODO: Maybe should be assert
 		if (m_EntityMap.find(uuid) != m_EntityMap.end())
 			return { m_EntityMap.at(uuid), this };
 
@@ -244,6 +386,17 @@ namespace Cober {
 		std::string name = entity.GetName();
 		Entity newEntity = CreateEntity(name);
 		CopyComponentIfExists(AllComponents{}, newEntity, entity);
+
+		if (EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR || 
+		EngineApp::Get().GetGameState() == EngineApp::GameState::PLAY)
+		{
+			// Necessary for the Physics World body count
+			Physics2D::InitEntity(newEntity);
+
+			if (newEntity.HasComponent<NativeScriptComponent>())
+				NativeScriptFn::InitEntity(this, newEntity);
+		}
+		
 		return newEntity;
 	}
 

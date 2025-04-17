@@ -1,13 +1,14 @@
 /.vs
 /.vscode
-/assets
+# /assets
 bin/
 bin-int/
 .idea/
 __pycache__/
-Game/assets/
 Editor/assets/
+Editor/ScriptModule/
 Game/build/
+Projects/
 
 *.log
 *.sln

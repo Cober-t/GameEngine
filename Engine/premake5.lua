@@ -44,6 +44,8 @@ project "Engine"
 		"include/Platforms",
 		"include/Platforms/OpenGL",
 		"include/Render",
+		"include/Render/Text",
+		"include/Render/Primitives",
 		"include/Render/Camera",
 		"include/Scene",
 		"include/Scene/Systems",
@@ -54,7 +56,8 @@ project "Engine"
         "%{IncludeDir.Box2D}",
 		"%{IncludeDir.glm}",
         "%{IncludeDir.entt}",
-        "%{IncludeDir.raudio}",
+		"%{IncludeDir.msdf}",
+		"%{IncludeDir.msdfgen}",
         "%{IncludeDir.stb_image}",
         "%{IncludeDir.stb_truetype}",
         "%{IncludeDir.spdlog}",
@@ -70,13 +73,13 @@ project "Engine"
         "Box2D",
         "ImGui",
 		"Lua",
+		"msdf-atlas-gen",
 	}
 
 	postbuildcommands
 	{
-		("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Editor/\""),
-		-- Copy to the project game folder with ARGS in the future
-		("{COPY} %{cfg.buildtarget.relpath} \"../Game/build/" .. outputdir .. "\""),
+		"{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Editor/\"",
+		"{COPY} %{cfg.buildtarget.relpath} \"../Game/build/" .. outputdir .. "\"",
 	}
 
     filter "files:libraries/ImGuizmo/**.cpp"

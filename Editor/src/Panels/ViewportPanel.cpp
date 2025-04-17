@@ -106,40 +106,31 @@ namespace Cober {
 	}
 
 
-	void ViewportPanel::ResizeViewport(Ref<EditorCamera> editorCamera, bool& game2D) 
+	void ViewportPanel::ResizeViewport(Ref<Camera> camera) 
     {
 		FramebufferSpecification spec = m_Fbo->GetSpecification();
-		if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
-			(spec.Width != (uint32_t)m_ViewportSize.x || spec.Height != (uint32_t)m_ViewportSize.y))
+		if (m_MustResize || (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
+			(spec.Width != (uint32_t)m_ViewportSize.x || spec.Height != (uint32_t)m_ViewportSize.y)))
 		{
-			ResizeFramebufferSpecification(editorCamera, (uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_MustResize = false;
+			ResizeFramebufferSpecification(camera, (uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 	}
 
-	void ViewportPanel::ResizeFramebufferSpecification(Ref<EditorCamera> editorCamera, uint32_t width, uint32_t height)
+	void ViewportPanel::ResizeFramebufferSpecification(Ref<Camera> camera, uint32_t width, uint32_t height)
 	{
-		// FIS THIS!! Performance issue
 		m_Fbo->Resize(width, height);
-		editorCamera->SetViewportSize(width, height);
+		camera->SetViewportSize(width, height);
 	}
 
 
-	void ViewportPanel::OnGuiRender(Ref<EditorCamera> editorCamera) 
+	void ViewportPanel::OnGuiRender(Ref<EditorCamera>& editorCamera, Ref<Camera>& camera)
     {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 		ImGui::Begin("Viewport");
 
-		//if (ImGui::IsMouseClicked(0) && ImGui::IsWindowHovered() && !ImGuizmo::IsOver() && !Input::IsKeyDown(KeyCode::LeftAlt))
-		//{
-			//LOG_INFO("Mouse clicked imgui event!!");
-			//scene->SetDefaultEntity(hoveredEntity);
-			//SceneHierarchyPanel::Get().SetNullEntityContext();
-		//}
-
-		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-
 		// Hovered Entity
+		auto viewportPanelSize = ImGui::GetContentRegionAvail();
 		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
 		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
 		auto viewportOffset = ImGui::GetWindowPos();
@@ -153,33 +144,41 @@ namespace Cober {
 		m_ViewportHovered = ImGui::IsWindowHovered();
 		EngineApp::Get().GetImGuiLayer()->BlockEvents(!m_ViewportHovered);
 
-		// Enable for GameCamera
-		// START CONSTRAIN VIEWPORT SCENE
-		// EngineApp& app = EngineApp::Get();
-		// float screenWidth  = app.GetWindow().GetWidth();
-		// float screenHeight = app.GetWindow().GetHeight();
-		
-		// if (viewportPanelSize.x >= viewportPanelSize.y)
-		// 	m_ViewportSize = { m_ViewportSize.y * screenWidth / screenHeight  , m_ViewportSize.y };
-		// else if (viewportPanelSize.x < viewportPanelSize.y)
-		// 	m_ViewportSize = { m_ViewportSize.x, m_ViewportSize.x * screenHeight / screenWidth };
-		
-		// if (m_ViewportSize.x >= viewportPanelSize.x) 
-		// {
-		// 	m_ViewportSize.x = viewportPanelSize.x;
-		// 	m_ViewportSize.y = m_ViewportSize.x * screenHeight / screenWidth;
-		// 	m_ViewportMargin.y = (viewportPanelSize.y - m_ViewportSize.y) / 2;
-		// 	m_ViewportMargin.x = 0.0f;
-		// }
+		// Center GameCamera
+		if (dynamic_cast<GameCamera*>(Editor::GetActiveCamera().get()))
+		{
+			float screenWidth  = Editor::GetActiveCamera()->GetSettings().width;
+			float screenHeight = Editor::GetActiveCamera()->GetSettings().height;
 
-		// if (m_ViewportSize.y >= viewportPanelSize.y) 
-		// {
-		// 	m_ViewportSize.y = viewportPanelSize.y;
-		// 	m_ViewportSize.x = m_ViewportSize.y * screenWidth / screenHeight;
-		// 	m_ViewportMargin.x = (viewportPanelSize.x - m_ViewportSize.x) / 2;
-		// 	m_ViewportMargin.y = 0.0f;
-		// }
-		// END CONSTRAIN VIEWPORT SCENE
+			viewportPanelSize = ImGui::GetContentRegionAvail();
+			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+			
+			if (viewportPanelSize.x >= viewportPanelSize.y)
+				m_ViewportSize = { m_ViewportSize.y * screenWidth / screenHeight, m_ViewportSize.y };
+			else if (viewportPanelSize.x < viewportPanelSize.y)
+				m_ViewportSize = { m_ViewportSize.x, m_ViewportSize.x * screenHeight / screenWidth };
+			
+			if (m_ViewportSize.x >= viewportPanelSize.x) 
+			{
+				m_ViewportSize.x = viewportPanelSize.x;
+				m_ViewportSize.y = m_ViewportSize.x * screenHeight / screenWidth;
+				m_ViewportMargin.y = (viewportPanelSize.y - m_ViewportSize.y) / 2;
+				m_ViewportMargin.x = 0.0f;
+			}
+			if (m_ViewportSize.y >= viewportPanelSize.y) 
+			{
+				m_ViewportSize.y = viewportPanelSize.y;
+				m_ViewportSize.x = m_ViewportSize.y * screenWidth / screenHeight;
+				m_ViewportMargin.x = (viewportPanelSize.x - m_ViewportSize.x) / 2;
+				m_ViewportMargin.y = 0.0f;
+			}
+		}
+		else
+		{
+			viewportPanelSize = ImGui::GetContentRegionAvail();
+			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+			m_ViewportMargin = { 0.0f, 0.0f };
+		}
 
 		/////////////////////////
 		// Center Viewport Image
@@ -194,40 +193,72 @@ namespace Cober {
 		// Enable Camera Controls
 		m_AllowViewportCameraEvents = (ImGui::IsMouseHoveringRect(m_MinViewportBound, m_MaxViewportBound) && m_ViewportFocused) || m_StartedCameraClickInViewport;
 
-		if (((Input::IsKeyDown(KeyCode::LeftAlt) && (Input::IsMouseButtonDown(MouseButton::Left) || (Input::IsMouseButtonDown(MouseButton::Middle)))) || Input::IsMouseButtonDown(MouseButton::Right)) && !m_StartedCameraClickInViewport && m_ViewportFocused && m_ViewportHovered)
+		if (Input::IsMouseButtonDown(MouseButton::Left) || 
+			  Input::IsMouseButtonDown(MouseButton::Middle) || 
+			  Input::IsMouseButtonDown(MouseButton::Right) && 
+			  !m_StartedCameraClickInViewport && m_ViewportHovered)
+		{
 			m_StartedCameraClickInViewport = true;
+		}
 
-		if (!Input::IsMouseButtonDown(MouseButton::Right) && !(Input::IsKeyDown(KeyCode::LeftAlt) && (Input::IsMouseButtonDown(MouseButton::Left) || (Input::IsMouseButtonDown(MouseButton::Middle)))))
+		if (!Input::IsMouseButtonDown(MouseButton::Right) && 
+			!Input::IsKeyDown(KeyCode::LeftAlt) && 
+			(Input::IsMouseButtonDown(MouseButton::Left) || (Input::IsMouseButtonDown(MouseButton::Middle))))
+		{
 			m_StartedCameraClickInViewport = false;
+		}
 
 
 		///////////////////////////////////
 		// Export to DragDropViewportTarget
-		if (ImGui::BeginDragDropTarget()) 
+		if (ImGui::BeginDragDropTarget())
 		{
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) 
 			{
 				const wchar_t* path = (const wchar_t*)payload->Data;
 				m_FilePath = (std::filesystem::current_path() / "assets" / path).string();
-				LOG_INFO(m_FilePath);
-				
-				//Textures
+
 				if (Editor::SelectedEntity() && Editor::SelectedEntity().HasComponent<Render2DComponent>()) 
 				{
-					auto lastDot = m_FilePath.find_last_of('.');
-					std::string format = lastDot != std::string::npos ? m_FilePath.substr(lastDot) : "null";
-					if (lastDot != std::string::npos && (format == ".png" || format == ".jpg" || format == ".jpeg"))
-						Editor::SelectedEntity().GetComponent<Render2DComponent>().texture = Texture::Create(m_FilePath);
+					if (m_FilePath.extension() == ".png" || m_FilePath.extension() == ".jpg" || m_FilePath.extension() == ".jpeg")
+					{
+						auto textureHolder = Texture::Create(m_FilePath);
+						auto& component = Editor::SelectedEntity().GetComponent<Render2DComponent>();
+						component.texture = textureHolder;
+
+						if (component.isSubTexture)
+						{
+							component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																			component.subTextureIndex, 
+																			component.subTextureCellSize,
+																			component.subTextureSpriteSize);
+						}
+						else
+						{
+							component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																			{0, 0}, 
+																			{component.texture->GetWidth(), component.texture->GetHeight()});
+						}
+					}
 				}
 			}
+			else if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_PREFAB")) 
+			{
+				const wchar_t* path = (const wchar_t*)payload->Data;
+				std::filesystem::path prefabPath = std::filesystem::current_path() / "assets" / path;
+				Scene::LoadPrefab(Editor::GetActiveScene().get(), prefabPath.filename().string());
+			}
+
 			ImGui::EndDragDropTarget();
 		}
 
 		///////////////////////////////
 		//Gizmos
-		if (Editor::SelectedEntity() && m_GizmoType != -1)
+		if (Editor::SelectedEntity() && 
+			m_GizmoType != -1 		 && 
+			dynamic_cast<EditorCamera*>(Editor::GetActiveCamera().get()) != nullptr) // Camera type must be "EditorCamera"
 		{
-			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetOrthographic(!editorCamera->IsPerspective());
 			ImGuizmo::SetDrawlist();
 
 			ImGuizmo::SetRect(m_MinViewportBound.x, m_MinViewportBound.y, 
@@ -293,13 +324,19 @@ namespace Cober {
 		float size = ImGui::GetWindowHeight() - 4.0f;
 		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 
-		if (ImGui::Button(icon)) 
+		if (ImGui::Button(icon) || Editor::GetActiveScene()->ExitFromRuntimeEditor())
         {
+			ImGuiIO& io = ImGui::GetIO(); (void)io;
 			m_GizmoType = -1;
 			if (gameState == EngineApp::GameState::EDITOR) 
             {
 				Log::ClearLogMessages();	
+				io.ConfigFlags ^= ImGuiConfigFlags_NavEnableKeyboard; 
+				
 				EngineApp::Get().SetGameState(EngineApp::GameState::RUNTIME_EDITOR);
+
+				// Reset for physics
+				EngineApp::Get().GetTimer()->GetAccumulatedTime() = 0.0f;
 
 				Editor::SetActiveScene(Scene::Copy(Editor::GetEditorScene()));
 				Editor::GetActiveScene()->OnSimulationStart();
@@ -307,6 +344,7 @@ namespace Cober {
 			}
 			else if (gameState == EngineApp::GameState::RUNTIME_EDITOR) 
             {
+				io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; 
 				Editor::GetActiveScene()->OnSimulationStop();
 
 				EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
@@ -320,7 +358,21 @@ namespace Cober {
 			}
 		}
 
-		if (gameState == EngineApp::GameState::RUNTIME_EDITOR)
+		// If inside the game we want to quit, the state of the editor will exit from Runtime
+		if (gameState == EngineApp::GameState::EXIT) 
+		{
+			Editor::GetActiveScene()->OnSimulationStop();
+
+			EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
+
+			Editor::SetActiveScene(Editor::GetEditorScene());
+			SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
+
+			// Provisional fix to avoid crash
+			NativeScriptFn::FreeScriptLibrary();
+			Editor::SetSelectedEntity();
+		}
+		else if (gameState == EngineApp::GameState::RUNTIME_EDITOR)
 		{
 			ImGui::SameLine();
 

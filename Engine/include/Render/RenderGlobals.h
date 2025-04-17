@@ -17,6 +17,7 @@ namespace Cober {
 		static void SetClearColor(float red, float green, float blue, float black = 255.0f);
 
 		static void SetLineWidth(float width);
+		static void DrawTriangles(const Ref<VertexArray>& vertexArray, uint32_t vertexCount);
 		static void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount);
 
 		static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t count = 0);

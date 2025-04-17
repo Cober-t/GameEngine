@@ -15,7 +15,7 @@ workspace "ScriptingWorkspace"
 		staticruntime "off"
 
 		targetdir("bin/%{prj.name}")
-		objdir("bin-int/%{prj.name}")
+		objdir("bin/obj")
 
 		files
 		{
@@ -39,21 +39,20 @@ workspace "ScriptingWorkspace"
 		{
 			"%{prj.name}/scripts",
 			-- Generate in the future
-			"C:/Users/Jorge/Documents/GameEngine/Engine",
-			"C:/Users/Jorge/Documents/GameEngine/Engine/include",
-			"C:/Users/Jorge/Documents/GameEngine/libraries",
-			"C:/Users/Jorge/Documents/GameEngine/libraries/glfw/include",
-			"C:/Users/Jorge/Documents/GameEngine/libraries/glad/include",
-			"C:/Users/Jorge/Documents/GameEngine/libraries/glm",
-			"C:/Users/Jorge/Documents/GameEngine/libraries/entt",
-			"C:/Users/Jorge/Documents/GameEngine/libraries/raudio",
-			"C:/Users/Jorge/Documents/GameEngine/libraries/box2d/include/box2d",
-			"C:/Users/Jorge/Documents/GameEngine/libraries/stb_image/include",
-			"C:/Users/Jorge/Documents/GameEngine/libraries/stb_truetype",
-			"C:/Users/Jorge/Documents/GameEngine/libraries/lua/lua",
-			"C:/Users/Jorge/Documents/GameEngine/libraries/imgui",
-			"C:/Users/Jorge/Documents/GameEngine/libraries/sol",
-			"C:/Users/Jorge/Documents/GameEngine/libraries/spdlog/include"
+			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/Engine",
+			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/Engine/include",
+			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries",
+			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/glfw/include",
+			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/glad/include",
+			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/glm",
+			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/entt",
+			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/box2d/include/box2d",
+			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/stb_image/include",
+			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/stb_truetype",
+			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/lua/lua",
+			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/imgui",
+			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/sol",
+			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/spdlog/include"
 		}
 
 		defines
@@ -64,16 +63,23 @@ workspace "ScriptingWorkspace"
 		}
 
 
-		symbolspath 'C:/Users/Jorge/Documents/GameEngine/bin/Debug-windows-x86_64/Engine/Engine.pdb'
+		symbolspath 'C:/Users/jorge/OneDrive/Escritorio/GameEngine/bin/Debug-windows-x86_64/Engine/Engine.pdb'
 		-- symbolspath '$(OutDir)$(TargetName)-$([System.DateTime]::Now.ToString(\"HH_mm_ss_fff\")).pdb'
 
 		links
 		{
 			-- Generate in the future
-			"C:/Users/Jorge/Documents/GameEngine/bin/Debug-windows-x86_64/Engine/Engine.lib",
-			"C:/Users/Jorge/Documents/GameEngine/libraries/glad/bin/Debug-windows-x86_64/Glad/Glad.lib",
-			"C:/Users/Jorge/Documents/GameEngine/libraries/glfw/bin/Debug-windows-x86_64/GLFW/GLFW.lib",
-			"C:/Users/Jorge/Documents/GameEngine/libraries/imgui/bin/Debug-windows-x86_64/ImGui/ImGui.lib"
+			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/bin/Debug-windows-x86_64/Engine/Engine.lib",
+			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/glad/bin/Debug-windows-x86_64/Glad/Glad.lib",
+			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/glfw/bin/Debug-windows-x86_64/GLFW/GLFW.lib",
+			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/imgui/bin/Debug-windows-x86_64/ImGui/ImGui.lib"
+		}
+
+		postbuildcommands
+		{
+			"del \"./**.sln\"";
+			"del \"./**.vcxproj\"";
+			"del \"./**.vcxproj.filters\"";
 		}
 
 		filter "system:windows"

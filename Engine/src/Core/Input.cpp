@@ -53,6 +53,7 @@ namespace Cober {
 		}
 	}
 
+	// FIXME: Dont work for some reason
 	bool Input::IsKeyPressed(KeyCode key)
 	{
 		return s_KeyData.find(key) != s_KeyData.end() && s_KeyData[key].State == KeyState::Pressed;

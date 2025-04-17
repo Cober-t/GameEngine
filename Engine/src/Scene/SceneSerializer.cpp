@@ -1,6 +1,8 @@
 #include <pch.h>
 #include "Scene/SceneSerializer.h"
 #include "Physics/Physics2D.h"
+#include "Scripting/NativeScripting.h"
+#include "Render/Camera/GlobalCamera.h"
 
 namespace Cober {
 
@@ -18,115 +20,20 @@ namespace Cober {
 		else
 			name = sceneName;
 
-		// sceneSaver[name]["world2D"].SetInt(scene->GetWorldType());
+		auto& loader = sceneSaver[name]["Settings"];
+		SerializeSceneSettings(loader);
 
-        EngineApp& app = EngineApp::Get();
 		sceneSaver[name]["numEntities"].SetInt(scene->GetSceneEntities().size());
-
-		// Change to enum in the future
-		sceneSaver[name]["Settings"]["SceneType"].SetString("2D");
-		sceneSaver[name]["Settings"]["Gravity"].SetReal(Physics2D::GetSettings().Gravity);
 
 		int32_t numEntity = 0;
 		for (auto& entity : scene->GetSceneEntities()) 
         {
 			auto& entityToBeSaved = sceneSaver[name]["Entity" + std::to_string(numEntity++)];
-			
-			entityToBeSaved["UUID"]["id"].SetString(std::to_string(entity.GetUUID()));
-			
-			entityToBeSaved["TagComponent"]["tag"].SetString(entity.GetComponent<TagComponent>().tag);
-			
-			auto& transform = entity.GetComponent<TransformComponent>();
-			entityToBeSaved["TransformComponent"]["position"].SetVec3(transform.position);
-			entityToBeSaved["TransformComponent"]["rotation"].SetVec3(transform.rotation);
-			entityToBeSaved["TransformComponent"]["scale"].SetVec3(transform.scale);
-
-			if (entity.HasComponent<Rigidbody2D>()) 
-            {
-				auto& rb2d = entity.GetComponent<Rigidbody2D>();
-				entityToBeSaved["Rigidbody2D"]["bodyType"].SetInt((int)rb2d.type);
-				entityToBeSaved["Rigidbody2D"]["fixedRotation"].SetInt(rb2d.fixedRotation);
-			}
-
-			if (entity.HasComponent<BoxCollider2D>()) 
-			{
-				auto& bc2D = entity.GetComponent<BoxCollider2D>();
-				entityToBeSaved["BoxCollider2D"]["offset"].SetVec2(bc2D.offset);
-				entityToBeSaved["BoxCollider2D"]["size"].SetVec2(bc2D.size);
-				entityToBeSaved["BoxCollider2D"]["density"].SetReal(bc2D.density);
-				entityToBeSaved["BoxCollider2D"]["friction"].SetReal(bc2D.friction);
-				entityToBeSaved["BoxCollider2D"]["restitution"].SetReal(bc2D.restitution);
-			}
-
-			if (entity.HasComponent<CircleCollider2D>()) 
-			{
-				auto& bc2D = entity.GetComponent<CircleCollider2D>();
-				entityToBeSaved["CircleCollider2D"]["offset"].SetVec2(bc2D.offset);
-				entityToBeSaved["CircleCollider2D"]["radius"].SetReal(bc2D.radius);
-				entityToBeSaved["CircleCollider2D"]["density"].SetReal(bc2D.density);
-				entityToBeSaved["CircleCollider2D"]["friction"].SetReal(bc2D.friction);
-				entityToBeSaved["CircleCollider2D"]["restitution"].SetReal(bc2D.restitution);
-			}
-
-			if (entity.HasComponent<EdgeCollider2D>()) 
-			{
-				auto& bc2D = entity.GetComponent<EdgeCollider2D>();
-				entityToBeSaved["EdgeCollider2D"]["pointA"].SetVec2(bc2D.pointA);
-				entityToBeSaved["EdgeCollider2D"]["pointB"].SetVec2(bc2D.pointB);
-				entityToBeSaved["EdgeCollider2D"]["density"].SetReal(bc2D.density);
-				entityToBeSaved["EdgeCollider2D"]["friction"].SetReal(bc2D.friction);
-				entityToBeSaved["EdgeCollider2D"]["restitution"].SetReal(bc2D.restitution);
-			}
-
-			if (entity.HasComponent<PolygonCollider2D>()) 
-			{
-				auto& bc2D = entity.GetComponent<PolygonCollider2D>();
-				entityToBeSaved["PolygonCollider2D"]["offset"].SetVec2(bc2D.offset);
-				entityToBeSaved["PolygonCollider2D"]["density"].SetReal(bc2D.density);
-				entityToBeSaved["PolygonCollider2D"]["friction"].SetReal(bc2D.friction);
-				entityToBeSaved["PolygonCollider2D"]["restitution"].SetReal(bc2D.restitution);
-			}
-
-			if (entity.HasComponent<ScriptComponent>()) 
-			{
-				auto& scriptComponent = entity.GetComponent<ScriptComponent>();
-				// entityToBeSaved["ScriptComponent"]["path"].SetVec2(scriptComponent.path);
-			}
-
-			if (entity.HasComponent<Render2DComponent>()) 
-			{
-				auto& bc2D = entity.GetComponent<Render2DComponent>();
-				entityToBeSaved["Render2DComponent"]["color"].SetVec4(entity.GetComponent<Render2DComponent>().color);
-				switch (entity.GetComponent<Render2DComponent>().shapeType)
-				{
-				case Shape2D::Line:
-					entityToBeSaved["Render2DComponent"]["shape2D"].SetString("Line");
-					entityToBeSaved["Render2DComponent"]["thickness"].SetReal(entity.GetComponent<Render2DComponent>().thickness);
-					break;
-				case Shape2D::Quad:
-					entityToBeSaved["Render2DComponent"]["shape2D"].SetString("Quad");
-					entityToBeSaved["Render2DComponent"]["fill"].SetInt(entity.GetComponent<Render2DComponent>().fill);
-					break;
-				case Shape2D::Circle:
-					entityToBeSaved["Render2DComponent"]["shape2D"].SetString("Circle");
-					entityToBeSaved["Render2DComponent"]["thickness"].SetReal(entity.GetComponent<Render2DComponent>().thickness);
-					entityToBeSaved["Render2DComponent"]["fade"].SetReal(entity.GetComponent<Render2DComponent>().fade);
-					break;
-				case Shape2D::Sprite:
-					entityToBeSaved["Render2DComponent"]["shape2D"].SetString("Sprite");
-					entityToBeSaved["Render2DComponent"]["texture"].SetString(entity.GetComponent<Render2DComponent>().texture->GetPath());
-					break;
-				}
-			}
-
-			if (entity.HasComponent<NativeScriptComponent>())
-			{
-				auto& script = entity.GetComponent<NativeScriptComponent>();
-				entityToBeSaved["NativeScriptComponent"]["className"].SetString(script.className);
-			}
+			SerializeAllComponents(entity, entityToBeSaved);
 		}
 		
-		return Utils::DataFile::Write(sceneSaver, sceneName);
+		std::filesystem::path scenePath = "assets/scenes/" + sceneName;
+		return Utils::DataFile::Write(sceneSaver, scenePath);
     }
 
 
@@ -138,9 +45,7 @@ namespace Cober {
 		std::filesystem::path scenesPath = std::filesystem::current_path() / "assets/scenes" / sceneName;
 
 		if (!std::filesystem::exists(scenesPath))
-		{
 			sceneName = "SceneDefault.lua";
-		}
 
 		if (sceneName.find_last_of('.') != std::string::npos)
 			name = sceneName.substr(0, sceneName.find_last_of('.'));
@@ -148,123 +53,24 @@ namespace Cober {
 			name = sceneName;
 
 
-
-		if (Utils::DataFile::Read(sceneLoader, sceneName)) 
+		std::filesystem::path scenePath = "assets/scenes/" + sceneName;
+		if (Utils::DataFile::Read(sceneLoader, scenePath)) 
 		{
 			Ref<Scene> newScene = CreateRef<Scene>();
 
-			Physics2D::GetSettings().Gravity = sceneLoader[name]["Settings"]["Gravity"].GetReal();
+			auto& loader = sceneLoader[name]["Settings"];
+			DeserializeSceneSettings(loader);
 
 			for (int i = 0; i < sceneLoader[name]["numEntities"].GetInt(); i++) 
 			{
 				if (sceneLoader[name].HasProperty("Entity" + std::to_string(i))) 
 				{
-					auto& loader = sceneLoader[name]["Entity" + std::to_string(i)];
-					Entity newEntity = newScene->CreateEntity(loader["TagComponent"]["tag"].GetString());
+					loader = sceneLoader[name]["Entity" + std::to_string(i)];
+					Entity newEntity = newScene->CreateEntityWithUUID(
+							UUID(loader["UUID"]["id"].GetReal()),
+							loader["TagComponent"]["tag"].GetString());
 
-					newEntity.GetComponent<IDComponent>().ID = loader["UUID"]["id"].GetReal();
-
-					newEntity.GetComponent<TransformComponent>().position = loader["TransformComponent"]["position"].GetVec3();
-					newEntity.GetComponent<TransformComponent>().rotation = loader["TransformComponent"]["rotation"].GetVec3();
-					newEntity.GetComponent<TransformComponent>().scale = loader["TransformComponent"]["scale"].GetVec3();
-
-					if (loader.HasProperty("Rigidbody2D")) 
-					{
-						auto rb2d = loader["Rigidbody2D"];
-						newEntity.AddComponent<Rigidbody2D>();
-						newEntity.GetComponent<Rigidbody2D>().type = BodyType((int)rb2d["bodyType"].GetInt());
-						newEntity.GetComponent<Rigidbody2D>().fixedRotation = (int)rb2d["fixedRotation"].GetInt();
-					}
-
-					if (loader.HasProperty("BoxCollider2D")) 
-					{
-						auto bc2d = loader["BoxCollider2D"];
-						newEntity.AddComponent<BoxCollider2D>();
-						newEntity.GetComponent<BoxCollider2D>().offset = bc2d["offset"].GetVec2();
-						newEntity.GetComponent<BoxCollider2D>().size = bc2d["size"].GetVec2();
-						newEntity.GetComponent<BoxCollider2D>().density = bc2d["density"].GetReal();
-						newEntity.GetComponent<BoxCollider2D>().friction = bc2d["friction"].GetReal();
-						newEntity.GetComponent<BoxCollider2D>().restitution = bc2d["restitution"].GetReal();
-					}
-
-					if (loader.HasProperty("CircleCollider2D")) 
-					{
-						auto bc2d = loader["CircleCollider2D"];
-						newEntity.AddComponent<CircleCollider2D>();
-						newEntity.GetComponent<CircleCollider2D>().offset = bc2d["offset"].GetVec2();
-						newEntity.GetComponent<CircleCollider2D>().radius = bc2d["radius"].GetReal();
-						newEntity.GetComponent<CircleCollider2D>().density = bc2d["density"].GetReal();
-						newEntity.GetComponent<CircleCollider2D>().friction = bc2d["friction"].GetReal();
-						newEntity.GetComponent<CircleCollider2D>().restitution = bc2d["restitution"].GetReal();
-					}
-
-					if (loader.HasProperty("EdgeCollider2D")) 
-					{
-						auto bc2d = loader["EdgeCollider2D"];
-						newEntity.AddComponent<EdgeCollider2D>();
-						newEntity.GetComponent<EdgeCollider2D>().pointA = bc2d["pointA"].GetVec2();
-						newEntity.GetComponent<EdgeCollider2D>().pointB = bc2d["pointB"].GetVec2();
-						newEntity.GetComponent<EdgeCollider2D>().density = bc2d["density"].GetReal();
-						newEntity.GetComponent<EdgeCollider2D>().friction = bc2d["friction"].GetReal();
-						newEntity.GetComponent<EdgeCollider2D>().restitution = bc2d["restitution"].GetReal();
-					}
-
-					if (loader.HasProperty("PolygonCollider2D")) 
-					{
-						auto bc2d = loader["PolygonCollider2D"];
-						newEntity.AddComponent<PolygonCollider2D>();
-						newEntity.GetComponent<PolygonCollider2D>().offset = bc2d["offset"].GetVec2();
-						newEntity.GetComponent<PolygonCollider2D>().density = bc2d["density"].GetReal();
-						newEntity.GetComponent<PolygonCollider2D>().friction = bc2d["friction"].GetReal();
-						newEntity.GetComponent<PolygonCollider2D>().restitution = bc2d["restitution"].GetReal();
-					}
-
-					if (loader.HasProperty("ScriptComponent")) 
-					{
-						auto bc2d = loader["ScriptComponent"];
-						newEntity.AddComponent<ScriptComponent>();
-					}
-
-					if (loader.HasProperty("Render2DComponent")) 
-					{
-						auto bc2d = loader["Render2DComponent"];
-						newEntity.AddComponent<Render2DComponent>();
-						newEntity.GetComponent<Render2DComponent>().color = loader["Render2DComponent"]["color"].GetVec4();
-
-						std::string shapeType = loader["Render2DComponent"]["shape2D"].GetString();
-						if (shapeType == "Line")
-						{
-							newEntity.GetComponent<Render2DComponent>().shapeType = Shape2D::Line;
-							newEntity.GetComponent<Render2DComponent>().thickness = loader["Render2DComponent"]["thickness"].GetReal();
-						}
-
-						if (shapeType == "Quad")
-						{
-							newEntity.GetComponent<Render2DComponent>().shapeType = Shape2D::Quad;
-							newEntity.GetComponent<Render2DComponent>().fill = loader["Render2DComponent"]["fill"].GetInt();
-						}
-
-						if (shapeType == "Circle")
-						{
-							newEntity.GetComponent<Render2DComponent>().shapeType = Shape2D::Circle;
-							newEntity.GetComponent<Render2DComponent>().thickness = loader["Render2DComponent"]["thickness"].GetReal();
-							newEntity.GetComponent<Render2DComponent>().fade = loader["Render2DComponent"]["fade"].GetReal();
-						}
-
-						if (shapeType == "Sprite")
-						{
-							std::string texturePath = loader["Render2DComponent"]["texture"].GetString();
-							newEntity.GetComponent<Render2DComponent>().shapeType = Shape2D::Sprite;
-							newEntity.GetComponent<Render2DComponent>().texture = Texture::Create(texturePath);
-						}
-					}
-
-					if (loader.HasProperty("NativeScriptComponent")) 
-					{
-						auto script = loader["NativeScriptComponent"];
-						newEntity.AddComponent<NativeScriptComponent>();
-						newEntity.GetComponent<NativeScriptComponent>().className = script["className"].GetString();
-					}
+					DeserializeAllComponents(newEntity, loader);
 				}
 			}
 
@@ -274,4 +80,538 @@ namespace Cober {
 		LOG_ERROR(("Cannot read scene with path: {0}", std::filesystem::current_path().string() + "\\assets\\scenes\\" + sceneName));
 		return nullptr;
     }
+
+	void SceneSerializer::SerializeSceneSettings(Utils::DataFile& serializer)
+	{
+		// Change to enum in the future
+		serializer["SceneType"].SetString("2D");
+		serializer["Gravity"].SetReal(physicsSettings.Gravity);
+		serializer["Perspective"].SetInt(GlobalCamera::perspective);
+	}
+
+	void SceneSerializer::DeserializeSceneSettings(Utils::DataFile& loader)
+	{
+		physicsSettings.Gravity = loader["Gravity"].GetReal();
+		GlobalCamera::perspective = loader["Perspective"].GetInt();
+	}
+
+	void SceneSerializer::SerializeAllComponents(Entity& entity, Utils::DataFile& serializer)
+	{
+		SerializeUUIDComponent(entity, serializer);
+		SerializeTagComponent(entity, serializer);
+		SerializeTransformComponent(entity, serializer);
+		SerializeCameraComponent(entity, serializer);
+		SerializeRigidbody2DComponent(entity, serializer);
+		SerializeBoxCollider2DComponent(entity, serializer);
+		SerializeCircleCollider2DComponent(entity, serializer);
+		SerializeRender2DComponent(entity, serializer);
+		SerializeNativeScriptComponent(entity, serializer);
+		SerializeAudioComponent(entity, serializer);
+		SerializeTextComponent(entity, serializer);
+		SerializeParticleEmitterComponent(entity, serializer);
+	}
+
+	void SceneSerializer::DeserializeAllComponents(Entity& entity, Utils::DataFile& loader)
+	{
+		DeserializeTransformComponent(entity, loader);
+		DeserializeCameraComponent(entity, loader);
+		DeserializeRigidbody2DComponent(entity, loader);
+		DeserializeBoxCollider2DComponent(entity, loader);
+		DeserializeCircleCollider2DComponent(entity, loader);
+		DeserializeRender2DComponent(entity, loader);
+		DeserializeNativeScriptComponent(entity, loader);
+		DeserializeAudioComponent(entity, loader);
+		DeserializeTextComponent(entity, loader);
+		DeserializeParticleEmitterComponent(entity, loader);
+	}
+
+	//////////////////////////////////////////
+	/// 	SERIALIZE   //////////////////////
+	void SceneSerializer::SerializeUUIDComponent(Entity& entity, Utils::DataFile& serializer)
+	{
+		serializer["UUID"]["id"].SetString(std::to_string(entity.GetUUID()));
+	}
+	void SceneSerializer::SerializeTagComponent(Entity& entity, Utils::DataFile& serializer)
+	{
+		serializer["TagComponent"]["tag"].SetString(entity.GetComponent<TagComponent>().tag);
+	}
+	void SceneSerializer::SerializeTransformComponent(Entity& entity, Utils::DataFile& serializer)
+	{
+		auto& transform = entity.GetComponent<TransformComponent>();
+		serializer["TransformComponent"]["position"].SetVec3(transform.position);
+		serializer["TransformComponent"]["rotation"].SetVec3(transform.rotation);
+		serializer["TransformComponent"]["scale"].SetVec3(transform.scale);
+	}
+	void SceneSerializer::SerializeCameraComponent(Entity& entity, Utils::DataFile& serializer)
+	{
+		if (entity.HasComponent<CameraComponent>()) 
+		{
+			auto& camera = entity.GetComponent<CameraComponent>();
+			serializer["CameraComponent"]["distance"].SetReal(camera.distance);
+			serializer["CameraComponent"]["width"].SetInt(camera.width);
+			serializer["CameraComponent"]["height"].SetInt(camera.height);
+			serializer["CameraComponent"]["nearClip"].SetReal(camera.nearClip);
+			serializer["CameraComponent"]["farClip"].SetReal(camera.farClip);
+			serializer["CameraComponent"]["fov"].SetReal(camera.fov);
+			serializer["CameraComponent"]["perspective"].SetInt(camera.perspective);
+			serializer["CameraComponent"]["mainCamera"].SetInt(camera.mainCamera);
+			serializer["CameraComponent"]["debug"].SetInt(camera.debug);
+		}
+	}
+	void SceneSerializer::SerializeRigidbody2DComponent(Entity& entity, Utils::DataFile& serializer)
+	{
+		if (entity.HasComponent<Rigidbody2D>()) 
+		{
+			auto& rb2d = entity.GetComponent<Rigidbody2D>();
+			serializer["Rigidbody2D"]["bodyType"].SetInt((int)rb2d.type);
+			serializer["Rigidbody2D"]["fixedRotation"].SetInt(rb2d.fixedRotation);
+		}
+	}
+	void SceneSerializer::SerializeBoxCollider2DComponent(Entity& entity, Utils::DataFile& serializer)
+	{
+		if (entity.HasComponent<BoxCollider2D>()) 
+		{
+			auto& bc2D = entity.GetComponent<BoxCollider2D>();
+			serializer["BoxCollider2D"]["offset"].SetVec2(bc2D.offset);
+			serializer["BoxCollider2D"]["size"].SetVec2(bc2D.size);
+			serializer["BoxCollider2D"]["density"].SetReal(bc2D.density);
+			serializer["BoxCollider2D"]["friction"].SetReal(bc2D.friction);
+			serializer["BoxCollider2D"]["restitution"].SetReal(bc2D.restitution);
+			serializer["BoxCollider2D"]["isSensor"].SetInt(bc2D.isSensor);
+		}
+	}
+	void SceneSerializer::SerializeCircleCollider2DComponent(Entity& entity, Utils::DataFile& serializer)
+	{
+		if (entity.HasComponent<CircleCollider2D>()) 
+		{
+			auto& bc2D = entity.GetComponent<CircleCollider2D>();
+			serializer["CircleCollider2D"]["offset"].SetVec2(bc2D.offset);
+			serializer["CircleCollider2D"]["radius"].SetReal(bc2D.radius);
+			serializer["CircleCollider2D"]["density"].SetReal(bc2D.density);
+			serializer["CircleCollider2D"]["friction"].SetReal(bc2D.friction);
+			serializer["CircleCollider2D"]["restitution"].SetReal(bc2D.restitution);
+			serializer["CircleCollider2D"]["isSensor"].SetInt(bc2D.isSensor);
+		}
+	}
+	void SceneSerializer::SerializeRender2DComponent(Entity& entity, Utils::DataFile& serializer)
+	{
+		if (entity.HasComponent<Render2DComponent>()) 
+		{
+			auto& renderComponent = entity.GetComponent<Render2DComponent>();
+			serializer["Render2DComponent"]["color"].SetVec4(renderComponent.color);
+			switch (renderComponent.shapeType)
+			{
+			case Shape2D::Line:
+				serializer["Render2DComponent"]["shape2D"].SetString("Line");
+				serializer["Render2DComponent"]["thickness"].SetReal(renderComponent.thickness);
+				break;
+			case Shape2D::Quad:
+				serializer["Render2DComponent"]["shape2D"].SetString("Quad");
+				serializer["Render2DComponent"]["fill"].SetInt(renderComponent.fill);
+				break;
+			case Shape2D::Circle:
+				serializer["Render2DComponent"]["shape2D"].SetString("Circle");
+				serializer["Render2DComponent"]["thickness"].SetReal(renderComponent.thickness);
+				serializer["Render2DComponent"]["fade"].SetReal(renderComponent.fade);
+				break;
+			case Shape2D::Sprite:
+				serializer["Render2DComponent"]["shape2D"].SetString("Sprite");
+				if (renderComponent.texture)
+				{
+					serializer["Render2DComponent"]["texture"].SetString(renderComponent.texture->GetPath().string());
+					serializer["Render2DComponent"]["issubtexture"].SetReal(renderComponent.isSubTexture);
+					if (renderComponent.isSubTexture)
+					{
+						serializer["Render2DComponent"]["subtexture"]["indices"].SetVec2(renderComponent.subTextureIndex);
+						serializer["Render2DComponent"]["subtexture"]["cellsize"].SetVec2(renderComponent.subTextureCellSize);
+						serializer["Render2DComponent"]["subtexture"]["spritesize"].SetVec2(renderComponent.subTextureSpriteSize);
+					}
+				}
+				break;
+			}
+		}
+	}
+	void SceneSerializer::SerializeNativeScriptComponent(Entity& entity, Utils::DataFile& serializer)
+	{
+		if (entity.HasComponent<NativeScriptComponent>())
+		{
+			auto& script = entity.GetComponent<NativeScriptComponent>();
+			serializer["NativeScriptComponent"]["className"].SetString(script.className);
+		}
+	}
+	void SceneSerializer::SerializeAudioComponent(Entity& entity, Utils::DataFile& serializer)
+	{
+		if (entity.HasComponent<AudioComponent>())
+		{
+			auto& audio = entity.GetComponent<AudioComponent>();
+			serializer["AudioComponent"]["audioName"].SetString(audio.audioName);
+			serializer["AudioComponent"]["audioPath"].SetString(audio.audioPath.string());
+			serializer["AudioComponent"]["loop"].SetInt(audio.loop);
+		}
+	}
+	void SceneSerializer::SerializeTextComponent(Entity& entity, Utils::DataFile& serializer)
+	{
+		if (entity.HasComponent<TextComponent>())
+		{
+			auto& text = entity.GetComponent<TextComponent>();
+			serializer["TextComponent"]["font"].SetString(text.FontAsset->GetFontPath().string());
+			serializer["TextComponent"]["text"].SetString(text.Text);
+			serializer["TextComponent"]["color"].SetVec4(text.Color);
+			serializer["TextComponent"]["kerning"].SetReal(text.Kerning);
+			serializer["TextComponent"]["lineSpacing"].SetReal(text.LineSpacing);
+		}
+	}
+	void SceneSerializer::SerializeParticleEmitterComponent(Entity& entity, Utils::DataFile& serializer)
+	{
+		if (entity.HasComponent<ParticleEmitterComponent>())
+		{
+			auto& particleEmitter = entity.GetComponent<ParticleEmitterComponent>();
+			serializer["ParticleEmitterComponent"]["positionVariation"].SetVec2(particleEmitter.positionVariation);
+			serializer["ParticleEmitterComponent"]["rotation"].SetReal(particleEmitter.rotation);
+			serializer["ParticleEmitterComponent"]["sizeBegin"].SetReal(particleEmitter.sizeBegin);
+			serializer["ParticleEmitterComponent"]["sizeEnd"].SetReal(particleEmitter.sizeEnd);
+			serializer["ParticleEmitterComponent"]["sizeVariation"].SetReal(particleEmitter.sizeVariation);
+			serializer["ParticleEmitterComponent"]["velocity"].SetVec2(particleEmitter.velocity);
+			serializer["ParticleEmitterComponent"]["velocityVariation"].SetVec2(particleEmitter.velocityVariation);
+			serializer["ParticleEmitterComponent"]["colorBegin"].SetVec4(particleEmitter.colorBegin);
+			serializer["ParticleEmitterComponent"]["colorEnd"].SetVec4(particleEmitter.colorEnd);
+			serializer["ParticleEmitterComponent"]["lifeTime"].SetReal(particleEmitter.lifeTime);
+			serializer["ParticleEmitterComponent"]["lifeRemaining"].SetReal(particleEmitter.lifeRemaining);
+			serializer["ParticleEmitterComponent"]["rate"].SetInt(particleEmitter.rate);
+			serializer["ParticleEmitterComponent"]["active"].SetInt(particleEmitter.active);
+			serializer["ParticleEmitterComponent"]["loop"].SetInt(particleEmitter.loop);
+
+			if (particleEmitter.texture)
+			{
+				serializer["ParticleEmitterComponent"]["texture"].SetString(particleEmitter.texture->GetPath().string());
+				serializer["ParticleEmitterComponent"]["issubtexture"].SetReal(particleEmitter.isSubTexture);
+				if (particleEmitter.isSubTexture)
+				{
+					serializer["ParticleEmitterComponent"]["subtexture"]["indices"].SetVec2(particleEmitter.subTextureIndex);
+					serializer["ParticleEmitterComponent"]["subtexture"]["cellsize"].SetVec2(particleEmitter.subTextureCellSize);
+					serializer["ParticleEmitterComponent"]["subtexture"]["spritesize"].SetVec2(particleEmitter.subTextureSpriteSize);
+				}
+			}
+		}
+	}
+
+
+	//////////////////////////////////////////
+	/// 	DESERIALIZE   ////////////////////
+	void SceneSerializer::DeserializeTransformComponent(Entity& entity, Utils::DataFile& loader)
+	{
+		entity.GetComponent<TransformComponent>().position = loader["TransformComponent"]["position"].GetVec3();
+		entity.GetComponent<TransformComponent>().rotation = loader["TransformComponent"]["rotation"].GetVec3();
+		entity.GetComponent<TransformComponent>().scale = loader["TransformComponent"]["scale"].GetVec3();
+	}
+
+	void SceneSerializer::DeserializeCameraComponent(Entity& entity, Utils::DataFile& loader)
+	{
+		if (loader.HasProperty("CameraComponent")) 
+		{
+			auto camera = loader["CameraComponent"];
+			auto& component = entity.AddComponent<CameraComponent>();
+			component.distance = camera["distance"].GetReal();
+			component.width = camera["width"].GetInt();
+			component.height = camera["height"].GetInt();
+
+			component.nearClip = camera["nearClip"].GetReal();
+			component.farClip = camera["farClip"].GetReal();
+			component.fov = camera["fov"].GetReal();
+
+			component.perspective = camera["perspective"].GetInt();
+			component.debug = camera["debug"].GetInt();
+
+			component.mainCamera = camera["mainCamera"].GetInt();
+			component.UpdateCameraValues();
+			component.camera->SetViewportSize(camera["width"].GetInt(), camera["height"].GetInt());
+		}
+	}
+
+	void SceneSerializer::DeserializeRigidbody2DComponent(Entity& entity, Utils::DataFile& loader)
+	{
+		if (loader.HasProperty("Rigidbody2D")) 
+		{
+			auto rb2d = loader["Rigidbody2D"];
+			auto& component = entity.AddComponent<Rigidbody2D>();
+			component.type = BodyType((int)rb2d["bodyType"].GetInt());
+			component.fixedRotation = (int)rb2d["fixedRotation"].GetInt();
+		}
+	}
+
+	void SceneSerializer::DeserializeBoxCollider2DComponent(Entity& entity, Utils::DataFile& loader)
+	{
+		if (loader.HasProperty("BoxCollider2D")) 
+		{
+			auto bc2d = loader["BoxCollider2D"];
+			auto& component = entity.AddComponent<BoxCollider2D>();
+			component.offset = bc2d["offset"].GetVec2();
+			component.size = bc2d["size"].GetVec2();
+			component.density = bc2d["density"].GetReal();
+			component.friction = bc2d["friction"].GetReal();
+			component.restitution = bc2d["restitution"].GetReal();
+			component.isSensor = bc2d["isSensor"].GetInt();
+		}
+	}
+
+	void SceneSerializer::DeserializeCircleCollider2DComponent(Entity& entity, Utils::DataFile& loader)
+	{
+		if (loader.HasProperty("CircleCollider2D")) 
+		{
+			auto bc2d = loader["CircleCollider2D"];
+			auto& component = entity.AddComponent<CircleCollider2D>();
+			component.offset = bc2d["offset"].GetVec2();
+			component.radius = bc2d["radius"].GetReal();
+			component.density = bc2d["density"].GetReal();
+			component.friction = bc2d["friction"].GetReal();
+			component.restitution = bc2d["restitution"].GetReal();
+			component.isSensor = bc2d["isSensor"].GetInt();
+		}
+	}
+
+	void SceneSerializer::DeserializeRender2DComponent(Entity& entity, Utils::DataFile& loader)
+	{
+		if (loader.HasProperty("Render2DComponent"))
+		{
+			auto renderComponent = loader["Render2DComponent"];
+			auto& component = entity.AddComponent<Render2DComponent>();
+			component.color = renderComponent["color"].GetVec4();
+
+			std::string shapeType = renderComponent["shape2D"].GetString();
+			if (shapeType == "Line")
+			{
+				component.shapeType = Shape2D::Line;
+				component.thickness = renderComponent["thickness"].GetReal();
+			}
+
+			if (shapeType == "Quad")
+			{
+				component.shapeType = Shape2D::Quad;
+				component.fill = renderComponent["fill"].GetInt();
+			}
+
+			if (shapeType == "Circle")
+			{
+				component.shapeType = Shape2D::Circle;
+				component.thickness = renderComponent["thickness"].GetReal();
+				component.fade = renderComponent["fade"].GetReal();
+			}
+			if (shapeType == "Sprite")
+			{
+				component.shapeType = Shape2D::Sprite;
+
+				std::filesystem::path texturePath = renderComponent["texture"].GetString();
+				if (std::filesystem::exists(texturePath) == false)
+					return;
+					
+				component.texture = Texture::Create(texturePath);
+
+				component.isSubTexture = renderComponent["issubtexture"].GetReal();
+				component.subTexture = CreateRef<SubTexture>();
+
+				if (component.isSubTexture)
+				{
+					component.subTextureIndex = renderComponent["subtexture"]["indices"].GetVec2();
+					component.subTextureCellSize = renderComponent["subtexture"]["cellsize"].GetVec2();
+					component.subTextureSpriteSize = renderComponent["subtexture"]["spritesize"].GetVec2();
+
+					component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																	component.subTextureIndex, 
+																	component.subTextureCellSize,
+																	component.subTextureSpriteSize);					
+				}
+				else
+				{
+					component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																	{0 ,0}, 
+																	{component.texture->GetWidth(), component.texture->GetHeight()});
+				}
+			}
+		}
+	}
+
+	void SceneSerializer::DeserializeNativeScriptComponent(Entity& entity, Utils::DataFile& loader)
+	{
+		if (loader.HasProperty("NativeScriptComponent")) 
+		{
+			auto script = loader["NativeScriptComponent"];
+			auto& component = entity.AddComponent<NativeScriptComponent>();
+			component.className = script["className"].GetString();
+		}
+	}
+
+	void SceneSerializer::DeserializeAudioComponent(Entity& entity, Utils::DataFile& loader)
+	{
+		if (loader.HasProperty("AudioComponent")) 
+		{
+			auto audio = loader["AudioComponent"];
+			auto& component = entity.AddComponent<AudioComponent>();
+			component.audioName = audio["audioName"].GetString();
+			component.audioPath = audio["audioPath"].GetString();
+			component.loop = audio["loop"].GetInt();
+		}
+	}
+
+	void SceneSerializer::DeserializeTextComponent(Entity& entity, Utils::DataFile& loader)
+	{
+		if (loader.HasProperty("TextComponent")) 
+		{
+			auto text = loader["TextComponent"];
+			auto& component = entity.AddComponent<TextComponent>();
+			component.FontAsset = CreateRef<Font>(text["font"].GetString());
+			component.Text = text["text"].GetString();
+			component.Color = text["color"].GetVec4();
+			component.Kerning = text["kerning"].GetReal();
+			component.LineSpacing = text["lineSpacing"].GetReal();
+		}
+	}
+
+	void SceneSerializer::DeserializeParticleEmitterComponent(Entity& entity, Utils::DataFile& loader)
+	{
+		if (loader.HasProperty("ParticleEmitterComponent"))
+		{
+			auto particleEmitter = loader["ParticleEmitterComponent"];
+			auto& component = entity.AddComponent<ParticleEmitterComponent>();
+			component.position.x = entity.GetComponent<TransformComponent>().position.x;
+			component.position.y = entity.GetComponent<TransformComponent>().position.y;
+			component.positionVariation = particleEmitter["positionVariation"].GetVec2();
+			component.rotation = particleEmitter["rotation"].GetReal();
+			component.sizeBegin = particleEmitter["sizeBegin"].GetReal();
+			component.sizeEnd = particleEmitter["sizeEnd"].GetReal();
+			component.sizeVariation = particleEmitter["sizeVariation"].GetReal();
+			component.velocity = particleEmitter["velocity"].GetVec2();
+			component.velocityVariation = particleEmitter["velocityVariation"].GetVec2();
+			component.colorBegin = particleEmitter["colorBegin"].GetVec4();
+			component.colorEnd = particleEmitter["colorEnd"].GetVec4();
+			component.lifeTime = particleEmitter["lifeTime"].GetReal();
+			component.lifeRemaining = particleEmitter["lifeRemaining"].GetReal();
+			component.rate = particleEmitter["rate"].GetInt();
+			component.active = particleEmitter["active"].GetInt();
+			component.loop = particleEmitter["loop"].GetInt();
+			component.InitDefaultParticle();
+			std::string texturePath = particleEmitter["texture"].GetString();
+
+			if (texturePath == "")
+				return;
+
+			component.texture = Texture::Create(texturePath);
+			component.isSubTexture = particleEmitter["issubtexture"].GetReal();
+			component.subTexture = CreateRef<SubTexture>();
+
+			if (component.isSubTexture)
+			{
+				component.subTextureIndex = particleEmitter["subtexture"]["indices"].GetVec2();
+				component.subTextureCellSize = particleEmitter["subtexture"]["cellsize"].GetVec2();
+				component.subTextureSpriteSize = particleEmitter["subtexture"]["spritesize"].GetVec2();
+
+				component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																component.subTextureIndex, 
+																component.subTextureCellSize,
+																component.subTextureSpriteSize);					
+			}
+			else
+			{
+				component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																{0 ,0}, 
+																{component.texture->GetWidth(), component.texture->GetHeight()});
+			}
+			
+		}
+	}
+
+
+	bool EntitySerializer::Serialize(Entity& entity, const std::string& entityName)
+	{
+		Utils::DataFile scriptableEntitiesSaver;
+		std::string name;
+
+		if (entityName.rfind(".lua") == std::string::npos)
+			return false;
+
+		if (entityName.find_last_of('.') != std::string::npos)
+			name = entityName.substr(0, entityName.find_last_of('.'));
+		else
+			name = entityName;
+
+		int32_t numEntity = 0;
+		auto& entityToBeSaved = scriptableEntitiesSaver[name];
+
+		EntitySerializer::SerializeAllComponents(entity, entityToBeSaved);
+
+		std::filesystem::path scriptableEntitiesPath = "assets/scripts/" + entityName;		
+		return Utils::DataFile::Write(scriptableEntitiesSaver, scriptableEntitiesPath);
+	}
+
+
+	Entity EntitySerializer::Deserialize(Scene* scene, std::string& entityName)
+	{
+		Utils::DataFile scriptableEntitiesLoader;
+		std::string name;
+
+		std::filesystem::path scriptsPath = std::filesystem::current_path() / "assets/scripts" / entityName;
+
+		if (!std::filesystem::exists(scriptsPath))
+			entityName = "EntityDefault.lua";
+
+		if (entityName.find_last_of('.') != std::string::npos)
+			name = entityName.substr(0, entityName.find_last_of('.'));
+		else
+			name = entityName;
+
+		std::filesystem::path scriptableEntitiesPath = "assets/scripts/" + entityName;
+		if (Utils::DataFile::Read(scriptableEntitiesLoader, scriptableEntitiesPath)) 
+		{
+			if (scriptableEntitiesLoader.HasProperty(name)) 
+			{
+				auto& loader = scriptableEntitiesLoader[name];
+				Entity newEntity = scene->CreateEntity(name);
+
+				EntitySerializer::DeserializeAllComponents(newEntity, loader);
+
+				if (newEntity.HasComponent<Rigidbody2D>() &&
+				   (EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR
+					|| EngineApp::Get().GetGameState() == EngineApp::GameState::PLAY))
+				{
+					Physics2D::InitEntity(newEntity);
+				}
+
+				if (newEntity.HasComponent<NativeScriptComponent>())
+					NativeScriptFn::InitEntity(scene, newEntity);
+
+				return newEntity;
+			}
+		}
+		
+		LOG_ERROR(("ScriptableEntity does not exists with path: {0}", std::filesystem::current_path().string() + "\\assets\\scripts\\" + entityName));
+		return {};
+	}
+
+
+	void EntitySerializer::SerializeAllComponents(Entity& entity, Utils::DataFile& serializer)
+	{
+		SceneSerializer::SerializeTransformComponent(entity, serializer);
+		SceneSerializer::SerializeCameraComponent(entity, serializer);
+		SceneSerializer::SerializeRigidbody2DComponent(entity, serializer);
+		SceneSerializer::SerializeBoxCollider2DComponent(entity, serializer);
+		SceneSerializer::SerializeCircleCollider2DComponent(entity, serializer);
+		SceneSerializer::SerializeRender2DComponent(entity, serializer);
+		SceneSerializer::SerializeNativeScriptComponent(entity, serializer);
+		SceneSerializer::SerializeAudioComponent(entity, serializer);
+		SceneSerializer::SerializeTextComponent(entity, serializer);
+		SceneSerializer::SerializeParticleEmitterComponent(entity, serializer);
+	}
+
+	void EntitySerializer::DeserializeAllComponents(Entity& entity, Utils::DataFile& loader)
+	{
+		SceneSerializer::DeserializeTransformComponent(entity, loader);
+		SceneSerializer::DeserializeCameraComponent(entity, loader);
+		SceneSerializer::DeserializeBoxCollider2DComponent(entity, loader);
+		SceneSerializer::DeserializeCircleCollider2DComponent(entity, loader);
+		SceneSerializer::DeserializeRigidbody2DComponent(entity, loader);
+		SceneSerializer::DeserializeRender2DComponent(entity, loader);
+		SceneSerializer::DeserializeNativeScriptComponent(entity, loader);
+		SceneSerializer::DeserializeAudioComponent(entity, loader);
+		SceneSerializer::DeserializeTextComponent(entity, loader);
+		SceneSerializer::DeserializeParticleEmitterComponent(entity, loader);
+	}
 }

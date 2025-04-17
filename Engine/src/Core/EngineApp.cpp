@@ -91,6 +91,11 @@ namespace Cober {
 
     void EngineApp::Run(Unique<Timestep>& ts)
     {
+        //Process Events
+        Input::TransitionPressedKeys();
+		Input::TransitionPressedButtons();
+        m_Window->OnUpdate();
+
         if(!m_Minimized) 
         {
             for (Layer* layer : m_LayerStack)
@@ -106,8 +111,6 @@ namespace Cober {
 
             m_GuiLayer->End();
         }
-
-        m_Window->OnUpdate();
     }
 
 
@@ -155,7 +158,13 @@ namespace Cober {
 		}
 
 		m_Minimized = false;
-		RenderGlobals::SetViewport(event.GetWidth(), event.GetHeight());
+
+        // In Play mode the viewport is manage by the camera
+        // In the rest, the viewport is managed by the Editor Viewport
+        if (EngineApp::Get().GetGameState() != EngineApp::GameState::PLAY)
+        {
+		    RenderGlobals::SetViewport(event.GetWidth(), event.GetHeight());
+        }
 
 		return false;
 	}

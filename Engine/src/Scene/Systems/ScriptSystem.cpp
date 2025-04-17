@@ -24,7 +24,6 @@ namespace Cober {
 
 		lua.open_libraries(sol::lib::base, sol::lib::math);
 		LOG_INFO("Script System Started!!");
-
     }
 
 
@@ -56,6 +55,6 @@ namespace Cober {
 
 	void ScriptSystem::FreeScripts(Scene* scene)
 	{
-		NativeScriptFn::DeleteScripts(scene);
+		// NativeScriptFn::DeleteScripts(scene);
 	}
 }

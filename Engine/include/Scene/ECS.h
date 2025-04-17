@@ -65,7 +65,8 @@ namespace Cober {
 
 		UUID GetUUID() { return GetComponent<IDComponent>().ID; }
 		Scene* GetScene() { return m_Scene; }
-		const std::string& GetName() { return GetComponent<TagComponent>().tag; }
+		std::string GetName() { return GetComponent<TagComponent>().tag; }
+		inline void* GetBody() { return HasComponent<Rigidbody2D>() == true ? GetComponent<Rigidbody2D>().runtimeBody : nullptr; }
 		const entt::entity GetHandle() { return m_EntityHandle; }
 
 		bool operator==(const Entity& other) const
@@ -86,7 +87,6 @@ namespace Cober {
 	public:
 		System() = default;
 		~System() = default;
-
 	};
 }
 

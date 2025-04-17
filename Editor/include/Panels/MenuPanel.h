@@ -26,22 +26,22 @@ namespace Cober {
 		const char* BuildValues[3]	= { "Windows", "Linux", "Web" };	// Add paths to makefiles instead platform names
 
 		const char* CurrentBuildOption = "Empty";
-		const char* ScreenValues[6] = {
-			{  "640 x 480"  },
-			{  "800 x 400"  },
-			{ "1280 x 720"  },
-			{ "1366 x 768"  },
-			{ "1920 x 1080" },
-			{ "2560 x 1440" }
-		};
-		glm::vec2 VPSize[6] = { 
-            {1, 30}, 
-            {800, 400}, 
-            {1280, 720}, 
-            {1366, 768}, 
-            {1920, 1080}, 
-            {2560, 1440} 
-        };
+		// const char* ScreenValues[6] = {
+		// 	{  "640 x 480"  },
+		// 	{  "800 x 400"  },
+		// 	{ "1280 x 720"  },
+		// 	{ "1366 x 768"  },
+		// 	{ "1920 x 1080" },
+		// 	{ "2560 x 1440" }
+		// };
+		// glm::vec2 VPSize[6] = { 
+        //     {1, 30}, 
+        //     {800, 400}, 
+        //     {1280, 720}, 
+        //     {1366, 768}, 
+        //     {1920, 1080}, 
+        //     {2560, 1440} 
+        // };
 	};
 
 	
@@ -60,17 +60,24 @@ namespace Cober {
 	private:
 		void FileMenu(Ref<EditorCamera>& editorCamera);
 		void OptionsMenu(Ref<EditorCamera>& editorCamera);
-		void OpenFileDialog();
-		void Resize(Ref<EditorCamera>& camera, int width, int height, bool ortho);
+		void ManageSceneReloadingIfExists();
 
 	private:
-		ImGui::FileBrowser* m_FileBrowser;
 		std::string m_FilePath;
 		std::filesystem::path m_SaveFile;
 		std::filesystem::path m_LoadFile;
 
-		MenuOptions m_MenuFileOption;
+		std::filesystem::path m_BuildFileCommand;
+		std::filesystem::path m_CompileFileCommand;
+		std::filesystem::path m_GamePath;
+		std::filesystem::path m_ScenesPath;
+
+
 		Settings m_Settings;
+		std::string m_SceneToReload;
+		std::string m_NewSceneName;
+		bool m_Reload;
+		bool m_ShowDemoWindow;
         
 	private:
 		static MenuPanel* s_Instance;

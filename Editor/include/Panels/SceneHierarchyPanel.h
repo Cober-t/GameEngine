@@ -14,11 +14,15 @@ namespace Cober {
 	namespace ComponentNames {
 
 		constexpr std::string_view Transform = "Transform";
+		constexpr std::string_view Camera = "Camera";
 		constexpr std::string_view Rigidbody2D = "Rigidbody2D";
 		constexpr std::string_view Box2DCollider = "Box 2D Collider";
 		constexpr std::string_view Circle2DCollider = "Circle 2D Collider";
 		constexpr std::string_view Render2DShape = "Render 2D Shape";
 		constexpr std::string_view NativeScript = "Native Script Component";
+		constexpr std::string_view Audio = "Audio Component";
+		constexpr std::string_view Text = "Text Component";
+		constexpr std::string_view Particle = "Particle Component";
 	}
 
 	class SceneHierarchyPanel
@@ -46,7 +50,7 @@ namespace Cober {
 
 	private:
 		void DrawEntityNode(Entity entity);
-	void DrawComponents(Entity& entity);
+		void DrawComponents(Entity& entity);
 
 	private:
 		Ref<Scene> m_SceneContext;

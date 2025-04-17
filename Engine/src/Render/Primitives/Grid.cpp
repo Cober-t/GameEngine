@@ -102,13 +102,6 @@ namespace Cober {
 
                 data.VertexBufferPtr++;
             }
-
-            uint32_t dataSize = (uint32_t)((uint8_t*)data.VertexBufferPtr - (uint8_t*)data.VertexBufferBase);
-            data.VertexBuffer->SetData(data.VertexBufferBase, dataSize);
-            
-            data.Shader->Bind();
-
-            RenderGlobals::DrawIndexed(data.VertexArray, (uint32_t)6);
         }
     }
 }

@@ -1,6 +1,7 @@
 #ifndef CONTENT_BROWSER_PANEL_H
 #define CONTENT_BROWSER_PANEL_H
 
+#include <Engine.h>
 #include "Theme/EditorResources.h"
 #include <filesystem>
 
@@ -21,7 +22,7 @@ namespace Cober {
 		std::filesystem::path m_AssetsPath;
 		std::filesystem::path m_CurrentDirectory;
 		std::map<std::string, Ref<Texture>> m_AssetIconMap;
-		std::map<std::string, Ref<Texture>> m_TextureFolderContentHolder;
+		std::map<std::filesystem::path, Ref<Texture>> m_TextureFolderContentHolder;
 	};
 }
 

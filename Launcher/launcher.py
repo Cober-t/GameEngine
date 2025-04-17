@@ -26,7 +26,7 @@ SHADERS_FOLDER = "shaders"
 ALL_ASSETS_FOLDERS = [AUDIO_FOLDER, FILES_FOLDER, FONTS_FOLDER, IMAGES_FOLDER,
                       MODELS_FOLDER, SCENES_FOLDER, SCRIPTS_FOLDER, SHADERS_FOLDER]
 
-ENGINE_ASSETS_FOLDER = "C:\\Users\\Jorge\\Documents\\GameEngine\\assets"
+ENGINE_ASSETS_FOLDER = ".\\assets"
 DEFAULT_BUILD_ICON = ".\\thumbnails\\default.jpg"
 THUMBNAIL_PATH = ".\\thumbnails"
 THUMBNAIL_NAME = "thumbnail"
@@ -184,9 +184,9 @@ class ProjectAPI():
         settings = []
         with open(os.path.join(path, PROJECT_SETTINGS)) as file:
             settings = json.load(file)
-        
+        # Change to "./Editor.exe" when building for Projects
         subprocess.Popen(f"..\\bin\\Debug-windows-x86_64\\Editor\\Editor.exe \
-            {settings['name']} {settings['assetsPath']} 1920 1080")
+            {settings['name']} {settings['assetsPath']} 1280 720")
         return
 
 

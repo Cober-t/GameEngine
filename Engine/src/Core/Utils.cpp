@@ -1,4 +1,5 @@
 #include <pch.h>
+
 #include "Core/Utils.h"
 
 #define GLM_ENABLE_EXPERIMENTAL
@@ -7,17 +8,21 @@
 
 namespace Cober::Random {
 
+	static std::mt19937 s_RandomEngine;
+	static std::uniform_int_distribution<std::mt19937::result_type> s_Distribution;
+
 	double Value(int min, int max) 
 	{
-		return min + std::rand() % (max - min + 1);
+		return min + s_Distribution(s_RandomEngine) % (max - min + 1);
 	}
 	void Seed(double seed) 
 	{
-		return std::srand(seed);
+		return s_RandomEngine.seed(seed);
 	}
 }
 
 namespace Cober::Utils {
+
 
 	bool DecomposeTransform(const glm::mat4& transform, glm::vec3& translation, glm::vec3& rotation, glm::vec3& scale)
 	{
@@ -198,7 +203,7 @@ namespace Cober::Utils {
 	}
 
 
-	bool DataFile::Write(const DataFile& dataFile, const std::string& fileName, const std::string& indent, const char listStep) 
+	bool DataFile::Write(const DataFile& dataFile, const std::filesystem::path& path, const std::string& indent, const char listStep) 
     {
 		// Cache separator string for convenience
 		std::string separator = std::string(1, listStep) + " ";
@@ -207,8 +212,8 @@ namespace Cober::Utils {
 		size_t indentCount = 0;
 
 		// Fully specified lambda, because this lambda is recursive!
-		std::function<void(const DataFile&, std::ofstream&)> write = [&](const DataFile& dataFile, std::ofstream& file) {
-
+		std::function<void(const DataFile&, std::ofstream&)> write = [&](const DataFile& dataFile, std::ofstream& file) 
+		{
 			// Lambda creates string given indentation preferences
 			auto indentation = [&](const std::string& string, const size_t count)
 			{
@@ -219,11 +224,11 @@ namespace Cober::Utils {
 			};
 
 			// Iterate through each property of this node
-			for (auto const& property : dataFile.m_VecObjects) {
-
+			for (auto const& property : dataFile.m_VecObjects) 
+			{
 				// Does property contain any sub objects?
-				if (property.second.m_VecObjects.empty()) {
-
+				if (property.second.m_VecObjects.empty()) 
+				{
 					file << indentation(indent, indentCount) << property.first << (property.second.isComment ? "" : " = ");
 
 					size_t items = property.second.GetValueCount();
@@ -245,7 +250,8 @@ namespace Cober::Utils {
 					// Property written, move to next line
 					file << "\n";
 				}
-				else {
+				else 
+				{
 					// Yes, property has properties of its own, so it's a node
 					// Force a new line and write out the node's name
 					file << "\n" << indentation(indent, indentCount) << property.first << "\n";
@@ -266,7 +272,7 @@ namespace Cober::Utils {
 
 		// Start here!, open the file for writing
 		// Receive a path on the future
-		std::filesystem::path filePath = std::filesystem::current_path() / "assets/scenes" / fileName;
+		std::filesystem::path filePath = std::filesystem::current_path() / path;
 		std::ofstream file(filePath);
 
 		if (file.is_open())
@@ -274,18 +280,18 @@ namespace Cober::Utils {
 			write(dataFile, file);
 			return true;
 		}
-		LOG_CORE_ERROR("Serializacion could'nt success with name: " + fileName);
+		LOG_CORE_ERROR("Serializacion could'nt success with path: " + path.string());
 		return false;
 	}
 
 
-	bool DataFile::Read(DataFile& dataFile, std::string& fileName, const char listStep) 
+	bool DataFile::Read(DataFile& dataFile, std::filesystem::path& path, const char listStep) 
     {
-		std::ifstream file(std::filesystem::current_path() / "assets/scenes" / fileName);
+		std::ifstream file(std::filesystem::current_path() / path);
 
 		//Open the file!
-		if (file.is_open()) {
-
+		if (file.is_open())
+		{
 			// These variables are outside of the read loop, as we will
 			// need to refer to previous iteration values in certain conditions
 			std::string propName = "";
@@ -294,14 +300,16 @@ namespace Cober::Utils {
 			std::stack<std::reference_wrapper<DataFile>> stackPath;
 			stackPath.push(dataFile);
 
-			while (!file.eof()) {
+			while (!file.eof()) 
+			{
 				// Read line
 				std::string line;
 				std::getline(file, line);
 
 				// This little lambda removes whitespace from
 				// beginning and end of supplied string
-				auto trim = [](std::string& space) {
+				auto trim = [](std::string& space) 
+				{
 					space.erase(0, space.find_first_not_of(" \t\n\r\f\v"));
 					space.erase(space.find_last_not_of(" \t\n\r\f\v") + 1);
 				};
@@ -319,7 +327,8 @@ namespace Cober::Utils {
 						comment.isComment = true;
 						stackPath.top().get().m_VecObjects.push_back({ line, comment });
 					}
-					else {
+					else 
+					{
 						// ...it is content, so parse. Firstly, find if the line
 						// contains an assignment. If it does then it's a property
 						size_t x = line.find_first_of('=');
@@ -354,9 +363,11 @@ namespace Cober::Utils {
 									// then just append characters until we aexit quote state.
 									if (inQuotes)
 										token.append(1, c);
-									else {
+									else 
+									{
 										// Is the character our separator? If it is
-										if (c == listStep) {
+										if (c == listStep) 
+										{
 											// Clean up the token
 											trim(token);
 											// Add it to the vector of calues for this property
@@ -373,7 +384,8 @@ namespace Cober::Utils {
 
 							// Any rsidual characters at this point just make up the final token,
 							// so clean it up and add it to the vector of values
-							if (!token.empty()) {
+							if (!token.empty())
+							{
 								trim(token);
 								stackPath.top().get()[propName].SetString(token, tokenCount);
 							}
@@ -381,7 +393,8 @@ namespace Cober::Utils {
 						else // No '='
 						{
 							// ...but if it doesnt, then it's something structural
-							if (line[0] == '{') {
+							if (line[0] == '{') 
+							{
 								// Open brace, so push this node to stack, subsequent properties
 								// wil belong to the new node
 								stackPath.push(stackPath.top().get()[propName]);
@@ -409,7 +422,7 @@ namespace Cober::Utils {
 			return true;
 		}
 
-		LOG_CORE_ERROR("File not found with name: " + fileName);
+		LOG_CORE_ERROR("File not found with path: " + path.string());
 		return false;
 	}
 

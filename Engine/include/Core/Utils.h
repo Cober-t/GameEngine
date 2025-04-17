@@ -2,12 +2,15 @@
 #define UTILS_H
 
 #include <map>
+#include <random>
+
 #include <glm/glm.hpp>
+
 #include "Core/EngineApp.h"
 
 namespace Cober::Random {
-
-	CB_API double Value(int min = 1, int max = 10);
+	
+	CB_API double Value(int min = 0, int max = 9);
 	CB_API void Seed(double seed = glfwGetTime());
 }
 
@@ -52,9 +55,9 @@ namespace Cober::Utils {
 		}
 
 		// Serializer
-		static bool Write(const DataFile& dataFile, const std::string& fileName, const std::string& indent = "\t", const char listStep = ',');
+		static bool Write(const DataFile& dataFile, const std::filesystem::path& path, const std::string& indent = "\t", const char listStep = ',');
 		// Deserializer
-		static bool Read(DataFile& dataFile, std::string& fileName, const char listStep = ',');
+		static bool Read(DataFile& dataFile, std::filesystem::path& path, const char listStep = ',');
 
 	private:
 		// The "list of strings" that make up a property value

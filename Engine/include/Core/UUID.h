@@ -3,7 +3,7 @@
 
 namespace Cober {
 
-	class UUID
+	class CB_API UUID
 	{
 	public:
 		UUID();

@@ -27,9 +27,9 @@ Cober::EngineApp* Cober::CreateApplication(Cober::AppCommandLineArgs args)
 {
 	AppSpecification spec;
 	spec.Name = "PONG";
-	spec.WorkingDirectory = "C:/Users/Jorge/Documents/GameEngine/Game";
-	spec.Width = 1280;
-	spec.Height = 720;
+	spec.WorkingDirectory = "C:/Users/jorge/OneDrive/Escritorio/GameEngine/Game";
+	spec.Width = 640;
+	spec.Height = 360;
 	spec.CommandLineArgs = args;
 
 	LOG_INFO("Game Constructor!");

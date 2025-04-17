@@ -18,24 +18,25 @@ namespace Cober {
 		
 		// void RenderSkybox();
 		void CreateFramebuffer(uint32_t width = 1280, uint32_t height = 720);
+		Ref<Framebuffer>& GetFramebuffer() { return m_Fbo; };
 
 		void BindFramebuffer();
 		void UnbindFramebuffer();
 		void FBOClearAttachments(uint32_t attachmentIndex, int value) { m_Fbo->ClearAttachment(attachmentIndex, value); }
 
 		void OnEvent(Event& event);	// Abstract to EVENT API
-		void ResizeViewport(Ref<EditorCamera> editorCamera, bool& game2D);
-		void ResizeFramebufferSpecification(Ref<EditorCamera> editorCamera, uint32_t width, uint32_t height);
+		void ResizeViewport(Ref<Camera> editorCamera);
+		void ResizeFramebufferSpecification(Ref<Camera> editorCamera, uint32_t width, uint32_t height);
 
-		void OnGuiRender(Ref<EditorCamera> editorCamera);
+		void OnGuiRender(Ref<EditorCamera>& editorCamera, Ref<Camera>& camera);
 
 		void SetCursorEntity();
+		void MustResize(bool resize = true) { m_MustResize = resize; }; 
 		void PlayButtonBar(EngineApp::GameState gameState);
 		inline bool AllowViewportCameraEvents() { return m_AllowViewportCameraEvents; }
 
 	private:
 		Ref<Framebuffer> m_Fbo;
-		Ref<EditorCamera> m_CameraAux;
 		std::map<std::string, Ref<Texture>> m_AssetIconMap;
 		static ViewportPanel* m_Instance;
 
@@ -44,11 +45,12 @@ namespace Cober {
 		ImVec2 m_MinViewportBound, m_MaxViewportBound;
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
 		bool m_StartedCameraClickInViewport = false, m_AllowViewportCameraEvents = false;
+		bool m_MustResize = false;
 
 		bool m_MouseButtonHeld = false;
 		glm::vec2 m_Mouse{0.0f, 0.0f}, m_LastMousePos{ 0.0f, 0.0f };
 
-		std::string m_FilePath;
+		std::filesystem::path m_FilePath;
 		int m_GizmoType = -1;
 	};
 }

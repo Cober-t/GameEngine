@@ -95,7 +95,7 @@ public:
 	void OnEvent(Event& event) override;
 private:
 	Ref<Scene> m_ActiveScene;
-	Ref<GameCamera> m_Camera;
+	Ref<Camera> m_Camera;
 }};
 
 #endif
@@ -109,14 +109,13 @@ private:
 
 {self.projectName}::{self.projectName}() : Layer("{self.projectName} application") 
 {{
-	m_Camera = CreateRef<GameCamera>(45.0f, EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight(), 0.01f, 1000.0f);
+	m_Camera = CreateRef<GameCamera>(45.0f, EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight(), 0.01f, 1000.0f, GlobalCamera::perspective);
 }}
 
 
 void {self.projectName}::OnAttach() 
 {{
 	m_ActiveScene = Scene::Load("SceneDefault.lua");
-	m_ActiveScene->OnSimulationStart();
 }}
 
 
@@ -141,5 +140,6 @@ void {self.projectName}::OnUpdate(Unique<Timestep>& ts)
 void {self.projectName}::OnEvent(Event& event) 
 {{
 	m_Camera->OnEvent(event);
+    NativeScriptFn::OnEvent(m_ActiveScene.get(), event);
 }}
 """

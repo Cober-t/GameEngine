@@ -11,15 +11,14 @@ namespace Cober {
 
 	public:
 		GameCamera() = default;
-		GameCamera(float fov, float width, float height, float nearClip, float farClip, bool ortho = false);
+		GameCamera(float fov, float width, float height, float nearClip, float farClip, bool persp = true);
 		virtual ~GameCamera();
 
 		void OnUpdate(Unique<Timestep>& ts) override;
 		void OnEvent(Event& event) override;
 
-		void SetViewportSize(float width, float height);
-
-		CameraSettings GetGameCameraSettings() { return m_GameCamera; }
+		void SetViewportSize(float width, float height) override;
+		virtual void SetPerspective(bool persp = true) override;
 
 		glm::quat GetOrientation() const;
 		glm::vec3 GetUpDirection() const;
@@ -35,8 +34,7 @@ namespace Cober {
 
 	private:
 		glm::mat4 m_ViewMatrix;
-		CameraSettings m_GameCamera;
-		
+
 		float m_ViewportWidth = 1280, m_ViewportHeight = 720;
 	};
 }

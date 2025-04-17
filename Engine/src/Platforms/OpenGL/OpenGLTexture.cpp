@@ -31,39 +31,62 @@ namespace Cober {
 			return 0;
 		}
 
+		static GLenum ImageFilterToGL(ImageFilter format)
+		{
+			switch (format)
+			{
+			case ImageFilter::NEAREST:  return GL_NEAREST;
+			case ImageFilter::LINEAR: return GL_LINEAR;
+			}
+
+			LOG_CORE_ASSERT(false, "Unknown internal texture format");
+			return 0;
+		}
+
+		static GLenum ImageRepeatPatternToGL(RepeatPattern format)
+		{
+			switch (format)
+			{
+			case RepeatPattern::REPEAT:  return GL_REPEAT;
+			case RepeatPattern::CLAM_TO_EDGE: return GL_CLAMP_TO_EDGE;
+			case RepeatPattern::MIRRORED_REPEAT: return GL_MIRRORED_REPEAT;
+			}
+
+			LOG_CORE_ASSERT(false, "Unknown internal texture format");
+			return 0;
+		}
+
 	}
 
 
-	OpenGLTexture::OpenGLTexture(uint32_t width, uint32_t height)
-		: m_Width(width), m_Height(height)
+	OpenGLTexture::OpenGLTexture(const TextureSpecification& specification)
+		: m_Specification(specification), m_Width(m_Specification.Width), m_Height(m_Specification.Height)
 	{
-		m_InternalFormat = Utils::ImageFormatToGLInternalFormat(m_Format);
-		m_DataFormat = Utils::ImageFormatToGLDataFormat(m_Format);
+		m_InternalFormat = Utils::ImageFormatToGLInternalFormat(m_Specification.Format);
+		m_DataFormat = Utils::ImageFormatToGLDataFormat(m_Specification.Format);
 
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
-		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
+		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Specification.Width, m_Specification.Height);
+		
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, Utils::ImageFilterToGL(m_Specification.Filter));
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, Utils::ImageFilterToGL(m_Specification.Filter));
 
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, Utils::ImageRepeatPatternToGL(m_Specification.Pattern));
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, Utils::ImageRepeatPatternToGL(m_Specification.Pattern));
 	}
 
 
-	OpenGLTexture::OpenGLTexture(const std::string& path)
+	OpenGLTexture::OpenGLTexture(const std::filesystem::path& path)
 		: m_Path(path)
 	{
+		stbi_uc* data = nullptr;
 		int width, height, channels;
-		
-		stbi_set_flip_vertically_on_load(1);
 
-		stbi_uc* data = stbi_load(path.c_str(), &width, &height, &channels, 0);
-		
+		stbi_set_flip_vertically_on_load(1);
+		data = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
+
 		if (data)
 		{
-			m_IsLoaded = true;
-
 			m_Width = width;
 			m_Height = height;
 
@@ -82,21 +105,19 @@ namespace Cober {
 			m_InternalFormat = internalFormat;
 			m_DataFormat = dataFormat;
 
-			LOG_CORE_ASSERT(internalFormat & dataFormat, "Format not supported!");
-
+			if (channels == 3 && m_Width%channels != 0)
+				glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 			glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 			glTextureStorage2D(m_RendererID, 1, internalFormat, m_Width, m_Height);
 
-			glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 			glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, dataFormat, GL_UNSIGNED_BYTE, data);
-
-			stbi_image_free(data);
 		}
 	}
 
@@ -109,27 +130,19 @@ namespace Cober {
 
 	std::string OpenGLTexture::GetName() const  
 	{
-		auto lastSlash = m_Path.find_last_of("/\\");
-		
-        LOG_CORE_ASSERT(lastSlash != std::string::npos, "Texture Path is invalid or does not exist!");
-		
-		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
-		auto lastDot = m_Path.rfind('.');
-		
-        LOG_CORE_ASSERT(lastDot != std::string::npos, "Texture Name is invalid or does not exist!");
-		
-		auto count = lastDot == std::string::npos ? m_Path.size() - lastSlash : lastDot - lastSlash;
-		std::string name = m_Path.substr(lastSlash, count);
-		return name;
+		if (std::filesystem::exists(m_Path))
+			return m_Path.filename().string();
+		else;
+			return "";
 	}
 
 
 	std::string OpenGLTexture::GetFormat() const 
 	{
-		auto lastDot = m_Path.rfind('.');
-		// auto count = lastDot != std::string::npos ? m_Path.size() - lastDot : m_Path.size();
-		std::string format = lastDot != std::string::npos ? m_Path.substr(lastDot) : "null";
-		return format;
+		if (std::filesystem::exists(m_Path))
+			return m_Path.extension().string();
+		else;
+			return "null";
 	}
 
 
@@ -145,5 +158,11 @@ namespace Cober {
 	void OpenGLTexture::Bind(uint32_t slot) const
 	{
 		glBindTextureUnit(slot, m_RendererID);
+	}
+	
+
+	void OpenGLTexture::BindSingleTexture(uint32_t data) const
+	{
+		glBindTexture(GL_TEXTURE_2D, data);
 	}
 }

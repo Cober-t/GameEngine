@@ -42,7 +42,6 @@ project "Editor"
         "%{IncludeDir.ImGuizmo}",
         "%{IncludeDir.Box2D}",
         "%{IncludeDir.GLFW}",
-        "%{IncludeDir.raudio}",
         "%{IncludeDir.stb_image}",
         "%{IncludeDir.stb_truetype}",
         "%{IncludeDir.lua}",
@@ -68,6 +67,13 @@ project "Editor"
         'SOLUTION_DIR=R"($(SolutionDir))"',
         'EDITOR_ICONS_DIR=R"($(SolutionDir)Editor\\icons\\)"',
     }
+
+    -- postbuildcommands
+	-- {
+	-- 	"del \"./**.vcxproj\"",
+	-- 	"del \"./**.vcxproj.filters\"",
+	-- 	"del \"./**.vcxproj.user\"",
+	-- }
 
     filter { "system:windows", "configurations:Debug" }
         buildoptions "/MDd"       

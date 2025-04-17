@@ -95,7 +95,7 @@ namespace Cober {
 
         glm::mat4 transform = glm::translate(glm::mat4(1.0f), centerPosition)
             * rot
-            * glm::scale(glm::mat4(1.0f), scale);
+            * glm::scale(glm::mat4(1.0f), scale * radius * 2.0f);
 
         Primitive::Circle::Draw(transform, 0.5f * convertedColor, 1.0f);
     }

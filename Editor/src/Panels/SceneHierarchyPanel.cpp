@@ -2,7 +2,7 @@
 
 #include "EditorLayer.h"
 #include "Panels/SceneHierarchyPanel.h"
-//#include "Cober/Scene/Components.h"
+#include "Render/Text/Font.h"
 //#include "Cober/Renderer/Renderer.h"
 //#include "Cober/Renderer/Lighting.h"
 
@@ -67,6 +67,12 @@ namespace Cober {
 		for (auto& entity : m_SceneContext->GetSceneEntities()) 
 		{
 			DrawEntityNode(entity);
+			if (ImGui::BeginDragDropSource())
+			{
+				uint64_t id = (uint64_t)entity.GetUUID();
+				ImGui::SetDragDropPayload("ENTITY_TYPE", &id, sizeof(uint64_t));
+				ImGui::EndDragDropSource();
+			}
 		}
 
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) 
@@ -88,9 +94,9 @@ namespace Cober {
 		ImGui::End();
 
 		ImGui::Begin("Properties");
-		if (m_SelectionContext != m_NullEntityContext)
+		if ((bool)m_SelectionContext && m_SelectionContext.HasComponent<TagComponent>() && m_SelectionContext != m_NullEntityContext)
 			DrawComponents(m_SelectionContext);
-
+			
 		ImGui::End();
 	}
 
@@ -100,7 +106,7 @@ namespace Cober {
 
 		auto& tag = entity.GetComponent<TagComponent>().tag;
 		ImGuiTreeNodeFlags flags = ((m_SelectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
-		flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
+		// flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
 		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
 
 		if (ImGui::IsItemClicked()) 
@@ -225,6 +231,7 @@ namespace Cober {
 				iconComponent = m_AssetIconMap["boxCollider2D"];
 			else if (name == ComponentNames::Render2DShape)
 				iconComponent = m_AssetIconMap["sprite"];
+			// TODO: Add icons for Audio, text, native scripting and particle components
 
 
 			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
@@ -250,7 +257,7 @@ namespace Cober {
 
 			if (open) 
 			{
-				uiFunction(component);
+				uiFunction(component, entity);
 				ImGui::TreePop();
 			}
 		}
@@ -270,6 +277,88 @@ namespace Cober {
 		}
 	}
 
+	
+	template <typename T>
+	static void DropTextureButton(T& component)
+    {
+		std::string nameTexture = component.texture == nullptr ? "##" : component.texture->GetName();
+		ImGui::Button(nameTexture.c_str(), ImVec2(100.0f, 0.0f));
+
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
+				const wchar_t* path = (const wchar_t*)payload->Data;
+				std::filesystem::path texturePath = std::filesystem::current_path() / "assets" / path;
+
+				std::string format = texturePath.extension().string();
+				if (format == ".png" || format == ".jpg" || format == ".jpeg")
+				{
+					component.texture = Texture::Create(texturePath);
+
+					if (component.isSubTexture)
+					{
+						component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																		component.subTextureIndex, 
+																		component.subTextureCellSize,
+																		component.subTextureSpriteSize);
+					}
+					else
+					{
+						component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																		{0 ,0}, 
+																		{component.texture->GetWidth(), component.texture->GetHeight()});
+					}
+				}
+			}
+			ImGui::EndDragDropTarget();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button(ICON_FA_TIMES))
+		{
+			component.isSubTexture = false;
+			component.subTexture = CreateRef<SubTexture>();
+			component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+															{0 ,0}, 
+															{component.texture->GetWidth(), component.texture->GetHeight()});
+
+			component.texture = Texture::Create(TextureSpecification());
+			uint32_t whiteTextureData = 0xffffffff;
+			component.texture->SetData(&whiteTextureData, sizeof(uint32_t));
+		}
+
+		if(component.texture)
+		{
+			if (ImGui::Checkbox("SubTexture", &component.isSubTexture))
+			{
+				if (component.isSubTexture)
+				{
+					component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																	component.subTextureIndex, 
+																	component.subTextureCellSize,
+																	component.subTextureSpriteSize);
+				}
+				else
+				{
+					component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																	{0 ,0}, 
+																	{component.texture->GetWidth(), component.texture->GetHeight()});
+				}
+			}
+			if (component.isSubTexture)
+			{
+				if (ImGui::DragFloat2("Index", glm::value_ptr(component.subTextureIndex), 0, 0) ||
+					ImGui::DragFloat2("Cell size", glm::value_ptr(component.subTextureCellSize), 16, 0) ||
+					ImGui::DragFloat2("Sprite size", glm::value_ptr(component.subTextureSpriteSize), 1, 1))
+				{
+					component.subTexture = SubTexture::UpdateCoords(component.texture, component.vertices,
+																	component.subTextureIndex, 
+																	component.subTextureCellSize,
+																	component.subTextureSpriteSize);
+				}
+			}
+		}
+	}
+
 
 	void SceneHierarchyPanel::DrawComponents(Entity& entity)
 	{
@@ -279,20 +368,28 @@ namespace Cober {
 		strcpy_s(buffer, sizeof(buffer), entity.GetComponent<TagComponent>().tag.c_str());
 
 		if (ImGui::InputText("##Name", buffer, sizeof(buffer)))
-			m_NewEntityTag = buffer;
-
-		ImGui::SameLine();
-
-		if (ImGui::Button("Rename")) 
-        {
-			if (m_NewEntityTag != "") 
-				entity.GetComponent<TagComponent>().tag = (std::string)m_NewEntityTag;
-		}
+			entity.GetComponent<TagComponent>().tag = (std::string)buffer;
 
 		if (ImGui::Button("Add Component")) 
         {
 			if (ImGui::IsMouseDown(ImGuiMouseButton_Right)) 
             {
+				if (!m_SelectionContext.HasComponent<CameraComponent>()) 
+                {
+					m_SelectionContext.AddComponent<CameraComponent>();
+				}
+				else if (!m_SelectionContext.HasComponent<Render2DComponent>()) 
+                {
+					m_SelectionContext.AddComponent<Render2DComponent>();
+				}
+				else if (!m_SelectionContext.HasComponent<TextComponent>())
+				{
+					m_SelectionContext.AddComponent<TextComponent>();
+				}
+				else if (!m_SelectionContext.HasComponent<ParticleEmitterComponent>())
+				{
+					m_SelectionContext.AddComponent<ParticleEmitterComponent>();
+				}
 				if (!m_SelectionContext.HasComponent<Rigidbody2D>()) 
                 {
 					m_SelectionContext.AddComponent<Rigidbody2D>();
@@ -313,9 +410,9 @@ namespace Cober {
                 // {
 				// 	m_SelectionContext.AddComponent<PolygonCollider2D>();
 				// }
-				else if (!m_SelectionContext.HasComponent<Render2DComponent>()) 
-                {
-					m_SelectionContext.AddComponent<Render2DComponent>();
+				else if (!m_SelectionContext.HasComponent<AudioComponent>())
+				{
+					m_SelectionContext.AddComponent<AudioComponent>();
 				}
 				else if (!m_SelectionContext.HasComponent<NativeScriptComponent>())
 				{
@@ -328,20 +425,24 @@ namespace Cober {
 
 		if (ImGui::BeginPopup("AddComponent")) 
 		{
-			AddIfHasComponent<Rigidbody2D>("Rigidbody 2D Component");
-			AddIfHasComponent<BoxCollider2D>("Box Collider 2D Component");
-			AddIfHasComponent<CircleCollider2D>("Circle Collider 2D Component");
+			AddIfHasComponent<CameraComponent>((std::string)ComponentNames::Camera);
+			AddIfHasComponent<Render2DComponent>((std::string)ComponentNames::Render2DShape);
+			AddIfHasComponent<TextComponent>((std::string)ComponentNames::Text);
+			AddIfHasComponent<ParticleEmitterComponent>((std::string)ComponentNames::Particle);
+			AddIfHasComponent<Rigidbody2D>((std::string)ComponentNames::Rigidbody2D);
+			AddIfHasComponent<BoxCollider2D>((std::string)ComponentNames::Box2DCollider);
+			AddIfHasComponent<CircleCollider2D>((std::string)ComponentNames::Circle2DCollider);
 			// AddIfHasComponent<EdgeCollider2D>("Edge Collider 2D Component");
 			// AddIfHasComponent<PolygonCollider2D>("Polygon Collider 2D Component");
-			AddIfHasComponent<Render2DComponent>("Render 2D Shape Component");
-			AddIfHasComponent<NativeScriptComponent>("Native Script Component");
+			AddIfHasComponent<AudioComponent>((std::string)ComponentNames::Audio);
+			AddIfHasComponent<NativeScriptComponent>((std::string)ComponentNames::NativeScript);
 			// ...
 			// ...
 
 			ImGui::EndPopup();
 		}
 
-		DrawComponent<TransformComponent>((std::string)ComponentNames::Transform, entity, [](auto& component)
+		DrawComponent<TransformComponent>((std::string)ComponentNames::Transform, entity, [](auto& component, auto& entity)
 			{
 				DrawVec3Control("Position", component.position);
 				glm::vec3 rotation = glm::degrees(component.rotation);
@@ -349,19 +450,83 @@ namespace Cober {
 				component.rotation = glm::radians(rotation);
 				DrawVec3Control("Scale", component.scale, 1.0f);
 			});
-	
 
-		DrawComponent<Rigidbody2D>((std::string)ComponentNames::Rigidbody2D, entity, [](auto& component)
+		DrawComponent<CameraComponent>((std::string)ComponentNames::Camera, entity, [](auto& component, auto& entity)
+			{
+				// DrawVec3Control("Focal Point", component.focalPoint);
+				if (ImGui::DragFloat("Distance", &component.distance, 0.1, 0.0f, 100.0f))
+				{
+					component.camera->GetSettings().distance = component.distance;
+					component.camera->SetViewportSize(component.width, component.height);
+					ViewportPanel::Get().MustResize();
+				}
+
+				if (ImGui::DragInt("Width", &component.width, 1, 1))
+				{
+					component.camera->GetSettings().width = component.width;
+					component.camera->SetViewportSize(component.width, component.height);
+				}
+
+				if (ImGui::DragInt("Height", &component.height, 1, 1))
+				{
+					component.camera->GetSettings().height = component.height;
+					component.camera->SetViewportSize(component.width, component.height);
+				}
+
+				if (ImGui::DragFloat("Near Clip", &component.nearClip, 10.0f, 0.0f, 1000.0f))
+				{
+					component.camera->GetSettings().nearClip = component.nearClip;
+					component.camera->SetViewportSize(component.width, component.height);
+					ViewportPanel::Get().MustResize();
+				}
+
+				if (ImGui::DragFloat("Far Clip", &component.farClip, 10.0f, 0.0f, 1000.0f))
+				{
+					component.camera->GetSettings().nearClip = component.nearClip;
+					component.camera->SetViewportSize(component.width, component.height);
+					ViewportPanel::Get().MustResize();
+				}
+
+				if (ImGui::DragFloat("Fov", &component.fov, 0.01f, 0.0f, 90.0f))
+				{
+					component.camera->GetSettings().fov = component.fov;
+					component.camera->SetViewportSize(component.width, component.height);
+					ViewportPanel::Get().MustResize();
+				}
+
+				if (ImGui::Checkbox("Perspective", &component.perspective))
+				{
+					component.camera->GetSettings().perspectiveProjection = component.perspective;
+				    ViewportPanel::Get().MustResize();
+				}
+					
+				if (ImGui::Checkbox("Main Camera", &component.mainCamera))
+				{
+					component.camera->SetMainCamera(component.mainCamera);
+
+					if (component.mainCamera)
+						Editor::SetMainCamera(component.camera);
+					else
+						Editor::SetMainCamera(Editor::GetEditorCamera());
+						
+					ViewportPanel::Get().MustResize();
+				}
+				ImGui::Checkbox("Debug", &component.debug);
+			});
+
+		DrawComponent<Rigidbody2D>((std::string)ComponentNames::Rigidbody2D, entity, [](auto& component, auto& entity)
 			{
 				const char* bodyTypeStrings[] = { "Static", "Kinematic", "Dynamic" };
 				const char* currentBodyTypeString = bodyTypeStrings[(int)component.type];
-				if (ImGui::BeginCombo("Body Type", currentBodyTypeString)) {
-
-					for (int i = 0; i < 3; i++) {
+				if (ImGui::BeginCombo("Body Type", currentBodyTypeString)) 
+				{
+					for (int i = 0; i < 3; i++) 
+					{
 						bool isSelected = currentBodyTypeString == bodyTypeStrings[i];
-						if (ImGui::Selectable(bodyTypeStrings[i], isSelected)) {
+						if (ImGui::Selectable(bodyTypeStrings[i], isSelected)) 
+						{
 							currentBodyTypeString = bodyTypeStrings[i];
-							component.type = (BodyType)i;
+							Physics2D::SetBodyType(entity, (BodyType)i);
 						}
 						if (isSelected)
 							ImGui::SetItemDefaultFocus();
@@ -372,27 +537,29 @@ namespace Cober {
 				ImGui::Checkbox("Fixed Rotation", &component.fixedRotation);
 			});
 
-		DrawComponent<BoxCollider2D>((std::string)ComponentNames::Box2DCollider, entity, [](auto& component)
+		DrawComponent<BoxCollider2D>((std::string)ComponentNames::Box2DCollider, entity, [](auto& component, auto& entity)
 			{
 				ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
 				ImGui::DragFloat2("Size", glm::value_ptr(component.size), 1.0f, 1.0f);
 				ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
 				ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
 				ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
+				ImGui::Checkbox("Is Sensor", &component.isSensor);
 			});
 
 
-		DrawComponent<CircleCollider2D>((std::string)ComponentNames::Circle2DCollider, entity, [](auto& component)
+		DrawComponent<CircleCollider2D>((std::string)ComponentNames::Circle2DCollider, entity, [](auto& component, auto& entity)
 			{
 				ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
 				ImGui::DragFloat("Radius", &component.radius, 0.5f, 0.0f, 100.0f);
 				ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
 				ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
 				ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
+				ImGui::Checkbox("Is Sensor", &component.isSensor);
 			});
 
 
-		DrawComponent<EdgeCollider2D>("Edge Collider 2D", entity, [](auto& component)
+		DrawComponent<EdgeCollider2D>("Edge Collider 2D", entity, [](auto& component, auto& entity)
 			{
 				ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
 				ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
@@ -400,7 +567,7 @@ namespace Cober {
 			});
 
 
-		DrawComponent<PolygonCollider2D>("Polygon Collider 2D", entity, [](auto& component)
+		DrawComponent<PolygonCollider2D>("Polygon Collider 2D", entity, [](auto& component, auto& entity)
 			{
 				ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
 				ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
@@ -408,7 +575,7 @@ namespace Cober {
 			});
 		
 
-		DrawComponent<Render2DComponent>((std::string)ComponentNames::Render2DShape, entity, [](auto& component)
+		DrawComponent<Render2DComponent>((std::string)ComponentNames::Render2DShape, entity, [](auto& component, auto& entity)
 			{
 				ImGui::ColorEdit4("Color", glm::value_ptr(component.color));
 
@@ -450,28 +617,11 @@ namespace Cober {
 
 				if ((int)component.shapeType == (int)Shape2D::Sprite)
 				{
-					std::string nameTexture = component.texture == nullptr ? "Texture" : component.texture->GetName();
-					ImGui::Button(nameTexture.c_str(), ImVec2(100.0f, 0.0f));
-
-					if (ImGui::BeginDragDropTarget())
-					{
-						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
-							const wchar_t* path = (const wchar_t*)payload->Data;
-							std::filesystem::path texturePath = std::filesystem::current_path() / "assets" / path;
-
-							std::string format = texturePath.string();
-							auto lastDot = format.find_last_of('.');
-							format = lastDot != std::string::npos ? format.substr(lastDot) : "null";
-
-							if (lastDot != std::string::npos && (format == ".png" || format == ".jpg" || format == ".jpeg"))
-								component.texture = Texture::Create(texturePath.string());
-						}
-						ImGui::EndDragDropTarget();
-					}
+					DropTextureButton<Render2DComponent>(component);
 				}
 			});
 
-		DrawComponent<NativeScriptComponent>((std::string)ComponentNames::NativeScript, entity, [](auto& component)
+		DrawComponent<NativeScriptComponent>((std::string)ComponentNames::NativeScript, entity, [](auto& component, auto& entity)
 			{
 				if (m_LoadScripts)
 				{
@@ -514,6 +664,124 @@ namespace Cober {
 
 					ImGui::EndCombo();
 				}
+			});
+		
+		DrawComponent<AudioComponent>((std::string)ComponentNames::Audio, entity, [](auto& component, auto& entity)
+			{
+				char buffer[256];
+				memset(buffer, 0, sizeof(buffer));
+				strcpy_s(buffer, sizeof(buffer), component.audioName.c_str());
+				std::filesystem::path audioPath = std::filesystem::current_path() / "assets";
+
+				if (ImGui::InputText("##Name", buffer, sizeof(buffer)))
+				{
+					component.audioPath = audioPath / "audio" / (std::string)buffer;
+
+					std::string format = (std::string)buffer;
+					auto lastDot = format.find_last_of('.');
+					format = lastDot != std::string::npos ? format.substr(lastDot) : "null";
+					component.audioName = (std::string)buffer;
+				}
+
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
+						const wchar_t* path = (const wchar_t*)payload->Data;
+
+						component.audioPath = audioPath / path;
+
+						std::string format = component.audioPath.string();
+						auto lastDot = format.find_last_of('.');
+						format = lastDot != std::string::npos ? format.substr(lastDot) : "null";
+
+						if (format == ".mp3" || format == ".wav" && std::filesystem::exists(audioPath / path))
+						{
+							component.audioName = component.audioPath.filename().string();
+							strcpy_s(buffer, sizeof(buffer), component.audioName.c_str());
+						}
+					}
+					ImGui::EndDragDropTarget();
+				}
+
+				if (ImGui::Checkbox("Loop", &component.loop))
+				{
+					Audio::LoopSound(component.audioName, component.loop);
+				}
+			});
+		
+
+		DrawComponent<TextComponent>((std::string)ComponentNames::Text, entity, [](auto& component, auto& entity)
+			{
+				char buffer[256];
+				memset(buffer, 0, sizeof(buffer));
+				strcpy_s(buffer, sizeof(buffer), component.Text.c_str());
+
+				if (ImGui::InputTextMultiline("##", buffer, sizeof(buffer)))
+				{
+					component.Text = (std::string)buffer;
+				}
+				char buf[256];
+				memset(buf, 0, sizeof(buf));
+				if (component.FontAsset)
+					strcpy_s(buf, sizeof(buf), component.FontAsset->GetFontName().c_str());
+				else
+					strcpy_s(buf, sizeof(buf), "##");
+				
+				ImGui::Button(buf, ImVec2(100.0f, 0.0f));
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+					{
+						const wchar_t* path = (const wchar_t*)payload->Data;
+
+						std::filesystem::path fontPath = std::filesystem::current_path() / "assets" / path;
+						if (fontPath.extension().string() == ".ttf" && std::filesystem::exists(fontPath))
+						{
+							component.FontAsset = CreateRef<Font>(fontPath);
+						}
+					}
+					ImGui::EndDragDropTarget();
+				}
+				
+				ImGui::ColorEdit4("Color", glm::value_ptr(component.Color));
+				ImGui::DragFloat("Kerning", &component.Kerning, 0.025f);
+				ImGui::DragFloat("Line Spacing", &component.LineSpacing, 0.025f);
+			});
+		
+		DrawComponent<ParticleEmitterComponent>((std::string)ComponentNames::Particle, entity, [](auto& component, auto& entity)
+			{
+				ImGui::DragFloat2("Position Variation", glm::value_ptr(component.positionVariation), 0.1f, 0.0f);
+				ImGui::DragFloat("Rotation", &component.rotation, 0.01f, 0.0f, 1.0f);
+				ImGui::DragFloat("Size Begin", &component.sizeBegin, 0.01f, 1.0f);
+				ImGui::DragFloat("Size End", &component.sizeEnd, 0.01f, 1.0f);
+				ImGui::DragFloat("Size variation", &component.sizeVariation, 0.01f, 0.0f);
+				ImGui::Separator();
+
+				ImGui::DragInt("Rate", &component.rate, 1, 1);
+				ImGui::Separator();
+
+				ImGui::DragFloat2("Velocity", glm::value_ptr(component.velocity), 0.01f, 1.0f);
+				ImGui::DragFloat2("Vel. variation", glm::value_ptr(component.velocityVariation), 0.01f, 0.0f);
+
+				ImGui::Separator();
+
+				ImGui::ColorEdit4("Color Begin", glm::value_ptr(component.colorBegin));
+				ImGui::ColorEdit4("Color End", glm::value_ptr(component.colorEnd));
+
+				ImGui::Separator();
+
+				ImGui::DragFloat("LifeTime", &component.lifeTime, 0.1f, 1.0f);
+				ImGui::DragFloat("LifeRemaining", &component.lifeRemaining, 0.1f, 0.0f);
+
+				ImGui::Separator();
+				
+				if (ImGui::Checkbox("Active", &component.active))
+					component.InitDefaultParticle();
+				ImGui::SameLine();
+				if (ImGui::Checkbox("Loop", &component.loop))
+					component.InitDefaultParticle();
+
+				DropTextureButton<ParticleEmitterComponent>(component);
 			});
 	}
 }

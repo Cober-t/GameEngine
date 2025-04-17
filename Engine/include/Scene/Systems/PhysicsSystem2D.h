@@ -24,14 +24,11 @@ namespace Cober {
 		~PhysicsSystem2D();
 
 		void Start(Scene* scene);
-		void Update(Scene* scene, Unique<Timestep>& ts);
+		void Update(Scene* scene);
 
-		void InitEntityPhysics(Entity entity);
-        
 		//void OnEvent(Event& event);
 	
 	private:
-		b2World* m_PhysicsWorld = nullptr;
 	};
 }
 
