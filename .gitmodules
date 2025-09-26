@@ -25,3 +25,6 @@
 [submodule "libraries/sol2"]
 	path = libraries/sol2
 	url = https://github.com/ThePhD/sol2.git
+[submodule "libraries/spdlog"]
+	path = libraries/spdlog
+	url = https://github.com/gabime/spdlog.git
