@@ -19,3 +19,6 @@
 [submodule "libraries/msdfgen"]
 	path = libraries/msdfgen
 	url = https://github.com/Chlumsky/msdfgen.git
+[submodule "libraries/SDL"]
+	path = libraries/SDL
+	url = https://github.com/libsdl-org/SDL.git
