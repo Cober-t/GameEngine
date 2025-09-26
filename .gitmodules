@@ -16,3 +16,6 @@
 [submodule "libraries/imgui"]
 	path = libraries/imgui
 	url = https://github.com/ocornut/imgui.git
+[submodule "libraries/msdfgen"]
+	path = libraries/msdfgen
+	url = https://github.com/Chlumsky/msdfgen.git
