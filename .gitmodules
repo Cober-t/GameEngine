@@ -22,3 +22,6 @@
 [submodule "libraries/SDL"]
 	path = libraries/SDL
 	url = https://github.com/libsdl-org/SDL.git
+[submodule "libraries/sol2"]
+	path = libraries/sol2
+	url = https://github.com/ThePhD/sol2.git
