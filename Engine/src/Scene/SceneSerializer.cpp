@@ -169,29 +169,31 @@ namespace Cober {
 	}
 	void SceneSerializer::SerializeBoxCollider2DComponent(Entity& entity, Utils::DataFile& serializer)
 	{
-		if (entity.HasComponent<BoxCollider2D>()) 
-		{
-			auto& bc2D = entity.GetComponent<BoxCollider2D>();
-			serializer["BoxCollider2D"]["offset"].SetVec2(bc2D.offset);
-			serializer["BoxCollider2D"]["size"].SetVec2(bc2D.size);
-			serializer["BoxCollider2D"]["density"].SetReal(bc2D.density);
-			serializer["BoxCollider2D"]["friction"].SetReal(bc2D.friction);
-			serializer["BoxCollider2D"]["restitution"].SetReal(bc2D.restitution);
-			serializer["BoxCollider2D"]["isSensor"].SetInt(bc2D.isSensor);
-		}
+		/// TODO: COMPONENT MISSING BECAUSE OF BOX2D
+		// if (entity.HasComponent<BoxCollider2D>()) 
+		// {
+		// 	auto& bc2D = entity.GetComponent<BoxCollider2D>();
+		// 	serializer["BoxCollider2D"]["offset"].SetVec2(bc2D.offset);
+		// 	serializer["BoxCollider2D"]["size"].SetVec2(bc2D.size);
+		// 	serializer["BoxCollider2D"]["density"].SetReal(bc2D.density);
+		// 	serializer["BoxCollider2D"]["friction"].SetReal(bc2D.friction);
+		// 	serializer["BoxCollider2D"]["restitution"].SetReal(bc2D.restitution);
+		// 	serializer["BoxCollider2D"]["isSensor"].SetInt(bc2D.isSensor);
+		// }
 	}
 	void SceneSerializer::SerializeCircleCollider2DComponent(Entity& entity, Utils::DataFile& serializer)
 	{
-		if (entity.HasComponent<CircleCollider2D>()) 
-		{
-			auto& bc2D = entity.GetComponent<CircleCollider2D>();
-			serializer["CircleCollider2D"]["offset"].SetVec2(bc2D.offset);
-			serializer["CircleCollider2D"]["radius"].SetReal(bc2D.radius);
-			serializer["CircleCollider2D"]["density"].SetReal(bc2D.density);
-			serializer["CircleCollider2D"]["friction"].SetReal(bc2D.friction);
-			serializer["CircleCollider2D"]["restitution"].SetReal(bc2D.restitution);
-			serializer["CircleCollider2D"]["isSensor"].SetInt(bc2D.isSensor);
-		}
+		/// TODO: COMPONENT MISSING BECAUSE OF BOX2D
+		// if (entity.HasComponent<CircleCollider2D>()) 
+		// {
+		// 	auto& bc2D = entity.GetComponent<CircleCollider2D>();
+		// 	serializer["CircleCollider2D"]["offset"].SetVec2(bc2D.offset);
+		// 	serializer["CircleCollider2D"]["radius"].SetReal(bc2D.radius);
+		// 	serializer["CircleCollider2D"]["density"].SetReal(bc2D.density);
+		// 	serializer["CircleCollider2D"]["friction"].SetReal(bc2D.friction);
+		// 	serializer["CircleCollider2D"]["restitution"].SetReal(bc2D.restitution);
+		// 	serializer["CircleCollider2D"]["isSensor"].SetInt(bc2D.isSensor);
+		// }
 	}
 	void SceneSerializer::SerializeRender2DComponent(Entity& entity, Utils::DataFile& serializer)
 	{
@@ -254,7 +256,8 @@ namespace Cober {
 		if (entity.HasComponent<TextComponent>())
 		{
 			auto& text = entity.GetComponent<TextComponent>();
-			serializer["TextComponent"]["font"].SetString(text.FontAsset->GetFontPath().string());
+			/// TODO: COMPONENT MISSING BECAUSE OF THE MSDF LIBRARY IS DISABLED
+			// serializer["TextComponent"]["font"].SetString(text.FontAsset->GetFontPath().string());
 			serializer["TextComponent"]["text"].SetString(text.Text);
 			serializer["TextComponent"]["color"].SetVec4(text.Color);
 			serializer["TextComponent"]["kerning"].SetReal(text.Kerning);
@@ -341,32 +344,34 @@ namespace Cober {
 
 	void SceneSerializer::DeserializeBoxCollider2DComponent(Entity& entity, Utils::DataFile& loader)
 	{
-		if (loader.HasProperty("BoxCollider2D")) 
-		{
-			auto bc2d = loader["BoxCollider2D"];
-			auto& component = entity.AddComponent<BoxCollider2D>();
-			component.offset = bc2d["offset"].GetVec2();
-			component.size = bc2d["size"].GetVec2();
-			component.density = bc2d["density"].GetReal();
-			component.friction = bc2d["friction"].GetReal();
-			component.restitution = bc2d["restitution"].GetReal();
-			component.isSensor = bc2d["isSensor"].GetInt();
-		}
+		/// TODO: COMPONENT MISSING BECAUSE OF BOX2D
+		// if (loader.HasProperty("BoxCollider2D")) 
+		// {
+		// 	auto bc2d = loader["BoxCollider2D"];
+		// 	auto& component = entity.AddComponent<BoxCollider2D>();
+		// 	component.offset = bc2d["offset"].GetVec2();
+		// 	component.size = bc2d["size"].GetVec2();
+		// 	component.density = bc2d["density"].GetReal();
+		// 	component.friction = bc2d["friction"].GetReal();
+		// 	component.restitution = bc2d["restitution"].GetReal();
+		// 	component.isSensor = bc2d["isSensor"].GetInt();
+		// }
 	}
 
 	void SceneSerializer::DeserializeCircleCollider2DComponent(Entity& entity, Utils::DataFile& loader)
 	{
-		if (loader.HasProperty("CircleCollider2D")) 
-		{
-			auto bc2d = loader["CircleCollider2D"];
-			auto& component = entity.AddComponent<CircleCollider2D>();
-			component.offset = bc2d["offset"].GetVec2();
-			component.radius = bc2d["radius"].GetReal();
-			component.density = bc2d["density"].GetReal();
-			component.friction = bc2d["friction"].GetReal();
-			component.restitution = bc2d["restitution"].GetReal();
-			component.isSensor = bc2d["isSensor"].GetInt();
-		}
+		/// TODO: COMPONENT MISSING BECAUSE OF BOX2D
+		// if (loader.HasProperty("CircleCollider2D")) 
+		// {
+		// 	auto bc2d = loader["CircleCollider2D"];
+		// 	auto& component = entity.AddComponent<CircleCollider2D>();
+		// 	component.offset = bc2d["offset"].GetVec2();
+		// 	component.radius = bc2d["radius"].GetReal();
+		// 	component.density = bc2d["density"].GetReal();
+		// 	component.friction = bc2d["friction"].GetReal();
+		// 	component.restitution = bc2d["restitution"].GetReal();
+		// 	component.isSensor = bc2d["isSensor"].GetInt();
+		// }
 	}
 
 	void SceneSerializer::DeserializeRender2DComponent(Entity& entity, Utils::DataFile& loader)
@@ -458,7 +463,8 @@ namespace Cober {
 		{
 			auto text = loader["TextComponent"];
 			auto& component = entity.AddComponent<TextComponent>();
-			component.FontAsset = CreateRef<Font>(text["font"].GetString());
+			/// TODO: COMPONENT MISSING BECAUSE OF THE MSDF LIBRARY IS DISABLED
+			// component.FontAsset = CreateRef<Font>(text["font"].GetString());
 			component.Text = text["text"].GetString();
 			component.Color = text["color"].GetVec4();
 			component.Kerning = text["kerning"].GetReal();

@@ -216,14 +216,16 @@ namespace Cober {
 
 	static void DisableMouse()
 	{
-		Input::SetCursorMode(CursorMode::Locked);
-		// EngineApp::Get().GetImGuiLayer()->SetInputEnabled(false);
+		/// TODO: FIRST WINDOW MUST MANAGED BY SDL3
+		// Input::SetCursorMode(CursorMode::Locked);
+		// // EngineApp::Get().GetImGuiLayer()->SetInputEnabled(false);
 	}
 
 	static void EnableMouse()
 	{
-		Input::SetCursorMode(CursorMode::Normal);
-		// EngineApp::Get().GetImGuiLayer()->SetInputEnabled(true);
+		/// TODO: FIRST WINDOW MUST MANAGED BY SDL3
+		// Input::SetCursorMode(CursorMode::Normal);
+		// // EngineApp::Get().GetImGuiLayer()->SetInputEnabled(true);
 	}
 
 	void EditorCamera::OnUpdate(Unique<Timestep>& ts) 

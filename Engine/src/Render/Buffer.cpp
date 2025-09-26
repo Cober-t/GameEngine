@@ -12,7 +12,7 @@ namespace Cober {
 		switch (RenderAPI::GetAPI())
 		{
 			case RenderAPI::API::None:      LOG_CORE_ERROR("RendererAPI::None is currently not supported!"); return nullptr;
-			case RenderAPI::API::OpenGL:    return CreateRef<OpenGLVertexBuffer>(size);
+			// case RenderAPI::API::OpenGL:    return CreateRef<OpenGLVertexBuffer>(size);
 			default:	LOG_CORE_ASSERT(false, "Unknown RendererAPI!"); break;
 		}
 
@@ -24,7 +24,7 @@ namespace Cober {
 		switch (RenderAPI::GetAPI())
 		{
 			case RenderAPI::API::None:      LOG_ERROR("RendererAPI::None is currently not supported!"); return nullptr;
-			case RenderAPI::API::OpenGL:    return CreateRef<OpenGLVertexBuffer>(vertices, size);
+			// case RenderAPI::API::OpenGL:    return CreateRef<OpenGLVertexBuffer>(vertices, size);
 			default:	LOG_CORE_ASSERT(false, "Unknown RendererAPI!"); break;
 		}
 
@@ -36,7 +36,7 @@ namespace Cober {
 		switch (RenderAPI::GetAPI())
 		{
 			case RenderAPI::API::None:      LOG_ERROR("RendererAPI::None is currently not supported!"); return nullptr;
-			case RenderAPI::API::OpenGL:    return CreateRef<OpenGLIndexBuffer>(indices, size);
+			// case RenderAPI::API::OpenGL:    return CreateRef<OpenGLIndexBuffer>(indices, size);
 			default:	LOG_CORE_ASSERT(false, "Unknown RendererAPI!"); break;
 		}
 
@@ -49,7 +49,7 @@ namespace Cober {
 		switch (RenderAPI::GetAPI())
 		{
 			case RenderAPI::API::None:    LOG_CORE_ERROR("RendererAPI::None is currently not supported!"); return nullptr;
-			case RenderAPI::API::OpenGL:  return CreateRef<OpenGLUniformBuffer>(size, binding);
+			// case RenderAPI::API::OpenGL:  return CreateRef<OpenGLUniformBuffer>(size, binding);
             default:	LOG_CORE_ASSERT(false, "Unknown RendererAPI!"); break;
 		}
 

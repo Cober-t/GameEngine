@@ -20,12 +20,20 @@ namespace Cober {
 
         LOG_CORE_INFO("Current Working Path: {0}", m_Specification.WorkingDirectory);
 
-        m_Window = CreateUnique<Window>(WindowProps(m_Specification.Name, m_Specification.Width, m_Specification.Height));
-        m_Window->SetEventCallback([this](Event& e) { OnEvent(e); });
+        /// TODO: CREATE WINDOW WITH SDL3
+        // m_Window = CreateUnique<Window>(WindowProps(m_Specification.Name, m_Specification.Width, m_Specification.Height));
+        // m_Window->SetEventCallback([this](Event& e) { OnEvent(e); });
         m_TimeStep = CreateUnique<Timestep>();
 
-        RenderGlobals::Init();
-		Render2D::Start();
+        // if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD))
+        // {
+        //     printf("Error: SDL_Init(): %s\n", SDL_GetError());
+        //     // return;
+        // }
+
+        /// TODO: RENDER PIPELINE WITH SDL3
+        // RenderGlobals::Init();
+		// Render2D::Start();
 
         m_GameState = EngineApp::GameState::PLAY;
     }
@@ -33,9 +41,9 @@ namespace Cober {
 
     EngineApp::~EngineApp() 
     {
-		m_Window->SetEventCallback([](Event& e) {});
+		// m_Window->SetEventCallback([](Event& e) {});
 
-        Render2D::Shutdown();   // Abstract in a global Render api class in the future
+        // Render2D::Shutdown();   // Abstract in a global Render api class in the future
         LOG_CORE_INFO("EngineApp Destructor!");
     }
 
@@ -102,15 +110,15 @@ namespace Cober {
                 layer->OnUpdate(ts);
         }
 
-        if (m_GameState == EngineApp::GameState::EDITOR || m_GameState == EngineApp::GameState::RUNTIME_EDITOR) 
-        {
-            m_GuiLayer->Begin();
+        // if (m_GameState == EngineApp::GameState::EDITOR || m_GameState == EngineApp::GameState::RUNTIME_EDITOR) 
+        // {
+        //     m_GuiLayer->Begin();
 
-            for (Layer* layer : m_LayerStack)
-                layer->OnImGuiRender();
+        //     for (Layer* layer : m_LayerStack)
+        //         layer->OnImGuiRender();
 
-            m_GuiLayer->End();
-        }
+        //     m_GuiLayer->End();
+        // }
     }
 
 

@@ -6,19 +6,19 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
-#include <b2_edge_shape.h>
-#include <b2_circle_shape.h>
-#include <b2_polygon_shape.h>
+// #include <b2_edge_shape.h>
+// #include <b2_circle_shape.h>
+// #include <b2_polygon_shape.h>
 
 #include <filesystem>
 #include <unordered_map>
 
-#include <sol/sol.hpp>
+// #include <sol/sol.hpp>
 
 #include "Core/Core.h"
 #include "Render/Texture.h"
 #include "Render/Camera/GameCamera.h"
-#include "Render/Text/Font.h"
+// #include "Render/Text/Font.h"
 
 namespace Cober {
 	
@@ -120,66 +120,68 @@ namespace Cober {
 	};
 
 
-	struct Collider2D 
-	{
-		b2Shape* body;
+	/// TODO: FIX, SOME BOX2D LIBRARY FILES MISSING
+	// struct Collider2D 
+	// {
+	// 	b2Shape* body;
 
-		float density = 1.0f;
-		float friction = 0.5f;
-		float restitution = 0.0f;
+	// 	float density = 1.0f;
+	// 	float friction = 0.5f;
+	// 	float restitution = 0.0f;
 
-		// Storage for runtime
-		void* runtimeFixture = nullptr;
-	};
+	// 	// Storage for runtime
+	// 	void* runtimeFixture = nullptr;
+	// };
 
 
-	struct BoxCollider2D : public Collider2D 
-	{
-		glm::vec2 offset = { 0.0f, 0.0f };
-		glm::vec2 size =   { 1.0f, 1.0f };
+	/// TODO: FIX, SOME BOX2D LIBRARY FILES MISSING
+	// struct BoxCollider2D : public Collider2D 
+	// {
+	// 	glm::vec2 offset = { 0.0f, 0.0f };
+	// 	glm::vec2 size =   { 1.0f, 1.0f };
 
-		b2PolygonShape shape;
-		bool isSensor = false;
+	// 	b2PolygonShape shape;
+	// 	bool isSensor = false;
 
-		BoxCollider2D() = default;
-		BoxCollider2D(const BoxCollider2D&) = default;
-	};
+	// 	BoxCollider2D() = default;
+	// 	BoxCollider2D(const BoxCollider2D&) = default;
+	// };
         
         
-	struct CircleCollider2D : public Collider2D 
-	{
-		glm::vec2 offset = { 0.0f, 0.0f };
-		float radius = 0.5f;
+	// struct CircleCollider2D : public Collider2D 
+	// {
+	// 	glm::vec2 offset = { 0.0f, 0.0f };
+	// 	float radius = 0.5f;
 
-		b2CircleShape shape;
-		bool isSensor = false;
+	// 	b2CircleShape shape;
+	// 	bool isSensor = false;
 
-		CircleCollider2D() = default;
-		CircleCollider2D(const CircleCollider2D&) = default;
-	};
-
-
-	struct PolygonCollider2D : public Collider2D 
-	{
-		glm::vec2 offset = { 0.0f, 0.0f };
-
-		b2PolygonShape shape;
-
-		PolygonCollider2D() = default;
-		PolygonCollider2D(const PolygonCollider2D&) = default;
-	};
+	// 	CircleCollider2D() = default;
+	// 	CircleCollider2D(const CircleCollider2D&) = default;
+	// };
 
 
-	struct EdgeCollider2D : public Collider2D 
-	{
-		glm::vec2 pointA = { 0.0f, 0.0f };
-		glm::vec2 pointB = { 5.0f, 0.0f };
+	// struct PolygonCollider2D : public Collider2D 
+	// {
+	// 	glm::vec2 offset = { 0.0f, 0.0f };
 
-		b2EdgeShape shape;
+	// 	b2PolygonShape shape;
 
-		EdgeCollider2D() = default;
-		EdgeCollider2D(const EdgeCollider2D&) = default;
-	};
+	// 	PolygonCollider2D() = default;
+	// 	PolygonCollider2D(const PolygonCollider2D&) = default;
+	// };
+
+
+	// struct EdgeCollider2D : public Collider2D 
+	// {
+	// 	glm::vec2 pointA = { 0.0f, 0.0f };
+	// 	glm::vec2 pointB = { 5.0f, 0.0f };
+
+	// 	b2EdgeShape shape;
+
+	// 	EdgeCollider2D() = default;
+	// 	EdgeCollider2D(const EdgeCollider2D&) = default;
+	// };
 
 
 	enum class Shape2D { Line = 0, Quad, Circle, Sprite, N_SHAPE_ITEMS };
@@ -219,14 +221,15 @@ namespace Cober {
 
 	struct ScriptComponent
 	{
-		std::vector<sol::function> scripts;
+		/// TODO: FIX, SOME LIBRARY FILES MISSING
+		// std::vector<sol::function> scripts;
 		// sol::function script = sol::lua_nil;
 
-		void AddScript(sol::function func) { scripts.push_back(func); }
+		// void AddScript(sol::function func) { scripts.push_back(func); }
 
 		ScriptComponent() = default;
 		ScriptComponent(const ScriptComponent&) = default;
-		ScriptComponent(std::vector<sol::function> funcs) : scripts(funcs) {}
+		// ScriptComponent(std::vector<sol::function> funcs) : scripts(funcs) {}
 		// ScriptComponent(sol::function funcs = sol::lua_nil) : script(funcs) {}
 	};
 
@@ -255,7 +258,8 @@ namespace Cober {
 	struct TextComponent
 	{
 		std::string Text;
-		Ref<Font> FontAsset = Font::GetDefault();
+		/// TODO: DISABLED THE MSDF LIBRARY
+		// Ref<Font> FontAsset = Font::GetDefault();
 		glm::vec4 Color{ 1.0f };
 		float Kerning = 0.0f;
 		float LineSpacing = 0.0f;
@@ -359,7 +363,7 @@ namespace Cober {
 		ParticleEmitterComponent,
 		AudioComponent,
 		TextComponent,
-		Rigidbody2D, BoxCollider2D, CircleCollider2D, EdgeCollider2D, PolygonCollider2D,
+		Rigidbody2D, //BoxCollider2D, CircleCollider2D, EdgeCollider2D, PolygonCollider2D,
 		ScriptComponent, NativeScriptComponent>;
 }
 

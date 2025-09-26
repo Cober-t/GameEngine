@@ -1,7 +1,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include <GLFW/glfw3.h>
+// #include <GLFW/glfw3.h>
 
 #include "Core/Core.h"
 #include "Core/Input.h"
@@ -48,7 +48,7 @@ namespace Cober {
 		bool IsVSync() const;
 		void ChangeFullScreen();
 
-		virtual void* GetNativeWindow() const { return m_Window; }
+		// virtual void* GetNativeWindow() const { return m_Window; }
 
 	private:
 		virtual void Init(const WindowProps& props);
@@ -56,7 +56,7 @@ namespace Cober {
 		virtual void Shutdown();
 
 	private:
-		GLFWwindow* m_Window;
+		// GLFWwindow* m_Window;
 		Unique<GraphicsContext> m_Context;
 
 		struct WindowData

@@ -22,7 +22,8 @@ namespace Cober {
     {
 		NativeScriptFn::Init(scene);
 
-		lua.open_libraries(sol::lib::base, sol::lib::math);
+		/// TODO: FIX LIBRARY, SOME FILES MISSING
+		// lua.open_libraries(sol::lib::base, sol::lib::math);
 		LOG_INFO("Script System Started!!");
     }
 

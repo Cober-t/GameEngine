@@ -11,7 +11,7 @@
 
 #include <ImGui/imgui.h>
 
-#include <GLFW/glfw3.h>
+// #include <GLFW/glfw3.h>
 #include <imgui/imgui_internal.h>
 
 
@@ -68,8 +68,9 @@ namespace Cober {
 		static float GetMouseY();
 		static std::pair<float, float> GetMousePosition();
 
-		static void SetCursorMode(CursorMode mode);
-		static CursorMode GetCursorMode();
+		/// TODO: FIRST WINDOW MUST MANAGED BY SDL3
+		// static void SetCursorMode(CursorMode mode);
+		// static CursorMode GetCursorMode();
 
 		// Controllers
 		static bool IsControllerPresent(int id);

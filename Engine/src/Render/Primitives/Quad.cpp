@@ -106,9 +106,10 @@ namespace Cober {
 		{
 			InitFramebuffer();
 			
-			glDisable(GL_DEPTH_TEST);
+			/// TODO: MANAGE RENDER ORDERS WITH SDL3
+			// glDisable(GL_DEPTH_TEST);
 			RenderGlobals::SetClearColor(40, 120, 150);
-			glClear(GL_COLOR_BUFFER_BIT);
+			// glClear(GL_COLOR_BUFFER_BIT);
 
 			data.FramebufferShader->Bind();
 

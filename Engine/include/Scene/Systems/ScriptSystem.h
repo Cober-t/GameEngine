@@ -7,7 +7,8 @@
 
 #include "Scripting/NativeScripting.h"
 
-#include <sol/sol.hpp>
+/// TODO: SOME LIBRARY FILES MISSING
+// #include <sol/sol.hpp>
 
 
 namespace Cober {
@@ -23,7 +24,7 @@ namespace Cober {
 		void FreeScripts(Scene* scene);
 
     private:
-		sol::state lua;
+		// sol::state lua;
 	};
 }
 

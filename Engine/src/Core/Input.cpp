@@ -9,48 +9,49 @@ namespace Cober {
 
 	void Input::Update()
 	{
-		// Cleanup disconnected controller
-		for (auto it = s_Controllers.begin(); it != s_Controllers.end(); )
-		{
-			int id = it->first;
-			if (glfwJoystickPresent(id) != GLFW_TRUE)
-				it = s_Controllers.erase(it);
-			else
-				it++;
-		}
+		/// TODO: MANAGE INPUTS WITH SDL3
+		// // Cleanup disconnected controller
+		// for (auto it = s_Controllers.begin(); it != s_Controllers.end(); )
+		// {
+		// 	int id = it->first;
+		// 	if (glfwJoystickPresent(id) != GLFW_TRUE)
+		// 		it = s_Controllers.erase(it);
+		// 	else
+		// 		it++;
+		// }
 
-		// Update controllers
-		for (int id = GLFW_JOYSTICK_1; id < GLFW_JOYSTICK_LAST; id++)
-		{
-			if (glfwJoystickPresent(id) == GLFW_TRUE)
-			{
-				Controller& controller = s_Controllers[id];
-				controller.ID = id;
-				controller.Name = glfwGetJoystickName(id);
+		// // Update controllers
+		// for (int id = GLFW_JOYSTICK_1; id < GLFW_JOYSTICK_LAST; id++)
+		// {
+		// 	if (glfwJoystickPresent(id) == GLFW_TRUE)
+		// 	{
+		// 		Controller& controller = s_Controllers[id];
+		// 		controller.ID = id;
+		// 		controller.Name = glfwGetJoystickName(id);
 
-				int buttonCount;
-				const unsigned char* buttons = glfwGetJoystickButtons(id, &buttonCount);
-				for (int i = 0; i < buttonCount; i++)
-				{
-					if(buttons[i] == GLFW_PRESS && !controller.ButtonDown[i])
-						controller.ButtonStates[i].State = KeyState::Pressed;
-					else if(buttons[i] == GLFW_RELEASE && controller.ButtonDown[i])
-						controller.ButtonStates[i].State = KeyState::Released;
+		// 		int buttonCount;
+		// 		const unsigned char* buttons = glfwGetJoystickButtons(id, &buttonCount);
+		// 		for (int i = 0; i < buttonCount; i++)
+		// 		{
+		// 			if(buttons[i] == GLFW_PRESS && !controller.ButtonDown[i])
+		// 				controller.ButtonStates[i].State = KeyState::Pressed;
+		// 			else if(buttons[i] == GLFW_RELEASE && controller.ButtonDown[i])
+		// 				controller.ButtonStates[i].State = KeyState::Released;
 
-					controller.ButtonDown[i] = buttons[i] == GLFW_PRESS;
-				}
+		// 			controller.ButtonDown[i] = buttons[i] == GLFW_PRESS;
+		// 		}
 
-				int axisCount;
-				const float* axes = glfwGetJoystickAxes(id, &axisCount);
-				for (int i = 0; i < axisCount; i++)
-					controller.AxisStates[i] = abs(axes[i]) > controller.DeadZones[i] ? axes[i] : 0.0f;
+		// 		int axisCount;
+		// 		const float* axes = glfwGetJoystickAxes(id, &axisCount);
+		// 		for (int i = 0; i < axisCount; i++)
+		// 			controller.AxisStates[i] = abs(axes[i]) > controller.DeadZones[i] ? axes[i] : 0.0f;
 
-				int hatCount;
-				const unsigned char* hats = glfwGetJoystickHats(id, &hatCount);
-				for (int i = 0; i < hatCount; i++)
-					controller.HatStates[i] = hats[i];
-			}
-		}
+		// 		int hatCount;
+		// 		const unsigned char* hats = glfwGetJoystickHats(id, &hatCount);
+		// 		for (int i = 0; i < hatCount; i++)
+		// 			controller.HatStates[i] = hats[i];
+		// 	}
+		// }
 	}
 
 	// FIXME: Dont work for some reason
@@ -66,32 +67,35 @@ namespace Cober {
 
 	bool Input::IsKeyDown(KeyCode keycode)
 	{
+		return false;
 	#ifndef __EDITOR__
 
-		Window& window = static_cast<Window&>(EngineApp::Get().GetWindow());
-		GLFWwindow* nativeWindow = reinterpret_cast<GLFWwindow*>(window.GetNativeWindow());
-		auto state = glfwGetKey(nativeWindow, static_cast<int32_t>(keycode));
-		return state == GLFW_PRESS || state == GLFW_REPEAT;
+		/// TODO: MANAGE WINDOW WITH SDL3
+		// Window& window = static_cast<Window&>(EngineApp::Get().GetWindow());
+		// GLFWwindow* nativeWindow = reinterpret_cast<GLFWwindow*>(window.GetNativeWindow());
+		// auto state = glfwGetKey(nativeWindow, static_cast<int32_t>(keycode));
+		// return state == GLFW_PRESS || state == GLFW_REPEAT;
 	
 	#else
 
-		bool pressed = false;
-		for (ImGuiViewport* viewport : ImGui::GetCurrentContext()->Viewports)
-		{
-			if (!viewport->PlatformUserData)
-				continue;
+		/// TODO: MANAGE WINDOW WITH SDL3
+		// bool pressed = false;
+		// for (ImGuiViewport* viewport : ImGui::GetCurrentContext()->Viewports)
+		// {
+		// 	if (!viewport->PlatformUserData)
+		// 		continue;
 
-			GLFWwindow* windowHandle = *(GLFWwindow**)viewport->PlatformUserData; // First member is GLFWwindow
-			if (!windowHandle)
-				continue;
-			auto state = glfwGetKey(windowHandle, static_cast<int32_t>(keycode));
-			if (state == GLFW_PRESS || state == GLFW_REPEAT)
-			{
-				pressed = true;
-				break;
-			}
-		}
-		return pressed;
+		// 	GLFWwindow* windowHandle = *(GLFWwindow**)viewport->PlatformUserData; // First member is GLFWwindow
+		// 	if (!windowHandle)
+		// 		continue;
+		// 	auto state = glfwGetKey(windowHandle, static_cast<int32_t>(keycode));
+		// 	if (state == GLFW_PRESS || state == GLFW_REPEAT)
+		// 	{
+		// 		pressed = true;
+		// 		break;
+		// 	}
+		// }
+		// return pressed;
 
 	#endif
 	}
@@ -113,32 +117,35 @@ namespace Cober {
 
 	bool Input::IsMouseButtonDown(MouseButton button)
 	{
+		return false;
 	#ifndef __EDITOR__
 
-		GLFWwindow* nativeWindow = reinterpret_cast<GLFWwindow*>(EngineApp::Get().GetWindow().GetNativeWindow());
-		auto state = glfwGetMouseButton(nativeWindow, static_cast<int32_t>(button));
-		return state == GLFW_PRESS;
+		/// TODO: MANAGE WINDOW WITH SDL3
+		// GLFWwindow* nativeWindow = reinterpret_cast<GLFWwindow*>(EngineApp::Get().GetWindow().GetNativeWindow());
+		// auto state = glfwGetMouseButton(nativeWindow, static_cast<int32_t>(button));
+		// return state == GLFW_PRESS;
 	
 	#else
 
-		bool pressed = false;
-		for (ImGuiViewport* viewport : ImGui::GetCurrentContext()->Viewports)
-		{
-			if (!viewport->PlatformUserData)
-				continue;
+		/// TODO: MANAGE WINDOW WITH SDL3
+		// bool pressed = false;
+		// for (ImGuiViewport* viewport : ImGui::GetCurrentContext()->Viewports)
+		// {
+		// 	if (!viewport->PlatformUserData)
+		// 		continue;
 
-			GLFWwindow* windowHandle = *(GLFWwindow**)viewport->PlatformUserData; // First member is GLFWwindow
-			if (!windowHandle)
-				continue;
+		// 	GLFWwindow* windowHandle = *(GLFWwindow**)viewport->PlatformUserData; // First member is GLFWwindow
+		// 	if (!windowHandle)
+		// 		continue;
 
-			auto state = glfwGetMouseButton(static_cast<GLFWwindow*>(windowHandle), static_cast<int32_t>(button));
-			if (state == GLFW_PRESS || state == GLFW_REPEAT)
-			{
-				pressed = true;
-				break;
-			}
-		}
-		return pressed;
+		// 	auto state = glfwGetMouseButton(static_cast<GLFWwindow*>(windowHandle), static_cast<int32_t>(button));
+		// 	if (state == GLFW_PRESS || state == GLFW_REPEAT)
+		// 	{
+		// 		pressed = true;
+		// 		break;
+		// 	}
+		// }
+		// return pressed;
 
 	#endif
 	}
@@ -162,29 +169,33 @@ namespace Cober {
 
 	std::pair<float, float> Input::GetMousePosition()
 	{
-		GLFWwindow* nativeWindow = reinterpret_cast<GLFWwindow*>(EngineApp::Get().GetWindow().GetNativeWindow());
+		/// TODO: MANAGE WINDOW WITH SDL3
+		// GLFWwindow* nativeWindow = reinterpret_cast<GLFWwindow*>(EngineApp::Get().GetWindow().GetNativeWindow());
 
 		double x, y;
-		glfwGetCursorPos(nativeWindow, &x, &y);
+		/// TODO: MANAGE INPUTS WITH SDL3
+		// glfwGetCursorPos(nativeWindow, &x, &y);
 		return { (float)x, (float)y };
 	}
 
-	// TODO: A better way to do this is to handle it internally, and simply move the cursor the opposite side
+	/// TODO: A better way to do this is to handle it internally, and simply move the cursor the opposite side
 	//		of the screen when it reaches the edge
-	void Input::SetCursorMode(CursorMode mode)
-	{
-		GLFWwindow* nativeWindow = reinterpret_cast<GLFWwindow*>(EngineApp::Get().GetWindow().GetNativeWindow());
-		glfwSetInputMode(nativeWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL + (int)mode);
+	// void Input::SetCursorMode(CursorMode mode)
+	// {
+	// 	/// TODO: MANAGE INPUTS WITH SDL3
+	// 	// GLFWwindow* nativeWindow = reinterpret_cast<GLFWwindow*>(EngineApp::Get().GetWindow().GetNativeWindow());
+	// 	// glfwSetInputMode(nativeWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL + (int)mode);
 
-		// if (EngineApp::Get().GetSpecification().EnableImGui)
-		// 	UI::SetInputEnabled(mode == CursorMode::Normal);
-	}
+	// 	// // if (EngineApp::Get().GetSpecification().EnableImGui)
+	// 	// // 	UI::SetInputEnabled(mode == CursorMode::Normal);
+	// }
 
-	CursorMode Input::GetCursorMode()
-	{
-		GLFWwindow* nativeWindow = reinterpret_cast<GLFWwindow*>(EngineApp::Get().GetWindow().GetNativeWindow());
-		return (CursorMode)(glfwGetInputMode(nativeWindow, GLFW_CURSOR) - GLFW_CURSOR_NORMAL);
-	}
+	// CursorMode Input::GetCursorMode()
+	// {
+	// 	/// TODO: MANAGE INPUTS WITH SDL3
+	// 	// GLFWwindow* nativeWindow = reinterpret_cast<GLFWwindow*>(EngineApp::Get().GetWindow().GetNativeWindow());
+	// 	// return (CursorMode)(glfwGetInputMode(nativeWindow, GLFW_CURSOR) - GLFW_CURSOR_NORMAL);
+	// }
 
 	bool Input::IsControllerPresent(int id)
 	{

@@ -11,7 +11,8 @@
 namespace Cober::Random {
 	
 	CB_API double Value(int min = 0, int max = 9);
-	CB_API void Seed(double seed = glfwGetTime());
+	/// TODO: MANAGE TIMERS WITH SDL3
+	CB_API void Seed(double seed = 0/*glfwGetTime()*/);
 }
 
 namespace Cober::Utils {

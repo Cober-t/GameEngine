@@ -722,10 +722,11 @@ namespace Cober {
 				}
 				char buf[256];
 				memset(buf, 0, sizeof(buf));
-				if (component.FontAsset)
-					strcpy_s(buf, sizeof(buf), component.FontAsset->GetFontName().c_str());
-				else
-					strcpy_s(buf, sizeof(buf), "##");
+				/// TODO: COMPONENT MISSING BECAUSE OF THE MSDF LIBRARY IS DISABLED
+				// if (component.FontAsset)
+				// 	strcpy_s(buf, sizeof(buf), component.FontAsset->GetFontName().c_str());
+				// else
+				// 	strcpy_s(buf, sizeof(buf), "##");
 				
 				ImGui::Button(buf, ImVec2(100.0f, 0.0f));
 				if (ImGui::BeginDragDropTarget())
@@ -737,7 +738,8 @@ namespace Cober {
 						std::filesystem::path fontPath = std::filesystem::current_path() / "assets" / path;
 						if (fontPath.extension().string() == ".ttf" && std::filesystem::exists(fontPath))
 						{
-							component.FontAsset = CreateRef<Font>(fontPath);
+							/// TODO: COMPONENT MISSING BECAUSE OF THE MSDF LIBRARY IS DISABLED
+							// component.FontAsset = CreateRef<Font>(fontPath);
 						}
 					}
 					ImGui::EndDragDropTarget();

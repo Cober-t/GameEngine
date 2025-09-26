@@ -51,6 +51,7 @@ project "Engine"
 		"include/Scene/Systems",
 		"%{wks.location}/libraries",
 		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.SDL3}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
         "%{IncludeDir.Box2D}",
@@ -70,12 +71,13 @@ project "Engine"
 		"GLFW",
         "opengl32.lib",
         "Glad",
+		"SDL3",
         "Box2D",
         "ImGui",
 		"Lua",
 		"msdf-atlas-gen",
 	}
-
+	
 	postbuildcommands
 	{
 		"{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Editor/\"",

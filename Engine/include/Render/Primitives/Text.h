@@ -4,7 +4,7 @@
 #include "Render/VertexArray.h"
 #include "Render/Texture.h"
 #include "Render/Shader.h"
-#include "Render/Text/Font.h"
+// #include "Render/Text/Font.h"
 #include "Scene/ECS.h"
 
 class Render2D;
@@ -60,7 +60,8 @@ namespace Cober  {
 			Attributes* attributes;
 
 		private:
-			static void SetAttributes(const std::string& string, Ref<Font> font, const glm::mat4& transform, const TextParams& textParams, int entityID);
+			/// TODO: FIX FONT, DISABLED BECAUSE OF THE MSDF GEN LIBRARY
+			// static void SetAttributes(const std::string& string, Ref<Font> font, const glm::mat4& transform, const TextParams& textParams, int entityID);
 		};
 	}
 }

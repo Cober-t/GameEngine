@@ -3,8 +3,8 @@
 #include "ImGui/Colors.h"
 #include "Core/EngineApp.h"
 
-#include <backends/imgui_impl_glfw.h>
-#include <backends/imgui_impl_opengl3.h>
+// #include <backends/imgui_impl_glfw.h>
+// #include <backends/imgui_impl_opengl3.h>
 
 
 namespace Cober {
@@ -24,14 +24,15 @@ namespace Cober {
 
 	void ImGuiLayer::OnAttach() 
 	{
+		return;
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		m_ImGuiContext = ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      	// Enable Gamepad Controls
-		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
-		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
+		// io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+		// io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      	// Enable Gamepad Controls
+		// io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+		// io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 
 		ImFontConfig config;
 		config.MergeMode = true;
@@ -58,31 +59,35 @@ namespace Cober {
 
 		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
 		ImGuiStyle& style = ImGui::GetStyle();
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			style.WindowRounding = 0.0f;
-			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-		}
+		// if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		// {
+		// 	style.WindowRounding = 0.0f;
+		// 	style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+		// }
 
-		EngineApp& app = EngineApp::Get();
-		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
+		/// TODO: MANAGE WINDOW WITH SDL3
+		// EngineApp& app = EngineApp::Get();
+		// GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
+		/// TODO: CREATE IMGUI WINDOW WITH SDL3
 		// Setup Platform/Renderer bindings
-		ImGui_ImplGlfw_InitForOpenGL(window, true);
-		ImGui_ImplOpenGL3_Init("#version 410");
+		// ImGui_ImplGlfw_InitForOpenGL(window, true);
+		// ImGui_ImplOpenGL3_Init("#version 410");
 	}
 
 
 	void ImGuiLayer::OnDetach() 
 	{
-		ImGui_ImplOpenGL3_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
-		ImGui::DestroyContext();
+		/// TODO: DESTROY IMGUI WINDOW WITH SDL3
+		// ImGui_ImplOpenGL3_Shutdown();
+		// ImGui_ImplGlfw_Shutdown();
+		// ImGui::DestroyContext();
 	}
 
 
 	bool ImGuiLayer::IsInputEnabled()
 	{
+		return false;
 		const auto& io = ImGui::GetIO();
 		return (io.ConfigFlags & ImGuiConfigFlags_NoMouse) == 0 && (io.ConfigFlags & ImGuiConfigFlags_NavNoCaptureKeyboard) == 0;
 	}
@@ -90,6 +95,7 @@ namespace Cober {
 
 	void ImGuiLayer::SetInputEnabled(bool enabled)
 	{
+		return;
 		auto& io = ImGui::GetIO();
 
 		if (enabled)
@@ -107,6 +113,7 @@ namespace Cober {
 
 	void ImGuiLayer::OnEvent(Event& event) 
 	{
+		return;
 		if (m_BlockEvents)
 		{
 			ImGuiIO& io = ImGui::GetIO();
@@ -118,29 +125,31 @@ namespace Cober {
 
 	void ImGuiLayer::Begin() 
 	{
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-		//ImGuizmo::BeginFrame();
+		/// TODO: MANAGE BEGIN IMGUI FRAME WITH SDL3
+		// ImGui_ImplOpenGL3_NewFrame();
+		// ImGui_ImplGlfw_NewFrame();
+		// ImGui::NewFrame();
+		// //ImGuizmo::BeginFrame();
 	}
 
 	void ImGuiLayer::End() {
 
-		ImGuiIO& io = ImGui::GetIO();
-		EngineApp& app = EngineApp::Get();
-		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
+		/// TODO: MANAGE IMGUI END CONTEXT WITH SDL3
+		// ImGuiIO& io = ImGui::GetIO();
+		// EngineApp& app = EngineApp::Get();
+		// io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 
-		// Rendering
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		// // Rendering
+		// ImGui::Render();
+		// ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			GLFWwindow* backup_current_context = glfwGetCurrentContext();
-			ImGui::UpdatePlatformWindows();
-			ImGui::RenderPlatformWindowsDefault();
-			glfwMakeContextCurrent(backup_current_context);
-		}
+		// if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		// {
+		// 	GLFWwindow* backup_current_context = glfwGetCurrentContext();
+		// 	ImGui::UpdatePlatformWindows();
+		// 	ImGui::RenderPlatformWindowsDefault();
+		// 	glfwMakeContextCurrent(backup_current_context);
+		// }
 	}
 
 	void ImGuiLayer::StyleDefault()

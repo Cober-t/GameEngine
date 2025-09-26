@@ -10,7 +10,7 @@ namespace Cober {
 	{
 		switch (RenderAPI::GetAPI()) {
 			case RenderAPI::API::None:			LOG_CORE_ERROR("RenderAPI::None means there is not render defined!!");		return nullptr;
-			case RenderAPI::API::OpenGL:		return CreateRef<OpenGLShader>(filepath);
+			// case RenderAPI::API::OpenGL:		return CreateRef<OpenGLShader>(filepath);
 			default: LOG_CORE_ASSERT(false, "Unknown RendererAPI!"); break;
 		}
 
@@ -23,7 +23,7 @@ namespace Cober {
 		switch (RenderAPI::GetAPI())
 		{
 			case RenderAPI::API::None:			LOG_CORE_ERROR("RenderAPI::None means there is not render defined!!");		return nullptr;
-			case RenderAPI::API::OpenGL:		return CreateRef<OpenGLShader>(name, vertexSrc, fragmentSrc);
+			// case RenderAPI::API::OpenGL:		return CreateRef<OpenGLShader>(name, vertexSrc, fragmentSrc);
 			default:	LOG_CORE_ASSERT(false, "Unknown RendererAPI!"); break;
 		}
 

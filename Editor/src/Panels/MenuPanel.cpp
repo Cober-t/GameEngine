@@ -210,19 +210,19 @@ namespace Cober {
 
 			if (ImGui::Checkbox(ICON_FA_CODE  "  Debug Mode", &EngineApp::Get().IsDebugMode()))
 			{
-				Debug2DPhysics::Get().UpdateFlags();
+				// Debug2DPhysics::Get().UpdateFlags();
 			}
 
 			if (EngineApp::Get().IsDebugMode())
 			{
-				if (ImGui::Checkbox("Shapes", &Debug2DPhysics::Settings().shapes) ||
-					ImGui::Checkbox("Joints", &Debug2DPhysics::Settings().joints) ||
-					ImGui::Checkbox("AABBs", &Debug2DPhysics::Settings().aabbs) ||
-					ImGui::Checkbox("Pair", &Debug2DPhysics::Settings().pair) ||
-					ImGui::Checkbox("Center of Mass", &Debug2DPhysics::Settings().center_of_mass))
-				{
-						Debug2DPhysics::Get().UpdateFlags();
-				}
+				// if (ImGui::Checkbox("Shapes", &Debug2DPhysics::Settings().shapes) ||
+				// 	ImGui::Checkbox("Joints", &Debug2DPhysics::Settings().joints) ||
+				// 	ImGui::Checkbox("AABBs", &Debug2DPhysics::Settings().aabbs) ||
+				// 	ImGui::Checkbox("Pair", &Debug2DPhysics::Settings().pair) ||
+				// 	ImGui::Checkbox("Center of Mass", &Debug2DPhysics::Settings().center_of_mass))
+				// {
+				// 		Debug2DPhysics::Get().UpdateFlags();
+				// }
 			}
 
 			ImGui::Checkbox("Show Demo Window", &m_ShowDemoWindow);

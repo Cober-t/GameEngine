@@ -6,9 +6,9 @@
 #include "Scene/Scene.h"
 // #include "Events/Event.h"
 
-#include <b2_body.h>
-#include <b2_fixture.h>
-#include <b2_draw.h>
+// #include <b2_body.h>
+// #include <b2_fixture.h>
+// #include <b2_draw.h>
 
 #include <Render/Primitives/Line.h>
 #include <Physics/Physics2D.h>

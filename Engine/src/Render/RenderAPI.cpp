@@ -1,6 +1,6 @@
 #include <pch.h>
 #include "RenderAPI.h"
-#include "Platforms/OpenGL/OpenGLRenderAPI.h"
+// #include "Platforms/OpenGL/OpenGLRenderAPI.h"
 
 namespace Cober {
 
@@ -11,7 +11,7 @@ namespace Cober {
 		switch (m_Api) 
 		{
 			case RenderAPI::API::None:		LOG_CORE_INFO("RenderAPI::None means there is not render defined!!"); return nullptr;
-			case RenderAPI::API::OpenGL:	return CreateUnique<OpenGLRenderAPI>();
+			// case RenderAPI::API::OpenGL:	return CreateUnique<OpenGLRenderAPI>();
 			default:	LOG_CORE_ASSERT(false, "Unknown RendererAPI!"); break;
 		}
 

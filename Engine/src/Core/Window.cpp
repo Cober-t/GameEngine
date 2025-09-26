@@ -42,23 +42,25 @@ namespace Cober {
 
 		if (s_GLFWWindowCount == 0)
 		{
-			int success = glfwInit();
-			LOG_CORE_ASSERT(success, "Could not initialize GLFW!");
-			glfwSetErrorCallback(GLFWErrorCallback);
+			/// TODO: CHANGE BY SDL23 IMPLEMENTATION
+			// int success = glfwInit();
+			// LOG_CORE_ASSERT(success, "Could not initialize GLFW!");
+			// glfwSetErrorCallback(GLFWErrorCallback);
 		}
 
-	// #if defined(CB_DEBUG)
-		if (RenderAPI::GetAPI() == RenderAPI::API::OpenGL)
-			glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
-	// #endif
-	
-		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		// #if defined(CB_DEBUG)
+			// if (RenderAPI::GetAPI() == RenderAPI::API::OpenGL)
+			// 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+		// #endif
+
+		/// TODO: CREATE WINDOW WITH SDL3
+		// m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		++s_GLFWWindowCount;
 
-		m_Context = GraphicsContext::Create(m_Window);
-		m_Context->Init();
+		// m_Context = GraphicsContext::Create(m_Window);
+		// m_Context->Init();
 
-		glfwSetWindowUserPointer(m_Window, &m_Data);
+		// glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(props.VSync);
 
 		SetWindowCallbacks();
@@ -67,11 +69,12 @@ namespace Cober {
 
 	void Window::Shutdown()
 	{
-		glfwDestroyWindow(m_Window);
-		--s_GLFWWindowCount;
+		/// TODO: DESTROY WINDOW WITH SDL3
+		// glfwDestroyWindow(m_Window);
+		// --s_GLFWWindowCount;
 
-		if (s_GLFWWindowCount == 0)
-			glfwTerminate();
+		// if (s_GLFWWindowCount == 0)
+		// 	glfwTerminate();
 	}
 
 	// void Window::SetEventCallback(const EventCallbackFn& callback)
@@ -87,118 +90,121 @@ namespace Cober {
 	// uint32_t Window::GetWidth() const { return m_Data.Width; }
 	// uint32_t Window::GetHeight() const { return m_Data.Height; }
 
-	void Window::SetWindowCallbacks()
-	{
-		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
-		{
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-			data.Width = width;
-			data.Height = height;
+	// void Window::SetWindowCallbacks()
+	// {
+	// 	glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
+	// 	{
+	// 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+	// 		data.Width = width;
+	// 		data.Height = height;
 
-			WindowResizeEvent event(width, height);
-			data.EventCallback(event);
-		});
+	// 		WindowResizeEvent event(width, height);
+	// 		data.EventCallback(event);
+	// 	});
 
-		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
-		{
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-			WindowCloseEvent event;
-			data.EventCallback(event);
-		});
+	// 	glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
+	// 	{
+	// 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+	// 		WindowCloseEvent event;
+	// 		data.EventCallback(event);
+	// 	});
 
-		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
-		{
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+	// 	glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+	// 	{
+	// 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 			
-			switch (action)
-			{
-				case GLFW_PRESS:
-				{
-					Input::UpdateKeyState((KeyCode)key, KeyState::Pressed);
-					KeyPressedEvent event((KeyCode)key, 0);
-					data.EventCallback(event);
-					break;
-				}
-				case GLFW_RELEASE:
-				{
-					Input::UpdateKeyState((KeyCode)key, KeyState::Released);
-					KeyReleasedEvent event((KeyCode)key);
-					data.EventCallback(event);
-					break;
-				}
-				case GLFW_REPEAT:
-				{
-					Input::UpdateKeyState((KeyCode)key, KeyState::Held);
-					KeyPressedEvent event((KeyCode)key, true);
-					data.EventCallback(event);
-					break;
-				}
-			}
-		});
+	// 		switch (action)
+	// 		{
+	// 			case GLFW_PRESS:
+	// 			{
+	// 				Input::UpdateKeyState((KeyCode)key, KeyState::Pressed);
+	// 				KeyPressedEvent event((KeyCode)key, 0);
+	// 				data.EventCallback(event);
+	// 				break;
+	// 			}
+	// 			case GLFW_RELEASE:
+	// 			{
+	// 				Input::UpdateKeyState((KeyCode)key, KeyState::Released);
+	// 				KeyReleasedEvent event((KeyCode)key);
+	// 				data.EventCallback(event);
+	// 				break;
+	// 			}
+	// 			case GLFW_REPEAT:
+	// 			{
+	// 				Input::UpdateKeyState((KeyCode)key, KeyState::Held);
+	// 				KeyPressedEvent event((KeyCode)key, true);
+	// 				data.EventCallback(event);
+	// 				break;
+	// 			}
+	// 		}
+	// 	});
 
-		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
-		{
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+	// 	glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
+	// 	{
+	// 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-			KeyTypedEvent event((KeyCode)keycode);
-			data.EventCallback(event);
-		});
+	// 		KeyTypedEvent event((KeyCode)keycode);
+	// 		data.EventCallback(event);
+	// 	});
 
-		glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
-		{
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+	// 	glfwSetMouseButtonCallback(m_Window, [](GLFWwindow* window, int button, int action, int mods)
+	// 	{
+	// 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-			switch (action)
-			{
-				case GLFW_PRESS:
-				{
-					Input::UpdateButtonState((MouseButton)button, KeyState::Pressed);
-					MouseButtonPressedEvent event((MouseButton)button);
-					data.EventCallback(event);
-					break;
-				}
-				case GLFW_RELEASE:
-				{
-					Input::UpdateButtonState((MouseButton)button, KeyState::Released);
-					MouseButtonReleasedEvent event((MouseButton)button);
-					data.EventCallback(event);
-					break;
-				}
-			}
-		});
+	// 		switch (action)
+	// 		{
+	// 			case GLFW_PRESS:
+	// 			{
+	// 				Input::UpdateButtonState((MouseButton)button, KeyState::Pressed);
+	// 				MouseButtonPressedEvent event((MouseButton)button);
+	// 				data.EventCallback(event);
+	// 				break;
+	// 			}
+	// 			case GLFW_RELEASE:
+	// 			{
+	// 				Input::UpdateButtonState((MouseButton)button, KeyState::Released);
+	// 				MouseButtonReleasedEvent event((MouseButton)button);
+	// 				data.EventCallback(event);
+	// 				break;
+	// 			}
+	// 		}
+	// 	});
 
-		glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset)
-		{
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+	// 	glfwSetScrollCallback(m_Window, [](GLFWwindow* window, double xOffset, double yOffset)
+	// 	{
+	// 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-			MouseScrolledEvent event((float)xOffset, (float)yOffset);
-			data.EventCallback(event);
-		});
+	// 		MouseScrolledEvent event((float)xOffset, (float)yOffset);
+	// 		data.EventCallback(event);
+	// 	});
 
-		glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos)
-		{
-			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+	// 	glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos)
+	// 	{
+	// 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-			MouseMovedEvent event((float)xPos, (float)yPos);
-			data.EventCallback(event);
-		});
-	}
+	// 		MouseMovedEvent event((float)xPos, (float)yPos);
+	// 		data.EventCallback(event);
+	// 	});
+	// }
 
 
 	void Window::OnUpdate()
 	{
-		glfwPollEvents();
+		/// TODO: MANAGE VSYNC WITH SDL poll events
+		// glfwPollEvents();
 		Input::Update();
-		m_Context->SwapBuffers();
+		/// TODO: MANAGE SWAPBUFFER WINDOWS WITH SDL
+		// m_Context->SwapBuffers();
 	}
 
 
 	void Window::SetVSync(bool enabled)
 	{
-		if (enabled)
-			glfwSwapInterval(1);
-		else
-			glfwSwapInterval(0);
+		/// TODO: MANAGE VSYNC WITH SDL
+		// if (enabled)
+			// glfwSwapInterval(1);
+		// else
+			// glfwSwapInterval(0);
 
 		m_Data.VSync = enabled;
 	}
@@ -212,14 +218,15 @@ namespace Cober {
 
 	void Window::ChangeFullScreen() 
 	{
-		if (m_Data.FullScreen)
-		{
-			glfwRestoreWindow(m_Window);
-		}
-		else
-		{
-			glfwMaximizeWindow(m_Window);
-		}
+		/// TODO: MANAGE WINDOWS PROPERTIES WITH SDL3
+		// if (m_Data.FullScreen)
+		// {
+		// 	glfwRestoreWindow(m_Window);
+		// }
+		// else
+		// {
+		// 	glfwMaximizeWindow(m_Window);
+		// }
 		
 		m_Data.FullScreen = m_Data.FullScreen == true ? false : true;
 	}

@@ -6,14 +6,14 @@
 
 namespace Cober {
 
-	std::unordered_map<std::filesystem::path, Ref<Texture>> Texture::m_TexturesDataHolder;
+	// std::unordered_map<std::filesystem::path, Ref<Texture>> Texture::m_TexturesDataHolder;
 
 	Ref<Texture> Texture::Create(const TextureSpecification& specification)
 	{
 		switch (RenderAPI::GetAPI())
 		{
 			case RenderAPI::API::None:      LOG_CORE_WARNING("RendererAPI::None is currently not supported!"); return nullptr;
-			case RenderAPI::API::OpenGL:    return CreateRef<OpenGLTexture>(specification);
+			// case RenderAPI::API::OpenGL:    return CreateRef<OpenGLTexture>(specification);
 			default:	LOG_CORE_ASSERT(false, "Unknown RendererAPI!"); break;
 		}
 		
@@ -29,7 +29,7 @@ namespace Cober {
 			case RenderAPI::API::OpenGL:    
 				if (m_TexturesDataHolder.find(path) == m_TexturesDataHolder.end())
 				{
-					m_TexturesDataHolder[path] = CreateRef<OpenGLTexture>(path);
+					// m_TexturesDataHolder[path] = CreateRef<OpenGLTexture>(path);
 				}
 				return m_TexturesDataHolder[path];
 			default:	LOG_CORE_ASSERT(false, "Unknown RendererAPI!"); break;
@@ -101,10 +101,10 @@ namespace Cober {
 
 	void SubTexture::ChangeIndices(Ref<SubTexture>& subTexture, glm::vec2 newIndices)
 	{
-		subTexture = SubTexture::UpdateCoords(subTexture->GetTexture(), 
-								 subTexture->GetTexture()->GetTextureVertices(), 
-								 newIndices, 
-								 subTexture->subTextureCellSize, 
-								 subTexture->subTextureSpriteSize);
+		// subTexture = SubTexture::UpdateCoords(subTexture->GetTexture(), 
+		// 						 subTexture->GetTexture()->GetTextureVertices(), 
+		// 						 newIndices, 
+		// 						 subTexture->subTextureCellSize, 
+		// 						 subTexture->subTextureSpriteSize);
 	}
 }

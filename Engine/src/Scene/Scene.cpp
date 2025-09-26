@@ -152,7 +152,8 @@ namespace Cober {
 		}
 
 		// Copy components (except IDComponent and TagComponent)
-		CopyComponent(AllComponents{}, dstSceneRegistry, srcSceneRegistry, enttMap);
+		/// TODO: FIX ALL COMPONENT BUGS FIRST TO AVOID VOID COPIES ERROR
+		// CopyComponent(AllComponents{}, dstSceneRegistry, srcSceneRegistry, enttMap);
 
 		return newScene;
 	}
@@ -181,7 +182,8 @@ namespace Cober {
 		for (auto& entity : originalEntityMap)
 		{
 			Entity ent = sceneToBeReloaded->CreateEntityWithUUID(entity.first, entity.second.GetName());
-			CopyComponentIfExists(AllComponents{}, ent, originalEntityMap.at(entity.first));
+			/// TODO: FIX ALL COMPONENT BUGS FIRST TO AVOID VOID COPIES ERROR
+			// CopyComponentIfExists(AllComponents{}, ent, originalEntityMap.at(entity.first));
 			Physics2D::InitEntity(ent);
 		}
 
@@ -385,7 +387,8 @@ namespace Cober {
 	{
 		std::string name = entity.GetName();
 		Entity newEntity = CreateEntity(name);
-		CopyComponentIfExists(AllComponents{}, newEntity, entity);
+		/// TODO: FIX ALL COMPONENT BUGS FIRST TO AVOID VOID COPIES ERROR
+		// CopyComponentIfExists(AllComponents{}, newEntity, entity);
 
 		if (EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR || 
 		EngineApp::Get().GetGameState() == EngineApp::GameState::PLAY)
