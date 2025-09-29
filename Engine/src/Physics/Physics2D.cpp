@@ -6,9 +6,9 @@
 
 namespace Cober {
 
-    // bool Physics2D::m_DebugActive = false;
+    bool Physics2D::m_DebugActive = false;
     // b2World* Physics2D::m_PhysicsWorld = nullptr;
-    // std::vector<Entity> Physics2D::m_EntitiesToInitPhysics;
+    std::vector<Entity> Physics2D::m_EntitiesToInitPhysics;
     // std::vector<b2Body*> Physics2D::m_BodiesToBeDestroyed;
     // std::vector<std::pair<BodyChangesType, BodyValues>> Physics2D::m_ApplyBodyChangesPool;
 

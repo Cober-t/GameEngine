@@ -462,10 +462,11 @@ inline void ImGui::FileBrowser::Display()
 
     SameLine();
 
-    int escIdx = GetIO().KeyMap[ImGuiKey_Escape];
-    if (Button(cancel_.c_str()) || closeFlag_ ||
-        ((flags_ & ImGuiFileBrowserFlags_CloseOnEsc) && IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) && escIdx >= 0 && IsKeyPressed(escIdx)))
-        CloseCurrentPopup();
+    /// TODO: OBSOLOETE, FIX WITH THE NEW IMGUI API
+    // int escIdx = GetIO().KeyMap[ImGuiKey_Escape];
+    // if (Button(cancel_.c_str()) || closeFlag_ ||
+    //     ((flags_ & ImGuiFileBrowserFlags_CloseOnEsc) && IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows) && escIdx >= 0 && IsKeyPressed(escIdx)))
+    //     CloseCurrentPopup();
 
     if (!statusStr_.empty() && !(flags_ & ImGuiFileBrowserFlags_NoStatusBar))
     {

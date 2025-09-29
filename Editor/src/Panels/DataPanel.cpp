@@ -38,7 +38,8 @@ namespace Cober {
 		ImGui::Spacing();
 		ImGui::Text("Entities: %i", scene->GetEntityCount());
 		ImGui::Text("Physics Bodies: %i", Physics2D::GetBodyCount());
-		ImGui::Text("Fonts Loaded: %i", Font::GetFontLoadedCount());
+		/// TODO: FIX FONTS FIRST
+		// ImGui::Text("Fonts Loaded: %i", Font::GetFontLoadedCount());
 		ImGui::Text("Textures Loaded: %i", Render2D::GetStats().TexturesLoadedOnScene);
 		ImGui::Spacing();
 		ImGui::Text("Screen size:\nX: %i Y: %i", EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight());

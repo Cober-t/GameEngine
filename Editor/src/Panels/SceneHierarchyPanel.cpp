@@ -22,8 +22,8 @@ namespace Cober {
 		s_Instance = this;
 
 		m_AssetIconMap["audio"] = EditorResources::AudioIcon;
-		m_AssetIconMap["boxCollider2D"] = EditorResources::BoxCollider2DIcon;
 		m_AssetIconMap["circleCollider2D"] = EditorResources::CircleCollider2DIcon;
+		m_AssetIconMap["boxCollider2D"] = EditorResources::BoxCollider2DIcon;
 		m_AssetIconMap["rigidbody2D"] = EditorResources::RigidBody2DIcon;
 		m_AssetIconMap["nativeScript"] = EditorResources::NativeScriptIcon;
 		m_AssetIconMap["sprite"] = EditorResources::SpriteIcon;
@@ -155,8 +155,9 @@ namespace Cober {
 		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0,0 });
 
-		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-		ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
+		/// TODO: FIX FONT FIST (msgen library)
+		// float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+		ImVec2 buttonSize = { /*lineHeight*/ 5.0f + 3.0f, 5.0f/*lineHeight*/ };
 
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
@@ -216,7 +217,8 @@ namespace Cober {
 		{
 			auto& component = entity.GetComponent<T>();
 			ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
-			float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y;
+			/// TODO: FIX FONT FIRST (msgen library)
+			float lineHeight = /*GImGui->Font->FontSize*/5.0f + GImGui->Style.FramePadding.y;
 
 			// Switch to make icon components
 			Ref<Texture> iconComponent = m_AssetIconMap["transform"];
@@ -245,14 +247,18 @@ namespace Cober {
 
 			if (name != ComponentNames::Transform)
 			{
-				if (ImGui::ImageButton((ImTextureID)m_AssetIconMap["remove"]->GetRendererID(), ImVec2{ lineHeight*0.9f, lineHeight*0.9f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 }))
+				ImTextureRef* texRef = new ImTextureRef(m_AssetIconMap["remove"]->GetRendererID());
+				const char* strID = "remove";
+				if (ImGui::ImageButton(strID, texRef, ImVec2{ lineHeight*0.9f, lineHeight*0.9f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 }))
 					entity.RemoveComponent<T>();
 			}
 				
 			ImGui::SameLine(2.0f, 0.0f);
 			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 			// This usless button cover the node tree's ugly arrow
-			ImGui::ImageButton((ImTextureID)iconComponent->GetRendererID(), ImVec2{ lineHeight*0.9f, lineHeight*0.9f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+			ImTextureRef* texRef = new ImTextureRef(iconComponent->GetRendererID());
+			const char* strID = "coverUglyArror";
+			ImGui::ImageButton(strID, texRef, ImVec2{ lineHeight*0.9f, lineHeight*0.9f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 	        ImGui::PopItemFlag();
 
 			if (open) 
@@ -394,22 +400,24 @@ namespace Cober {
                 {
 					m_SelectionContext.AddComponent<Rigidbody2D>();
 				}
-				else if (!m_SelectionContext.HasComponent<BoxCollider2D>()) 
-                {
-					m_SelectionContext.AddComponent<BoxCollider2D>();
-				}
-				else if (!m_SelectionContext.HasComponent<CircleCollider2D>()) 
-                {
-					m_SelectionContext.AddComponent<CircleCollider2D>();
-				}
-				// else if (!m_SelectionContext.HasComponent<EdgeCollider2D>()) 
+				/// TODO: FIX COMPONENTS FIRST
+				// else if (!m_SelectionContext.HasComponent<BoxCollider2D>()) 
                 // {
-				// 	m_SelectionContext.AddComponent<EdgeCollider2D>();
+				// 	m_SelectionContext.AddComponent<BoxCollider2D>();
 				// }
-				// else if (!m_SelectionContext.HasComponent<PolygonCollider2D>()) 
+				// else if (!m_SelectionContext.HasComponent<CircleCollider2D>()) 
                 // {
-				// 	m_SelectionContext.AddComponent<PolygonCollider2D>();
+				// 	m_SelectionContext.AddComponent<CircleCollider2D>();
 				// }
+				// NOT IMPLEMENTED YET
+				// // else if (!m_SelectionContext.HasComponent<EdgeCollider2D>()) 
+                // // {
+				// // 	m_SelectionContext.AddComponent<EdgeCollider2D>();
+				// // }
+				// // else if (!m_SelectionContext.HasComponent<PolygonCollider2D>()) 
+                // // {
+				// // 	m_SelectionContext.AddComponent<PolygonCollider2D>();
+				// // }
 				else if (!m_SelectionContext.HasComponent<AudioComponent>())
 				{
 					m_SelectionContext.AddComponent<AudioComponent>();
@@ -430,8 +438,9 @@ namespace Cober {
 			AddIfHasComponent<TextComponent>((std::string)ComponentNames::Text);
 			AddIfHasComponent<ParticleEmitterComponent>((std::string)ComponentNames::Particle);
 			AddIfHasComponent<Rigidbody2D>((std::string)ComponentNames::Rigidbody2D);
-			AddIfHasComponent<BoxCollider2D>((std::string)ComponentNames::Box2DCollider);
-			AddIfHasComponent<CircleCollider2D>((std::string)ComponentNames::Circle2DCollider);
+			/// TODO: FIX COMPONENTS FIRST
+			// AddIfHasComponent<BoxCollider2D>((std::string)ComponentNames::Box2DCollider);
+			// AddIfHasComponent<CircleCollider2D>((std::string)ComponentNames::Circle2DCollider);
 			// AddIfHasComponent<EdgeCollider2D>("Edge Collider 2D Component");
 			// AddIfHasComponent<PolygonCollider2D>("Polygon Collider 2D Component");
 			AddIfHasComponent<AudioComponent>((std::string)ComponentNames::Audio);
@@ -537,42 +546,44 @@ namespace Cober {
 				ImGui::Checkbox("Fixed Rotation", &component.fixedRotation);
 			});
 
-		DrawComponent<BoxCollider2D>((std::string)ComponentNames::Box2DCollider, entity, [](auto& component, auto& entity)
-			{
-				ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
-				ImGui::DragFloat2("Size", glm::value_ptr(component.size), 1.0f, 1.0f);
-				ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
-				ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
-				ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
-				ImGui::Checkbox("Is Sensor", &component.isSensor);
-			});
+		/// TODO: FIX COMPONENT FIRST
+		// DrawComponent<BoxCollider2D>((std::string)ComponentNames::Box2DCollider, entity, [](auto& component, auto& entity)
+		// 	{
+		// 		ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
+		// 		ImGui::DragFloat2("Size", glm::value_ptr(component.size), 1.0f, 1.0f);
+		// 		ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
+		// 		ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
+		// 		ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
+		// 		ImGui::Checkbox("Is Sensor", &component.isSensor);
+		// 	});
 
 
-		DrawComponent<CircleCollider2D>((std::string)ComponentNames::Circle2DCollider, entity, [](auto& component, auto& entity)
-			{
-				ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
-				ImGui::DragFloat("Radius", &component.radius, 0.5f, 0.0f, 100.0f);
-				ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
-				ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
-				ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
-				ImGui::Checkbox("Is Sensor", &component.isSensor);
-			});
+		// DrawComponent<CircleCollider2D>((std::string)ComponentNames::Circle2DCollider, entity, [](auto& component, auto& entity)
+		// 	{
+		// 		ImGui::DragFloat2("Offset", glm::value_ptr(component.offset));
+		// 		ImGui::DragFloat("Radius", &component.radius, 0.5f, 0.0f, 100.0f);
+		// 		ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
+		// 		ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
+		// 		ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
+		// 		ImGui::Checkbox("Is Sensor", &component.isSensor);
+		// 	});
 
 
-		DrawComponent<EdgeCollider2D>("Edge Collider 2D", entity, [](auto& component, auto& entity)
-			{
-				ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
-				ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
-				ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
-			});
+		// NOT IMPLEMENTED YET
+		// // DrawComponent<EdgeCollider2D>("Edge Collider 2D", entity, [](auto& component, auto& entity)
+		// // 	{
+		// // 		ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
+		// // 		ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
+		// // 		ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
+		// // 	});
 
 
-		DrawComponent<PolygonCollider2D>("Polygon Collider 2D", entity, [](auto& component, auto& entity)
-			{
-				ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
-				ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
-				ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
-			});
+		// // DrawComponent<PolygonCollider2D>("Polygon Collider 2D", entity, [](auto& component, auto& entity)
+		// // 	{
+		// // 		ImGui::DragFloat("Density", &component.density, 0.01f, 0.0f, 1.0f);
+		// // 		ImGui::DragFloat("Friction", &component.friction, 0.01f, 0.0f, 1.0f);
+		// // 		ImGui::DragFloat("Restitution", &component.restitution, 0.01f, 0.0f, 1.0f);
+		// // 	});
 		
 
 		DrawComponent<Render2DComponent>((std::string)ComponentNames::Render2DShape, entity, [](auto& component, auto& entity)

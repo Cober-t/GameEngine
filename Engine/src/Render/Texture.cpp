@@ -6,7 +6,7 @@
 
 namespace Cober {
 
-	// std::unordered_map<std::filesystem::path, Ref<Texture>> Texture::m_TexturesDataHolder;
+	std::unordered_map<std::filesystem::path, Ref<Texture>> Texture::m_TexturesDataHolder;
 
 	Ref<Texture> Texture::Create(const TextureSpecification& specification)
 	{

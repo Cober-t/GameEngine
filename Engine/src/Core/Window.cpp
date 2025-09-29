@@ -90,17 +90,18 @@ namespace Cober {
 	// uint32_t Window::GetWidth() const { return m_Data.Width; }
 	// uint32_t Window::GetHeight() const { return m_Data.Height; }
 
-	// void Window::SetWindowCallbacks()
-	// {
-	// 	glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
-	// 	{
-	// 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-	// 		data.Width = width;
-	// 		data.Height = height;
+	void Window::SetWindowCallbacks()
+	{
+		// glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
+		// {
+		// 	WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+		// 	data.Width = width;
+		// 	data.Height = height;
 
-	// 		WindowResizeEvent event(width, height);
-	// 		data.EventCallback(event);
-	// 	});
+		// 	WindowResizeEvent event(width, height);
+		// 	data.EventCallback(event);
+		// });
+	}
 
 	// 	glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
 	// 	{

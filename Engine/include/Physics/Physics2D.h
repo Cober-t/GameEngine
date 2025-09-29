@@ -52,7 +52,8 @@ namespace Cober {
         // inline static b2Body* CreateBody(b2BodyDef body) { return m_PhysicsWorld->CreateBody(&body); }
         inline static void DestroyBody(Entity entity);
 
-        // inline static int32 GetBodyCount() { return m_PhysicsWorld ? m_PhysicsWorld->GetBodyCount() : 0; };
+        // return m_PhysicsWorld ? m_PhysicsWorld->GetBodyCount() : 0;  
+        inline static uint32_t GetBodyCount() {  return 0; }
 
         // inline static b2World& PhysicsWorld() {return *m_PhysicsWorld; }
         static void CleanUp();

@@ -16,106 +16,108 @@ namespace Cober {
 
 		EditorResources::Init();
 
-		new ViewportPanel();
-		new DataPanel();
-		new ConsolePanel();
-		new SceneHierarchyPanel();
-		new ContentBrowserPanel();
-		new MenuPanel();
+		// new ViewportPanel();
+		// new DataPanel();
+		// new ConsolePanel();
+		// new SceneHierarchyPanel();
+		// new ContentBrowserPanel();
+		// new MenuPanel();
 
-		new Debug2DPhysics();
+		// new Debug2DPhysics();
 	}
 
 
 	void Editor::OnAttach() 
 	{
-		m_ActiveScene = Scene::Load(EngineApp::Get().GetSpecification().LastScene);
+		// m_ActiveScene = Scene::Load(EngineApp::Get().GetSpecification().LastScene);
 
-		m_ActiveScene->OnRuntimeStart();
-		m_EditorScene = m_ActiveScene;
+		// m_ActiveScene->OnRuntimeStart();
+		// m_EditorScene = m_ActiveScene;
 
-		// Primitive::Grid::Init();
-		ViewportPanel::Get().CreateFramebuffer(m_EditorCamera->m_ViewportWidth, m_EditorCamera->m_ViewportHeight);
-		SceneHierarchyPanel::Get().SetContext(m_ActiveScene);
+		// // Primitive::Grid::Init();
+		// ViewportPanel::Get().CreateFramebuffer(m_EditorCamera->m_ViewportWidth, m_EditorCamera->m_ViewportHeight);
+		// SceneHierarchyPanel::Get().SetContext(m_ActiveScene);
 	}
 
 
 	void Editor::OnDetach() 
 	{
-		m_ActiveScene->OnRuntimeStop();
-		ViewportPanel::Get().UnbindFramebuffer();
+		// m_ActiveScene->OnRuntimeStop();
+		// ViewportPanel::Get().UnbindFramebuffer();
 
-		m_ActiveScene  = nullptr;
-		m_EditorScene  = nullptr;
-		m_EditorCamera = nullptr;
-		m_CameraActive = nullptr;
+		// m_ActiveScene  = nullptr;
+		// m_EditorScene  = nullptr;
+		// m_EditorCamera = nullptr;
+		// m_CameraActive = nullptr;
 
-		EditorResources::Shutdown();
+		// EditorResources::Shutdown();
 
- 		LOG_INFO("Detached Editor Layer!");
+ 		// LOG_INFO("Detached Editor Layer!");
 	}
 
 
 	void Editor::OnUpdate(Unique<Timestep>& ts) 
 	{
-		ViewportPanel::Get().ResizeViewport(m_CameraActive);
-		ViewportPanel::Get().BindFramebuffer();
-		// ViewportPanel::Get().RenderSkybox();
+		// ViewportPanel::Get().ResizeViewport(m_CameraActive);
+		// ViewportPanel::Get().BindFramebuffer();
+		// // ViewportPanel::Get().RenderSkybox();
 
-		RenderGlobals::SetClearColor(46, 47, 52);
-		// RenderGlobals::SetClearColor(32, 167, 219);
-		RenderGlobals::Clear();
+		// RenderGlobals::SetClearColor(46, 47, 52);
+		// // RenderGlobals::SetClearColor(32, 167, 219);
+		// RenderGlobals::Clear();
 		
-		ViewportPanel::Get().FBOClearAttachments(1, -1);
+		// ViewportPanel::Get().FBOClearAttachments(1, -1);
 
-		ImGui::SetCurrentContext(ImGuiLayer::GetContext());
-		auto& colors = ImGui::GetStyle().Colors;
+		// ImGui::SetCurrentContext(ImGuiLayer::GetContext());
+		// auto& colors = ImGui::GetStyle().Colors;
 
-		switch (EngineApp::Get().GetGameState()) 
-		{
-			case EngineApp::GameState::EDITOR:
-			{
-				colors[ImGuiCol_WindowBg] = ImGui::ColorConvertU32ToFloat4(Colors::Theme::titlebar);
-				m_EditorCamera->SetActive(ViewportPanel::Get().AllowViewportCameraEvents());
-				m_ActiveScene->OnUpdateRuntime(ts, m_CameraActive);
-				// Commented because of a problem with the framebuffer and camera depth
-				// Primitive::Grid::Draw(m_EditorCamera);
-				break;
-			}
-			case EngineApp::GameState::RUNTIME_EDITOR: 
-			{
-				colors[ImGuiCol_WindowBg] = ImVec4(0, 0.0, 0.0, 0.268f);
-				m_ActiveScene->OnUpdateSimulation(ts, m_CameraActive);
-				break;
-			}
-		}
+		// switch (EngineApp::Get().GetGameState()) 
+		// {
+		// 	case EngineApp::GameState::EDITOR:
+		// 	{
+		// 		colors[ImGuiCol_WindowBg] = ImGui::ColorConvertU32ToFloat4(Colors::Theme::titlebar);
+		// 		m_EditorCamera->SetActive(ViewportPanel::Get().AllowViewportCameraEvents());
+		// 		m_ActiveScene->OnUpdateRuntime(ts, m_CameraActive);
+		// 		// Commented because of a problem with the framebuffer and camera depth
+		// 		// Primitive::Grid::Draw(m_EditorCamera);
+		// 		break;
+		// 	}
+		// 	case EngineApp::GameState::RUNTIME_EDITOR: 
+		// 	{
+		// 		colors[ImGuiCol_WindowBg] = ImVec4(0, 0.0, 0.0, 0.268f);
+		// 		m_ActiveScene->OnUpdateSimulation(ts, m_CameraActive);
+		// 		break;
+		// 	}
+		// }
 
-		ViewportPanel::Get().SetCursorEntity();
+		// ViewportPanel::Get().SetCursorEntity();
 
-		ViewportPanel::Get().UnbindFramebuffer();
+		// ViewportPanel::Get().UnbindFramebuffer();
 	}
 
 
 	void Editor::OnImGuiRender() 
 	{
-		InitDockspace();
+		// InitDockspace();
 
-		ViewportPanel::Get().OnGuiRender(m_EditorCamera, m_CameraActive);
-		DataPanel::Get().OnGuiRender(m_ActiveScene);
-		ConsolePanel::Get().OnImGuiRender();
-		SceneHierarchyPanel::Get().OnGuiRender();
-		ContentBrowserPanel::Get().OnGuiRender();
+		// ViewportPanel::Get().OnGuiRender(m_EditorCamera, m_CameraActive);
+		// DataPanel::Get().OnGuiRender(m_ActiveScene);
+		// ConsolePanel::Get().OnImGuiRender();
+		// SceneHierarchyPanel::Get().OnGuiRender();
+		// ContentBrowserPanel::Get().OnGuiRender();
 		
-		MenuPanel::Get().OnGuiRender(m_EditorCamera);
+		// MenuPanel::Get().OnGuiRender(m_EditorCamera);
 
-		ViewportPanel::Get().PlayButtonBar(EngineApp::Get().GetGameState());
+		// ViewportPanel::Get().PlayButtonBar(EngineApp::Get().GetGameState());
 
-		EndDockspace();
+		// EndDockspace();
 	}
 
 
 	void Editor::InitDockspace() 
 	{
+		/// TODO: FIX IMGUI FIRST
+		 /*
 		// [[----- Init variables & dockspace -----]]
 		static bool dockspaceOpen = true;
 		static bool opt_fullscreen_persistant = true;
@@ -168,12 +170,13 @@ namespace Cober {
 		}
 		style.WindowMinSize.x = minWinSizeX;
 		//style.WindowMinSize.y = minWinSizeY;
+		*/
 	}
 
 
 	void Editor::EndDockspace() 
 	{
-		ImGui::End();
+		// ImGui::End();
 	}
 
 

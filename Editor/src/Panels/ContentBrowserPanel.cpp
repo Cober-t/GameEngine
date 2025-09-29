@@ -51,7 +51,9 @@ namespace Cober {
 
 		if (m_CurrentDirectory != m_AssetsPath)
 		{
-			if (ImGui::ImageButton((ImTextureID)m_AssetIconMap["backwards"]->GetRendererID(), ImVec2(18.0f, 18.0f), { 0, 1 }, { 1, 0 }))
+			ImTextureRef* texRef = new ImTextureRef(m_AssetIconMap["backwards"]->GetRendererID());
+			const char* strID = "backwards";
+			if (ImGui::ImageButton(strID, texRef, ImVec2(18.0f, 18.0f), { 0, 1 }, { 1, 0 }))
 			{
 				m_CurrentDirectory = m_CurrentDirectory.parent_path().string() + "\\";
 				m_TextureFolderContentHolder.clear();
@@ -97,7 +99,9 @@ namespace Cober {
 
 			if (directoryEntry.is_directory())
 			{
-				ImGui::ImageButton((ImTextureID)m_AssetIconMap["folder"]->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+				ImTextureRef* texRef = new ImTextureRef(m_AssetIconMap["folder"]->GetRendererID());
+				const char* strID = "folder";
+				ImGui::ImageButton(strID, texRef, { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
 			}
 			else
 			{
@@ -109,11 +113,17 @@ namespace Cober {
 					{
 						m_TextureFolderContentHolder[texturePath] = Texture::Create(texturePath);
 					}
-					ImGui::ImageButton((ImTextureID)m_TextureFolderContentHolder[texturePath.string()]->GetRendererID(), 
-						{ thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+					
+					ImTextureRef* texRef = new ImTextureRef(m_TextureFolderContentHolder[texturePath.string()]->GetRendererID());
+					const char* strID = "imageFile";
+					ImGui::ImageButton(strID, texRef, { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
 				}
-				else
-					ImGui::ImageButton((ImTextureID)m_AssetIconMap["file"]->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+				else {
+
+					ImTextureRef* texRef = new ImTextureRef(m_AssetIconMap["file"]->GetRendererID());
+					const char* strID = "file";
+					ImGui::ImageButton(strID, texRef, { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+				}
 			}
 
 			// Drag and Drop
