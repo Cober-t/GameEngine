@@ -56,9 +56,9 @@ target_include_directories(Engine PRIVATE
 # Public include directories (for consumers of this library)
 target_include_directories(Engine PUBLIC
     include
-    ${GLFW_INCLUDE_DIR}
+    # ${GLFW_INCLUDE_DIR}
     ${SDL3_INCLUDE_DIR}
-    ${GLAD_INCLUDE_DIR}
+    # ${GLAD_INCLUDE_DIR}
     ${IMGUI_INCLUDE_DIR}
     ${BOX2D_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
@@ -75,7 +75,7 @@ target_include_directories(Engine PUBLIC
 # Link libraries - using the actual target names from the submodules
 target_link_libraries(Engine PUBLIC
     # Libraries with their own CMake
-    $<$<TARGET_EXISTS:glfw>:glfw>
+    # $<$<TARGET_EXISTS:glfw>:glfw>
     $<$<TARGET_EXISTS:SDL3-static>:SDL3-static>
     $<$<TARGET_EXISTS:SDL3::SDL3>:SDL3::SDL3>
     $<$<TARGET_EXISTS:box2d>:box2d>
@@ -84,7 +84,7 @@ target_link_libraries(Engine PUBLIC
     $<$<TARGET_EXISTS:msdf-atlas-gen>:msdf-atlas-gen>
     
     # Custom built libraries
-    $<$<TARGET_EXISTS:Glad>:Glad>
+    # $<$<TARGET_EXISTS:Glad>:Glad>
     $<$<TARGET_EXISTS:ImGui>:ImGui>
     $<$<TARGET_EXISTS:Lua>:Lua>
     

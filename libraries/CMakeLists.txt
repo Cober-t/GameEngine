@@ -63,69 +63,58 @@ endif()
 # Libraries without CMakeLists.txt or requiring custom build logic
 # These will be built with custom configurations
 
-# # ImGui - Immediate mode GUI
-# if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/imgui)
-#     message(STATUS "Adding ImGui library (custom build)")
-#     file(GLOB IMGUI_SOURCES 
-#         imgui/*.cpp
-#         imgui/*.h
-#     )
+# ImGui - Immediate mode GUI
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/imgui)
+    message(STATUS "Adding ImGui library (custom build)")
+    file(GLOB IMGUI_SOURCES 
+        imgui/*.cpp
+        imgui/*.h
+    )
     
-#     # Add backend sources if they exist
-#     if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends)
-#         file(GLOB IMGUI_BACKEND_SOURCES
-#             imgui/backends/imgui_impl_glfw.cpp
-#             imgui/backends/imgui_impl_glfw.h
-#             imgui/backends/imgui_impl_opengl3.cpp
-#             imgui/backends/imgui_impl_opengl3.h
-#         )
-#         list(APPEND IMGUI_SOURCES ${IMGUI_BACKEND_SOURCES})
-#     endif()
-    
-#     if(IMGUI_SOURCES)
-#         add_library(ImGui STATIC ${IMGUI_SOURCES})
-#         target_include_directories(ImGui PUBLIC 
-#             imgui
-#             $<$<BOOL:${EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends}>:imgui/backends>
-#         )
+    if(IMGUI_SOURCES)
+        add_library(ImGui STATIC ${IMGUI_SOURCES})
+        target_include_directories(ImGui PUBLIC imgui)
+        if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends)
+            target_include_directories(ImGui PUBLIC imgui/backends)
+        endif()
         
-#         # Link with GLFW if available
-#         if(TARGET glfw)
-#             target_link_libraries(ImGui PUBLIC glfw)
-#         endif()
+        # # Link with GLFW if available
+        # if(TARGET glfw)
+        #     target_link_libraries(ImGui PUBLIC glfw)
+        # endif()
         
-#         target_compile_definitions(ImGui PRIVATE 
-#             IMGUI_IMPL_OPENGL_LOADER_GLAD
-#             $<$<PLATFORM_ID:Windows>:_CRT_SECURE_NO_WARNINGS>
-#         )
-#         set_target_properties(ImGui PROPERTIES FOLDER "Dependencies")
-#     endif()
-# endif()
+        target_compile_definitions(ImGui PRIVATE 
+            # IMGUI_IMPL_OPENGL_LOADER_GLAD
+            $<$<PLATFORM_ID:Windows>:_CRT_SECURE_NO_WARNINGS>
+        )
+        set_target_properties(ImGui PROPERTIES FOLDER "Dependencies")
+    endif()
+endif()
 
-# # ImGuizmo - 3D gizmo for ImGui
-# if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ImGuizmo)
-#     message(STATUS "Adding ImGuizmo library (custom build)")
-#     file(GLOB IMGUIZMO_SOURCES 
-#         ImGuizmo/*.cpp
-#         ImGuizmo/*.h
-#     )
+# ImGuizmo - 3D gizmo for ImGui
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ImGuizmo)
+    message(STATUS "Adding ImGuizmo library (custom build)")
+    file(GLOB IMGUIZMO_SOURCES 
+        ImGuizmo/*.cpp
+        ImGuizmo/*.h
+    )
     
-#     if(IMGUIZMO_SOURCES)
-#         add_library(ImGuizmo STATIC ${IMGUIZMO_SOURCES})
-#         target_include_directories(ImGuizmo PUBLIC ImGuizmo)
+    if(IMGUIZMO_SOURCES)
+        add_library(ImGuizmo STATIC ${IMGUIZMO_SOURCES})
+        target_include_directories(ImGuizmo PUBLIC ImGuizmo)
         
-#         # Link with ImGui if available
-#         if(TARGET ImGui)
-#             target_link_libraries(ImGuizmo PUBLIC ImGui)
-#         endif()
+        # Link with ImGui if available
+        if(TARGET ImGui)
+            target_link_libraries(ImGuizmo PUBLIC ImGui)
+        endif()
         
-#         # Disable precompiled headers for ImGuizmo
-#         set_target_properties(ImGuizmo PROPERTIES 
-#             DISABLE_PRECOMPILE_HEADERS ON
-#             FOLDER "Dependencies"
-#         )
-#     endif()
-# endif()
+        # Disable precompiled headers for ImGuizmo
+        set_target_properties(ImGuizmo PROPERTIES 
+            DISABLE_PRECOMPILE_HEADERS ON
+            FOLDER "Dependencies"
+        )
+    endif()
+endif()
 
 # Lua - Scripting language
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/lua)
@@ -193,10 +182,13 @@ endif()
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/stb_image)
     message(STATUS "Adding STB Image library (header-only)")
     add_library(stb_image INTERFACE)
-    target_include_directories(stb_image INTERFACE 
-        $<$<BOOL:$EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/stb_image/include>:stb_image/include>
-        $<$<BOOL:$EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/stb_image>:stb_image>
-    )
+    target_include_directories(stb_image INTERFACE)
+     if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/stb_image/include)
+        target_include_directories(ImGui PUBLIC stb_image/include)
+    endif()
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/stb_image)
+        target_include_directories(ImGui PUBLIC stb_image)
+    endif()
 endif()
 
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/stb_truetype)
