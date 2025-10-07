@@ -7,14 +7,14 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 // GUI PANELS
-#include "Panels/ViewportPanel.h"
-#include "Panels/DataPanel.h"
-#include "Panels/ConsolePanel.h"
-#include "Panels/SceneHierarchyPanel.h"
-#include "Panels/ContentBrowserPanel.h"
-#include "Panels/MenuPanel.h"
+// #include "Panels/ViewportPanel.h"
+// #include "Panels/DataPanel.h"
+// #include "Panels/ConsolePanel.h"
+// #include "Panels/SceneHierarchyPanel.h"
+// #include "Panels/ContentBrowserPanel.h"
+// #include "Panels/MenuPanel.h"
 
-#include "Physics/Debug2DPhysics.h"
+// #include "Physics/Debug2DPhysics.h"
 
 namespace Cober {
 
@@ -49,7 +49,7 @@ namespace Cober {
 		bool OnKeyPressed(KeyPressedEvent& event);
 
 	private:
-		Ref<Framebuffer> m_Fbo;
+		// Ref<Framebuffer> m_Fbo;
 		bool m_AllowViewportCameraEvents;
 
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };

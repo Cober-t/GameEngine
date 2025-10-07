@@ -1,32 +1,32 @@
-#ifndef DATA_PANEL_H
-#define DATA_PANEL_H
+// #ifndef DATA_PANEL_H
+// #define DATA_PANEL_H
 
-// Quit when DataManger class has been created
-#include <Engine.h>
+// // Quit when DataManger class has been created
+// #include <Engine.h>
 
 
-namespace Cober {
+// namespace Cober {
 
-	class DataPanel 
-    {
-	public:
-		DataPanel();
-		~DataPanel();
+// 	class DataPanel 
+//     {
+// 	public:
+// 		DataPanel();
+// 		~DataPanel();
 
-		static DataPanel& Get() { return *instance; }
+// 		static DataPanel& Get() { return *instance; }
 
-		void SetMouseX(int x) { mouseX = x; }
-		void SetMouseY(int y) { mouseY = y; }
+// 		void SetMouseX(int x) { mouseX = x; }
+// 		void SetMouseY(int y) { mouseY = y; }
 
-		void OnGuiRender(const Ref<Scene>& scene);
-		//void OnGuiRender(Unique<DataManager> dataManager);
+// 		void OnGuiRender(const Ref<Scene>& scene);
+// 		//void OnGuiRender(Unique<DataManager> dataManager);
 
-	private:
-		int mouseX, mouseY;
+// 	private:
+// 		int mouseX, mouseY;
 
-	private:
-		static DataPanel* instance;
-	};
-}
+// 	private:
+// 		static DataPanel* instance;
+// 	};
+// }
 
-#endif
+// #endif

@@ -1,29 +1,29 @@
-#ifndef CONTENT_BROWSER_PANEL_H
-#define CONTENT_BROWSER_PANEL_H
+// #ifndef CONTENT_BROWSER_PANEL_H
+// #define CONTENT_BROWSER_PANEL_H
 
-#include <Engine.h>
-#include "Theme/EditorResources.h"
-#include <filesystem>
+// #include <Engine.h>
+// #include "Theme/EditorResources.h"
+// #include <filesystem>
 
-namespace Cober {
+// namespace Cober {
 
-	class ContentBrowserPanel
-	{
-	public:
-		ContentBrowserPanel();
-		~ContentBrowserPanel();
+// 	class ContentBrowserPanel
+// 	{
+// 	public:
+// 		ContentBrowserPanel();
+// 		~ContentBrowserPanel();
 
-		static ContentBrowserPanel& Get() { return *s_Instance; }
+// 		static ContentBrowserPanel& Get() { return *s_Instance; }
 
-		void OnGuiRender();
+// 		void OnGuiRender();
         
-	private:
-		static ContentBrowserPanel* s_Instance;
-		std::filesystem::path m_AssetsPath;
-		std::filesystem::path m_CurrentDirectory;
-		std::map<std::string, Ref<Texture>> m_AssetIconMap;
-		std::map<std::filesystem::path, Ref<Texture>> m_TextureFolderContentHolder;
-	};
-}
+// 	private:
+// 		static ContentBrowserPanel* s_Instance;
+// 		std::filesystem::path m_AssetsPath;
+// 		std::filesystem::path m_CurrentDirectory;
+// 		std::map<std::string, Ref<Texture>> m_AssetIconMap;
+// 		std::map<std::filesystem::path, Ref<Texture>> m_TextureFolderContentHolder;
+// 	};
+// }
 
-#endif
+// #endif

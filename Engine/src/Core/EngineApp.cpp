@@ -1,6 +1,6 @@
 #include <pch.h>
 #include "Core/EngineApp.h"
-
+#include <SDL3/SDL.h>
 
 namespace Cober {
 
@@ -20,20 +20,15 @@ namespace Cober {
 
         LOG_CORE_INFO("Current Working Path: {0}", m_Specification.WorkingDirectory);
 
-        /// TODO: CREATE WINDOW WITH SDL3
-        // m_Window = CreateUnique<Window>(WindowProps(m_Specification.Name, m_Specification.Width, m_Specification.Height));
-        // m_Window->SetEventCallback([this](Event& e) { OnEvent(e); });
         m_TimeStep = CreateUnique<Timestep>();
 
-        // if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD))
-        // {
-        //     printf("Error: SDL_Init(): %s\n", SDL_GetError());
-        //     // return;
-        // }
+        /// TODO: CREATE WINDOW WITH SDL3
+        m_Window = CreateUnique<Window>(WindowProps(m_Specification.Name, m_Specification.Width, m_Specification.Height));
+        m_Window->SetEventCallback([this](Event& e) { OnEvent(e); });
 
         /// TODO: RENDER PIPELINE WITH SDL3
-        // RenderGlobals::Init();
-		// Render2D::Start();
+        RenderGlobals::Init();
+		//Render2D::Start();
 
         m_GameState = EngineApp::GameState::PLAY;
     }
@@ -100,9 +95,9 @@ namespace Cober {
     void EngineApp::Run(Unique<Timestep>& ts)
     {
         //Process Events
-        Input::TransitionPressedKeys();
-		Input::TransitionPressedButtons();
-        m_Window->OnUpdate();
+        // Input::TransitionPressedKeys();
+		// Input::TransitionPressedButtons();
+        // m_Window->OnUpdate();
 
         if(!m_Minimized) 
         {
@@ -132,22 +127,22 @@ namespace Cober {
     {
         // In the future each layer/object could save the event on a buffer
         // and handle it one per frame on Update instead of delay all the Application
-        EventDispatcher dispatcher(event);
-		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(EngineApp::OnWindowClose));
-        dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(EngineApp::OnWindowResize));
+        // EventDispatcher dispatcher(event);
+		// dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(EngineApp::OnWindowClose));
+        // dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(EngineApp::OnWindowResize));
 
-		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
-		{
-			if (event.Handled) 
-				break;
-			(*it)->OnEvent(event);
-		}
+		// for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
+		// {
+		// 	if (event.Handled) 
+		// 		break;
+		// 	(*it)->OnEvent(event);
+		// }
     }
   
 
     bool EngineApp::OnWindowClose(WindowCloseEvent& event)
 	{
-		m_GameState = EngineApp::GameState::EXIT;
+		// m_GameState = EngineApp::GameState::EXIT;
 		return true;
 	}
 
@@ -159,20 +154,20 @@ namespace Cober {
 
 	bool EngineApp::OnWindowResize(WindowResizeEvent& event)
 	{
-		if (event.GetWidth() == 0 || event.GetHeight() == 0)
-		{
-			m_Minimized = true;
-			return false;
-		}
+		// if (event.GetWidth() == 0 || event.GetHeight() == 0)
+		// {
+		// 	m_Minimized = true;
+		// 	return false;
+		// }
 
-		m_Minimized = false;
+		// m_Minimized = false;
 
-        // In Play mode the viewport is manage by the camera
-        // In the rest, the viewport is managed by the Editor Viewport
-        if (EngineApp::Get().GetGameState() != EngineApp::GameState::PLAY)
-        {
-		    RenderGlobals::SetViewport(event.GetWidth(), event.GetHeight());
-        }
+        // // In Play mode the viewport is manage by the camera
+        // // In the rest, the viewport is managed by the Editor Viewport
+        // if (EngineApp::Get().GetGameState() != EngineApp::GameState::PLAY)
+        // {
+		//     RenderGlobals::SetViewport(event.GetWidth(), event.GetHeight());
+        // }
 
 		return false;
 	}

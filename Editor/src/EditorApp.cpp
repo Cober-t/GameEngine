@@ -11,12 +11,12 @@ namespace Cober {
 	
 		EditorApp(const AppSpecification& specification) : EngineApp(specification)
 		{
-			EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
+			EngineApp::Get().SetGameState(EngineApp::GameState::PLAY);
 			PushLayer(new Editor());
 		}
 
-		~EditorApp() {
-
+		~EditorApp() 
+		{
 			LOG_INFO("Editor Destructor!");
 		}
 	};

@@ -3,13 +3,15 @@
 
 namespace Cober {
 
-	Unique<RenderAPI> RenderGlobals::m_Api = RenderAPI::Create();
+	Unique<RenderAPI> RenderGlobals::m_Api = nullptr;// RenderAPI::Create();
 
 	void RenderGlobals::Init() 
 	{
-		// RenderGlobals::m_Api->SetAPI(RenderAPI::API::OpenGL);
-		// RenderGlobals::m_Api = RenderAPI::Create();
-		RenderGlobals::m_Api->Init();
+		RenderGlobals::m_Api->SetAPI(RenderAPI::API::Vulkan);
+		RenderGlobals::m_Api = RenderAPI::Create();
+		if (RenderGlobals::m_Api) {
+			RenderGlobals::m_Api->Init();
+		}
 	}
 
 

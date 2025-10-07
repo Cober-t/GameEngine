@@ -84,4 +84,4 @@ if "!ASAN_FLAG!"=="ON" (
     echo - Windows SDK 10.0.20348.0 or later
     echo.
 )
-pause
+cmd /c start C:/Users/Jorge/Documents/GameEngine/build/bin/Debug/Editor/Editor.exe

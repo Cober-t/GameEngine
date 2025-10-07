@@ -1,6 +1,8 @@
 #ifndef GRAPHICS_CONTEXT_H
 #define GRAPHICS_CONTEXT_H
 
+struct SDL_Window;
+
 namespace Cober {
 
 	class GraphicsContext

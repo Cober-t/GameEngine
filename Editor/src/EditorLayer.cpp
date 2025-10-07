@@ -11,10 +11,10 @@ namespace Cober {
 
 	Editor::Editor() : Layer("Editor")
 	{
-		m_EditorCamera = CreateUnique<EditorCamera>(45.0f, EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight(), 0.01f, 1000.0f, GlobalCamera::perspective);
-		m_CameraActive = m_EditorCamera;
+		// m_EditorCamera = CreateUnique<EditorCamera>(45.0f, EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight(), 0.01f, 1000.0f, GlobalCamera::perspective);
+		// m_CameraActive = m_EditorCamera;
 
-		EditorResources::Init();
+		// EditorResources::Init();
 
 		// new ViewportPanel();
 		// new DataPanel();
@@ -117,60 +117,59 @@ namespace Cober {
 	void Editor::InitDockspace() 
 	{
 		/// TODO: FIX IMGUI FIRST
-		 /*
+
 		// [[----- Init variables & dockspace -----]]
-		static bool dockspaceOpen = true;
-		static bool opt_fullscreen_persistant = true;
-		bool opt_fullscreen = opt_fullscreen_persistant;
-		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+		// static bool dockspaceOpen = true;
+		// static bool opt_fullscreen_persistant = true;
+		// bool opt_fullscreen = opt_fullscreen_persistant;
+		// static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
-		// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-		// because it would be confusing to have two docking targets within each others.
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-		if (opt_fullscreen)
-		{
-			ImGuiViewport* viewport = ImGui::GetMainViewport();
-			ImGui::SetNextWindowPos(viewport->Pos);
-			ImGui::SetNextWindowSize(viewport->Size);
-			ImGui::SetNextWindowViewport(viewport->ID);
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-			window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-			window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-		}
+		// // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
+		// // because it would be confusing to have two docking targets within each others.
+		// ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+		// if (opt_fullscreen)
+		// {
+		// 	ImGuiViewport* viewport = ImGui::GetMainViewport();
+		// 	ImGui::SetNextWindowPos(viewport->Pos);
+		// 	ImGui::SetNextWindowSize(viewport->Size);
+		// 	ImGui::SetNextWindowViewport(viewport->ID);
+		// 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+		// 	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+		// 	window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+		// 	window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+		// }
 
-		// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
-		if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-			window_flags |= ImGuiWindowFlags_NoBackground;
+		// // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
+		// if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+		// 	window_flags |= ImGuiWindowFlags_NoBackground;
 
-		if (!dockspaceOpen)
-			EngineApp::Get().Close();
+		// if (!dockspaceOpen)
+		// 	EngineApp::Get().Close();
 
-		// [[----- BEGIN DOCKSPACE ----]]
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+		// // [[----- BEGIN DOCKSPACE ----]]
+		// ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
-		EngineApp& app = EngineApp::Get();
-		const char* title = app.GetWindow().GetTitle().c_str();
-		ImGui::Begin(title, &dockspaceOpen, window_flags);
-		ImGui::PopStyleVar();
+		// EngineApp& app = EngineApp::Get();
+		// const char* title = app.GetWindow().GetTitle().c_str();
+		// ImGui::Begin(title, &dockspaceOpen, window_flags);
+		// ImGui::PopStyleVar();
 
-		if (opt_fullscreen)
-			ImGui::PopStyleVar(2);
+		// if (opt_fullscreen)
+		// 	ImGui::PopStyleVar(2);
 
-		// DockSpace
-		ImGuiIO& io = ImGui::GetIO();
-		ImGuiStyle& style = ImGui::GetStyle();
-		float minWinSizeX = style.WindowMinSize.x;
-		//float minWinSizeY = style.WindowMinSize.y;
-		style.WindowMinSize.x = 200.0f;
-		//style.WindowMinSize.y = 25.0f;
-		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
-			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-		}
-		style.WindowMinSize.x = minWinSizeX;
+		// // DockSpace
+		// ImGuiIO& io = ImGui::GetIO();
+		// ImGuiStyle& style = ImGui::GetStyle();
+		// float minWinSizeX = style.WindowMinSize.x;
+		// //float minWinSizeY = style.WindowMinSize.y;
+		// style.WindowMinSize.x = 200.0f;
+		// //style.WindowMinSize.y = 25.0f;
+		// if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
+		// 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+		// 	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+		// }
+		// style.WindowMinSize.x = minWinSizeX;
 		//style.WindowMinSize.y = minWinSizeY;
-		*/
 	}
 
 
@@ -182,65 +181,65 @@ namespace Cober {
 
 	void Editor::OnEvent(Event& event)
 	{
-		auto gameState = EngineApp::Get().GetGameState();
+		// auto gameState = EngineApp::Get().GetGameState();
 
-		if (gameState == EngineApp::GameState::EDITOR || gameState == EngineApp::GameState::RUNTIME_EDITOR)
-		{
-			if (m_AllowViewportCameraEvents)
-				m_CameraActive->OnEvent(event);
-		}
+		// if (gameState == EngineApp::GameState::EDITOR || gameState == EngineApp::GameState::RUNTIME_EDITOR)
+		// {
+		// 	if (m_AllowViewportCameraEvents)
+		// 		m_CameraActive->OnEvent(event);
+		// }
 		
-		ViewportPanel::Get().OnEvent(event);
+		// ViewportPanel::Get().OnEvent(event);
 		
-		if (gameState == EngineApp::GameState::RUNTIME_EDITOR)
-			NativeScriptFn::OnEvent(Editor::GetActiveScene().get(), event);
+		// if (gameState == EngineApp::GameState::RUNTIME_EDITOR)
+		// 	NativeScriptFn::OnEvent(Editor::GetActiveScene().get(), event);
 
-		EventDispatcher dispatcher(event);
-		dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& event) { return OnKeyPressed(event); });
+		// EventDispatcher dispatcher(event);
+		// dispatcher.Dispatch<KeyPressedEvent>([this](KeyPressedEvent& event) { return OnKeyPressed(event); });
 	}
 
 
 	bool Editor::OnKeyPressed(KeyPressedEvent& event) 
 	{
 		// TEST PARTICLE SYSTEM
-		if (Input::IsKeyPressed(KeyCode::P))
-		{
-			ParticleEmitter::Emit(Editor::GetActiveScene().get());
-		}
+		// if (Input::IsKeyPressed(KeyCode::P))
+		// {
+		// 	ParticleEmitter::Emit(Editor::GetActiveScene().get());
+		// }
 
-		if (Input::IsKeyDown(Key::LeftControl) && !Input::IsMouseButtonDown(MouseButton::Right))
-		{
-			switch (event.GetKeyCode())
-			{
-				case Key::N:
-				{
-					// 	NewScene();
-					break;
-				}
-				case Key::S: 
-				{
-					if (EngineApp::Get().GetGameState() == EngineApp::GameState::EDITOR)
-						Scene::Save(m_ActiveScene, m_ActiveScene->GetName());
-					break;
-				}
-				case Key::D:
-				{
-					if (m_SelectedEntity)
-						m_ActiveScene->DuplicateEntity(m_SelectedEntity);
-					break;
-				}
-				case Key::Delete:
-				{
-					if (m_SelectedEntity)
-					{
-						SceneHierarchyPanel::Get().SetNullEntityContext();
-						m_ActiveScene->DestroyEntity(m_SelectedEntity);
-						m_SelectedEntity = Entity();
-					}
-					break;
-				}
-			}
-		}
+		// if (Input::IsKeyDown(Key::LeftControl) && !Input::IsMouseButtonDown(MouseButton::Right))
+		// {
+		// 	switch (event.GetKeyCode())
+		// 	{
+		// 		case Key::N:
+		// 		{
+		// 			// 	NewScene();
+		// 			break;
+		// 		}
+		// 		case Key::S: 
+		// 		{
+		// 			if (EngineApp::Get().GetGameState() == EngineApp::GameState::EDITOR)
+		// 				Scene::Save(m_ActiveScene, m_ActiveScene->GetName());
+		// 			break;
+		// 		}
+		// 		case Key::D:
+		// 		{
+		// 			if (m_SelectedEntity)
+		// 				m_ActiveScene->DuplicateEntity(m_SelectedEntity);
+		// 			break;
+		// 		}
+		// 		case Key::Delete:
+		// 		{
+		// 			if (m_SelectedEntity)
+		// 			{
+		// 				SceneHierarchyPanel::Get().SetNullEntityContext();
+		// 				m_ActiveScene->DestroyEntity(m_SelectedEntity);
+		// 				m_SelectedEntity = Entity();
+		// 			}
+		// 			break;
+		// 		}
+		// 	}
+		// }
 
 		return true;
 	}
@@ -265,8 +264,8 @@ namespace Cober {
 
 	Entity& Editor::SelectedEntity()
 	{
-		if ((bool)m_SelectedEntity && m_SelectedEntity.HasComponent<TagComponent>() == false)
-			m_SelectedEntity = Entity();
+		// if ((bool)m_SelectedEntity && m_SelectedEntity.HasComponent<TagComponent>() == false)
+		// 	m_SelectedEntity = Entity();
 
 		return m_SelectedEntity;
 	}

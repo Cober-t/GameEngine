@@ -9,6 +9,8 @@
 
 #include "Events/Event.h"
 
+class SDL_Window;
+
 namespace Cober {
 
 	struct WindowProps 
@@ -56,7 +58,7 @@ namespace Cober {
 		virtual void Shutdown();
 
 	private:
-		// GLFWwindow* m_Window;
+		SDL_Window* m_Window = nullptr;
 		Unique<GraphicsContext> m_Context;
 
 		struct WindowData

@@ -13,7 +13,7 @@ namespace Cober {
 	public:
 		enum class API 
 		{
-			None = 0, OpenGL, OpenGLES, OpenGLES3
+			None = 0, Vulkan, OpenGL, OpenGLES, OpenGLES3
 		};
 		
 	public:

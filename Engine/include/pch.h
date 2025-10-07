@@ -26,6 +26,7 @@
 /* --- CUSTOM HEADERS --- */
 // #include <glad/glad.h>
 // #include <GLFW/glfw3.h>
+#include <SDL3/SDL.h>
 
 
 #include <Core/Core.h>

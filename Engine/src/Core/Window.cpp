@@ -7,9 +7,10 @@
 #include "Events/KeyEvents.h"
 #include "Events/MouseEvents.h"
 
+
 namespace Cober {
 
-	static uint8_t s_GLFWWindowCount = 0;
+	static uint8_t s_SDL3WindowCount = 0;
 
 	static void GLFWErrorCallback(int error, const char* description)
 	{
@@ -40,9 +41,15 @@ namespace Cober {
 
 		LOG_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
-		if (s_GLFWWindowCount == 0)
+		if (s_SDL3WindowCount == 0)
 		{
-			/// TODO: CHANGE BY SDL23 IMPLEMENTATION
+			if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD))
+			{
+				printf("Error: SDL_Init(): %s\n", SDL_GetError());
+				// return;
+			}
+
+			/// TODO: CHANGE BY SDL3 IMPLEMENTATION
 			// int success = glfwInit();
 			// LOG_CORE_ASSERT(success, "Could not initialize GLFW!");
 			// glfwSetErrorCallback(GLFWErrorCallback);
@@ -55,10 +62,17 @@ namespace Cober {
 
 		/// TODO: CREATE WINDOW WITH SDL3
 		// m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		++s_GLFWWindowCount;
+		m_Window = SDL_CreateWindow( m_Data.Title.c_str(), (int)props.Width, (int)props.Height, 0 );
+		if (m_Window == nullptr) 
+		{
+			SDL_Log( "Window could not be created! SDL error: %s\n", SDL_GetError() );
+			return;
+		}
+        
+		++s_SDL3WindowCount;
 
-		// m_Context = GraphicsContext::Create(m_Window);
-		// m_Context->Init();
+		m_Context = GraphicsContext::Create(m_Window);
+		m_Context->Init();
 
 		// glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(props.VSync);
@@ -70,10 +84,12 @@ namespace Cober {
 	void Window::Shutdown()
 	{
 		/// TODO: DESTROY WINDOW WITH SDL3
+		SDL_DestroyWindow(m_Window);
 		// glfwDestroyWindow(m_Window);
+		--s_SDL3WindowCount;
 		// --s_GLFWWindowCount;
-
-		// if (s_GLFWWindowCount == 0)
+		
+		//if(s_SDL3WindowCount == 0)
 		// 	glfwTerminate();
 	}
 

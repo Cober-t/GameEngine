@@ -103,6 +103,7 @@
 //[++++++++++++++++++++++++++++]
 //[+++++++++ Platform +++++++++]
 //[++++++++++++++++++++++++++++]
+#include <Platforms/Vulkan/VulkanContext.h>
 // #include <Platforms/OpenGL/OpenGLContext.h>
 // #include <Platforms/OpenGL/OpenGLRenderAPI.h>
 // #include <Platforms/OpenGL/OpenGLBuffer.h>
