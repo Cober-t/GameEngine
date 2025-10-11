@@ -4,16 +4,15 @@
 #include <Core/Log.h>
 #include <iostream>
 
-// #include <GLFW/glfw3.h>
+#include <SDL3/SDL.h> /// TODO: Create Timestep.cpp and move implementation
 
 namespace Cober {
 
 	class CB_API Timestep 
 	{
 	public:
-		/// TODO: GET TIME WITH SDL3
 		Timestep() 
-		 : m_DeltaTime(0), m_NowTime(0), m_LastFrameTime(0/*glfwGetTime()*/), m_Timer(0),
+		 : m_DeltaTime(0), m_NowTime(0), m_LastFrameTime(SDL_GetTicks() * 0.001f), m_Timer(0),
 		  m_Frames(0), m_Updates(0), m_AccumulatedTime(0), m_LimitFPS(1.0f / 60.0f) 
 		{ 
 			LOG_CORE_INFO("Created Timer");
@@ -30,8 +29,7 @@ namespace Cober {
 
 		inline void Start()
 		{
-			/// TODO: GET TIME WITH SDL3
-			m_NowTime = 0;// glfwGetTime();
+			m_NowTime = SDL_GetTicks() * 0.001f;
 			m_DeltaTime = m_NowTime - m_LastFrameTime;
 			m_LastFrameTime = m_NowTime;
 			m_AccumulatedTime += m_DeltaTime;
@@ -51,15 +49,15 @@ namespace Cober {
 		}
 
 		inline void ResetAfterOneSecond() 
-		{ 
-			/// TODO: GET TIME WITH SDL3
-			// if (glfwGetTime() - m_Timer > 1.0)
-			// {
-			// 	m_FramesOneSec = m_Frames;
-			// 	m_UpdatesOneSec = m_Updates;
-			// 	m_DeltaPerSecond = m_DeltaTime;
-			// 	m_Timer++, m_Updates = 0; m_Frames = 0;
-			// }
+		{
+			float seconds = SDL_GetTicks() * 0.001f;
+			if (seconds - m_Timer > 1.0)
+			{
+				m_FramesOneSec = m_Frames;
+				m_UpdatesOneSec = m_Updates;
+				m_DeltaPerSecond = m_DeltaTime;
+				m_Timer++, m_Updates = 0; m_Frames = 0;
+			}
 		}
 
 		operator float() const { return m_DeltaTime; }

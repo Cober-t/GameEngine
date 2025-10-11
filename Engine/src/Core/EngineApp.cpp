@@ -1,6 +1,5 @@
 #include <pch.h>
 #include "Core/EngineApp.h"
-#include <SDL3/SDL.h>
 
 namespace Cober {
 
@@ -24,7 +23,9 @@ namespace Cober {
 
         /// TODO: CREATE WINDOW WITH SDL3
         m_Window = CreateUnique<Window>(WindowProps(m_Specification.Name, m_Specification.Width, m_Specification.Height));
-        m_Window->SetEventCallback([this](Event& e) { OnEvent(e); });
+
+        /// TODO: Process Events from SDL  (EventHandler)// EventHandler::Get()->ProcessEvents(event);
+        // m_Window->SetEventCallback([this](Event& e) { OnEvent(e); });
 
         /// TODO: RENDER PIPELINE WITH SDL3
         RenderGlobals::Init();
@@ -80,18 +81,18 @@ namespace Cober {
                 m_GameState == EngineApp::GameState::RUNTIME_EDITOR)
         {
             m_TimeStep->Start();
-
+            
             Run(m_TimeStep);
 
             while(m_TimeStep->GetDeltaTime() >= 1.0f)
             {
                 m_TimeStep->Update();
             }
-
+            
             m_TimeStep->ResetAfterOneSecond();
         }
     }
-
+    
     void EngineApp::Run(Unique<Timestep>& ts)
     {
         //Process Events
@@ -101,8 +102,11 @@ namespace Cober {
 
         if(!m_Minimized) 
         {
-            for (Layer* layer : m_LayerStack)
+            m_Window->OnUpdate();
+
+            for (Layer* layer : m_LayerStack) {    
                 layer->OnUpdate(ts);
+            }
         }
 
         // if (m_GameState == EngineApp::GameState::EDITOR || m_GameState == EngineApp::GameState::RUNTIME_EDITOR) 
@@ -123,7 +127,7 @@ namespace Cober {
     }
 
 
-    void EngineApp::OnEvent(Event& event)
+    void EngineApp::ProcessEvents(Event& event)
     {
         // In the future each layer/object could save the event on a buffer
         // and handle it one per frame on Update instead of delay all the Application
@@ -131,12 +135,21 @@ namespace Cober {
 		// dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(EngineApp::OnWindowClose));
         // dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(EngineApp::OnWindowResize));
 
-		// for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
-		// {
-		// 	if (event.Handled) 
-		// 		break;
-		// 	(*it)->OnEvent(event);
-		// }
+        LOG_CORE_INFO("TRY TO CAPTURE EVENT");
+        // SDL_Event rawEvent;
+        // while (SDL_PollEvent(&rawEvent))
+        // {
+        //     LOG_CORE_INFO(rawEvent.key.raw);
+            //UISystem::ProcessInputs(event);
+
+            /// TODO: Process Events from SDL  (EventHandler)
+            // EventHandler::Get()->ProcessEvents(event);
+        for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
+        {
+            if (event.Handled) 
+                break;
+            (*it)->OnEvent(event);
+        }
     }
   
 

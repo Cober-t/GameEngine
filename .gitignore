@@ -9,6 +9,7 @@ Editor/assets/
 Editor/ScriptModule/
 Game/build/
 Projects/
+build/
 
 *.log
 *.sln

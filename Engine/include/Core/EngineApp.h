@@ -1,7 +1,7 @@
 #ifndef ENGINNE_APP_H
 #define ENGINNE_APP_H
 
-#include "Core.h"
+// #include "Core.h"
 #include "Input.h"
 
 #include "Window.h"
@@ -61,7 +61,7 @@ namespace Cober {
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 
-		void OnEvent(Event& event);
+		void ProcessEvents(Event& event);
 
 		void Close();
 

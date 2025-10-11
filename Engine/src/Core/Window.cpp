@@ -89,7 +89,9 @@ namespace Cober {
 		--s_SDL3WindowCount;
 		// --s_GLFWWindowCount;
 		
-		//if(s_SDL3WindowCount == 0)
+		if(s_SDL3WindowCount == 0) {
+			SDL_Quit();
+		}
 		// 	glfwTerminate();
 	}
 
@@ -108,6 +110,8 @@ namespace Cober {
 
 	void Window::SetWindowCallbacks()
 	{
+		/// TODO: Process Events from SDL  (EventHandler)
+		// EventHandler::Get()->ProcessEvents(event);
 		// glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 		// {
 		// 	WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
@@ -195,6 +199,8 @@ namespace Cober {
 	// 		data.EventCallback(event);
 	// 	});
 
+	/// TODO: Process Events from SDL  (EventHandler)
+	// EventHandler::Get()->ProcessEvents(event);
 	// 	glfwSetCursorPosCallback(m_Window, [](GLFWwindow* window, double xPos, double yPos)
 	// 	{
 	// 		WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
