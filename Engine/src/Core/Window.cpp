@@ -62,7 +62,7 @@ namespace Cober {
 
 		/// TODO: CREATE WINDOW WITH SDL3
 		// m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
-		m_Window = SDL_CreateWindow( m_Data.Title.c_str(), (int)props.Width, (int)props.Height, 0 );
+		m_Window = SDL_CreateWindow( m_Data.Title.c_str(), (int)props.Width, (int)props.Height, SDL_WINDOW_RESIZABLE );
 		if (m_Window == nullptr) 
 		{
 			SDL_Log( "Window could not be created! SDL error: %s\n", SDL_GetError() );
@@ -242,6 +242,8 @@ namespace Cober {
 	void Window::ChangeFullScreen() 
 	{
 		/// TODO: MANAGE WINDOWS PROPERTIES WITH SDL3
+		SDL_SetWindowFullscreen(m_Window, m_Data.FullScreen);
+		m_Data.FullScreen = !m_Data.FullScreen;
 		// if (m_Data.FullScreen)
 		// {
 		// 	glfwRestoreWindow(m_Window);
@@ -250,7 +252,5 @@ namespace Cober {
 		// {
 		// 	glfwMaximizeWindow(m_Window);
 		// }
-		
-		m_Data.FullScreen = m_Data.FullScreen == true ? false : true;
 	}
 }

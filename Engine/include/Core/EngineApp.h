@@ -61,7 +61,7 @@ namespace Cober {
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 
-		void ProcessEvents(Event& event);
+		void ProcessEvents();
 
 		void Close();
 

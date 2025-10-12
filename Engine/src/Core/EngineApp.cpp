@@ -104,9 +104,12 @@ namespace Cober {
         {
             m_Window->OnUpdate();
 
-            for (Layer* layer : m_LayerStack) {    
+            ProcessEvents();
+
+            for (Layer* layer : m_LayerStack) {
                 layer->OnUpdate(ts);
             }
+
         }
 
         // if (m_GameState == EngineApp::GameState::EDITOR || m_GameState == EngineApp::GameState::RUNTIME_EDITOR) 
@@ -127,7 +130,7 @@ namespace Cober {
     }
 
 
-    void EngineApp::ProcessEvents(Event& event)
+    void EngineApp::ProcessEvents()
     {
         // In the future each layer/object could save the event on a buffer
         // and handle it one per frame on Update instead of delay all the Application
@@ -135,21 +138,21 @@ namespace Cober {
 		// dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(EngineApp::OnWindowClose));
         // dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(EngineApp::OnWindowResize));
 
-        LOG_CORE_INFO("TRY TO CAPTURE EVENT");
-        // SDL_Event rawEvent;
-        // while (SDL_PollEvent(&rawEvent))
-        // {
-        //     LOG_CORE_INFO(rawEvent.key.raw);
+        SDL_Event rawEvent;
+        while (SDL_PollEvent(&rawEvent))
+        {
+            // LOG_CORE_INFO(rawEvent.key.raw);
+        }
             //UISystem::ProcessInputs(event);
 
             /// TODO: Process Events from SDL  (EventHandler)
             // EventHandler::Get()->ProcessEvents(event);
-        for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
-        {
-            if (event.Handled) 
-                break;
-            (*it)->OnEvent(event);
-        }
+        // for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
+        // {
+        //     if (event.Handled) 
+        //         break;
+        //     (*it)->OnEvent(event);
+        // }
     }
   
 
