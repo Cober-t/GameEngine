@@ -1,5 +1,6 @@
 #include <pch.h>
 #include "Platforms/Vulkan/VulkanRenderAPI.h"
+#include "EngineApp.h"
 
 namespace Cober {
 
@@ -54,20 +55,45 @@ namespace Cober {
 
 	void VulkanRenderAPI::SetClearColor(glm::vec4 color) 
 	{
-		// glClearColor(color.r, color.g, color.b, color.a);
+		m_clearColor = { color.x, color.y, color.z, color.a };
 	}
 
 
 	void VulkanRenderAPI::SetClearColor(float red, float green, float blue, float black) 
 	{
-		// float r = red / 255, g = green / 255, b = blue / 255, k = black / 255;
-		// glClearColor(r, g, b, k);
+		m_clearColor = { red, green , blue, black };
 	}
 
 
 	void VulkanRenderAPI::Clear() 
 	{
 		// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		EngineApp& app = EngineApp::Get();
+		SDL_GPUCommandBuffer* cmdbuf = SDL_AcquireGPUCommandBuffer(app.GetWindow().GetContext()->GetGPUDevice());
+		if (cmdbuf == NULL) {
+			SDL_Log("AcquireGPUCommandBuffer failed: %s", SDL_GetError());
+			return ;
+		}
+
+		SDL_GPUTexture* swapchainTexture;
+		if (!SDL_WaitAndAcquireGPUSwapchainTexture(cmdbuf, app.GetWindow().GetRawWindow(), &swapchainTexture, NULL, NULL)) {
+			SDL_Log("WaitAndAcquireGPUSwapchainTexture failed: %s", SDL_GetError());
+			return;
+		}
+
+		if (swapchainTexture != NULL)
+		{
+			SDL_GPUColorTargetInfo colorTargetInfo = { 0 };
+			colorTargetInfo.texture = swapchainTexture;
+			colorTargetInfo.clear_color = { m_clearColor[0], m_clearColor[1], m_clearColor[2], m_clearColor[3] };
+			colorTargetInfo.load_op = SDL_GPU_LOADOP_CLEAR;
+			colorTargetInfo.store_op = SDL_GPU_STOREOP_STORE;
+
+			SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(cmdbuf, &colorTargetInfo, 1, NULL);
+			SDL_EndGPURenderPass(renderPass);
+		}
+
+		SDL_SubmitGPUCommandBuffer(cmdbuf);
 	}
 
 

@@ -2,6 +2,7 @@
 #define GRAPHICS_CONTEXT_H
 
 struct SDL_Window;
+struct SDL_GPUDevice;
 
 namespace Cober {
 
@@ -12,6 +13,8 @@ namespace Cober {
 
 		virtual void Init() = 0;
 		virtual void SwapBuffers() = 0;
+		virtual void Destroy() = 0;
+		virtual SDL_GPUDevice* GetGPUDevice() = 0;
 
 		static Unique<GraphicsContext> Create(void* window);
 	};

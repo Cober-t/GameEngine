@@ -44,6 +44,8 @@ namespace Cober {
 		uint32_t GetWidth() const { return m_Data.Width; }
 		uint32_t GetHeight() const { return m_Data.Height; }
 		bool GetVsync() const { return m_Data.VSync; }
+		SDL_Window* GetRawWindow() const { return m_Window; }
+		Unique<GraphicsContext>& GetContext() { return m_Context; }
 
 		void SetEventCallback(const EventCallbackFn& callback) { m_Data.EventCallback = callback; }
 		void SetVSync(bool enabled);

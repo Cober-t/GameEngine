@@ -11,13 +11,15 @@ namespace Cober {
 		LOG_CORE_INFO("Window Context Created!!");
 	}
 
-	VulkanContext::~VulkanContext()
+	void VulkanContext::Destroy()
 	{
-		LOG_CORE_INFO("Window Context Destroyed!!");
-        //SDL_DestroyRenderer(m_renderer);
         SDL_DestroyGPUDevice(m_gpuDevice);
 	}
 
+	SDL_GPUDevice* VulkanContext::GetGPUDevice()
+	{
+		return m_gpuDevice;
+	}
 
 	void VulkanContext::Init()
 	{
@@ -28,8 +30,8 @@ namespace Cober {
 
 		// SDL_GetNumRenderDrivers();
 		// SDL_GetRenderDriverInfo();
-		const char* devideDriver = SDL_GetGPUDeviceDriver(m_gpuDevice);
-		LOG_CORE_INFO("GPU Device Driver: {0}", devideDriver);
+		const char* deviceDriver = SDL_GetGPUDeviceDriver(m_gpuDevice);
+		LOG_CORE_INFO("GPU Device Driver: {0}", deviceDriver);
 
 		// int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		// LOG_CORE_ASSERT(status, "Failed to initialize Glad!");

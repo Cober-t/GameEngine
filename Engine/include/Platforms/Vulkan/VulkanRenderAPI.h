@@ -27,6 +27,8 @@ namespace Cober {
 
 		virtual void ClearErrors() override;
 		virtual void CheckErrors(const char* function) override;
+	private:
+		std::vector<float> m_clearColor = {1.0f, 0.0f, 0.0f, 1.0f};
  	};
 }
 

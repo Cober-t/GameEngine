@@ -13,10 +13,12 @@ namespace Cober {
 	{
 	public:
 		VulkanContext(SDL_Window* windowHandle);
-		virtual ~VulkanContext();
+		virtual ~VulkanContext() = default;
 
 		virtual void Init() override;
 		virtual void SwapBuffers() override;
+		virtual void Destroy() override;
+		virtual SDL_GPUDevice* GetGPUDevice() override;
 
 	private:
 		SDL_Window*    m_windowHandle = nullptr;

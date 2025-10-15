@@ -29,6 +29,8 @@ namespace Cober {
 
         /// TODO: RENDER PIPELINE WITH SDL3
         RenderGlobals::Init();
+        // TEST
+        RenderGlobals::SetClearColor({0.8f, 0.3f, 0.1f, 1.0f});
 		//Render2D::Start();
 
         m_GameState = EngineApp::GameState::PLAY;
@@ -109,7 +111,6 @@ namespace Cober {
             for (Layer* layer : m_LayerStack) {
                 layer->OnUpdate(ts);
             }
-
         }
 
         // if (m_GameState == EngineApp::GameState::EDITOR || m_GameState == EngineApp::GameState::RUNTIME_EDITOR) 
@@ -138,9 +139,13 @@ namespace Cober {
 		// dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(EngineApp::OnWindowClose));
         // dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(EngineApp::OnWindowResize));
 
-        SDL_Event rawEvent;
-        while (SDL_PollEvent(&rawEvent))
+        SDL_Event event;
+        while (SDL_PollEvent(&event))
         {
+            // Check if the user clicked the close button
+            if (event.type == SDL_EVENT_QUIT) {
+                m_GameState = GameState::EXIT;
+            }
             // LOG_CORE_INFO(rawEvent.key.raw);
         }
             //UISystem::ProcessInputs(event);
