@@ -17,8 +17,8 @@ namespace Cober {
 
 	void CameraSystem::Start(Scene* scene)
 	{
-        float screenWidth = EngineApp::Get().GetWindow().GetWidth();
-        float screenHeight = EngineApp::Get().GetWindow().GetHeight();
+        uint32_t screenWidth = EngineApp::Get().GetWindow().GetWidth();
+        uint32_t screenHeight = EngineApp::Get().GetWindow().GetHeight();
         GlobalCamera::camera = CreateUnique<EditorCamera>(45.0f, screenWidth, screenHeight, 0.01f, 1000.0f, GlobalCamera::perspective);
 
         auto view = scene->GetAllEntitiesWith<TransformComponent, TagComponent, CameraComponent>();

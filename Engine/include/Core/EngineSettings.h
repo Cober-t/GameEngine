@@ -51,13 +51,13 @@ namespace Cober {
         static const glm::vec4 black = glm::vec4(0.0f, 0.0f, 0.0f, 255.0f);
     };
 
-    typedef struct 
+    struct PhysicsSettings
     {
         float TimeStep = 1/60.0f;
         float Gravity = -9.8f;
         int32_t VelocityIterations = 6;
         int32_t PositionIterations = 2;
-    } PhysicsSettings;
+    };
     static PhysicsSettings physicsSettings;
 
     struct RenderSettings

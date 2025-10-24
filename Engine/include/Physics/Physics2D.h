@@ -50,7 +50,7 @@ namespace Cober {
 
         // inline static void SetDrawDebug(b2Draw* debugDraw) { m_PhysicsWorld->SetDebugDraw(debugDraw); };
         // inline static b2Body* CreateBody(b2BodyDef body) { return m_PhysicsWorld->CreateBody(&body); }
-        inline static void DestroyBody(Entity entity);
+        static void DestroyBody(Entity entity);
 
         // return m_PhysicsWorld ? m_PhysicsWorld->GetBodyCount() : 0;  
         inline static uint32_t GetBodyCount() {  return 0; }

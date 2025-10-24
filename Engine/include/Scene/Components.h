@@ -70,8 +70,8 @@ namespace Cober {
 	struct CameraComponent
     {
 		float distance	= 5.0f;
-		int width = 1280;
-		int height = 720;
+		float width = 1280.0;
+		float height = 720.0;
 		float nearClip = 0.01f;
 		float farClip = 1000.0f;
 		float fov = 45.0f;
