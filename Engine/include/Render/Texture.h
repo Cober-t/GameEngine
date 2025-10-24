@@ -4,7 +4,14 @@
 #include <string>
 #include <filesystem>
 
-#include <stb_image.h>
+#ifdef new
+    #undef new
+#endif
+	#include <stb_image.h>
+#ifdef _DEBUG
+    #define new DEBUG_NEW
+#endif
+
 #include "Core/Core.h"
 
 

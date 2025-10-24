@@ -22,15 +22,16 @@
 #include <unordered_set>
 #include <Windows.h>
 
-
 /* --- CUSTOM HEADERS --- */
 // #include <glad/glad.h>
 // #include <GLFW/glfw3.h>
 #include <SDL3/SDL.h>
 
+#include <Core/MemoryDebug.h>
 
 #include <Core/Core.h>
 #include <Core/Log.h>
 #include <Events/KeyCodes.h>
+
 
 #endif

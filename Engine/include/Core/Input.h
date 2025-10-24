@@ -9,10 +9,16 @@
 
 #include <glm/glm.hpp>
 
+#ifdef new
+    #undef new
+#endif
 #include <ImGui/imgui.h>
+#include <imgui/imgui_internal.h>
+#ifdef _DEBUG
+    #define new DEBUG_NEW
+#endif
 
 // #include <GLFW/glfw3.h>
-#include <imgui/imgui_internal.h>
 
 
 namespace Cober {

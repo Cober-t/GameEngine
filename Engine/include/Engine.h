@@ -6,6 +6,7 @@
 //[++++++++++ CORE ++++++++++]
 //[++++++++++++++++++++++++++]
 // #include "Core/PlatformDetection.h"
+#include "Core/MemoryDebug.h"
 #include "Core/Core.h"
 #include "Core/EngineApp.h"
 #include "Core/Log.h"

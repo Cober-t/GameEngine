@@ -3,8 +3,14 @@
 
 #include "Core/Layer.h"
 
+#ifdef new
+    #undef new
+#endif
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
+#ifdef _DEBUG
+    #define new DEBUG_NEW
+#endif
 
 
 namespace Cober {

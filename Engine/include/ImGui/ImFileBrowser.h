@@ -11,7 +11,13 @@
 #include <functional>
 #include <memory>
 #include <string>
-#include <imgui/imgui.h>
+#ifdef new
+    #undef new
+#endif
+#include <ImGui/imgui.h>
+#ifdef _DEBUG
+    #define new DEBUG_NEW
+#endif
 
 #ifndef IMGUI_VERSION
 #   error "include imgui.h before this header"

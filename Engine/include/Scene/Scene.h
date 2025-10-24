@@ -7,8 +7,14 @@
 
 #include "Scene/Components.h"
 
+#ifdef new
+    #undef new
+#endif
 #include <entt/entt.hpp>
 #include <typeindex>
+#ifdef _DEBUG
+    #define new DEBUG_NEW
+#endif
 
 
 namespace Cober {

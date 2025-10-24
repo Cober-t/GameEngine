@@ -1,7 +1,13 @@
 #ifndef IMGUI_COLORS_H
 #define IMGUI_COLORS_H
 
-#include "imgui/imgui.h"
+#ifdef new
+    #undef new
+#endif
+#include <imgui/imgui.h>
+#ifdef _DEBUG
+    #define new DEBUG_NEW
+#endif
 
 namespace Colors
 {

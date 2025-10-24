@@ -1,8 +1,15 @@
 #ifndef SETTING_H
 #define SETTING_H
 
-#include <stdint.h>
-#include <glm/glm.hpp>
+#ifdef new
+    #undef new
+#endif
+    #include <stdint.h>
+    #include <glm/glm.hpp>
+#ifdef _DEBUG
+    #define new DEBUG_NEW
+#endif
+
 
 #include "Render/Camera/Camera.h"
 

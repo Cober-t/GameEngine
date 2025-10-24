@@ -2,7 +2,13 @@
 #define TEST_SCRIPT_GENERATED_H
 
 #define ENTT_STANDARD_CPP
+#ifdef new
+    #undef new
+#endif
 #include <entt/entt.hpp>
+#ifdef _DEBUG
+    #define new DEBUG_NEW
+#endif
 
 #include <imgui.h>
 #include <map>

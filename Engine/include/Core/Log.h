@@ -9,10 +9,16 @@
 
 // This ignores all warnings raised inside External headers
 #pragma warning(push, 0)
-#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
-#include <spdlog/spdlog.h>
-#include <spdlog/fmt/ostr.h>
-#include <spdlog/sinks/ringbuffer_sink.h>
+#ifdef new
+    #undef new
+#endif
+	#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
+	#include <spdlog/spdlog.h>
+	#include <spdlog/fmt/ostr.h>
+	#include <spdlog/sinks/ringbuffer_sink.h>
+#ifdef _DEBUG
+	#define new DEBUG_NEW
+#endif
 #pragma warning(pop)
 
 namespace Cober {
@@ -20,7 +26,7 @@ namespace Cober {
 	class CB_API Log
 	{
 	public:
-		static enum LOG_LEVELS { TRACE = 0, DEBUG, INFO, WARN, ERR, CRITICAL };
+		enum LOG_LEVELS { TRACE = 0, DEBUG, INFO, WARN, ERR, CRITICAL };
 
 		struct LogMessage
 		{

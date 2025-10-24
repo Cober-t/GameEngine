@@ -3,8 +3,16 @@
 
 #include <Engine.h>
 
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#ifdef new
+	#undef new
+#endif
+	#include <glm/gtc/type_ptr.hpp>
+	
+	#include <glm/gtc/matrix_transform.hpp>
+#ifdef _DEBUG
+	#define new DEBUG_NEW
+#endif
+
 
 // GUI PANELS
 // #include "Panels/ViewportPanel.h"

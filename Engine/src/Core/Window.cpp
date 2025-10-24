@@ -85,14 +85,14 @@ namespace Cober {
 		SDL_ReleaseWindowFromGPUDevice(m_Context->GetGPUDevice(), m_Window);
 		LOG_CORE_INFO("Removed GPU Device from the Window");
 		SDL_DestroyWindow(m_Window);
-		LOG_CORE_INFO("Window Destroyed");
+		//LOG_CORE_INFO("Window Destroyed");
 		m_Context->Destroy();
-		LOG_CORE_INFO("Window Context Destroyed!!");
+		//LOG_CORE_INFO("Window Context Destroyed!!");
 		
 		if(--s_SDL3WindowCount == 0) {
 			SDL_Quit();
+			LOG_CORE_INFO("SDL Quit");
 		}
-		LOG_CORE_INFO("SDL Quit");
 	}
 
 	// void Window::SetEventCallback(const EventCallbackFn& callback)
