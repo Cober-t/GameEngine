@@ -17,6 +17,13 @@ int main(int argc, char** argv)
 
 	{
 		Cober::Log::Init();
+
+		// This WILL be detected by ASan (raw leak)
+		int* rawLeak = new int(42);
+
+		// This WON'T be detected by ASan (proper cleanup, just late)
+		static auto smartLeak = std::make_shared<int>(123);
+
 		auto app = Cober::CreateApplication({ argc, argv });
 
 		app->Start();

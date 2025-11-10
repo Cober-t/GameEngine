@@ -13,21 +13,21 @@
 #endif
 
 
-#ifdef _WIN32
-    #ifdef _CB_BUILD_DLL
-        #define CB_API __declspec(dllexport)
-    #else 
-        #define CB_API __declspec(dllimport)
-    #endif
-#else 
+// #ifdef _WIN32
+//     #ifdef _CB_BUILD_DLL
+//         #define CB_API __declspec(dllexport)
+//     #else 
+//         #define CB_API __declspec(dllimport)
+//     #endif
+// #else 
     #define CB_API
-#endif
+// #endif
 
 
 #ifdef _WIN32
     #ifdef _CB_SCRIPT_DLL
         #define CB_SCRIPT __declspec(dllexport)
-    #else 
+    #else
         #define CB_SCRIPT __declspec(dllimport)
     #endif
 #else 

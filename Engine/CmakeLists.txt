@@ -1,5 +1,3 @@
-# Engine CMakeLists.txt
-
 project(Engine)
 
 # Collect all source files
@@ -21,24 +19,33 @@ file(GLOB_RECURSE GLM_SOURCES
 )
 
 # Create the engine library as shared (DLL)
-add_library(Engine SHARED 
-    ${ENGINE_SOURCES}
-    ${STB_IMAGE_SOURCES}
-    ${GLM_SOURCES}
-)
+if (${CMAKE_BUILD_TYPE} STREQUAL "debug")
+    add_library(${PROJECT_NAME} STATIC
+        ${ENGINE_SOURCES}
+        ${STB_IMAGE_SOURCES}
+        ${GLM_SOURCES}
+    )
+else()
+    add_library(${PROJECT_NAME} SHARED
+        ${ENGINE_SOURCES}
+        ${STB_IMAGE_SOURCES}
+        ${GLM_SOURCES}
+    )
+endif()
+
 
 # Set up precompiled headers
-target_precompile_headers(Engine PRIVATE
+target_precompile_headers(${PROJECT_NAME} PRIVATE
     "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/include/pch.h>"
 )
 
 # Define engine-specific macros
-target_compile_definitions(Engine PRIVATE
+target_compile_definitions(${PROJECT_NAME} PRIVATE
     _CB_BUILD_DLL
 )
 
 # Include directories
-target_include_directories(Engine PRIVATE
+target_include_directories(${PROJECT_NAME} PRIVATE
     include
     include/Core
     include/ImGui
@@ -54,11 +61,9 @@ target_include_directories(Engine PRIVATE
 )
 
 # Public include directories (for consumers of this library)
-target_include_directories(Engine PUBLIC
+target_include_directories(${PROJECT_NAME} PUBLIC
     include
-    # ${GLFW_INCLUDE_DIR}
     ${SDL3_INCLUDE_DIR}
-    # ${GLAD_INCLUDE_DIR}
     ${IMGUI_INCLUDE_DIR}
     ${BOX2D_INCLUDE_DIR}
     ${GLM_INCLUDE_DIR}
@@ -73,9 +78,8 @@ target_include_directories(Engine PUBLIC
 )
 
 # Link libraries - using the actual target names from the submodules
-target_link_libraries(Engine PUBLIC
+target_link_libraries(${PROJECT_NAME} PUBLIC
     # Libraries with their own CMake
-    # $<$<TARGET_EXISTS:glfw>:glfw>
     $<$<TARGET_EXISTS:SDL3-static>:SDL3-static>
     $<$<TARGET_EXISTS:SDL3::SDL3>:SDL3::SDL3>
     $<$<TARGET_EXISTS:box2d>:box2d>
@@ -84,7 +88,6 @@ target_link_libraries(Engine PUBLIC
     $<$<TARGET_EXISTS:msdf-atlas-gen>:msdf-atlas-gen>
     
     # Custom built libraries
-    # $<$<TARGET_EXISTS:Glad>:Glad>
     $<$<TARGET_EXISTS:ImGui>:ImGui>
     $<$<TARGET_EXISTS:Lua>:Lua>
     
@@ -96,38 +99,37 @@ target_link_libraries(Engine PUBLIC
 )
 
 # Windows-specific libraries
-if(WIN32)
-    target_link_libraries(Engine PUBLIC opengl32)
-endif()
+# if(WIN32)
+#     target_link_libraries(${PROJECT_NAME} PUBLIC opengl32)
+# endif()
 
 # Set output directories
-set_target_properties(Engine PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
-    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin-int/$<CONFIG>/Engine
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/${BUILD_DIR}/bin/$<CONFIG>
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/${BUILD_DIR}/bin/$<CONFIG>
+    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/${BUILD_DIR}/bin-int/$<CONFIG>/Engine
 )
 
 # Post-build commands to copy DLL to Editor and Game directories
 if(WIN32)
-    add_custom_command(TARGET Engine POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:Engine>
-        ${CMAKE_BINARY_DIR}/bin/$<CONFIG>/Editor/
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_SOURCE_DIR}/build/${BUILD_DIR}/bin/$<CONFIG>/Engine
+        COMMENT "Creating Engine build directory"
+    )
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Engine> ${CMAKE_SOURCE_DIR}/build/${BUILD_DIR}/bin/$<CONFIG>/Engine/
         COMMENT "Copying Engine DLL to Editor directory"
     )
     
-    add_custom_command(TARGET Engine POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory
-        ${CMAKE_SOURCE_DIR}/Game/build/$<CONFIG>
-        COMMENT "Creating Game build directory"
-    )
+    # add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    #     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_SOURCE_DIR}/Game/build/$<CONFIG>
+    #     COMMENT "Creating Game build directory"
+    # )
     
-    add_custom_command(TARGET Engine POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        $<TARGET_FILE:Engine>
-        ${CMAKE_SOURCE_DIR}/Game/build/$<CONFIG>/
-        COMMENT "Copying Engine DLL to Game directory"
-    )
+    # add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    #     COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:Engine> ${CMAKE_SOURCE_DIR}/Game/build/$<CONFIG>/
+    #     COMMENT "Copying Engine DLL to Game directory"
+    # )
 endif()
 
 # Set folder in Visual Studio
