@@ -178,6 +178,18 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/entt/include OR EXISTS ${CMAKE_CURRENT_SOU
     endif()
 endif()
 
+# Nlohmann Json parser - Entity Component System (header-only)
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/nlohmann/include OR EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/nlohmann/single_include)
+    message(STATUS "Adding Nlohmann json parser library (header-only)")
+    add_library(nlohmann INTERFACE)
+    
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/nlohmann/include)
+        target_include_directories(nlohmann INTERFACE nlohmann/include)
+    elseif(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/nlohmann/single_include)
+        target_include_directories(nlohmann INTERFACE nlohmann/single_include)
+    endif()
+endif()
+
 # STB libraries - Header-only imaging libraries
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/stb_image)
     message(STATUS "Adding STB Image library (header-only)")
