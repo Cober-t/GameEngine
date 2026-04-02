@@ -1,0 +1,18 @@
+{
+  "name": "Game",
+  "engineVersion": "0.1.0",
+  "projectVersion": 1,
+  "startupScene": "assets/scenes/SceneDefault.lua",
+  "window": {
+    "title": "PONG",
+    "width": 640,
+    "height": 360
+  },
+  "paths": {
+    "assets": "assets",
+    "scripts": "assets/scripts",
+    "scenes": "assets/scenes",
+    "build": "build",
+    "dist": "dist"
+  }
+}

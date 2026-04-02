@@ -7,6 +7,9 @@ namespace Cober {
 	{
 		s_ProjectRoot = std::filesystem::weakly_canonical(projectRoot);
 		s_AssetsRoot = std::filesystem::weakly_canonical(assetsRoot);
+
+		LOG_CORE_INFO("Project Root: {}", projectRoot.string());
+		LOG_CORE_INFO("Assets Root: {}", assetsRoot.string());
 	}
 
 	const std::filesystem::path& PathService::ProjectRoot()

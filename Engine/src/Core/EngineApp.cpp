@@ -6,7 +6,7 @@ namespace Cober {
     EngineApp* EngineApp::s_Instance = nullptr;
 
     EngineApp::EngineApp(const AppSpecification& specification)
-        : m_Specification(specification)
+        : m_Specification(specification), m_GameState(GameState::PLAY), m_GuiLayer(nullptr)
     {
         LOG_CORE_INFO("EngineApp Constructor!");
 
@@ -14,15 +14,16 @@ namespace Cober {
         s_Instance = this;
 
         // Set working directory here
-		if (!m_Specification.WorkingDirectory.empty())
-			std::filesystem::current_path(m_Specification.WorkingDirectory);
-
-        LOG_CORE_INFO("Current Working Path: {0}", m_Specification.WorkingDirectory);
+		if (!m_Specification.ProjectRoot.empty() && !m_Specification.AssetsRoot.empty()) {
+			PathService::Init(m_Specification.ProjectRoot, m_Specification.AssetsRoot);
+        }
 
         m_TimeStep = CreateUnique<Timestep>();
 
         /// TODO: CREATE WINDOW WITH SDL3
-        m_Window = CreateUnique<Window>(WindowProps(m_Specification.Name, m_Specification.Width, m_Specification.Height));
+        m_Window = CreateUnique<Window>(
+            WindowProps(m_Specification.Name, m_Specification.Width, m_Specification.Height)
+        );
 
         /// TODO: Process Events from SDL  (EventHandler)// EventHandler::Get()->ProcessEvents(event);
         // m_Window->SetEventCallback([this](Event& e) { OnEvent(e); });
@@ -32,8 +33,6 @@ namespace Cober {
         // TEST
         RenderGlobals::SetClearColor({0.8f, 0.3f, 0.1f, 1.0f});
 		//Render2D::Start();
-
-        m_GameState = EngineApp::GameState::PLAY;
     }
 
 
@@ -102,16 +101,31 @@ namespace Cober {
 		// Input::TransitionPressedButtons();
         // m_Window->OnUpdate();
 
-        if(!m_Minimized) 
+        ProcessEvents();
+
+        if (m_GameState == EngineApp::GameState::EXIT)
+            return;
+
+        if (!m_Minimized)
         {
-            m_Window->OnUpdate();
-
-            ProcessEvents();
-
-            for (Layer* layer : m_LayerStack) {
+            for (Layer* layer : m_LayerStack)
                 layer->OnUpdate(ts);
-            }
         }
+
+        if (m_GuiLayer &&
+            (m_GameState == EngineApp::GameState::EDITOR || m_GameState == EngineApp::GameState::RUNTIME_EDITOR))
+        {
+            m_GuiLayer->Begin();
+
+            for (Layer* layer : m_LayerStack)
+                layer->OnImGuiRender();
+
+            m_GuiLayer->End();
+        }
+
+        m_Window->OnUpdate();
+        
+        // Input::EndFrame();
 
         // if (m_GameState == EngineApp::GameState::EDITOR || m_GameState == EngineApp::GameState::RUNTIME_EDITOR) 
         // {
@@ -142,16 +156,44 @@ namespace Cober {
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
-            // Check if the user clicked the close button
-            if (event.type == SDL_EVENT_QUIT) {
-                m_GameState = GameState::EXIT;
-            }
-            // LOG_CORE_INFO(rawEvent.key.raw);
-        }
-            //UISystem::ProcessInputs(event);
+            // Input::OnEvent(event);
 
-            /// TODO: Process Events from SDL  (EventHandler)
-            // EventHandler::Get()->ProcessEvents(event);
+            switch (event.type)
+            {
+                case SDL_EVENT_QUIT:
+                {
+                    Close();
+                    break;
+                }
+
+                case SDL_EVENT_WINDOW_RESIZED:
+                {
+                    const int width = event.window.data1;
+                    const int height = event.window.data2;
+
+                    if (width == 0 || height == 0)
+                    {
+                        m_Minimized = true;
+                    }
+                    else
+                    {
+                        m_Minimized = false;
+                        RenderGlobals::SetViewport(width, height);
+                    }
+                    break;
+                }
+
+                default:
+                    break;
+            }
+            //LOG_CORE_INFO(event.key.raw);
+        }
+
+        //UISystem::ProcessInputs(event);
+
+        /// TODO: Process Events from SDL  (EventHandler)
+        // EventHandler::Get()->ProcessEvents(event);
+
         // for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
         // {
         //     if (event.Handled) 

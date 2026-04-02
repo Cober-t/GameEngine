@@ -1,6 +1,10 @@
 #ifndef ENGINNE_APP_H
 #define ENGINNE_APP_H
 
+#include <filesystem>
+#include "Project.h"
+#include "PathService.h"
+
 // #include "Core.h"
 #include "Input.h"
 
@@ -18,7 +22,6 @@
 int main(int argc, char** argv);
 
 namespace Cober {
-
 	
 	struct AppCommandLineArgs
 	{
@@ -34,14 +37,15 @@ namespace Cober {
 
 	struct AppSpecification
 	{
-		std::string Name = "Cober Engine Application";
-		std::string LastScene = "SceneDefault.lua";
-		std::string WorkingDirectory = "./";
+		std::string Name = "Cober";
+		std::filesystem::path ProjectPath;
+		std::filesystem::path ProjectRoot;
+		std::filesystem::path AssetsRoot;
+		std::filesystem::path StartupScene;
 		uint32_t Width = 1280;
 		uint32_t Height = 720;
 		AppCommandLineArgs CommandLineArgs;
 	};
-
 
 	class CB_API EngineApp
 	{

@@ -6,11 +6,19 @@
 
 using namespace Cober;
 
+static std::filesystem::path ParseProjectArg(Cober::AppCommandLineArgs args)
+{
+	for (int i = 1; i < args.Count - 1; i++)
+	{
+		if (std::string(args[i]) == "--project")
+			return args[i + 1];
+	}
+	return {};
+}
 
 class GameApp: public EngineApp
 {
 public:
-
 	GameApp(const AppSpecification& specification) : EngineApp(specification) 
 	{
 		PushLayer(new Game());
@@ -23,13 +31,23 @@ public:
 	}
 };
 
+
 Cober::EngineApp* Cober::CreateApplication(Cober::AppCommandLineArgs args)
 {
+	const auto projectPath = ParseProjectArg(args);
+	LOG_CORE_ASSERT(!projectPath.empty(), "Missing --project argument");
+
+	auto project = Project::Load(projectPath);
+	LOG_CORE_ASSERT(project.has_value(), "Could not load project file");
+
 	AppSpecification spec;
-	spec.Name = "PONG";
-	spec.WorkingDirectory = "C:/Users/jorge/OneDrive/Escritorio/GameEngine/Game";
-	spec.Width = 640;
-	spec.Height = 360;
+	spec.Name = project->WindowTitle;
+	spec.ProjectPath = project->ProjectFilePath;
+	spec.ProjectRoot = project->ProjectRoot;
+	spec.AssetsRoot = project->AssetsPath;
+	spec.StartupScene = project->StartupScene;
+	spec.Width = project->WindowWidth;
+	spec.Height = project->WindowHeight;
 	spec.CommandLineArgs = args;
 
 	LOG_INFO("Game Constructor!");

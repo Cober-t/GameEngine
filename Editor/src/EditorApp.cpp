@@ -5,10 +5,19 @@
 
 namespace Cober {
 
-	class EditorApp : public EngineApp {
+	static std::filesystem::path ParseProjectArg(AppCommandLineArgs args)
+	{
+		for (int i = 1; i < args.Count - 1; i++)
+		{
+			if (std::string(args[i]) == "--project")
+				return args[i + 1];
+		}
+		return {};
+	}
 
+	class EditorApp : public EngineApp 
+	{
 	public:
-	
 		EditorApp(const AppSpecification& specification) : EngineApp(specification)
 		{
 			EngineApp::Get().SetGameState(EngineApp::GameState::PLAY);
@@ -26,13 +35,23 @@ namespace Cober {
 	EngineApp* CreateApplication(AppCommandLineArgs args)
 	{
 		AppSpecification spec;
-		if (args.Count >= 4)
+		spec.Name = "Cober Editor";
+		spec.Width = 1600;
+		spec.Height = 900;
+		spec.CommandLineArgs = args;
+
+		const auto projectPath = ParseProjectArg(args);
+		if (!projectPath.empty())
 		{
-			spec.Name = args[1];
-			spec.WorkingDirectory = (std::string)args[2];
-			spec.Width = atoi(args[3]);
-			spec.Height = atoi(args[4]);
-			spec.CommandLineArgs = args;
+			auto project = Project::Load(projectPath);
+			LOG_CORE_ASSERT(project.has_value(), "Could not load project file");
+
+			spec.ProjectPath = project->ProjectFilePath;
+			spec.ProjectRoot = project->ProjectRoot;
+			spec.AssetsRoot = project->AssetsPath;
+			spec.StartupScene = project->StartupScene;
+			spec.Width = project->WindowWidth;
+			spec.Height = project->WindowHeight;
 		}
 
 		LOG_INFO("Editor Constructor!");
