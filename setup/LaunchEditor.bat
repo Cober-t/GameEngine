@@ -1,4 +1,4 @@
 @echo off
-pushd %~dp0\..\bin\Debug-windows-x86_64\Editor
+pushd %~dp0\..\build\bin\Debug
 call "Editor.exe"
 popd
