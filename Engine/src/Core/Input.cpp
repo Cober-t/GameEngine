@@ -54,6 +54,80 @@ namespace Cober {
 		// }
 	}
 
+	void Input::OnEvent(const SDL_Event& event)
+	{
+		switch (event.type)
+		{
+			case SDL_EVENT_KEY_DOWN:
+			{
+				if (event.key.repeat)
+					break;
+
+				KeyCode key = static_cast<KeyCode>(event.key.key);
+				auto& data = s_KeyData[key];
+				data.Key = key;
+				data.State = KeyState::Pressed;
+				break;
+			}
+
+			case SDL_EVENT_KEY_UP:
+			{
+				KeyCode key = static_cast<KeyCode>(event.key.key);
+				auto& data = s_KeyData[key];
+				data.Key = key;
+				data.State = KeyState::Released;
+				break;
+			}
+
+			case SDL_EVENT_MOUSE_BUTTON_DOWN:
+			{
+				MouseButton button = static_cast<MouseButton>(event.button.button - 1);
+				auto& data = s_MouseData[button];
+				data.Button = button;
+				data.State = KeyState::Pressed;
+				break;
+			}
+
+			case SDL_EVENT_MOUSE_BUTTON_UP:
+			{
+				MouseButton button = static_cast<MouseButton>(event.button.button - 1);
+				auto& data = s_MouseData[button];
+				data.Button = button;
+				data.State = KeyState::Released;
+				break;
+			}
+
+			case SDL_EVENT_MOUSE_MOTION:
+			{
+				s_MouseX = static_cast<float>(event.motion.x);
+				s_MouseY = static_cast<float>(event.motion.y);
+				break;
+			}
+
+			default:
+				break;
+		}
+	}
+
+	void Input::EndFrame()
+	{
+		for (auto& [key, data] : s_KeyData)
+		{
+			if (data.State == KeyState::Pressed)
+				data.State = KeyState::Held;
+			else if (data.State == KeyState::Released)
+				data.State = KeyState::None;
+		}
+
+		for (auto& [button, data] : s_MouseData)
+		{
+			if (data.State == KeyState::Pressed)
+				data.State = KeyState::Held;
+			else if (data.State == KeyState::Released)
+				data.State = KeyState::None;
+		}
+	}
+
 	// FIXME: Dont work for some reason
 	bool Input::IsKeyPressed(KeyCode key)
 	{
@@ -67,7 +141,7 @@ namespace Cober {
 
 	bool Input::IsKeyDown(KeyCode keycode)
 	{
-		return false;
+		return IsKeyPressed(keycode) || IsKeyHeld(keycode);
 	#ifndef __EDITOR__
 
 		/// TODO: MANAGE WINDOW WITH SDL3
@@ -154,29 +228,16 @@ namespace Cober {
 	{
 		return s_MouseData.find(button) != s_MouseData.end() && s_MouseData[button].State == KeyState::Released;
 	}
-
-	float Input::GetMouseX()
-	{
-		auto [x, y] = GetMousePosition();
-		return (float)x;
-	}
-
-	float Input::GetMouseY()
-	{
-		auto [x, y] = GetMousePosition();
-		return (float)y;
-	}
-
-	std::pair<float, float> Input::GetMousePosition()
-	{
+	
+	// std::pair<float, float> Input::GetMousePosition()
+	// {
+		// return { s_MouseX, s_MouseY };
 		/// TODO: MANAGE WINDOW WITH SDL3
 		// GLFWwindow* nativeWindow = reinterpret_cast<GLFWwindow*>(EngineApp::Get().GetWindow().GetNativeWindow());
 
-		double x = 0, y = 0;
 		/// TODO: MANAGE INPUTS WITH SDL3
 		// glfwGetCursorPos(nativeWindow, &x, &y);
-		return { (float)x, (float)y };
-	}
+	// }
 
 	/// TODO: A better way to do this is to handle it internally, and simply move the cursor the opposite side
 	//		of the screen when it reaches the edge

@@ -3,6 +3,7 @@
 
 #include <map>
 #include <vector>
+#include <SDL3/SDL.h>
 
 #include "Core.h"
 #include "Events/KeyCodes.h"
@@ -17,8 +18,6 @@
 #ifdef _DEBUG
     #define new DEBUG_NEW
 #endif
-
-// #include <GLFW/glfw3.h>
 
 
 namespace Cober {
@@ -60,6 +59,8 @@ namespace Cober {
 	{
 	public:
 		static void Update();
+		static void OnEvent(const SDL_Event& event);
+		static void EndFrame();
 
 		static bool IsKeyPressed(KeyCode keycode);
 		static bool IsKeyHeld(KeyCode keycode);
@@ -70,9 +71,10 @@ namespace Cober {
 		static bool IsMouseButtonHeld(MouseButton button);
 		static bool IsMouseButtonDown(MouseButton button);
 		static bool IsMouseButtonReleased(MouseButton button);
-		static float GetMouseX();
-		static float GetMouseY();
-		static std::pair<float, float> GetMousePosition();
+		
+		inline static float GetMouseX() { return s_MouseX; };
+		inline static float GetMouseY() { return s_MouseY; };
+		inline static std::pair<float, float> GetMousePosition() { return { s_MouseX, s_MouseY }; };
 
 		/// TODO: FIRST WINDOW MUST MANAGED BY SDL3
 		// static void SetCursorMode(CursorMode mode);
@@ -109,6 +111,8 @@ namespace Cober {
 		inline static std::map<KeyCode, KeyData> s_KeyData;
 		inline static std::map<MouseButton, ButtonData> s_MouseData;
 		inline static std::map<int, Controller> s_Controllers;
+		inline static float s_MouseX = 0.0f;
+		inline static float s_MouseY = 0.0f;
 	};
 }
 

@@ -99,7 +99,6 @@ namespace Cober {
         //Process Events
         // Input::TransitionPressedKeys();
 		// Input::TransitionPressedButtons();
-        // m_Window->OnUpdate();
 
         ProcessEvents();
 
@@ -125,7 +124,7 @@ namespace Cober {
 
         m_Window->OnUpdate();
         
-        // Input::EndFrame();
+        Input::EndFrame();
 
         // if (m_GameState == EngineApp::GameState::EDITOR || m_GameState == EngineApp::GameState::RUNTIME_EDITOR) 
         // {
@@ -156,7 +155,7 @@ namespace Cober {
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
-            // Input::OnEvent(event);
+            Input::OnEvent(event);
 
             switch (event.type)
             {
