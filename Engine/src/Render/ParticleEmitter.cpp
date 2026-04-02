@@ -26,7 +26,7 @@ namespace Cober {
             }
             else if (particleEmitter.lifeRemaining < 0.0f)
             {
-                particleEmitter.active == false;
+                particleEmitter.active = false;
             }
         }
 

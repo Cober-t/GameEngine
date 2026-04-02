@@ -172,7 +172,7 @@ namespace Cober {
 		/// TODO: MANAGE WINDOW WITH SDL3
 		// GLFWwindow* nativeWindow = reinterpret_cast<GLFWwindow*>(EngineApp::Get().GetWindow().GetNativeWindow());
 
-		double x, y;
+		double x = 0, y = 0;
 		/// TODO: MANAGE INPUTS WITH SDL3
 		// glfwGetCursorPos(nativeWindow, &x, &y);
 		return { (float)x, (float)y };

@@ -6,7 +6,7 @@
 
 #include "Window.h"
 #include "Timestep.h"
-#include "Layer.h"
+#include "LayerStack.h"
 #include "ImGui/ImGuiLayer.h"
 
 #include "Events/ApplicationEvents.h"
@@ -88,7 +88,7 @@ namespace Cober {
 		GameState m_GameState;
 		Unique<Window> m_Window;
 		ImGuiLayer* m_GuiLayer;
-		Layer m_LayerStack;
+		LayerStack m_LayerStack;
 		Unique<Timestep> m_TimeStep;
 
 		float m_LastFrameTime = 0.0f;

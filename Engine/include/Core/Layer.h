@@ -1,22 +1,19 @@
 #ifndef LAYER_H
 #define LAYER_H
 
-
-#include <vector>
 #include <string>
 
 #include "Core.h"
 #include "Timestep.h"
-
 #include "Events/Event.h"
 
 namespace Cober {
 
-	class CB_API Layer 
+	class CB_API Layer
 	{
 	public:
-		Layer(const std::string& debugName = "No Assigned");
-		~Layer();
+		Layer(const std::string& debugName = "Layer");
+		virtual ~Layer() = default;
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
@@ -24,24 +21,9 @@ namespace Cober {
 		virtual void OnEvent(Event& event) {}
 		virtual void OnImGuiRender() {}
 
-		void PushLayer(Layer* layer);
-		void PushOverlay(Layer* overlay);
-		void PopLayer(Layer* layer);
-		void PopOverlay(Layer* overlay);
+		const std::string& GetName() const { return m_DebugName; }
 
-		std::vector<Layer*>::iterator begin()	{ return m_Layers.begin(); }
-		std::vector<Layer*>::iterator end()		{ return m_Layers.end(); }
-		std::vector<Layer*>::reverse_iterator rbegin()	{ return m_Layers.rbegin(); }
-		std::vector<Layer*>::reverse_iterator rend()	{ return m_Layers.rend(); }
-
-		std::vector<Layer*>::const_iterator begin() const	{ return m_Layers.begin(); }
-		std::vector<Layer*>::const_iterator end() const		{ return m_Layers.end(); }
-		std::vector<Layer*>::const_reverse_iterator rbegin() const	{ return m_Layers.rbegin(); }
-		std::vector<Layer*>::const_reverse_iterator rend() const	{ return m_Layers.rend(); }
-		
 	private:
-		std::vector<Layer*> m_Layers;
-		unsigned int m_LayerInsertIndex = 0;
 		std::string m_DebugName;
 	};
 }
