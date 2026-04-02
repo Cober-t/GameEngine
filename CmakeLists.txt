@@ -10,90 +10,23 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Option Build types
+option(COBER_BUILD_EDITOR "Build editor" ON)
+option(COBER_BUILD_GAME "Build sample game" ON)
+option(COBER_ENABLE_ASAN "Enable AddressSanitizer" OFF)
+
 # Configuration types
-if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-    set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose the type of build." FORCE)
-    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "Dist")
+if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build." FORCE)
+    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS Debug Release Dist)
 endif()
 
-# AddressSanitizer option
-option(ENABLE_ASAN "Enable AddressSanitizer" ${ENABLE_ASAN})
-
-# Set output directories
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/${BUILD_DIR}/bin/${CONFIG})
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/${BUILD_DIR}/bin/${CONFIG})
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/${BUILD_DIR}/bin-int/${CONFIG})
-
-# Set PDB output directory for MSVC
 if(MSVC)
-    set(CMAKE_PDB_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/${BUILD_DIR}/bin/${CONFIG})
+    add_compile_options(/MP /wd4251 /wd4131 /wd4267)
 endif()
-
-# Global compiler flags
-if(MSVC)
-    # Enable multi-processor compilation
-    add_compile_options(/MP)
-    
-    # Disable specific warnings
-    add_compile_options(/wd4251 /wd4131 /wd4267)
-    
-    # Set runtime library based on configuration
-    set_property(GLOBAL PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
-endif()
-
-# AddressSanitizer configuration
-function(enable_address_sanitizer target)
-    if(ENABLE_ASAN AND CMAKE_BUILD_TYPE STREQUAL "Debug")
-        message(STATUS "AddressSanitizer enabled for target: ${target}")
-        
-        if(MSVC)
-            # MSVC AddressSanitizer flags
-            target_compile_options(${target} PRIVATE 
-                $<$<CONFIG:Debug>:/fsanitize=address>
-                $<$<AND:$<BOOL:${ENABLE_ASAN}>,$<NOT:$<CONFIG:Debug>>>:/fsanitize=address>
-            )
-            
-            # Link with AddressSanitizer runtime
-            target_link_options(${target} PRIVATE 
-                $<$<CONFIG:Debug>:/INCREMENTAL:NO>
-                $<$<AND:$<BOOL:${ENABLE_ASAN}>,$<NOT:$<CONFIG:Debug>>>:/INCREMENTAL:NO>
-            )
-            
-            # Set environment variable for better stack traces
-            target_compile_definitions(${target} PRIVATE
-                $<$<CONFIG:Debug>:_DISABLE_VECTOR_ANNOTATION>
-                $<$<CONFIG:Debug>:_DISABLE_STRING_ANNOTATION>
-                $<$<AND:$<BOOL:${ENABLE_ASAN}>,$<NOT:$<CONFIG:Debug>>>:_DISABLE_VECTOR_ANNOTATION>
-                $<$<AND:$<BOOL:${ENABLE_ASAN}>,$<NOT:$<CONFIG:Debug>>>:_DISABLE_STRING_ANNOTATION>
-            )
-            
-        elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-            # GCC/Clang AddressSanitizer flags
-            target_compile_options(${target} PRIVATE 
-                $<$<CONFIG:Debug>:-fsanitize=address>
-                $<$<CONFIG:Debug>:-fno-omit-frame-pointer>
-                $<$<CONFIG:Debug>:-g>
-                $<$<AND:$<BOOL:${ENABLE_ASAN}>,$<NOT:$<CONFIG:Debug>>>:-fsanitize=address>
-                $<$<AND:$<BOOL:${ENABLE_ASAN}>,$<NOT:$<CONFIG:Debug>>>:-fno-omit-frame-pointer>
-                $<$<AND:$<BOOL:${ENABLE_ASAN}>,$<NOT:$<CONFIG:Debug>>>:-g>
-            )
-            
-            target_link_options(${target} PRIVATE 
-                $<$<CONFIG:Debug>:-fsanitize=address>
-                $<$<AND:$<BOOL:${ENABLE_ASAN}>,$<NOT:$<CONFIG:Debug>>>:-fsanitize=address>
-            )
-        endif()
-        
-        # AddressSanitizer-specific definitions
-        target_compile_definitions(${target} PRIVATE
-            $<$<CONFIG:Debug>:ASAN_ENABLED>
-            $<$<AND:$<BOOL:${ENABLE_ASAN}>,$<NOT:$<CONFIG:Debug>>>:ASAN_ENABLED>
-        )
-    endif()
-endfunction()
 
 # Global definitions
-add_compile_definitions( _CRT_SECURE_NO_WARNINGS )
+add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 
 # Configuration-specific definitions
 add_compile_definitions(
@@ -102,12 +35,31 @@ add_compile_definitions(
     $<$<CONFIG:Dist>:COBER_DIST>
 )
 
+# AddressSanitizer configuration
+function(enable_address_sanitizer target)
+    if(COBER_ENABLE_ASAN)
+        if(MSVC)
+            target_compile_options(${target} PRIVATE $<$<CONFIG:Debug>:/fsanitize=address>)
+            target_link_options(${target} PRIVATE $<$<CONFIG:Debug>:/INCREMENTAL:NO>)
+        elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+            target_compile_options(${target} PRIVATE
+                $<$<CONFIG:Debug>:-fsanitize=address>
+                $<$<CONFIG:Debug>:-fno-omit-frame-pointer>
+                $<$<CONFIG:Debug>:-g>
+            )
+            target_link_options(${target} PRIVATE $<$<CONFIG:Debug>:-fsanitize=address>)
+        endif()
+
+        target_compile_definitions(${target} PRIVATE $<$<CONFIG:Debug>:ASAN_ENABLED>)
+    endif()
+endfunction()
+
 # Include directories for libraries
 set(SDL3_INCLUDE_DIR         ${CMAKE_SOURCE_DIR}/libraries/SDL/include)
 set(IMGUI_INCLUDE_DIR        ${CMAKE_SOURCE_DIR}/libraries/imgui)
 set(IMGUIZMO_INCLUDE_DIR     ${CMAKE_SOURCE_DIR}/libraries/ImGuizmo)
 set(GLM_INCLUDE_DIR          ${CMAKE_SOURCE_DIR}/libraries/glm)
-set(ENTT_INCLUDE_DIR         ${CMAKE_SOURCE_DIR}/libraries/entt/include)
+set(ENTT_INCLUDE_DIR         ${CMAKE_SOURCE_DIR}/libraries/entt/single_include)
 set(MSDF_INCLUDE_DIR         ${CMAKE_SOURCE_DIR}/libraries/msdf/msdf-atlas-gen)
 set(MSDFGEN_INCLUDE_DIR      ${CMAKE_SOURCE_DIR}/libraries/msdf/msdfgen)
 set(BOX2D_INCLUDE_DIR        ${CMAKE_SOURCE_DIR}/libraries/box2d/include)
@@ -140,25 +92,33 @@ set(GLM_TEST_ENABLE OFF CACHE BOOL "" FORCE)
 
 # Add subdirectories for dependencies
 add_subdirectory(libraries)
-
-# Add subdirectories for core components
-
-# set_target_properties(Editor PROPERTIES
-#         VS_DEBUGGER_ENVIRONMENT "ASAN_OPTIONS=windows_hook_rtl_allocators=true:detect_leaks=1"
-#     )
-
 add_subdirectory(Engine)
 
-if(PROJECT STREQUAL "game")
-    message(STATUS "Building game project: ${GAME_NAME}")
+# Add subdirectories for core components
+if(COBER_BUILD_EDITOR)
     add_subdirectory(Editor)
-    add_subdirectory(${GAME_NAME})
-    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${GAME_NAME})
-elseif(PROJECT STREQUAL "Editor")
-    message(STATUS "Building ${PROJECT}")
-    add_subdirectory("Editor")
-    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Editor)
-else()
-    message(STATUS "Building ${PROJECT}")
-    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Engine)
 endif()
+
+if(COBER_BUILD_GAME)
+    add_subdirectory(Game)
+endif()
+
+if(COBER_BUILD_EDITOR)
+    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Editor)
+elseif(COBER_BUILD_GAME)
+    set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Game)
+endif()
+
+# if(PROJECT STREQUAL "game")
+#     message(STATUS "Building game project: ${GAME_NAME}")
+#     add_subdirectory(Editor)
+#     add_subdirectory(${GAME_NAME})
+#     set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT ${GAME_NAME})
+# elseif(PROJECT STREQUAL "Editor")
+#     message(STATUS "Building ${PROJECT}")
+#     add_subdirectory("Editor")
+#     set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Editor)
+# else()
+#     message(STATUS "Building ${PROJECT}")
+#     set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Engine)
+# endif()

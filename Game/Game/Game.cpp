@@ -33,7 +33,7 @@ void Game::OnUpdate(Unique<Timestep>& ts)
 	// Bind Framebuffer...
 	m_Fbo->Bind();
 
-	RenderGlobals::SetClearColor(20, 70, 150);
+	RenderGlobals::SetClearColor(50, 70, 150);
 	RenderGlobals::Clear();
 
 	// Clear Framebuffer Attachments...

@@ -13,7 +13,7 @@
 	#define new DEBUG_NEW
 #endif
 	
-#include "Log.h"
+#include "Core/Log.h"
 
 namespace Cober {
 

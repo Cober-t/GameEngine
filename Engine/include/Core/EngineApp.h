@@ -12,7 +12,7 @@
 #include "Events/ApplicationEvents.h"
 #include "Events/Event.h"
 #include "Render/Render2D.h"
-#include "Log.h"
+#include "Core/Log.h"
 
 
 int main(int argc, char** argv);

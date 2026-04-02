@@ -1,8 +1,8 @@
 #ifndef RENDER_GLOBALS_H
 #define RENDER_GLOBALS_H
 
-#include "RenderAPI.h"
-#include "VertexArray.h"
+#include "Render/RenderAPI.h"
+#include "Render/VertexArray.h"
 
 namespace Cober {
 

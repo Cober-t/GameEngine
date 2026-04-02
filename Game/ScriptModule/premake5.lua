@@ -42,7 +42,7 @@ workspace "ScriptingWorkspace"
 			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/Engine",
 			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/Engine/include",
 			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries",
-			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/glfw/include",
+			--"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/glfw/include",
 			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/glad/include",
 			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/glm",
 			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/entt",
@@ -71,7 +71,7 @@ workspace "ScriptingWorkspace"
 			-- Generate in the future
 			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/bin/Debug-windows-x86_64/Engine/Engine.lib",
 			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/glad/bin/Debug-windows-x86_64/Glad/Glad.lib",
-			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/glfw/bin/Debug-windows-x86_64/GLFW/GLFW.lib",
+			--"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/glfw/bin/Debug-windows-x86_64/GLFW/GLFW.lib",
 			"C:/Users/jorge/OneDrive/Escritorio/GameEngine/libraries/imgui/bin/Debug-windows-x86_64/ImGui/ImGui.lib"
 		}
 
