@@ -22,7 +22,7 @@
 int main(int argc, char** argv);
 
 namespace Cober {
-	
+
 	struct AppCommandLineArgs
 	{
 		int Count = 0;
@@ -46,6 +46,17 @@ namespace Cober {
 		uint32_t Height = 720;
 		AppCommandLineArgs CommandLineArgs;
 	};
+
+
+	static std::filesystem::path ParseProjectArg(const AppCommandLineArgs& args)
+	{
+		for (int i = 1; i < args.Count - 1; i++)
+		{
+			if (std::string(args[i]) == "--project")
+				return args[i + 1];
+		}
+		return {};
+	}
 
 	class CB_API EngineApp
 	{

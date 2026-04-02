@@ -6,7 +6,6 @@
 
 namespace Cober {
 
-
     bool SceneSerializer::Serialize(const Ref<Scene>& scene, const std::string& sceneName)
     {
         Utils::DataFile sceneSaver;
@@ -42,7 +41,7 @@ namespace Cober {
 		Utils::DataFile sceneLoader;
 		std::string name;
 
-		std::filesystem::path scenesPath = std::filesystem::current_path() / "assets/scenes" / sceneName;
+		std::filesystem::path scenesPath = PathService::AssetsRoot() / "scenes" / sceneName;
 
 		if (!std::filesystem::exists(scenesPath))
 			sceneName = "SceneDefault.lua";
@@ -77,7 +76,7 @@ namespace Cober {
 			return newScene;
 		}
 		
-		LOG_ERROR(("Cannot read scene with path: {0}", std::filesystem::current_path().string() + "\\assets\\scenes\\" + sceneName));
+		LOG_ERROR(("Cannot read scene with path: {0}", PathService::AssetsRoot().string() + "\\scenes\\" + sceneName));
 		return nullptr;
     }
 
@@ -554,7 +553,7 @@ namespace Cober {
 		Utils::DataFile scriptableEntitiesLoader;
 		std::string name;
 
-		std::filesystem::path scriptsPath = std::filesystem::current_path() / "assets/scripts" / entityName;
+		std::filesystem::path scriptsPath = PathService::AssetsRoot() / "scripts" / entityName;
 
 		if (!std::filesystem::exists(scriptsPath))
 			entityName = "EntityDefault.lua";
@@ -588,7 +587,7 @@ namespace Cober {
 			}
 		}
 		
-		LOG_ERROR(("ScriptableEntity does not exists with path: {0}", std::filesystem::current_path().string() + "\\assets\\scripts\\" + entityName));
+		LOG_ERROR(("ScriptableEntity does not exists with path: {0}", PathService::ResolveAsset("\\scripts\\").string() + entityName));
 		return {};
 	}
 

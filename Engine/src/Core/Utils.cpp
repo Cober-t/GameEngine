@@ -272,7 +272,7 @@ namespace Cober::Utils {
 
 		// Start here!, open the file for writing
 		// Receive a path on the future
-		std::filesystem::path filePath = std::filesystem::current_path() / path;
+		std::filesystem::path filePath = PathService::ProjectRoot() / path;
 		std::ofstream file(filePath);
 
 		if (file.is_open())
@@ -287,7 +287,7 @@ namespace Cober::Utils {
 
 	bool DataFile::Read(DataFile& dataFile, std::filesystem::path& path, const char listStep) 
     {
-		std::ifstream file(std::filesystem::current_path() / path);
+		std::ifstream file(PathService::ResolveProject(path));
 
 		//Open the file!
 		if (file.is_open())

@@ -30,6 +30,7 @@
 #include <Core/MemoryDebug.h>
 
 #include <Core/Core.h>
+#include <Core/PathService.h>
 #include <Core/Log.h>
 #include <Events/KeyCodes.h>
 

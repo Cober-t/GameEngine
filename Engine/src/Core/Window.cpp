@@ -44,14 +44,9 @@ namespace Cober {
 		{
 			if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD))
 			{
-				printf("Error: SDL_Init(): %s\n", SDL_GetError());
-				// return;
+				LOG_CORE_ERROR("Error: SDL_Init failed: {}", SDL_GetError());
+				return;
 			}
-
-			/// TODO: CHANGE BY SDL3 IMPLEMENTATION
-			// int success = glfwInit();
-			// LOG_CORE_ASSERT(success, "Could not initialize GLFW!");
-			// glfwSetErrorCallback(GLFWErrorCallback);
 		}
 
 		// #if defined(CB_DEBUG)
@@ -59,8 +54,6 @@ namespace Cober {
 			// 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
 		// #endif
 
-		/// TODO: CREATE WINDOW WITH SDL3
-		// m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		m_Window = SDL_CreateWindow( m_Data.Title.c_str(), (int)props.Width, (int)props.Height, SDL_WINDOW_RESIZABLE );
 		if (m_Window == nullptr) 
 		{
@@ -213,9 +206,6 @@ namespace Cober {
 
 	void Window::OnUpdate()
 	{
-		/// TODO: MANAGE VSYNC WITH SDL poll events
-		// glfwPollEvents();
-		Input::Update();
 		/// TODO: MANAGE SWAPBUFFER WINDOWS WITH SDL
 		// m_Context->SwapBuffers();
 

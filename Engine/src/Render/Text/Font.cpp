@@ -176,7 +176,7 @@
 // 		static Ref<Font> DefaultFont;
 // 		if (!DefaultFont)
 // 		{
-// 			std::filesystem::path fontPath =std::filesystem::current_path()/"assets"/"fonts"/"opensans"/"OpenSans-Regular.ttf";
+// 			std::filesystem::path fontPath = PathService::ResolveAsset("fonts"/"opensans"/"OpenSans-Regular.ttf");
 // 			DefaultFont = CreateRef<Font>(fontPath);
 // 			DefaultFont->m_FontName = "OpenSans-Regular";
 // 			DefaultFont->m_FontPath = fontPath;

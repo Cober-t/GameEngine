@@ -13,8 +13,8 @@
 // 	ContentBrowserPanel::ContentBrowserPanel()
 // 	{
 // 		s_Instance = this;
-// 		m_AssetsPath = std::filesystem::current_path() /  "assets";
-// 		m_CurrentDirectory = m_AssetsPath;
+// 		m_AssetsPath = PathService::AssetsRoot();
+// 		m_CurrentDirectory = PathService::AssetsRoot();
 
 // 		m_AssetIconMap[".png"] = EditorResources::PNGFileIcon;
 // 		m_AssetIconMap[".jpg"] = EditorResources::JPGFileIcon;

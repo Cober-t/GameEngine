@@ -216,7 +216,7 @@
 // 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) 
 // 			{
 // 				const wchar_t* path = (const wchar_t*)payload->Data;
-// 				m_FilePath = (std::filesystem::current_path() / "assets" / path).string();
+// 				m_FilePath = PathService::ResolveAsset(path).string();
 
 // 				if (Editor::SelectedEntity() && Editor::SelectedEntity().HasComponent<Render2DComponent>()) 
 // 				{
@@ -245,7 +245,7 @@
 // 			else if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_PREFAB")) 
 // 			{
 // 				const wchar_t* path = (const wchar_t*)payload->Data;
-// 				std::filesystem::path prefabPath = std::filesystem::current_path() / "assets" / path;
+// 				std::filesystem::path prefabPath = PathService::ResolveAsset(path);
 // 				Scene::LoadPrefab(Editor::GetActiveScene().get(), prefabPath.filename().string());
 // 			}
 

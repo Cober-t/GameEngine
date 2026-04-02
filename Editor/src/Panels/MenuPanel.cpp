@@ -26,12 +26,12 @@
 
 // 		std::filesystem::path solutionDirPath = SOLUTION_DIR;
 // 		m_BuildFileCommand = solutionDirPath / "setup" / "Compile.bat";
-// 		m_CompileFileCommand = std::filesystem::current_path() / "ScriptModule" / "build.bat";
+// 		m_CompileFileCommand = PathService::ProjectRoot() / "ScriptModule" / "build.bat";
 
 // 		std::string exeName = EngineApp::Get().GetSpecification().Name + ".exe";
-// 		m_GamePath = std::filesystem::current_path() / "build" / "Debug-windows-x86_64" / exeName;
+// 		m_GamePath = PathService::ProjectRoot() / "build" / "Debug-windows-x86_64" / exeName;
 
-// 		m_ScenesPath = std::filesystem::current_path() / "assets" / "scenes";
+// 		m_ScenesPath = PathService::ResolveAsset("scenes");
 // 	}
 
 // 	MenuPanel::~MenuPanel() 
@@ -73,7 +73,7 @@
 
 // 			if (ImGui::Button(ICON_FA_FILE  "  New Scene"))
 // 			{
-// 				std::filesystem::path newScenePath = std::filesystem::current_path() / "assets" / "scenes";
+// 				std::filesystem::path newScenePath = PathService::ResolveAsset("scenes");
 //     			std::ofstream ofs(newScenePath / m_NewSceneName);
 // 			}
 
@@ -134,7 +134,7 @@
 
 // 			if (ImGui::MenuItem("Build Game"))
 // 			{
-// 				std::string command = m_BuildFileCommand.string() + " game " + "\"" + std::filesystem::current_path().string() + "\"";
+// 				std::string command = m_BuildFileCommand.string() + " game " + "\"" + PathService::ProjectRoot().string() + "\"";
 // 				system(command.c_str());
 // 				LOG_CORE_INFO("Build command: {0}", command.c_str());
 // 				if (std::filesystem::exists(m_CompileFileCommand))

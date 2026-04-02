@@ -294,7 +294,7 @@
 // 		{
 // 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM")) {
 // 				const wchar_t* path = (const wchar_t*)payload->Data;
-// 				std::filesystem::path texturePath = std::filesystem::current_path() / "assets" / path;
+// 				std::filesystem::path texturePath = PathService::ResolveAsset(path);
 
 // 				std::string format = texturePath.extension().string();
 // 				if (format == ".png" || format == ".jpg" || format == ".jpeg")
@@ -638,7 +638,7 @@
 // 				{
 // 					// File watcher in the future
 // 					m_ScriptList.erase(m_ScriptList.begin(), m_ScriptList.end());
-// 					std::filesystem::path scriptPath = std::filesystem::current_path() / "ScriptModule" / "scripts";
+// 					std::filesystem::path scriptPath = PathService::ProjectRoot() / "ScriptModule" / "scripts";
 // 					for (const auto & entry : std::filesystem::directory_iterator(scriptPath))
 // 					{
 // 						std::string stringPath = entry.path().string();
@@ -682,7 +682,7 @@
 // 				char buffer[256];
 // 				memset(buffer, 0, sizeof(buffer));
 // 				strcpy_s(buffer, sizeof(buffer), component.audioName.c_str());
-// 				std::filesystem::path audioPath = std::filesystem::current_path() / "assets";
+// 				std::filesystem::path audioPath = PathService::AssetsRoot();
 
 // 				if (ImGui::InputText("##Name", buffer, sizeof(buffer)))
 // 				{
@@ -746,7 +746,7 @@
 // 					{
 // 						const wchar_t* path = (const wchar_t*)payload->Data;
 
-// 						std::filesystem::path fontPath = std::filesystem::current_path() / "assets" / path;
+// 						std::filesystem::path fontPath = PathService::ResolveAsset(path);
 // 						if (fontPath.extension().string() == ".ttf" && std::filesystem::exists(fontPath))
 // 						{
 // 							/// TODO: COMPONENT MISSING BECAUSE OF THE MSDF LIBRARY IS DISABLED

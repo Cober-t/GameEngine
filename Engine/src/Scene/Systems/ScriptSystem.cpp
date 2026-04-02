@@ -44,7 +44,7 @@ namespace Cober {
 		// 	// 	// if (script != sol::lua_nil)
 		// 	// 		// script.func();	// Inoke lua function
 		// 	// }
-		// 	std::filesystem::path scriptPath = std::filesystem::current_path() / "assets/scripts";
+		// 	std::filesystem::path scriptPath = PathService::ResolveAsset("scripts");
 		// 	lua.script_file(scriptPath.string() + "scriptTest.lua");
 		// 	sol::function addFunction = lua["add"];
 		// 	int sum = addFunction(5, 6);

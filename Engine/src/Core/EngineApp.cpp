@@ -64,10 +64,8 @@ namespace Cober {
         layer->OnAttach();
     }
 
-
     void EngineApp::Start()
     {
-
         if (m_GameState == EngineApp::GameState::EDITOR || m_GameState == EngineApp::GameState::RUNTIME_EDITOR) 
         {
             m_GuiLayer = new ImGuiLayer("#version 460");

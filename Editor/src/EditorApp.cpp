@@ -5,16 +5,6 @@
 
 namespace Cober {
 
-	static std::filesystem::path ParseProjectArg(AppCommandLineArgs args)
-	{
-		for (int i = 1; i < args.Count - 1; i++)
-		{
-			if (std::string(args[i]) == "--project")
-				return args[i + 1];
-		}
-		return {};
-	}
-
 	class EditorApp : public EngineApp 
 	{
 	public:
