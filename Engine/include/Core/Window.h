@@ -56,7 +56,6 @@ namespace Cober {
 
 	private:
 		virtual void Init(const WindowProps& props);
-		virtual void SetWindowCallbacks();
 		virtual void Shutdown();
 
 	private:

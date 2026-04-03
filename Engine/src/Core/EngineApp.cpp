@@ -22,17 +22,13 @@ namespace Cober {
 
         m_TimeStep = CreateUnique<Timestep>();
 
-        /// TODO: CREATE WINDOW WITH SDL3
         m_Window = CreateUnique<Window>(
             WindowProps(m_Specification.Name, m_Specification.Width, m_Specification.Height)
         );
 
-        /// TODO: Process Events from SDL  (EventHandler)// EventHandler::Get()->ProcessEvents(event);
-        // m_Window->SetEventCallback([this](Event& e) { OnEvent(e); });
 
         /// TODO: RENDER PIPELINE WITH SDL3
         RenderGlobals::Init();
-        // TEST
         RenderGlobals::SetClearColor({0.8f, 0.3f, 0.1f, 1.0f});
 		//Render2D::Start();
     }
@@ -40,8 +36,6 @@ namespace Cober {
 
     EngineApp::~EngineApp() 
     {
-		// m_Window->SetEventCallback([](Event& e) {});
-
         // Render2D::Shutdown();   // Abstract in a global Render api class in the future
         LOG_CORE_INFO("EngineApp Destructor!");
     }
@@ -68,9 +62,10 @@ namespace Cober {
 
     void EngineApp::Start()
     {
-        if (m_GameState == EngineApp::GameState::EDITOR || m_GameState == EngineApp::GameState::RUNTIME_EDITOR) 
+        if (m_GameState == EngineApp::GameState::EDITOR ||
+        m_GameState == EngineApp::GameState::RUNTIME_EDITOR)
         {
-            m_GuiLayer = new ImGuiLayer("#version 460");
+            m_GuiLayer = new ImGuiLayer();
             PushOverlay(m_GuiLayer);
         }
     }
@@ -96,7 +91,7 @@ namespace Cober {
 
     void EngineApp::OnEvent(Event& event) 
     {
-        LOG_CORE_INFO(event.GetName());
+        //LOG_CORE_INFO(event.GetName());
         
         EventDispatcher dispatcher(event);
         dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(EngineApp::OnWindowClose));
@@ -200,16 +195,19 @@ namespace Cober {
 
         while (SDL_PollEvent(&rawEvent))
         {
+            if (m_GuiLayer)
+                m_GuiLayer->OnSDLEvent(rawEvent);
+
             Input::OnEvent(rawEvent);
 
             auto event = TranslateSDLEvent(rawEvent);
-
             if (!event) {
                 continue;
             }
 
             OnEvent(*event);
         }
+
         //UISystem::ProcessInputs(event);
     }
 

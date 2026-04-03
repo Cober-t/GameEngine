@@ -2,6 +2,7 @@
 #define BUFFER_H
 
 #include "Core/Core.h"
+#include "Core/Log.h"
 
 #include <vector>
 

@@ -20,15 +20,22 @@
 #include <map>
 #include <unordered_map>
 #include <unordered_set>
+
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
+#ifdef _WIN32
 #include <Windows.h>
+#endif
 
 /* --- CUSTOM HEADERS --- */
-// #include <glad/glad.h>
-// #include <GLFW/glfw3.h>
 #include <SDL3/SDL.h>
 
 #include <Core/MemoryDebug.h>
-
 #include <Core/Core.h>
 #include <Core/PathService.h>
 #include <Core/Log.h>

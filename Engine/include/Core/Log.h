@@ -9,16 +9,10 @@
 
 // This ignores all warnings raised inside External headers
 #pragma warning(push, 0)
-#ifdef new
-    #undef new
-#endif
-	#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
-	#include <spdlog/spdlog.h>
-	#include <spdlog/fmt/ostr.h>
-	#include <spdlog/sinks/ringbuffer_sink.h>
-#ifdef _DEBUG
-	#define new DEBUG_NEW
-#endif
+#define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
+#include <spdlog/spdlog.h>
+#include <spdlog/fmt/ostr.h>
+#include <spdlog/sinks/ringbuffer_sink.h>
 #pragma warning(pop)
 
 namespace Cober {

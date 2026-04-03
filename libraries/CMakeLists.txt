@@ -64,39 +64,51 @@ endif()
 # These will be built with custom configurations
 
 # ImGui - Immediate mode GUI
+# ImGui - Immediate mode GUI
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/imgui)
     message(STATUS "Adding ImGui library (custom build)")
-    file(GLOB IMGUI_SOURCES 
-        imgui/*.cpp
-        imgui/*.h
+
+    set(IMGUI_SOURCES
+        imgui/imgui.cpp
+        imgui/imgui_draw.cpp
+        imgui/imgui_tables.cpp
+        imgui/imgui_widgets.cpp
+        imgui/imgui_demo.cpp
+        imgui/backends/imgui_impl_sdl3.cpp
+        imgui/backends/imgui_impl_sdlgpu3.cpp
     )
-    
-    if(IMGUI_SOURCES)
-        add_library(ImGui STATIC ${IMGUI_SOURCES})
-        target_include_directories(ImGui PUBLIC imgui)
-        if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/imgui/backends)
-            target_include_directories(ImGui PUBLIC imgui/backends)
-        endif()
-        
-        # # Link with GLFW if available
-        # if(TARGET glfw)
-        #     target_link_libraries(ImGui PUBLIC glfw)
-        # endif()
-        
-        target_compile_definitions(ImGui PRIVATE 
-            # IMGUI_IMPL_OPENGL_LOADER_GLAD
-            $<$<PLATFORM_ID:Windows>:_CRT_SECURE_NO_WARNINGS>
-        )
-        set_target_properties(ImGui PROPERTIES FOLDER "Dependencies")
+
+    add_library(ImGui STATIC ${IMGUI_SOURCES})
+
+    target_include_directories(ImGui
+        PUBLIC
+            imgui
+            imgui/backends
+            ${CMAKE_CURRENT_SOURCE_DIR}/SDL/include
+    )
+
+    if(TARGET SDL3::SDL3-static)
+        target_link_libraries(ImGui PUBLIC SDL3::SDL3-static)
+    elseif(TARGET SDL3-static)
+        target_link_libraries(ImGui PUBLIC SDL3-static)
+    elseif(TARGET SDL3::SDL3)
+        target_link_libraries(ImGui PUBLIC SDL3::SDL3)
+    else()
+        message(FATAL_ERROR "ImGui requires an SDL3 target, but none was found.")
     endif()
+
+    target_compile_definitions(ImGui PRIVATE
+        $<$<PLATFORM_ID:Windows>:_CRT_SECURE_NO_WARNINGS>
+    )
+
+    set_target_properties(ImGui PROPERTIES FOLDER "Dependencies")
 endif()
 
 # ImGuizmo - 3D gizmo for ImGui
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/ImGuizmo)
     message(STATUS "Adding ImGuizmo library (custom build)")
     file(GLOB IMGUIZMO_SOURCES 
-        ImGuizmo/*.cpp
-        ImGuizmo/*.h
+        ImGuizmo/ImGuizmo.cpp
     )
     
     if(IMGUIZMO_SOURCES)

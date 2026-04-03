@@ -5,14 +5,7 @@
 #include "Components.h"
 #include "Scene.h"
 
-#ifdef new
-    #undef new
-#endif
 #include <entt/entt.hpp>
-#ifdef _DEBUG
-    #define new DEBUG_NEW
-#endif
-
 
 namespace Cober {
 

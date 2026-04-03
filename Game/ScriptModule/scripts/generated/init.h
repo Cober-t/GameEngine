@@ -8,13 +8,7 @@
 #include "../TestScript.h"
 
 #define ENTT_STANDARD_CPP
-#ifdef new
-    #undef new
-#endif
 #include <entt/entt.hpp>
-#ifdef _DEBUG
-    #define new DEBUG_NEW
-#endif
 
 
 namespace Cober {

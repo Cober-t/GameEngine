@@ -79,16 +79,3 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 
 # Enable AddressSanitizer for Engine
 enable_address_sanitizer(${PROJECT_NAME})
-
-# Configuration-specific settings
-# target_compile_options(Engine PRIVATE
-#     $<$<CONFIG:Debug>:$<IF:$<CXX_COMPILER_ID:MSVC>,/Od /ZI,>>
-#     $<$<CONFIG:Release>:$<IF:$<CXX_COMPILER_ID:MSVC>,/O2,>>
-#     $<$<CONFIG:Dist>:$<IF:$<CXX_COMPILER_ID:MSVC>,/O2,>>
-# )
-
-# Debug symbols
-# set_target_properties(Engine PROPERTIES
-#     $<$<CONFIG:Debug>:CMAKE_CXX_FLAGS_DEBUG>
-#     $<$<CONFIG:Debug>:"/Zi">
-# )

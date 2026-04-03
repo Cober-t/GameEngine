@@ -2,17 +2,11 @@
 #include <iostream>
 #include <sstream>
 
-#ifdef new
-    #undef new
-#endif
-	#include <spdlog/sinks/stdout_color_sinks.h>
-	#include <spdlog/sinks/basic_file_sink.h>
-	#include <spdlog/sinks/stdout_sinks.h>
-	#include <spdlog/sinks/dup_filter_sink.h>
-#ifdef _DEBUG
-	#define new DEBUG_NEW
-#endif
-	
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/stdout_sinks.h>
+#include <spdlog/sinks/dup_filter_sink.h>
+
 #include "Core/Log.h"
 
 namespace Cober {

@@ -2,48 +2,43 @@
 #define IMGUI_LAYER_H
 
 #include "Core/Layer.h"
+#include <SDL3/SDL.h>
 
-#ifdef new
-    #undef new
-#endif
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
-#ifdef _DEBUG
-    #define new DEBUG_NEW
-#endif
-
 
 namespace Cober {
 
-	class CB_API ImGuiLayer : public Layer 
-	{
-	public:
+    class CB_API ImGuiLayer : public Layer
+    {
+    public:
+        ImGuiLayer();
+        ~ImGuiLayer() override;
 
-		ImGuiLayer(const char* glVersion = "#version 460");
-		~ImGuiLayer();
+        void OnAttach() override;
+        void OnDetach() override;
+        void OnEvent(Event& event) override;
 
-		virtual void OnAttach() override;
-		virtual void OnDetach() override;
-		virtual void OnEvent(Event& event) override;
+        void OnSDLEvent(const SDL_Event& event);
 
-		void Begin();
-		void End();
-		
-		bool IsInputEnabled();
-		void SetInputEnabled(bool enabled);
-		void BlockEvents(bool block) { m_BlockEvents = block; }
+        void Begin();
+        void End();
 
-		void StyleDefault();
-		void StyleCustom();
+        bool IsInputEnabled() const;
+        void SetInputEnabled(bool enabled);
+        void BlockEvents(bool block) { m_BlockEvents = block; }
 
-		static ImGuiContext* GetContext() { return m_ImGuiContext; }
+        void StyleDefault();
+        void StyleCustom();
 
-	private:
-		bool m_BlockEvents = false;
-		const char* glsl_version;
+        static ImGuiContext* GetContext() { return m_ImGuiContext; }
 
-		static ImGuiContext* m_ImGuiContext;
-	};
+    private:
+        bool m_BlockEvents = true;
+        bool m_Initialized = false;
+        static ImGuiContext* m_ImGuiContext;
+    };
+
 }
 
 #endif

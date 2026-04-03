@@ -62,19 +62,3 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 enable_address_sanitizer(${PROJECT_NAME})
 # Make Editor depend on Engine to ensure proper build order
 add_dependencies(${PROJECT_NAME} Engine)
-
-# # Set folder in Visual Studio
-# set_target_properties(Editor PROPERTIES FOLDER "Tools")
-
-# # Configuration-specific settings
-# target_compile_options(Editor PRIVATE
-#     $<$<CONFIG:Debug>:$<IF:$<CXX_COMPILER_ID:MSVC>,/MDd,>>
-#     $<$<CONFIG:Release>:$<IF:$<CXX_COMPILER_ID:MSVC>,/MD,>>
-#     $<$<CONFIG:Dist>:$<IF:$<CXX_COMPILER_ID:MSVC>,/MD,>>
-# )
-
-# # Debug symbols for debug configuration
-# set_target_properties(Editor PROPERTIES
-#     $<$<CONFIG:Debug>:CMAKE_CXX_FLAGS_DEBUG>
-#     $<$<CONFIG:Debug>:"/Zi">
-# )

@@ -11,12 +11,18 @@ namespace Cober {
 	class CB_API RenderAPI 
 	{
 	public:
-		enum class API 
-		{
-			None = 0, Vulkan, OpenGL, OpenGLES, OpenGLES3
+		enum class API {
+			None = 0,
+			// Automatic backend choice
+			SDLGPU,
+			// Preferred backend
+			Vulkan,
+			Metal,
+			DirectX12,
+			OpenGL,
+			OpenGLES, 
+			OpenGLES3
 		};
-		
-	public:
 
 		virtual void Init() = 0;
 

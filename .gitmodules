@@ -7,12 +7,6 @@
 [submodule "libraries/entt"]
 	path = libraries/entt
 	url = https://github.com/skypjack/entt.git
-; [submodule "libraries/glad"]
-; 	path = libraries/glad
-; 	url = https://github.com/Dav1dde/glad.git
-; [submodule "libraries/glfw"]
-; 	path = libraries/glfw
-; 	url = https://github.com/glfw/glfw.git
 [submodule "libraries/imgui"]
 	path = libraries/imgui
 	url = https://github.com/ocornut/imgui.git

@@ -2,16 +2,8 @@
 #define EDITOR_LAYER_H
 
 #include <Engine.h>
-
-#ifdef new
-	#undef new
-#endif
-	#include <glm/gtc/type_ptr.hpp>
-	
-	#include <glm/gtc/matrix_transform.hpp>
-#ifdef _DEBUG
-	#define new DEBUG_NEW
-#endif
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 
 // GUI PANELS

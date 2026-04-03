@@ -1,14 +1,7 @@
 #ifndef IMGUI_COLORS_H
 #define IMGUI_COLORS_H
 
-#ifdef new
-    #undef new
-#endif
 #include <imgui/imgui.h>
-#ifdef _DEBUG
-    #define new DEBUG_NEW
-#endif
-
 namespace Colors
 {
 	static inline float Convert_sRGB_FromLinear(float theLinearValue);

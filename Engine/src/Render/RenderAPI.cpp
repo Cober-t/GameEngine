@@ -1,11 +1,10 @@
 #include <pch.h>
 #include "Render/RenderAPI.h"
-// #include "Platforms/OpenGL/OpenGLRenderAPI.h"
 #include "Platforms/Vulkan/VulkanRenderAPI.h"
 
 namespace Cober {
 
-	RenderAPI::API RenderAPI::m_Api = RenderAPI::API::Vulkan;//RenderAPI::API::OpenGL;
+	RenderAPI::API RenderAPI::m_Api = RenderAPI::API::Vulkan;
 	
 	Unique<RenderAPI> RenderAPI::Create() 
 	{
@@ -19,7 +18,6 @@ namespace Cober {
 
 		return nullptr;
 	}
-
 
 	RenderAPI::API RenderAPI::GetAPI()
 	{
