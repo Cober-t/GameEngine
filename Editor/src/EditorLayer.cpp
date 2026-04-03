@@ -15,13 +15,15 @@ namespace Cober {
 		// m_EditorCamera = CreateUnique<EditorCamera>(45.0f, EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight(), 0.01f, 1000.0f, GlobalCamera::perspective);
 		// m_CameraActive = m_EditorCamera;
 
+		// TODO: Needs to load textures, fix render api first
 		// EditorResources::Init();
 
+		// TODO: Needs to load textures, fix render api first
 		// new ViewportPanel();
-		// new DataPanel();
-		// new ConsolePanel();
+		new DataPanel();
+		new ConsolePanel();
 		// new SceneHierarchyPanel();
-		// new ContentBrowserPanel();
+		new ContentBrowserPanel();
 		// new MenuPanel();
 
 		// new Debug2DPhysics();
@@ -30,12 +32,12 @@ namespace Cober {
 
 	void Editor::OnAttach() 
 	{
-		// m_ActiveScene = Scene::Load(EngineApp::Get().GetSpecification().LastScene);
+		// m_ActiveScene = Scene::Load(EngineApp::Get().GetSpecification().StartupScene.string());
 
 		// m_ActiveScene->OnRuntimeStart();
-		// m_EditorScene = m_ActiveScene;
+		m_EditorScene = m_ActiveScene;
 
-		// // Primitive::Grid::Init();
+		// Primitive::Grid::Init();
 		// ViewportPanel::Get().CreateFramebuffer(m_EditorCamera->m_ViewportWidth, m_EditorCamera->m_ViewportHeight);
 		// SceneHierarchyPanel::Get().SetContext(m_ActiveScene);
 	}
@@ -43,17 +45,17 @@ namespace Cober {
 
 	void Editor::OnDetach() 
 	{
-		// m_ActiveScene->OnRuntimeStop();
+		m_ActiveScene->OnRuntimeStop();
 		// ViewportPanel::Get().UnbindFramebuffer();
 
-		// m_ActiveScene  = nullptr;
-		// m_EditorScene  = nullptr;
-		// m_EditorCamera = nullptr;
-		// m_CameraActive = nullptr;
+		m_ActiveScene  = nullptr;
+		m_EditorScene  = nullptr;
+		m_EditorCamera = nullptr;
+		m_CameraActive = nullptr;
 
-		// EditorResources::Shutdown();
+		EditorResources::Shutdown();
 
- 		// LOG_INFO("Detached Editor Layer!");
+ 		LOG_INFO("Detached Editor Layer!");
 	}
 
 
@@ -61,7 +63,7 @@ namespace Cober {
 	{
 		// ViewportPanel::Get().ResizeViewport(m_CameraActive);
 		// ViewportPanel::Get().BindFramebuffer();
-		// // ViewportPanel::Get().RenderSkybox();
+		// ViewportPanel::Get().RenderSkybox();
 
 		// RenderGlobals::SetClearColor(46, 47, 52);
 		// // RenderGlobals::SetClearColor(32, 167, 219);
@@ -69,27 +71,28 @@ namespace Cober {
 		
 		// ViewportPanel::Get().FBOClearAttachments(1, -1);
 
-		// ImGui::SetCurrentContext(ImGuiLayer::GetContext());
-		// auto& colors = ImGui::GetStyle().Colors;
+		ImGui::SetCurrentContext(ImGuiLayer::GetContext());
+		auto& colors = ImGui::GetStyle().Colors;
 
-		// switch (EngineApp::Get().GetGameState()) 
-		// {
-		// 	case EngineApp::GameState::EDITOR:
-		// 	{
-		// 		colors[ImGuiCol_WindowBg] = ImGui::ColorConvertU32ToFloat4(Colors::Theme::titlebar);
-		// 		m_EditorCamera->SetActive(ViewportPanel::Get().AllowViewportCameraEvents());
-		// 		m_ActiveScene->OnUpdateRuntime(ts, m_CameraActive);
-		// 		// Commented because of a problem with the framebuffer and camera depth
-		// 		// Primitive::Grid::Draw(m_EditorCamera);
-		// 		break;
-		// 	}
-		// 	case EngineApp::GameState::RUNTIME_EDITOR: 
-		// 	{
-		// 		colors[ImGuiCol_WindowBg] = ImVec4(0, 0.0, 0.0, 0.268f);
-		// 		m_ActiveScene->OnUpdateSimulation(ts, m_CameraActive);
-		// 		break;
-		// 	}
-		// }
+		switch (EngineApp::Get().GetGameState()) 
+		{
+			case EngineApp::GameState::EDITOR:
+			{
+				colors[ImGuiCol_WindowBg] = ImGui::ColorConvertU32ToFloat4(Colors::Theme::titlebar);
+				// m_EditorCamera->SetActive(ViewportPanel::Get().AllowViewportCameraEvents());
+				// m_ActiveScene->OnUpdateRuntime(ts, m_CameraActive);
+				
+				// Commented because of a problem with the framebuffer and camera depth
+				// Primitive::Grid::Draw(m_EditorCamera);
+				break;
+			}
+			case EngineApp::GameState::RUNTIME_EDITOR: 
+			{
+				colors[ImGuiCol_WindowBg] = ImVec4(0, 0.0, 0.0, 0.268f);
+				// m_ActiveScene->OnUpdateSimulation(ts, m_CameraActive);
+				break;
+			}
+		}
 
 		// ViewportPanel::Get().SetCursorEntity();
 
@@ -99,7 +102,9 @@ namespace Cober {
 
 	void Editor::OnImGuiRender() 
 	{
-		// InitDockspace();
+		InitDockspace();
+
+		ImGui::ShowDemoWindow();
 
 		// ViewportPanel::Get().OnGuiRender(m_EditorCamera, m_CameraActive);
 		// DataPanel::Get().OnGuiRender(m_ActiveScene);
@@ -111,7 +116,7 @@ namespace Cober {
 
 		// ViewportPanel::Get().PlayButtonBar(EngineApp::Get().GetGameState());
 
-		// EndDockspace();
+		EndDockspace();
 	}
 
 
@@ -120,63 +125,63 @@ namespace Cober {
 		/// TODO: FIX IMGUI FIRST
 
 		// [[----- Init variables & dockspace -----]]
-		// static bool dockspaceOpen = true;
-		// static bool opt_fullscreen_persistant = true;
-		// bool opt_fullscreen = opt_fullscreen_persistant;
-		// static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+		static bool dockspaceOpen = true;
+		static bool opt_fullscreen_persistant = true;
+		bool opt_fullscreen = opt_fullscreen_persistant;
+		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
-		// // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-		// // because it would be confusing to have two docking targets within each others.
-		// ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
-		// if (opt_fullscreen)
-		// {
-		// 	ImGuiViewport* viewport = ImGui::GetMainViewport();
-		// 	ImGui::SetNextWindowPos(viewport->Pos);
-		// 	ImGui::SetNextWindowSize(viewport->Size);
-		// 	ImGui::SetNextWindowViewport(viewport->ID);
-		// 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-		// 	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-		// 	window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
-		// 	window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-		// }
+		// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
+		// because it would be confusing to have two docking targets within each others.
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+		if (opt_fullscreen)
+		{
+			ImGuiViewport* viewport = ImGui::GetMainViewport();
+			ImGui::SetNextWindowPos(viewport->Pos);
+			ImGui::SetNextWindowSize(viewport->Size);
+			ImGui::SetNextWindowViewport(viewport->ID);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+			window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+			window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+		}
 
-		// // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
-		// if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-		// 	window_flags |= ImGuiWindowFlags_NoBackground;
+		// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background and handle the pass-thru hole, so we ask Begin() to not render a background.
+		if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+			window_flags |= ImGuiWindowFlags_NoBackground;
 
-		// if (!dockspaceOpen)
-		// 	EngineApp::Get().Close();
+		if (!dockspaceOpen)
+			EngineApp::Get().Close();
 
-		// // [[----- BEGIN DOCKSPACE ----]]
-		// ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+		// [[----- BEGIN DOCKSPACE ----]]
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 
-		// EngineApp& app = EngineApp::Get();
-		// const char* title = app.GetWindow().GetTitle().c_str();
-		// ImGui::Begin(title, &dockspaceOpen, window_flags);
-		// ImGui::PopStyleVar();
+		EngineApp& app = EngineApp::Get();
+		const char* title = app.GetWindow().GetTitle().c_str();
+		ImGui::Begin(title, &dockspaceOpen, window_flags);
+		ImGui::PopStyleVar();
 
-		// if (opt_fullscreen)
-		// 	ImGui::PopStyleVar(2);
+		if (opt_fullscreen)
+			ImGui::PopStyleVar(2);
 
-		// // DockSpace
-		// ImGuiIO& io = ImGui::GetIO();
-		// ImGuiStyle& style = ImGui::GetStyle();
-		// float minWinSizeX = style.WindowMinSize.x;
-		// //float minWinSizeY = style.WindowMinSize.y;
-		// style.WindowMinSize.x = 200.0f;
-		// //style.WindowMinSize.y = 25.0f;
-		// if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
-		// 	ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
-		// 	ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
-		// }
-		// style.WindowMinSize.x = minWinSizeX;
-		//style.WindowMinSize.y = minWinSizeY;
+		// DockSpace
+		ImGuiIO& io = ImGui::GetIO();
+		ImGuiStyle& style = ImGui::GetStyle();
+		float minWinSizeX = style.WindowMinSize.x;
+		//float minWinSizeY = style.WindowMinSize.y;
+		style.WindowMinSize.x = 200.0f;
+		//style.WindowMinSize.y = 25.0f;
+		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
+			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+		}
+		style.WindowMinSize.x = minWinSizeX;
+		// style.WindowMinSize.y = minWinSizeY;
 	}
 
 
 	void Editor::EndDockspace() 
 	{
-		// ImGui::End();
+		ImGui::End();
 	}
 
 

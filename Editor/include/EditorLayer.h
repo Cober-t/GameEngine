@@ -7,14 +7,14 @@
 
 
 // GUI PANELS
-// #include "Panels/ViewportPanel.h"
-// #include "Panels/DataPanel.h"
-// #include "Panels/ConsolePanel.h"
+#include "Panels/ViewportPanel.h"
+#include "Panels/DataPanel.h"
+#include "Panels/ConsolePanel.h"
 // #include "Panels/SceneHierarchyPanel.h"
-// #include "Panels/ContentBrowserPanel.h"
-// #include "Panels/MenuPanel.h"
+#include "Panels/ContentBrowserPanel.h"
+#include "Panels/MenuPanel.h"
 
-// #include "Physics/Debug2DPhysics.h"
+//#include "Physics/Debug2DPhysics.h"
 
 namespace Cober {
 

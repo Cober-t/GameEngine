@@ -275,21 +275,21 @@ namespace Cober {
 
 	void Scene::OnRuntimeStart()
 	{
-		AddSystem<CameraSystem>();
-		AddSystem<RenderSystem>();
-		AddSystem<ParticleSystem>();
+		//AddSystem<CameraSystem>();
+		//AddSystem<RenderSystem>();
+		//AddSystem<ParticleSystem>();
 
-		GetSystem<CameraSystem>().Start(this);
-        GetSystem<RenderSystem>().Start();
-		GetSystem<ParticleSystem>().Start(this);
+		//GetSystem<CameraSystem>().Start(this);
+        //GetSystem<RenderSystem>().Start();
+		//GetSystem<ParticleSystem>().Start(this);
 	}
 
  
     void Scene::OnRuntimeStop()
 	{
-		RemoveSystem<CameraSystem>();
-		RemoveSystem<RenderSystem>();
-		RemoveSystem<ParticleSystem>();
+		//RemoveSystem<CameraSystem>();
+		//RemoveSystem<RenderSystem>();
+		//RemoveSystem<ParticleSystem>();
 	}
 
 

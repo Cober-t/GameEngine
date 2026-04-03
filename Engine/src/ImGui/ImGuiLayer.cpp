@@ -44,7 +44,7 @@ namespace Cober {
 		SDL_Window* sdlWindow = window.GetRawWindow();
 
 		ImGui_ImplSDL3_InitForSDLGPU(sdlWindow);
-		window.GetContext()->ImGuiInit(sdlWindow);
+		RenderGlobals::ImGuiInit();
 
 		m_Initialized = true;
     }
@@ -55,9 +55,8 @@ namespace Cober {
 			return;
 		}
 
-		Window& window = EngineApp::Get().GetWindow();
-		window.GetContext()->ImGuiShutdown();
 		ImGui_ImplSDL3_Shutdown();
+		RenderGlobals::ImGuiShutdown();
 
 		ImGui::DestroyContext(m_ImGuiContext);
 		m_ImGuiContext = nullptr;
@@ -95,10 +94,7 @@ namespace Cober {
             return;
 		}
 
-        EngineApp& app = EngineApp::Get();
-        GraphicsContext& gfx = *app.GetWindow().GetContext();
-
-        gfx.ImGuiNewFrame();
+        RenderGlobals::ImGuiNewFrame();
         ImGui_ImplSDL3_NewFrame();
         ImGui::NewFrame();
     }
@@ -118,7 +114,6 @@ namespace Cober {
 		);
 
 		ImGui::Render();
-		window.GetContext()->ImGuiRenderDrawData(ImGui::GetDrawData());
 	}
 
     bool ImGuiLayer::IsInputEnabled() const

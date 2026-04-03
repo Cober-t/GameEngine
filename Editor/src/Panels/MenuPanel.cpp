@@ -2,10 +2,11 @@
 
 // #include "Panels/MenuPanel.h"
 // #include "Panels/ViewportPanel.h"
-// #include "Panels/SceneHierarchyPanel.h"
+// #include "Theme/IconsFontAwesome.h"
+// // #include "Panels/SceneHierarchyPanel.h"
 // #include "Render/Render2D.h"
 // #include "Core/EngineApp.h"
-// // #include "Render/Text/Font.h"
+// #include "Render/Text/Font.h"
 
 // #include "EditorLayer.h"
 
@@ -24,7 +25,7 @@
 
 // 		m_Settings.Vsync = EngineApp::Get().GetWindow().GetVsync();
 
-// 		std::filesystem::path solutionDirPath = SOLUTION_DIR;
+// 		std::filesystem::path solutionDirPath = PathService::ProjectRoot();
 // 		m_BuildFileCommand = solutionDirPath / "setup" / "Compile.bat";
 // 		m_CompileFileCommand = PathService::ProjectRoot() / "ScriptModule" / "build.bat";
 
@@ -242,7 +243,8 @@
 // 			Editor::SetEditorScene(Scene::Load(m_SceneToReload));
 // 			Editor::SetActiveScene(Editor::GetEditorScene());
 // 			Editor::SetSelectedEntity(Entity());
-// 			SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
+// 			// TODO: Fix SceneHierarchyPanel
+// 			// SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
 
 // 			Editor::GetActiveCamera()->SetPerspective(GlobalCamera::perspective);
 // 			ViewportPanel::Get().MustResize();

@@ -83,7 +83,7 @@ namespace Cober {
 	void Window::OnUpdate()
 	{
 		// TEST
-		RenderGlobals::Clear();
+		// RenderGlobals::Clear();
 	}
 
 

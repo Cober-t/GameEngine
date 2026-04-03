@@ -26,10 +26,7 @@ namespace Cober {
             WindowProps(m_Specification.Name, m_Specification.Width, m_Specification.Height)
         );
 
-
-        /// TODO: RENDER PIPELINE WITH SDL3
-        RenderGlobals::Init();
-        RenderGlobals::SetClearColor({0.8f, 0.3f, 0.1f, 1.0f});
+        RenderGlobals::Init(m_Window->GetRawWindow(), m_Window->GetContext().get()->GetDevice());
 		//Render2D::Start();
     }
 
@@ -126,6 +123,8 @@ namespace Cober {
             return;
         }
 
+        RenderGlobals::BeginFrame();
+		
         if (!m_Minimized)
         {
             for (Layer* layer : m_LayerStack) {
@@ -138,27 +137,33 @@ namespace Cober {
         {
             m_GuiLayer->Begin();
 
-            for (Layer* layer : m_LayerStack)
+            for (Layer* layer : m_LayerStack) {
                 layer->OnImGuiRender();
+            }
 
             m_GuiLayer->End();
         }
+
+        // Upload ImGui buffers before render pass begins
+        RenderGlobals::ImGuiPrepareDrawData(ImGui::GetDrawData());
+
+        // Start the render pass
+        RenderGlobals::BeginMainRenderPass();
+
+        // Scene renderer, change the code structure to rely on layers
+        // ...
+
+        // Render ImGui into the active render pass
+        RenderGlobals::ImGuiRenderDrawData(ImGui::GetDrawData());
+
+        RenderGlobals::EndFrame();
 
         m_Window->OnUpdate();
         
         Input::EndFrame();
 
-        // if (m_GameState == EngineApp::GameState::EDITOR || m_GameState == EngineApp::GameState::RUNTIME_EDITOR) 
-        // {
-        //     m_GuiLayer->Begin();
-
-        //     for (Layer* layer : m_LayerStack)
-        //         layer->OnImGuiRender();
-
-        //     m_GuiLayer->End();
-        // }
+        RenderGlobals::EndFrame();
     }
-
 
     void EngineApp::Close()
     {

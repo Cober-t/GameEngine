@@ -52,10 +52,9 @@ namespace Cober {
 		bool IsVSync() const;
 		void ChangeFullScreen();
 
-		// virtual void* GetNativeWindow() const { return m_Window; }
-
 	private:
 		virtual void Init(const WindowProps& props);
+		// virtual void SetWindowCallbacks();
 		virtual void Shutdown();
 
 	private:
