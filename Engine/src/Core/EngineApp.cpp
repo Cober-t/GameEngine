@@ -1,5 +1,7 @@
 #include <pch.h>
 #include "Core/EngineApp.h"
+#include "Events/SDLEventTranslator.h"
+#include "Events/ApplicationEvents.h"
 
 namespace Cober {
 
@@ -91,22 +93,49 @@ namespace Cober {
             m_TimeStep->ResetAfterOneSecond();
         }
     }
+
+    void EngineApp::OnEvent(Event& event) 
+    {
+        LOG_CORE_INFO(event.GetName());
+        
+        EventDispatcher dispatcher(event);
+        dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(EngineApp::OnWindowClose));
+        dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(EngineApp::OnWindowResize));
+
+        if (m_GuiLayer && !event.Handled) {
+            m_GuiLayer->OnEvent(event);
+        }
+
+        if (!event.Handled)
+        {
+            for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
+            {
+                (*it)->OnEvent(event);
+
+                if (event.Handled) {
+                    break;
+                }
+            }
+        }
+    }
     
     void EngineApp::Run(Unique<Timestep>& ts)
     {
-        //Process Events
+        // Process Events
         // Input::TransitionPressedKeys();
 		// Input::TransitionPressedButtons();
 
         ProcessEvents();
 
-        if (m_GameState == EngineApp::GameState::EXIT)
+        if (m_GameState == EngineApp::GameState::EXIT) {
             return;
+        }
 
         if (!m_Minimized)
         {
-            for (Layer* layer : m_LayerStack)
+            for (Layer* layer : m_LayerStack) {
                 layer->OnUpdate(ts);
+            }
         }
 
         if (m_GuiLayer &&
@@ -141,94 +170,51 @@ namespace Cober {
         m_GameState = EngineApp::GameState::EXIT;
     }
 
+    bool EngineApp::OnWindowClose(WindowCloseEvent&)
+    {
+        Close();
+        return true;
+    }
+
+    bool EngineApp::OnWindowResize(WindowResizeEvent& event)
+    {
+        if (event.GetWidth() == 0 || event.GetHeight() == 0)
+        {
+            m_Minimized = true;
+            return false;
+        }
+
+        m_Minimized = false;
+
+        if (GetGameState() != EngineApp::GameState::PLAY)
+            RenderGlobals::SetViewport(event.GetWidth(), event.GetHeight());
+
+        return false;
+    }
 
     void EngineApp::ProcessEvents()
     {
         // In the future each layer/object could save the event on a buffer
         // and handle it one per frame on Update instead of delay all the Application
-        // EventDispatcher dispatcher(event);
-		// dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(EngineApp::OnWindowClose));
-        // dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(EngineApp::OnWindowResize));
+        SDL_Event rawEvent;
 
-        SDL_Event event;
-        while (SDL_PollEvent(&event))
+        while (SDL_PollEvent(&rawEvent))
         {
-            Input::OnEvent(event);
+            Input::OnEvent(rawEvent);
 
-            switch (event.type)
-            {
-                case SDL_EVENT_QUIT:
-                {
-                    Close();
-                    break;
-                }
+            auto event = TranslateSDLEvent(rawEvent);
 
-                case SDL_EVENT_WINDOW_RESIZED:
-                {
-                    const int width = event.window.data1;
-                    const int height = event.window.data2;
-
-                    if (width == 0 || height == 0)
-                    {
-                        m_Minimized = true;
-                    }
-                    else
-                    {
-                        m_Minimized = false;
-                        RenderGlobals::SetViewport(width, height);
-                    }
-                    break;
-                }
-
-                default:
-                    break;
+            if (!event) {
+                continue;
             }
-            //LOG_CORE_INFO(event.key.raw);
+
+            OnEvent(*event);
         }
-
         //UISystem::ProcessInputs(event);
-
-        /// TODO: Process Events from SDL  (EventHandler)
-        // EventHandler::Get()->ProcessEvents(event);
-
-        // for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
-        // {
-        //     if (event.Handled) 
-        //         break;
-        //     (*it)->OnEvent(event);
-        // }
     }
-  
-
-    bool EngineApp::OnWindowClose(WindowCloseEvent& event)
-	{
-		// m_GameState = EngineApp::GameState::EXIT;
-		return true;
-	}
 
     EngineApp::GameState EngineApp::GetGameState()
     { 
         return m_GameState; 
     }
-
-
-	bool EngineApp::OnWindowResize(WindowResizeEvent& event)
-	{
-		// if (event.GetWidth() == 0 || event.GetHeight() == 0)
-		// {
-		// 	m_Minimized = true;
-		// 	return false;
-		// }
-
-		// m_Minimized = false;
-
-        // // In Play mode the viewport is manage by the camera
-        // // In the rest, the viewport is managed by the Editor Viewport
-        // if (EngineApp::Get().GetGameState() != EngineApp::GameState::PLAY)
-        // {
-		//     RenderGlobals::SetViewport(event.GetWidth(), event.GetHeight());
-        // }
-
-		return false;
-	}
 }

@@ -2,9 +2,9 @@
 #define EVENT_H
 
 #include "Core/Core.h"
-
-#include <string>
 #include <functional>
+#include <ostream>
+#include <string>
 
 namespace Cober {
 
@@ -54,15 +54,15 @@ namespace Cober {
 
     class EventDispatcher
     {
-    public:
-        EventDispatcher(Event& event)
-            : m_Event(event)
-        {
-        }
+        template<typename T>
+        using EventFn = std::function<bool(T&)>;
 
-        // F will be deduced by the compiler
-        template<typename T, typename F>
-        bool Dispatch(const F& func)
+    public:
+        explicit EventDispatcher(Event& event)
+            : m_Event(event) {}
+
+        template<typename T>
+        bool Dispatch(EventFn<T> func)
         {
             if (m_Event.GetEventType() == T::GetStaticType())
             {
@@ -71,7 +71,7 @@ namespace Cober {
             }
             return false;
         }
-        
+
     private:
         Event& m_Event;
     };

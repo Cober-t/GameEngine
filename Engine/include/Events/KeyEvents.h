@@ -1,8 +1,8 @@
 #ifndef INPUT_EVENTS_H
 #define INPUT_EVENTS_H
 
-#include "Event.h"
-#include "KeyCodes.h"
+#include "Events/Event.h"
+#include "Events/KeyCodes.h"
 
 namespace Cober {
 

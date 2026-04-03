@@ -72,17 +72,19 @@ namespace Cober {
 
 		void Start();
 		void Update();
+		void OnEvent(Event& event);
 
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 
 		void ProcessEvents();
+		void SetMinimized(bool minimized) { m_Minimized = minimized; }
+    	bool IsMinimized() const { return m_Minimized; }
 
 		void Close();
 
 		inline int GetFrames() { return m_TimeStep->GetFrames(); }
 		inline Unique<Timestep>& GetTimer() { return m_TimeStep; }
-		inline void SetMinimized(bool min) { m_Minimized = min; }
 
 		inline ImGuiLayer* GetImGuiLayer() { return m_GuiLayer; }
 		inline Window& GetWindow() { return *m_Window; }
@@ -93,23 +95,23 @@ namespace Cober {
 		GameState GetGameState();
 
 	private:
+		// Functions
 		void Run(Unique<Timestep>& ts);
 		
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 
-	private:
-		AppSpecification m_Specification;
-		GameState m_GameState;
-		Unique<Window> m_Window;
-		ImGuiLayer* m_GuiLayer;
-		LayerStack m_LayerStack;
-		Unique<Timestep> m_TimeStep;
+		// Properties
+		AppSpecification m_Specification {};
+		GameState m_GameState = GameState::EDITOR;
+		Unique<Window> m_Window {};
+		ImGuiLayer* m_GuiLayer = nullptr;
+		LayerStack m_LayerStack {};
+		Unique<Timestep> m_TimeStep {};
 
 		float m_LastFrameTime = 0.0f;
 		bool m_Minimized = false;
 		bool m_DebugMode = false;
-		
 
 	private:
 		static EngineApp* s_Instance;

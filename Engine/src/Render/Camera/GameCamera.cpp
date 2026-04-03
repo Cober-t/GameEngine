@@ -154,12 +154,13 @@ namespace Cober {
 	
 	void GameCamera::OnEvent(Event& event) 
 	{
-		if (IsMainCamera() == false)
+		if (IsMainCamera() == false) {
 			return;
+		}
 
 		if (event.GetEventType() == EventType::WindowResize)
 		{
-			float screenWidth = static_cast<WindowResizeEvent&>(event).GetWidth();
+			float screenWidth  = static_cast<WindowResizeEvent&>(event).GetWidth();
 			float screenHeight = static_cast<WindowResizeEvent&>(event).GetHeight();
 			SetViewportSize(screenWidth, screenHeight);
 		}
@@ -171,10 +172,8 @@ namespace Cober {
 
 
 		// Test
-		if (Input::IsKeyDown(KeyCode::Up))
-			GetSettings().distance -= 0.2;
-		if (Input::IsKeyDown(KeyCode::Down))
-			GetSettings().distance += 0.2;
+		if (Input::IsKeyDown(KeyCode::Up))   { GetSettings().distance -= 0.2; }
+		if (Input::IsKeyDown(KeyCode::Down)) { GetSettings().distance += 0.2; }
 
 		if (Input::IsKeyDown(KeyCode::LeftControl) && Input::IsKeyPressed(KeyCode::P))
 		{
