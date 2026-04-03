@@ -8,8 +8,10 @@ Game::Game() : Layer("Game application")
 	float screenHeight = EngineApp::Get().GetWindow().GetHeight();
 	m_DefaultCamera = CreateRef<GameCamera>(45.0f, screenWidth, screenHeight, 0.01f, 1000.0f, GlobalCamera::perspective);
 
+#if 0
 	// Create Framebuffer...
 	m_Fbo = Framebuffer::Create(m_DefaultCamera->GetSettings().width, m_DefaultCamera->GetSettings().height);
+#endif
 }
 
 
@@ -31,11 +33,12 @@ void Game::OnDetach()
 void Game::OnUpdate(Unique<Timestep>& ts) 
 {
 	// Bind Framebuffer...
-	m_Fbo->Bind();
-
+	
 	RenderGlobals::SetClearColor(50, 70, 150);
 	RenderGlobals::Clear();
-
+	
+#if 0
+	m_Fbo->Bind();
 	// Clear Framebuffer Attachments...
 	m_Fbo->ClearAttachment(1, -1);
 
@@ -50,6 +53,7 @@ void Game::OnUpdate(Unique<Timestep>& ts)
 
 	// Render Framebuffer Attachment (scene generated texture)...
 	Cober::Render2D::DrawFramebuffer(m_Fbo);
+#endif
 }
 
 

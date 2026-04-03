@@ -33,6 +33,7 @@ target_link_libraries(Game
         $<$<TARGET_EXISTS:box2d>:box2d>
 )
 
+
 if(WIN32)
     target_link_libraries(Game PRIVATE opengl32)
 endif()
@@ -42,9 +43,9 @@ target_compile_definitions(Game PRIVATE
 )
 
 set_target_properties(Game PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
-    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/$<CONFIG>
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/$<CONFIG>"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/$<CONFIG>"
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib/$<CONFIG>"
 )
 
 enable_address_sanitizer(Game)

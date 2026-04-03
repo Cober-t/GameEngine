@@ -6,7 +6,7 @@ namespace Cober {
     EngineApp* EngineApp::s_Instance = nullptr;
 
     EngineApp::EngineApp(const AppSpecification& specification)
-        : m_Specification(specification), m_GameState(GameState::PLAY), m_GuiLayer(nullptr)
+        : m_Specification(specification), m_GameState(GameState::EDITOR), m_GuiLayer(nullptr)
     {
         LOG_CORE_INFO("EngineApp Constructor!");
 

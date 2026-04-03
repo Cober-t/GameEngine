@@ -111,6 +111,7 @@ namespace Cober {
 
 	void Input::EndFrame()
 	{
+		// Keyboard
 		for (auto& [key, data] : s_KeyData)
 		{
 			if (data.State == KeyState::Pressed)
@@ -119,12 +120,25 @@ namespace Cober {
 				data.State = KeyState::None;
 		}
 
+		// Mouse
 		for (auto& [button, data] : s_MouseData)
 		{
 			if (data.State == KeyState::Pressed)
 				data.State = KeyState::Held;
 			else if (data.State == KeyState::Released)
 				data.State = KeyState::None;
+		}
+
+		// Controllers
+		for (auto& [id, controller] : s_Controllers)
+		{
+			for (auto& [button, data] : controller.ButtonStates)
+			{
+				if (data.State == KeyState::Pressed)
+					data.State = KeyState::Held;
+				else if (data.State == KeyState::Released)
+					data.State = KeyState::None;
+			}
 		}
 	}
 

@@ -30,6 +30,7 @@ add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 
 # Configuration-specific definitions
 add_compile_definitions(
+    _CRT_SECURE_NO_WARNINGS
     $<$<CONFIG:Debug>:COBER_DEBUG>
     $<$<CONFIG:Release>:COBER_RELEASE>
     $<$<CONFIG:Dist>:COBER_DIST>

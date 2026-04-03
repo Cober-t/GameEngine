@@ -5,6 +5,7 @@
 
 namespace Cober {
 
+
 	class EditorApp : public EngineApp 
 	{
 	public:
@@ -24,11 +25,8 @@ namespace Cober {
 
 	EngineApp* CreateApplication(AppCommandLineArgs args)
 	{
+		
 		AppSpecification spec;
-		spec.Name = "Cober Editor";
-		spec.Width = 1600;
-		spec.Height = 900;
-		spec.CommandLineArgs = args;
 
 		const auto projectPath = ParseProjectArg(args);
 		if (!projectPath.empty())
@@ -36,12 +34,14 @@ namespace Cober {
 			auto project = Project::Load(projectPath);
 			LOG_CORE_ASSERT(project.has_value(), "Could not load project file");
 
+			spec.Name = project->WindowTitle;
 			spec.ProjectPath = project->ProjectFilePath;
 			spec.ProjectRoot = project->ProjectRoot;
 			spec.AssetsRoot = project->AssetsPath;
 			spec.StartupScene = project->StartupScene;
 			spec.Width = project->WindowWidth;
 			spec.Height = project->WindowHeight;
+			spec.CommandLineArgs = args;
 		}
 
 		LOG_INFO("Editor Constructor!");
