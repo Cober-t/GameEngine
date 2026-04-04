@@ -2,15 +2,16 @@
 #define ENGINNE_APP_H
 
 #include <filesystem>
-#include "Project.h"
-#include "PathService.h"
+#include "Core/Project.h"
+#include "Core/PathService.h"
 
 // #include "Core.h"
-#include "Input.h"
+#include "Core/Input.h"
 
-#include "Window.h"
-#include "Timestep.h"
-#include "LayerStack.h"
+#include "Core/Window.h"
+#include "Core/Timestep.h"
+#include "Core/LayerStack.h"
+#include <Core/Profiler.h>
 #include "ImGui/ImGuiLayer.h"
 
 #include "Events/ApplicationEvents.h"
@@ -113,6 +114,7 @@ namespace Cober {
 
 		// Properties
 		AppSpecification m_Specification {};
+		Profiler m_profiler {};
 		GameState m_GameState = GameState::EDITOR;
 		Unique<Window> m_Window {};
 		Unique<ImGuiLayer> m_GuiLayer {};

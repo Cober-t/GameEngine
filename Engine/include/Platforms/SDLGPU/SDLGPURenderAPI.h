@@ -7,6 +7,12 @@ struct SDL_Window;
 struct SDL_GPUDevice;
 struct ImDrawData;
 
+/**
+ * @class SDLGRPURenderApi
+ * @brief A class that performs specific calculations.
+ * 
+ * This class provides ....
+ */
 namespace Cober {
     
     class VertexArray;
@@ -14,6 +20,11 @@ namespace Cober {
  	class SDLGPURenderAPI : public RenderAPI 
  	{
  	public:
+		/**
+		 * @brief Init the render framework
+		 * @param ..
+		 * @return ..
+		 */
 		virtual void Init(void* window, void* context) override;
 
 		virtual void Clear() override;

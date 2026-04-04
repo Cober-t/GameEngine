@@ -3,7 +3,9 @@
 
 #include <SDL3/SDL_gpu.h>
 
-namespace Cober {
+namespace Cober 
+{
+    // --------------------------------------------------------------------------------------
 
     SDLGPUContext::SDLGPUContext(SDL_Window* windowHandle, RenderAPI::API requestedAPI)
         : m_WindowHandle(windowHandle)
@@ -11,8 +13,12 @@ namespace Cober {
         LOG_CORE_ASSERT(windowHandle, "SDLGPUContext: window handle is null!");
     }
 
+    // --------------------------------------------------------------------------------------
+
     void SDLGPUContext::Init()
     {
+        CB_PROFILE_FUNCTION();
+
         LOG_CORE_ASSERT(m_WindowHandle, "SDLGPUContext: window handle is null!");
 
         SDL_GPUShaderFormat shaderFormatFlags =  SDL_GPU_SHADERFORMAT_SPIRV |
@@ -60,8 +66,12 @@ namespace Cober {
 		LOG_CORE_INFO("  Driver Info: {0}", driverInfo);
     }
 
+    // --------------------------------------------------------------------------------------
+
     void SDLGPUContext::Destroy()
     {
+        CB_PROFILE_FUNCTION();
+        
         if (!m_GPUDevice) {
             return;
         }
@@ -75,4 +85,6 @@ namespace Cober {
         SDL_DestroyGPUDevice(m_GPUDevice);
         m_GPUDevice = nullptr;
     }
+
+    // --------------------------------------------------------------------------------------
 }

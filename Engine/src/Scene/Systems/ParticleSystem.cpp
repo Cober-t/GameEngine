@@ -5,7 +5,9 @@
 #include "Scene/Scene.h"
 #include "Scene/Systems/ParticleSystem.h"
 
-namespace Cober {
+namespace Cober 
+{
+	// --------------------------------------------------------------------------------------
 
 	ParticleSystem::ParticleSystem()
 	{
@@ -13,6 +15,7 @@ namespace Cober {
 		LOG_INFO("Particle System Added to Registry!!");
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	ParticleSystem::~ParticleSystem()
 	{
@@ -20,29 +23,30 @@ namespace Cober {
 		LOG_INFO("Particle System Removed from Registry");
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	void ParticleSystem::Start(Scene* scene)
 	{
-        auto view = scene->GetAllEntitiesWith<ParticleEmitterComponent>();
+        auto particleGroup = scene->GetAllEntitiesWith<ParticleEmitterComponent>();
 
-        for (auto& entt : view)
+        for (auto& entityHandle : particleGroup)
         {
-            Entity entity = Entity((entt::entity)entt, scene );
-
-            auto& particleEmitter = entity.GetComponent<ParticleEmitterComponent>();
+            auto& particleEmitter = particleGroup.get<ParticleEmitterComponent>(entityHandle);
             particleEmitter.InitDefaultParticle();
         }
 
 		LOG_INFO("Particle System Started!!");
 	}
     
+	// --------------------------------------------------------------------------------------
 
 	void ParticleSystem::Update(const Timestep& ts, Scene* scene)
 	{
-		auto view = scene->GetAllEntitiesWith<ParticleEmitterComponent>();
+		auto particleGroup = scene->GetAllEntitiesWith<ParticleEmitterComponent>();
 
-        for (auto& entt : view) {
-            Entity entity = Entity((entt::entity)entt, scene );
+        for (auto& entityHandle : particleGroup) 
+		{
+            Entity entity(entityHandle, scene );
             ParticleEmitter::Update(ts, entity);
 		}
 		ParticleEmitter::Render();

@@ -130,11 +130,11 @@ namespace Cober {
         {
             if (m_ParticlePool[i].lifeRemaining < 0.0f)
             {   
-                // std::erase_if(m_ParticlePool, [](const Particle& p) {
-                //     return p.lifeRemaining < 0.0f;
-                // });
+                std::erase_if(m_ParticlePool, [](const Particle& p) {
+                    return p.lifeRemaining < 0.0f;
+                });
                 // Old approach
-                m_ParticlePool.erase(m_ParticlePool.begin() + i--);
+                // m_ParticlePool.erase(m_ParticlePool.begin() + i--);
                 continue;
             }
             m_ParticlePool[i].lifeRemaining -= ts.GetConsistentTimer();

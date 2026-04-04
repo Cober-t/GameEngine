@@ -39,7 +39,8 @@
 #include <Core/Core.h>
 #include <Core/PathService.h>
 #include <Core/Log.h>
-#include <Events/KeyCodes.h>
+#include <Core/Profiler.h>
 
+#include <Events/KeyCodes.h>
 
 #endif

@@ -8,29 +8,40 @@
 #include "Events/MouseEvents.h"
 
 
-namespace Cober {
-
+namespace Cober 
+{
 	static uint8_t s_SDL3WindowCount = 0;
+
+	// --------------------------------------------------------------------------------------
 
 	static void GLFWErrorCallback(int error, const char* description)
 	{
 		LOG_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	Window::Window(const WindowProps& props)
 	{
+		CB_PROFILE_FUNCTION();
+		
 		Init(props);
 		LOG_CORE_INFO("Window Created");
 	}
+
+	// --------------------------------------------------------------------------------------
 
 	Window::~Window() 
 	{
 		Shutdown();
 	}
 
+	// --------------------------------------------------------------------------------------
+
 	void Window::Init(const WindowProps& props)
 	{
+		CB_PROFILE_FUNCTION();
+
 		m_Data.Title = props.Title;
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
@@ -65,8 +76,12 @@ namespace Cober {
 		SetVSync(props.VSync);
 	}
 
+	// --------------------------------------------------------------------------------------
+
 	void Window::Shutdown()
 	{
+		CB_PROFILE_FUNCTION();
+
 		if (m_Context) {
 			m_Context->Destroy();
 		}
@@ -81,12 +96,15 @@ namespace Cober {
 		}
 	}
 
+	// --------------------------------------------------------------------------------------
+
 	void Window::OnUpdate()
 	{
 		// TEST
 		// RenderGlobals::Clear();
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	void Window::SetVSync(bool enabled)
 	{
@@ -99,12 +117,14 @@ namespace Cober {
 		m_Data.VSync = enabled;
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	bool Window::IsVSync() const
 	{
 		return m_Data.VSync;
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	void Window::ChangeFullScreen() 
 	{
@@ -120,4 +140,6 @@ namespace Cober {
 		// 	glfwMaximizeWindow(m_Window);
 		// }
 	}
+
+	// --------------------------------------------------------------------------------------
 }

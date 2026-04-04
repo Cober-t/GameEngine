@@ -11,7 +11,8 @@
 // #include "Events/EventHandler.h"
 
 
-namespace Cober {
+namespace Cober 
+{
 
 	class CB_API RenderSystem : public System
 	{

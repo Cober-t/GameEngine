@@ -26,14 +26,12 @@ namespace Cober {
 			return component;
 		}
 
-
 		template<typename TComponent, typename... Args>
 		TComponent& AddOrReplaceComponent(Args&&... args)
 		{
 			TComponent& component = m_Scene->m_Registry.emplace_or_replace<TComponent>(m_EntityHandle, std::forward<Args>(args)...);
 			return component;
 		}
-
 
 		template<typename TComponent>
 		TComponent& GetComponent()
@@ -42,13 +40,11 @@ namespace Cober {
 			return m_Scene->m_Registry.get<TComponent>(m_EntityHandle);
 		}
 
-
 		template<typename TComponent>
 		bool HasComponent()
 		{
 			return m_Scene->m_Registry.all_of<TComponent>(m_EntityHandle);
 		}
-
 
 		template<typename TComponent>
 		void RemoveComponent()
@@ -68,8 +64,7 @@ namespace Cober {
 		inline void* GetBody() { return HasComponent<Rigidbody2D>() == true ? GetComponent<Rigidbody2D>().runtimeBody : nullptr; }
 		const entt::entity GetHandle() { return m_EntityHandle; }
 
-		bool operator==(const Entity& other) const
-		{
+		bool operator==(const Entity& other) const {
 			return m_EntityHandle == other.m_EntityHandle && m_Scene == other.m_Scene;
 		}
 

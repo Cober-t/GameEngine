@@ -4,63 +4,58 @@
 #include "Scene/Systems/PhysicsSystem2D.h"
 #include "Scene/Systems/CameraSystem.h"
 
-namespace Cober {
+namespace Cober 
+{
+	// --------------------------------------------------------------------------------------
 
 	RenderSystem::RenderSystem()
     {
 		LOG_INFO("Render System Added to Registry!!");
 	}
 
+	// --------------------------------------------------------------------------------------
+
 	RenderSystem::~RenderSystem() 
     {
 		LOG_INFO("Render System Removed from Registry");
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	void RenderSystem::Start()
 	{
 		LOG_INFO("Render System Started!!");
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	void RenderSystem::Update(Scene* scene)
-	{
-		auto view = scene->GetAllEntitiesWith<TransformComponent, TagComponent, Render2DComponent>();
-
-		// FIX: Better this way
-		// for (auto e : view) {
-		// 	auto& transform = view.get<TransformComponent>(e);
-		// 	auto& render = view.get<Render2DComponent>(e);
-		// }
-
-		for (auto& entt : view)
+	{	
+		// Render primitives
+		auto renderGroup = scene->GetAllEntitiesWith<TransformComponent, TagComponent, Render2DComponent>();
+		for (auto& entityHandle : renderGroup)
         {
-			Entity entity = Entity((entt::entity)entt, scene );
+			Entity entity(entityHandle, scene);
 			
 			switch (entity.GetComponent<Render2DComponent>().shapeType)
 			{
-			case Shape2D::Line:
-				Render2D::DrawLine(entity);
-				break;
-			case Shape2D::Quad:
-	            Render2D::DrawQuad(entity);
-				break;
-			case Shape2D::Circle:
-				Render2D::DrawCircle(entity);
-				break;
-			case Shape2D::Sprite:
-				Render2D::DrawSprite(entity);
-				break;
+				case Shape2D::Line:   Render2D::DrawLine(entity);   break;
+				case Shape2D::Quad:   Render2D::DrawQuad(entity);   break;
+				case Shape2D::Circle: Render2D::DrawCircle(entity); break;
+				case Shape2D::Sprite: Render2D::DrawSprite(entity); break;
 			}
 		}
 
-		auto viewText = scene->GetAllEntitiesWith<TransformComponent, TagComponent, TextComponent>();
-		for (auto& entt : viewText)
+		// Render Text
+		auto textGroup = scene->GetAllEntitiesWith<TransformComponent, TagComponent, TextComponent>();
+		for (auto& entityHandle : textGroup)
         {
-			Entity entity = Entity((entt::entity)entt, scene );
+			Entity entity(entityHandle, scene);
 			Render2D::DrawText(entity);
 		}
 
 		Physics2D::DebugDraw(scene);
 	}
+
+	// --------------------------------------------------------------------------------------
 }

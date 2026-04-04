@@ -7,8 +7,8 @@
 #include <imgui/imgui.h>
 #include <backends/imgui_impl_sdlgpu3.h>
 
-namespace Cober {
-
+namespace Cober 
+{
 	// void OpenGLMessageCallback(
 	// 	unsigned source,
 	// 	unsigned type,
@@ -28,9 +28,13 @@ namespace Cober {
 		
 	// 	LOG_CORE_ASSERT(false, "Unknown severity level!");
 	// }
+    
+    // --------------------------------------------------------------------------------------
 
 	void SDLGPURenderAPI::Init(void* window, void* context) 
 	{
+        CB_PROFILE_FUNCTION();
+        
         m_windowHandle = static_cast<SDL_Window*>(window);
         LOG_CORE_ASSERT(m_windowHandle, "Main Window does not exists");
 
@@ -42,24 +46,28 @@ namespace Cober {
 		LOG_CORE_TRACE("Render API init (Graphics Pipeline Render API)");
 	}
 
+    // --------------------------------------------------------------------------------------
 
 	void SDLGPURenderAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) 
 	{
 		// glViewport(0, 0, width, height);
 	}
 
+    // --------------------------------------------------------------------------------------
 
 	void SDLGPURenderAPI::SetClearColor(glm::vec4 color) 
 	{
 		m_clearColor = { color.x, color.y, color.z, color.a };
 	}
 
+    // --------------------------------------------------------------------------------------
 
 	void SDLGPURenderAPI::SetClearColor(float red, float green, float blue, float black) 
 	{
 		m_clearColor = { red, green , blue, black };
 	}
 
+    // --------------------------------------------------------------------------------------
 
 	void SDLGPURenderAPI::Clear() 
 	{
@@ -70,6 +78,8 @@ namespace Cober {
 
     bool SDLGPURenderAPI::BeginFrame()
     {
+        CB_PROFILE_FUNCTION();
+
         // m_frame->RenderPass = nullptr;
         m_frame->CommandBuffer = SDL_AcquireGPUCommandBuffer(m_GPUDevice);
         LOG_CORE_ASSERT(m_frame->CommandBuffer, "Command Buffer couldn't be acquired");
@@ -86,8 +96,12 @@ namespace Cober {
         return true;
     }
 
+    // --------------------------------------------------------------------------------------
+
     void SDLGPURenderAPI::BeginMainRenderPass() 
     {
+        CB_PROFILE_FUNCTION();
+
         if (EngineApp::Get().IsMinimized()) {
             return;
         }
@@ -103,8 +117,12 @@ namespace Cober {
         LOG_CORE_ASSERT(m_frame->RenderPass, "RenderPass couldn't be acquired");
     }
 
+    // --------------------------------------------------------------------------------------
+
     void SDLGPURenderAPI::EndFrame() 
     {
+        CB_PROFILE_FUNCTION();
+
         if (m_frame->RenderPass && !EngineApp::Get().IsMinimized()) {
             SDL_EndGPURenderPass(m_frame->RenderPass);
         }
@@ -118,8 +136,12 @@ namespace Cober {
         // m_frame->CommandBuffer = nullptr;
     }
 
+    // --------------------------------------------------------------------------------------
+
     void SDLGPURenderAPI::ImGuiInit()
     {
+        CB_PROFILE_FUNCTION();
+
         LOG_CORE_ASSERT(m_windowHandle, "ImGuiInit called before Window creation");
         LOG_CORE_ASSERT(m_GPUDevice, "ImGuiInit called before GPU device creation");
 
@@ -134,8 +156,12 @@ namespace Cober {
         m_ImGuiInitialized = true;
     }
 
+    // --------------------------------------------------------------------------------------
+
     void SDLGPURenderAPI::ImGuiShutdown()
     {
+        CB_PROFILE_FUNCTION();
+
         if (!m_ImGuiInitialized) {
             return;
         }
@@ -144,14 +170,22 @@ namespace Cober {
         m_ImGuiInitialized = false;
     }
 
+    // --------------------------------------------------------------------------------------
+
     void SDLGPURenderAPI::ImGuiNewFrame()
     {
+        CB_PROFILE_FUNCTION();
+
         LOG_CORE_ASSERT(m_ImGuiInitialized, "ImGuiNewFrame called before ImGuiInit");
         ImGui_ImplSDLGPU3_NewFrame();
     }
 
+    // --------------------------------------------------------------------------------------
+
     void SDLGPURenderAPI::ImGuiPrepareDrawData(ImDrawData* drawData)
     {
+        CB_PROFILE_FUNCTION();
+
         if (EngineApp::Get().IsMinimized()) {
             return;
         }
@@ -164,21 +198,29 @@ namespace Cober {
         ImGui_ImplSDLGPU3_PrepareDrawData(drawData, m_frame->CommandBuffer);
     }
 
+    // --------------------------------------------------------------------------------------
+
     void SDLGPURenderAPI::ImGuiRenderDrawData(ImDrawData* drawData)
     {
+        CB_PROFILE_FUNCTION();
+
         if (!drawData || !m_frame->CommandBuffer || !m_frame->RenderPass)
         return;
 
         ImGui_ImplSDLGPU3_RenderDrawData(drawData, m_frame->CommandBuffer, m_frame->RenderPass);
     }
+
+    // --------------------------------------------------------------------------------------
     
 	void SDLGPURenderAPI::DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount)
 	{
+        CB_PROFILE_FUNCTION();
 	// 	vertexArray->Bind();
 	// 	uint32_t count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
 	// 	glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 	}
 	
+    // --------------------------------------------------------------------------------------
 
 	void SDLGPURenderAPI::DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
 	{
@@ -186,23 +228,29 @@ namespace Cober {
 		// glDrawArrays(GL_LINES, 0, vertexCount);
 	}
 
+    // --------------------------------------------------------------------------------------
+
 	void SDLGPURenderAPI::DrawTriangles(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
 	{
 		// vertexArray->Bind();
 		// glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 	}
 
+    // --------------------------------------------------------------------------------------
+
 	void SDLGPURenderAPI::SetLineWidth(float width)
 	{
 		// glLineWidth(width);
 	}
 
+    // --------------------------------------------------------------------------------------
 
 	void SDLGPURenderAPI::ClearErrors() 
 	{
 		// while (glGetError());
 	}
 
+    // --------------------------------------------------------------------------------------
 
 	void SDLGPURenderAPI::CheckErrors(const char* function) 
 	{
@@ -217,4 +265,6 @@ namespace Cober {
 		// 	LOG_CORE_ASSERT(false, "[OpenGL Error] (" + errMessage + ") " + function + " " + fileName);
 		// }
 	}
+
+    // --------------------------------------------------------------------------------------
 }

@@ -11,18 +11,25 @@
 #include <backends/imgui_impl_sdl3.h>
 
 
-namespace Cober {
+namespace Cober 
+{
 
 	ImGuiContext* ImGuiLayer::m_ImGuiContext = nullptr;
+
+	// --------------------------------------------------------------------------------------
 
     ImGuiLayer::ImGuiLayer()
         : Layer("ImGuiLayer")
     {
     }
 
+	// --------------------------------------------------------------------------------------
+
     ImGuiLayer::~ImGuiLayer()
     {
     }
+
+	// --------------------------------------------------------------------------------------
 
     void ImGuiLayer::OnAttach()
     {
@@ -49,6 +56,8 @@ namespace Cober {
 		m_Initialized = true;
     }
 
+	// --------------------------------------------------------------------------------------
+
     void ImGuiLayer::OnDetach()
 	{
 		if (!m_Initialized) {
@@ -62,6 +71,8 @@ namespace Cober {
 		m_ImGuiContext = nullptr;
 		m_Initialized = false;
 	}
+
+	// --------------------------------------------------------------------------------------
 
 	void ImGuiLayer::OnEvent(Event& event)
 	{
@@ -79,6 +90,8 @@ namespace Cober {
 		}
 	}
 
+	// --------------------------------------------------------------------------------------
+
     void ImGuiLayer::OnSDLEvent(const SDL_Event& event)
 	{
 		if (!m_Initialized) {
@@ -87,6 +100,8 @@ namespace Cober {
 
 		ImGui_ImplSDL3_ProcessEvent(&event);
 	}
+
+	// --------------------------------------------------------------------------------------
 
     void ImGuiLayer::Begin()
     {
@@ -98,6 +113,8 @@ namespace Cober {
         ImGui_ImplSDL3_NewFrame();
         ImGui::NewFrame();
     }
+
+	// --------------------------------------------------------------------------------------
 
     void ImGuiLayer::End()
 	{
@@ -116,11 +133,15 @@ namespace Cober {
 		ImGui::Render();
 	}
 
+	// --------------------------------------------------------------------------------------
+
     bool ImGuiLayer::IsInputEnabled() const
     {
         const ImGuiIO& io = ImGui::GetIO();
         return !io.ConfigFlags || !(io.ConfigFlags & ImGuiConfigFlags_NoMouse);
     }
+
+	// --------------------------------------------------------------------------------------
 
     void ImGuiLayer::SetInputEnabled(bool enabled)
     {
@@ -132,6 +153,8 @@ namespace Cober {
             io.ConfigFlags |= ImGuiConfigFlags_NoMouse;
 		}
     }
+
+	// --------------------------------------------------------------------------------------
 
 	void ImGuiLayer::StyleDefault()
 	{
@@ -184,6 +207,7 @@ namespace Cober {
 		colors[ImGuiCol_SliderGrabActive] = ImVec4(0.66f, 0.66f, 0.66f, 1.0f);
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	void ImGuiLayer::StyleCustom()
 	{
@@ -270,4 +294,6 @@ namespace Cober {
 		style.FrameBorderSize = 1.0f;
 		style.IndentSpacing = 11.0f;
 	}
+
+	// --------------------------------------------------------------------------------------
 }
