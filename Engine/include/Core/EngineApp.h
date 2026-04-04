@@ -100,6 +100,8 @@ namespace Cober {
 		
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
+		bool OnWindowMinimized(WindowMinimizedEvent& e);
+		bool OnWindowRestored(WindowRestoredEvent& e);
 
 		// Properties
 		AppSpecification m_Specification {};

@@ -2,6 +2,7 @@
 #define TRANSLATED_SDL_EVENTS_H
 
 #include "Core/Core.h"
+#include "Core/EngineApp.h"
 #include "Events/Event.h"
 #include "Events/ApplicationEvents.h"
 #include "Events/KeyEvents.h"
@@ -16,6 +17,20 @@ namespace Cober
         {
             case SDL_EVENT_QUIT:
                 return CreateUnique<WindowCloseEvent>();
+            case SDL_EVENT_WINDOW_CLOSE_REQUESTED: {
+                if (raw.window.windowID == SDL_GetWindowID(EngineApp::Get().GetWindow().GetRawWindow())) {
+                    return CreateUnique<WindowCloseEvent>();
+                }
+            }
+
+            case SDL_EVENT_WINDOW_MINIMIZED:
+                return CreateUnique<WindowMinimizedEvent>();
+            
+            case SDL_EVENT_WINDOW_RESTORED:
+                return CreateUnique<WindowRestoredEvent>();
+
+            // case SDL_EVENT_WINDOW_MAXIMIZED:
+            //     return CreateUnique<WindowMaximizedEvent>();
 
             case SDL_EVENT_WINDOW_RESIZED:
                 return CreateUnique<WindowResizeEvent>(

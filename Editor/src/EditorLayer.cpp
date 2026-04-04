@@ -53,7 +53,7 @@ namespace Cober {
 		m_EditorCamera = nullptr;
 		m_CameraActive = nullptr;
 
-		EditorResources::Shutdown();
+		// EditorResources::Shutdown();
 
  		LOG_INFO("Detached Editor Layer!");
 	}
@@ -71,28 +71,28 @@ namespace Cober {
 		
 		// ViewportPanel::Get().FBOClearAttachments(1, -1);
 
-		ImGui::SetCurrentContext(ImGuiLayer::GetContext());
-		auto& colors = ImGui::GetStyle().Colors;
+		// ImGui::SetCurrentContext(ImGuiLayer::GetContext());
+		// auto& colors = ImGui::GetStyle().Colors;
 
-		switch (EngineApp::Get().GetGameState()) 
-		{
-			case EngineApp::GameState::EDITOR:
-			{
-				colors[ImGuiCol_WindowBg] = ImGui::ColorConvertU32ToFloat4(Colors::Theme::titlebar);
-				// m_EditorCamera->SetActive(ViewportPanel::Get().AllowViewportCameraEvents());
-				// m_ActiveScene->OnUpdateRuntime(ts, m_CameraActive);
+		// switch (EngineApp::Get().GetGameState()) 
+		// {
+		// 	case EngineApp::GameState::EDITOR:
+		// 	{
+		// 		colors[ImGuiCol_WindowBg] = ImGui::ColorConvertU32ToFloat4(Colors::Theme::titlebar);
+		// 		// m_EditorCamera->SetActive(ViewportPanel::Get().AllowViewportCameraEvents());
+		// 		// m_ActiveScene->OnUpdateRuntime(ts, m_CameraActive);
 				
-				// Commented because of a problem with the framebuffer and camera depth
-				// Primitive::Grid::Draw(m_EditorCamera);
-				break;
-			}
-			case EngineApp::GameState::RUNTIME_EDITOR: 
-			{
-				colors[ImGuiCol_WindowBg] = ImVec4(0, 0.0, 0.0, 0.268f);
-				// m_ActiveScene->OnUpdateSimulation(ts, m_CameraActive);
-				break;
-			}
-		}
+		// 		// Commented because of a problem with the framebuffer and camera depth
+		// 		// Primitive::Grid::Draw(m_EditorCamera);
+		// 		break;
+		// 	}
+		// 	case EngineApp::GameState::RUNTIME_EDITOR: 
+		// 	{
+		// 		colors[ImGuiCol_WindowBg] = ImVec4(0, 0.0, 0.0, 0.268f);
+		// 		// m_ActiveScene->OnUpdateSimulation(ts, m_CameraActive);
+		// 		break;
+		// 	}
+		// }
 
 		// ViewportPanel::Get().SetCursorEntity();
 

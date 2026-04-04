@@ -44,6 +44,30 @@ namespace Cober {
         EVENT_CLASS_CATEGORY(EventCategoryApplication)
     };
 
+    class CB_API WindowMinimizedEvent : public Event
+    {
+    public:
+        WindowMinimizedEvent() = default;
+        std::string ToString() const override
+        {
+            return "WindowMinimizedEvent";
+        }
+        EVENT_CLASS_TYPE(WindowMinimized)
+        EVENT_CLASS_CATEGORY(EventCategoryApplication)
+    };
+
+     class CB_API WindowRestoredEvent : public Event
+    {
+    public:
+        WindowRestoredEvent() = default;
+        std::string ToString() const override
+        {
+            return "WindowRestoredEvent";
+        }
+        EVENT_CLASS_TYPE(WindowRestored)
+        EVENT_CLASS_CATEGORY(EventCategoryApplication)
+    };
+
     class CB_API WindowFocusEvent : public Event
     {
     public:

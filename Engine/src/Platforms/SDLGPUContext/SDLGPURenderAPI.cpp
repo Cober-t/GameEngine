@@ -63,35 +63,14 @@ namespace Cober {
 
 	void SDLGPURenderAPI::Clear() 
 	{
-        #if 0
-        LOG_CORE_ASSERT(m_windowHandle, "window handle ref does not exists");
 
-		if (!SDL_WaitAndAcquireGPUSwapchainTexture(
-            m_frame->CommandBuffer, 
-            m_windowHandle, 
-            &m_frame->SwapchainTexture, 
-            NULL, NULL)) 
-        {
-			SDL_Log("WaitAndAcquireGPUSwapchainTexture failed: %s", SDL_GetError());
-			return;
-		}
-
-		if (m_frame->SwapchainTexture != NULL)
-		{
-			SDL_GPUColorTargetInfo colorTargetInfo = { 0 };
-			colorTargetInfo.texture = m_frame->SwapchainTexture;
-			colorTargetInfo.clear_color = { m_clearColor[0], m_clearColor[1], m_clearColor[2], m_clearColor[3] };
-			colorTargetInfo.load_op = SDL_GPU_LOADOP_CLEAR;
-			colorTargetInfo.store_op = SDL_GPU_STOREOP_STORE;
-
-			SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(m_frame->CommandBuffer, &colorTargetInfo, 1, NULL);
-			SDL_EndGPURenderPass(renderPass);
-		}
-        #endif
 	}
+
+    // --------------------------------------------------------------------------------------
 
     bool SDLGPURenderAPI::BeginFrame()
     {
+        // m_frame->RenderPass = nullptr;
         m_frame->CommandBuffer = SDL_AcquireGPUCommandBuffer(m_GPUDevice);
         LOG_CORE_ASSERT(m_frame->CommandBuffer, "Command Buffer couldn't be acquired");
 
@@ -103,16 +82,16 @@ namespace Cober {
             nullptr
         );
         LOG_CORE_ASSERT(ok, "Swapchain acquire failed");
-        LOG_CORE_ASSERT(m_frame->SwapchainTexture, "Swapchain texture couldn't be acquired");
 
-        m_frame->RenderPass = nullptr;
         return true;
     }
 
     void SDLGPURenderAPI::BeginMainRenderPass() 
     {
-        LOG_CORE_ASSERT(m_frame->CommandBuffer, "No command buffer");
-        LOG_CORE_ASSERT(m_frame->SwapchainTexture, "No swapchain texture");
+        if (EngineApp::Get().IsMinimized()) {
+            return;
+        }
+        // LOG_CORE_ASSERT(m_frame->CommandBuffer, "No command buffer");
 
         SDL_GPUColorTargetInfo targetInfo = {};
         targetInfo.texture = m_frame->SwapchainTexture;
@@ -126,7 +105,7 @@ namespace Cober {
 
     void SDLGPURenderAPI::EndFrame() 
     {
-        if (m_frame->RenderPass) {
+        if (m_frame->RenderPass && !EngineApp::Get().IsMinimized()) {
             SDL_EndGPURenderPass(m_frame->RenderPass);
         }
 
@@ -134,9 +113,9 @@ namespace Cober {
             SDL_SubmitGPUCommandBuffer(m_frame->CommandBuffer);
         }
 
-        m_frame->RenderPass = nullptr;
-        m_frame->SwapchainTexture = nullptr;
-        m_frame->CommandBuffer = nullptr;
+        // m_frame->RenderPass = nullptr;
+        // m_frame->SwapchainTexture = nullptr;
+        // m_frame->CommandBuffer = nullptr;
     }
 
     void SDLGPURenderAPI::ImGuiInit()
@@ -173,7 +152,12 @@ namespace Cober {
 
     void SDLGPURenderAPI::ImGuiPrepareDrawData(ImDrawData* drawData)
     {
-        if (!drawData || !m_frame->CommandBuffer) {
+        if (EngineApp::Get().IsMinimized()) {
+            return;
+        }
+
+        LOG_CORE_ASSERT(drawData, "ImGUI no draw data available!");
+        if (!m_frame->SwapchainTexture && EngineApp::Get().IsMinimized()) {
             return;
         }
 

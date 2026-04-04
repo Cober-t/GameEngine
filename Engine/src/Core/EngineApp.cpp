@@ -90,9 +90,12 @@ namespace Cober {
     {
         //LOG_CORE_INFO(event.GetName());
         
+        // Move to the Window class
         EventDispatcher dispatcher(event);
         dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(EngineApp::OnWindowClose));
         dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(EngineApp::OnWindowResize));
+        dispatcher.Dispatch<WindowMinimizedEvent>(BIND_EVENT_FN(EngineApp::OnWindowMinimized));
+        dispatcher.Dispatch<WindowRestoredEvent>(BIND_EVENT_FN(EngineApp::OnWindowRestored));
 
         if (m_GuiLayer && !event.Handled) {
             m_GuiLayer->OnEvent(event);
@@ -122,47 +125,49 @@ namespace Cober {
         if (m_GameState == EngineApp::GameState::EXIT) {
             return;
         }
-
-        RenderGlobals::BeginFrame();
-		
-        if (!m_Minimized)
-        {
-            for (Layer* layer : m_LayerStack) {
-                layer->OnUpdate(ts);
-            }
-        }
-
+        
         if (m_GuiLayer &&
-            (m_GameState == EngineApp::GameState::EDITOR || m_GameState == EngineApp::GameState::RUNTIME_EDITOR))
+            (m_GameState == EngineApp::GameState::EDITOR || 
+            m_GameState == EngineApp::GameState::RUNTIME_EDITOR))
         {
             m_GuiLayer->Begin();
-
+            
             for (Layer* layer : m_LayerStack) {
-                layer->OnImGuiRender();
+                layer->OnImGuiRender();   
             }
-
+            
             m_GuiLayer->End();
         }
+        
+        RenderGlobals::BeginFrame();
 
         // Upload ImGui buffers before render pass begins
-        RenderGlobals::ImGuiPrepareDrawData(ImGui::GetDrawData());
+        if (m_GameState == EngineApp::GameState::EDITOR || 
+            m_GameState == EngineApp::GameState::RUNTIME_EDITOR) 
+        {
+            RenderGlobals::ImGuiPrepareDrawData(ImGui::GetDrawData());
+        }
 
         // Start the render pass
         RenderGlobals::BeginMainRenderPass();
-
-        // Scene renderer, change the code structure to rely on layers
-        // ...
-
+        
+        if (!IsMinimized()) {
+            for (Layer* layer : m_LayerStack) {
+                layer->OnUpdate(ts);   
+            }
+        }
         // Render ImGui into the active render pass
-        RenderGlobals::ImGuiRenderDrawData(ImGui::GetDrawData());
+        if (m_GameState == EngineApp::GameState::EDITOR || 
+            m_GameState == EngineApp::GameState::RUNTIME_EDITOR) 
+        {
+            RenderGlobals::ImGuiRenderDrawData(ImGui::GetDrawData());
+        }
 
         RenderGlobals::EndFrame();
 
         m_Window->OnUpdate();
         
         Input::EndFrame();
-
-        RenderGlobals::EndFrame();
     }
 
     void EngineApp::Close()
@@ -170,26 +175,41 @@ namespace Cober {
         m_GameState = EngineApp::GameState::EXIT;
     }
 
-    bool EngineApp::OnWindowClose(WindowCloseEvent&)
+
+    // Move to window callbaks for Application Events
+    bool EngineApp::OnWindowClose(WindowCloseEvent& event)
     {
-        Close();
+        Close();    
         return true;
     }
 
     bool EngineApp::OnWindowResize(WindowResizeEvent& event)
     {
-        if (event.GetWidth() == 0 || event.GetHeight() == 0)
+        if (event.GetWidth() <= 0 || event.GetHeight() <= 0)
         {
-            m_Minimized = true;
+            SetMinimized(false);
             return false;
         }
 
-        m_Minimized = false;
+        SetMinimized(false);
 
-        if (GetGameState() != EngineApp::GameState::PLAY)
+        if (GetGameState() != EngineApp::GameState::PLAY) {
             RenderGlobals::SetViewport(event.GetWidth(), event.GetHeight());
+        }
 
         return false;
+    }
+
+    bool EngineApp::OnWindowMinimized(WindowMinimizedEvent& e) 
+    {
+        SetMinimized(true);
+        return true;
+    }
+
+    bool EngineApp::OnWindowRestored(WindowRestoredEvent& e) 
+    {
+        SetMinimized(false);
+        return true;
     }
 
     void EngineApp::ProcessEvents()
@@ -200,8 +220,9 @@ namespace Cober {
 
         while (SDL_PollEvent(&rawEvent))
         {
-            if (m_GuiLayer)
+            if (m_GuiLayer) {
                 m_GuiLayer->OnSDLEvent(rawEvent);
+            }
 
             Input::OnEvent(rawEvent);
 
