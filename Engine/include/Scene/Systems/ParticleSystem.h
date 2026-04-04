@@ -13,7 +13,7 @@ namespace Cober {
 		~ParticleSystem();
 
 		void Start(Scene* scene);
-		void Update(Unique<Timestep>& ts, Scene* scene);
+		void Update(const Timestep& ts, Scene* scene);
 	};
 }
 

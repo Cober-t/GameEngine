@@ -59,7 +59,7 @@ namespace Cober {
 	}
 
 
-	void Editor::OnUpdate(Unique<Timestep>& ts) 
+	void Editor::OnUpdate(const Timestep& ts) 
 	{
 		// ViewportPanel::Get().ResizeViewport(m_CameraActive);
 		// ViewportPanel::Get().BindFramebuffer();

@@ -37,7 +37,6 @@ namespace Cober {
         bool m_BlockEvents = true;
         bool m_Initialized = false;
 
-        SDL_Window* m_windowHandle = nullptr;
         static ImGuiContext* m_ImGuiContext;
     };
 }

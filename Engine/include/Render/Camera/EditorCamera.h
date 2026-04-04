@@ -17,7 +17,7 @@ namespace Cober {
 		EditorCamera(float fov, float width, float height, float nearClip, float farClip, bool persp = true);
 		virtual ~EditorCamera();
 
-		void OnUpdate(Unique<Timestep>& ts) override;
+		void OnUpdate(const Timestep& ts) override;
 		void OnEvent(Event& event) override;
 
 		void SetViewportSize(float width, float height) override;

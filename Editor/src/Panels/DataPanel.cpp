@@ -28,8 +28,8 @@ namespace Cober {
 		ImGui::Begin("Data");
 
 		ImGui::Text("Frames: %i", EngineApp::Get().GetFrames());
-		ImGui::Text("DeltaTime: %.3f", EngineApp::Get().GetTimer()->GetDeltaTimePerSecond());
-		ImGui::Text("Update: %i", EngineApp::Get().GetTimer()->GetUpdates());
+		ImGui::Text("DeltaTime: %.3f", EngineApp::Get().GetTimer().GetDeltaTimePerSecond());
+		ImGui::Text("Update: %i", EngineApp::Get().GetTimer().GetUpdates());
 		ImGui::Text("Draw Calls: %i", Render2D::GetStats().DrawCalls);
 		ImGui::Text("Quads: %i", Render2D::GetStats().QuadCount);
 		ImGui::Text("Lines: %i", Render2D::GetStats().LineCount);

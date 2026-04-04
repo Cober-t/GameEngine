@@ -228,7 +228,7 @@ namespace Cober {
 		// // EngineApp::Get().GetImGuiLayer()->SetInputEnabled(true);
 	}
 
-	void EditorCamera::OnUpdate(Unique<Timestep>& ts) 
+	void EditorCamera::OnUpdate(const Timestep& ts) 
 	{
 		const glm::vec2& mouse{ Input::GetMouseX(), Input::GetMouseY() };
 		const glm::vec2 delta = (mouse - m_InitialMousePosition) * 0.003f;

@@ -36,17 +36,14 @@ namespace Cober {
 	}
     
 
-	void ParticleSystem::Update(Unique<Timestep>& ts, Scene* scene)
+	void ParticleSystem::Update(const Timestep& ts, Scene* scene)
 	{
 		auto view = scene->GetAllEntitiesWith<ParticleEmitterComponent>();
 
-        for (auto& entt : view)
-        {
+        for (auto& entt : view) {
             Entity entity = Entity((entt::entity)entt, scene );
-
             ParticleEmitter::Update(ts, entity);
-
-			ParticleEmitter::Render();
 		}
+		ParticleEmitter::Render();
 	}
 };

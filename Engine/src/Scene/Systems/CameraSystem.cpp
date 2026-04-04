@@ -46,7 +46,7 @@ namespace Cober {
 	}
 
 
-	void CameraSystem::Update(Unique<Timestep>& ts, Ref<Camera>& defaultCamera, Scene* scene)
+	void CameraSystem::Update(const Timestep& ts, Ref<Camera>& defaultCamera, Scene* scene)
 	{
 		auto view = scene->GetAllEntitiesWith<TransformComponent, TagComponent, CameraComponent>();
 

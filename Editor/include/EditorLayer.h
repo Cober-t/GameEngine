@@ -27,7 +27,7 @@ namespace Cober {
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;
 
-		virtual void OnUpdate(Unique<Timestep>& ts) override;
+		virtual void OnUpdate(const Timestep& ts) override;
 		virtual void OnImGuiRender() override;
 		virtual void OnEvent(Event& event) override;
 

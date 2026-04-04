@@ -11,7 +11,7 @@ namespace Cober {
     std::vector<Particle> ParticleEmitter::m_ParticlePool;
 
     
-    void ParticleEmitter::Update(Unique<Timestep>& ts, Entity& entity)
+    void ParticleEmitter::Update(const Timestep& ts, Entity& entity)
     {
         auto& particleEmitter = entity.GetComponent<ParticleEmitterComponent>();
 
@@ -22,7 +22,7 @@ namespace Cober {
         {
             if (particleEmitter.lifeRemaining >= 0.0f)
             {
-                particleEmitter.lifeRemaining -= ts->GetConsistentTimer();
+                particleEmitter.lifeRemaining -= ts.GetConsistentTimer();
             }
             else if (particleEmitter.lifeRemaining < 0.0f)
             {
@@ -121,7 +121,7 @@ namespace Cober {
     }
 
 
-    void ParticleEmitter::CleanUpParticlePool(Unique<Timestep>& ts, ParticleEmitterComponent& particleEmitter)
+    void ParticleEmitter::CleanUpParticlePool(const Timestep& ts, ParticleEmitterComponent& particleEmitter)
     {
 
         int particlesCount = m_ParticlePool.size();
@@ -129,12 +129,16 @@ namespace Cober {
         {
             if (m_ParticlePool[i].lifeRemaining < 0.0f)
             {   
+                // TODO: Better approach
+                // std::erase_if(m_ParticlePool, [](const Particle& p) {
+                //     return p.lifeRemaining < 0.0f;
+                // });
                 m_ParticlePool.erase(m_ParticlePool.begin() + i--);
                 continue;
             }
-            m_ParticlePool[i].lifeRemaining -= ts->GetConsistentTimer();
-            m_ParticlePool[i].position += m_ParticlePool[i].velocity * (float)ts->GetDeltaTime();
-            m_ParticlePool[i].rotation += particleEmitter.rotation / 10 * (float)ts->GetDeltaTime();
+            m_ParticlePool[i].lifeRemaining -= ts.GetConsistentTimer();
+            m_ParticlePool[i].position += m_ParticlePool[i].velocity * (float)ts.GetDeltaTime();
+            m_ParticlePool[i].rotation += particleEmitter.rotation / 10 * (float)ts.GetDeltaTime();
         }
     }
 

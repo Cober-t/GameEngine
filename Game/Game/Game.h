@@ -15,7 +15,7 @@ public:
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;
 
-	void OnUpdate(Unique<Timestep>& ts) override;
+	void OnUpdate(const Timestep& ts) override;
 	void OnEvent(Event& event) override;
 	
 private:

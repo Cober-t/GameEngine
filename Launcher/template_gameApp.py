@@ -91,7 +91,7 @@ public:
 	virtual void OnAttach() override;
 	virtual void OnDetach() override;
 
-	void OnUpdate(Unique<Timestep>& ts) override;
+	void OnUpdate(const Timestep& ts) override;
 	void OnEvent(Event& event) override;
 private:
 	Ref<Scene> m_ActiveScene;
@@ -128,7 +128,7 @@ void {self.projectName}::OnDetach()
 }}
 
 
-void {self.projectName}::OnUpdate(Unique<Timestep>& ts) 
+void {self.projectName}::OnUpdate(const Timestep& ts) 
 {{
 	RenderGlobals::SetClearColor(46, 47, 52);
 	RenderGlobals::Clear();

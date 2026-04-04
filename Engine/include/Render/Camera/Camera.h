@@ -40,7 +40,7 @@ namespace Cober {
 		Camera(float fov, float width, float height, float nearClip, float farClip);
 		virtual ~Camera() = default;
 
-		virtual void OnUpdate(Unique<Timestep>& ts) = 0;
+		virtual void OnUpdate(const Timestep& ts) = 0;
 		virtual void OnEvent(Event& event) = 0;
 		virtual void SetViewportSize(float width, float height) = 0;
 

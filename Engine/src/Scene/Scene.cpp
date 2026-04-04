@@ -293,7 +293,7 @@ namespace Cober {
 	}
 
 
-	void Scene::OnUpdateSimulation(Unique<Timestep>& ts, Ref<Camera>& camera)
+	void Scene::OnUpdateSimulation(const Timestep& ts, Ref<Camera>& camera)
 	{
 		// Must be at start
 		Scene::CleanUp();
@@ -307,11 +307,11 @@ namespace Cober {
 
 		if (!m_IsPaused || m_StepFrames-- > 0.0f)
 		{
-			while (ts->GetAccumulatedTime() >= physicsSettings.TimeStep)
-			{
-				GetSystem<PhysicsSystem2D>().Update(this);
-				ts->GetAccumulatedTime() -= physicsSettings.TimeStep;
-			}
+			// while (ts.GetAccumulatedTime() >= physicsSettings.TimeStep)
+			// {
+			// 	GetSystem<PhysicsSystem2D>().Update(this);
+			// 	ts.GetAccumulatedTime() -= physicsSettings.TimeStep;
+			// }
 		}
 
 		GetSystem<AudioSystem>().Update(this);
@@ -321,11 +321,11 @@ namespace Cober {
 			GetSystem<ScriptSystem>().Start(this);
 			m_ReloadScripts = false;
 		}
-		GetSystem<ScriptSystem>().Update(this, ts->GetDeltaTime());
+		GetSystem<ScriptSystem>().Update(this, ts.GetDeltaTime());
 	}
 
 
-	void Scene::OnUpdateRuntime(Unique<Timestep>& ts, Ref<Camera>& camera)
+	void Scene::OnUpdateRuntime(const Timestep& ts, Ref<Camera>& camera)
 	{	
 		// Must be at start
 		Scene::CleanUp();

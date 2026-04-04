@@ -15,13 +15,13 @@ namespace Cober {
     class CB_API ParticleEmitter
     {
     public:
-        static void Update(Unique<Timestep>& ts, Entity& entity);
+        static void Update(const Timestep& ts, Entity& entity);
         static void Render();
         
         static void Emit(Scene* scene);
         static void Emit(ParticleEmitterComponent& particleEmitter);
 
-        static void CleanUpParticlePool(Unique<Timestep>& ts, ParticleEmitterComponent& particleEmitter);
+        static void CleanUpParticlePool(const Timestep& ts, ParticleEmitterComponent& particleEmitter);
         static void ForceCleanUPParticlePool();
 
     private:

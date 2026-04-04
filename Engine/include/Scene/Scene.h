@@ -35,8 +35,8 @@ namespace Cober {
 
 		void OnEvent(Event& event, const Ref<Camera>& camera);
 
-		void OnUpdateRuntime(Unique<Timestep>& ts, Ref<Camera>& camera);
-		void OnUpdateSimulation(Unique<Timestep>& ts, Ref<Camera>& camera);
+		void OnUpdateRuntime(const Timestep& ts, Ref<Camera>& camera);
+		void OnUpdateSimulation(const Timestep& ts, Ref<Camera>& camera);
 
 		template<typename... Components>
 		inline auto GetAllEntitiesWith() { return m_Registry.view<Components...>(); }

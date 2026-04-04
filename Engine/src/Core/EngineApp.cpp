@@ -33,6 +33,13 @@ namespace Cober {
 
     EngineApp::~EngineApp() 
     {
+        if (m_GuiLayer &&
+            (m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR))
+        {
+            m_GuiLayer->OnDetach();
+            m_GuiLayer.reset();
+        }
+        
         // Render2D::Shutdown();   // Abstract in a global Render api class in the future
         LOG_CORE_INFO("EngineApp Destructor!");
     }
@@ -44,38 +51,38 @@ namespace Cober {
     }
 
 
-    void EngineApp::PushLayer(Layer* layer)
+    void EngineApp::PushLayer(Unique<Layer> layer)
     {
-        m_LayerStack.PushLayer(layer);
-        layer->OnAttach();
+        m_LayerStack.PushLayer(std::move(layer)); // Transfer ownership
     }
 
-
-    void EngineApp::PushOverlay(Layer* layer)
+    void EngineApp::PushOverlay(Unique<Layer> layer)
     {
-        m_LayerStack.PushOverlay(layer);
-        layer->OnAttach();
+        m_LayerStack.PushOverlay(std::move(layer));  // Transfer ownership
     }
 
     void EngineApp::Start()
     {
-        if (m_GameState == EngineApp::GameState::EDITOR ||
-        m_GameState == EngineApp::GameState::RUNTIME_EDITOR)
+        if (m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR)
         {
-            m_GuiLayer = new ImGuiLayer();
-            PushOverlay(m_GuiLayer);
+            m_GuiLayer = CreateUnique<ImGuiLayer>();
+            m_GuiLayer->OnAttach();
         }
     }
 
     void EngineApp::Update() 
     {
-        while ( m_GameState == EngineApp::GameState::PLAY || 
-                m_GameState == EngineApp::GameState::EDITOR || 
-                m_GameState == EngineApp::GameState::RUNTIME_EDITOR)
+        while ( m_GameState == GameState::PLAY || 
+                m_GameState == GameState::EDITOR || 
+                m_GameState == GameState::RUNTIME_EDITOR)
         {
             m_TimeStep->Start();
             
-            Run(m_TimeStep);
+            if (m_GameState == GameState::EXIT) {
+                return;
+            }
+            
+            Run(*m_TimeStep);
 
             while(m_TimeStep->GetDeltaTime() >= 1.0f)
             {
@@ -97,16 +104,17 @@ namespace Cober {
         dispatcher.Dispatch<WindowMinimizedEvent>(BIND_EVENT_FN(EngineApp::OnWindowMinimized));
         dispatcher.Dispatch<WindowRestoredEvent>(BIND_EVENT_FN(EngineApp::OnWindowRestored));
 
+        // Editor Events
         if (m_GuiLayer && !event.Handled) {
             m_GuiLayer->OnEvent(event);
         }
 
+        // Layers Events
         if (!event.Handled)
         {
             for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
             {
                 (*it)->OnEvent(event);
-
                 if (event.Handled) {
                     break;
                 }
@@ -114,7 +122,7 @@ namespace Cober {
         }
     }
     
-    void EngineApp::Run(Unique<Timestep>& ts)
+    void EngineApp::Run(const Timestep& ts)
     {
         // Process Events
         // Input::TransitionPressedKeys();
@@ -122,28 +130,34 @@ namespace Cober {
 
         ProcessEvents();
 
-        if (m_GameState == EngineApp::GameState::EXIT) {
-            return;
-        }
-        
-        if (m_GuiLayer &&
-            (m_GameState == EngineApp::GameState::EDITOR || 
-            m_GameState == EngineApp::GameState::RUNTIME_EDITOR))
+        RunEditor(ts);
+
+        RunRender(ts);
+
+        m_Window->OnUpdate();
+    }
+
+    void EngineApp::RunEditor(const Timestep& ts) 
+    {
+        if (m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR)
         {
+            LOG_CORE_ASSERT(m_GuiLayer, "ImGui Layer is not created yed");
             m_GuiLayer->Begin();
             
-            for (Layer* layer : m_LayerStack) {
+            for (const auto& layer : m_LayerStack) {
                 layer->OnImGuiRender();   
             }
             
             m_GuiLayer->End();
         }
-        
+    }
+
+    void EngineApp::RunRender(const Timestep& ts) 
+    {          
         RenderGlobals::BeginFrame();
 
         // Upload ImGui buffers before render pass begins
-        if (m_GameState == EngineApp::GameState::EDITOR || 
-            m_GameState == EngineApp::GameState::RUNTIME_EDITOR) 
+        if (m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR) 
         {
             RenderGlobals::ImGuiPrepareDrawData(ImGui::GetDrawData());
         }
@@ -152,7 +166,7 @@ namespace Cober {
         RenderGlobals::BeginMainRenderPass();
         
         if (!IsMinimized()) {
-            for (Layer* layer : m_LayerStack) {
+            for (const auto& layer : m_LayerStack) {
                 layer->OnUpdate(ts);   
             }
         }
@@ -164,17 +178,12 @@ namespace Cober {
         }
 
         RenderGlobals::EndFrame();
-
-        m_Window->OnUpdate();
-        
-        Input::EndFrame();
     }
 
     void EngineApp::Close()
     {
         m_GameState = EngineApp::GameState::EXIT;
     }
-
 
     // Move to window callbaks for Application Events
     bool EngineApp::OnWindowClose(WindowCloseEvent& event)
@@ -187,7 +196,7 @@ namespace Cober {
     {
         if (event.GetWidth() <= 0 || event.GetHeight() <= 0)
         {
-            SetMinimized(false);
+            SetMinimized(true);
             return false;
         }
 
@@ -225,16 +234,19 @@ namespace Cober {
             }
 
             Input::OnEvent(rawEvent);
+            //Window::OnEvent(); // TODO: Resolve Window related Events
 
             auto event = TranslateSDLEvent(rawEvent);
             if (!event) {
                 continue;
             }
 
-            OnEvent(*event);
+            OnEvent(*event); // EngineApp Events
+
+            //UISystem::ProcessInputs(event);
         }
 
-        //UISystem::ProcessInputs(event);
+        Input::EndFrame();
     }
 
     EngineApp::GameState EngineApp::GetGameState()

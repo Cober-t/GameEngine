@@ -143,7 +143,7 @@ namespace Cober {
 	}
 
 	
-	void GameCamera::OnUpdate(Unique<Timestep>& ts) 
+	void GameCamera::OnUpdate(const Timestep& ts) 
 	{
 		if (IsMainCamera() == false)
 			return;

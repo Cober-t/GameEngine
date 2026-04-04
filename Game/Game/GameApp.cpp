@@ -11,7 +11,7 @@ class GameApp: public EngineApp
 public:
 	GameApp(const AppSpecification& specification) : EngineApp(specification) 
 	{
-		PushLayer(new Game());
+		PushLayer(CreateUnique<Game>());
 		EngineApp::Get().SetGameState(EngineApp::GameState::PLAY);
 	}
 

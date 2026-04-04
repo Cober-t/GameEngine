@@ -20,10 +20,10 @@ namespace Cober {
 
 		void Start(Scene* scene);
 
-		void Update(Unique<Timestep>& ts, Ref<Camera>& defaultCamera, Scene* scene);
+		void Update(const Timestep& ts, Ref<Camera>& defaultCamera, Scene* scene);
 		void OnEvent(Event& event, const Ref<Camera>& camera);
-		// void UpdateRuntime(Unique<Timestep>& ts, Ref<Camera>& defaultCamera, Scene* scene);
-		// void UpdateSimulation(Unique<Timestep>& ts, const Ref<Camera>& defaultCamera, Scene* scene);
+		// void UpdateRuntime(const Timestep& ts, Ref<Camera>& defaultCamera, Scene* scene);
+		// void UpdateSimulation(const Timestep& ts, const Ref<Camera>& defaultCamera, Scene* scene);
 
 		//void OnEvent(Unique<EventHandler>& eventHandler);
 	private:

@@ -74,8 +74,8 @@ namespace Cober {
 		void Update();
 		void OnEvent(Event& event);
 
-		void PushLayer(Layer* layer);
-		void PushOverlay(Layer* layer);
+		void PushLayer(Unique<Layer> layer);
+		void PushOverlay(Unique<Layer> layer);
 
 		void ProcessEvents();
 		void SetMinimized(bool minimized) { m_Minimized = minimized; }
@@ -84,10 +84,16 @@ namespace Cober {
 		void Close();
 
 		inline int GetFrames() { return m_TimeStep->GetFrames(); }
-		inline Unique<Timestep>& GetTimer() { return m_TimeStep; }
 
-		inline ImGuiLayer* GetImGuiLayer() { return m_GuiLayer; }
-		inline Window& GetWindow() { return *m_Window; }
+		Timestep& GetTimer() { return *m_TimeStep; }
+		const Timestep& GetTimer() const { return *m_TimeStep; }
+
+		ImGuiLayer* GetImGuiLayer() { return m_GuiLayer.get(); }
+		const ImGuiLayer* GetImGuiLayer() const { return m_GuiLayer.get(); }
+
+		Window& GetWindow() { return *m_Window; }
+		const Window& GetWindow() const { return *m_Window; }
+
 		void  SetDebugMode(bool debugMode)  { m_DebugMode = debugMode; }
 		bool& IsDebugMode() { return m_DebugMode; }
 
@@ -96,7 +102,9 @@ namespace Cober {
 
 	private:
 		// Functions
-		void Run(Unique<Timestep>& ts);
+		void Run(const Timestep& ts);
+		void RunEditor(const Timestep& ts);
+		void RunRender(const Timestep& ts);
 		
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
@@ -107,7 +115,7 @@ namespace Cober {
 		AppSpecification m_Specification {};
 		GameState m_GameState = GameState::EDITOR;
 		Unique<Window> m_Window {};
-		ImGuiLayer* m_GuiLayer = nullptr;
+		Unique<ImGuiLayer> m_GuiLayer {};
 		LayerStack m_LayerStack {};
 		Unique<Timestep> m_TimeStep {};
 
