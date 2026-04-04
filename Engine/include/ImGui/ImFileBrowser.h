@@ -294,7 +294,7 @@ inline void ImGui::FileBrowser::Display()
         PushID(secIdx);
         if (secIdx > 0)
             SameLine();
-        if (SmallButton(sec.u8string().c_str()))
+        if (SmallButton(sec.string().c_str()))
             newPwdLastSecIdx = secIdx;
         PopID();
         ++secIdx;
@@ -407,9 +407,9 @@ inline void ImGui::FileBrowser::Display()
                         {
 #ifdef _MSC_VER
                             strcpy_s(inputNameBuf_->data(), inputNameBuf_->size(),
-                                selectedFilename_.u8string().c_str());
+                                selectedFilename_.string().c_str());
 #else
-                            std::strncpy(inputNameBuf_->data(), selectedFilename_.u8string().c_str(),
+                            std::strncpy(inputNameBuf_->data(), selectedFilename_.string().c_str(),
                                 inputNameBuf_->size());
 #endif
                         }
@@ -562,7 +562,7 @@ inline void ImGui::FileBrowser::SetPwdUncatched(const std::filesystem::path& pwd
 
         rcd.extension = p.path().filename().extension().string();
 
-        rcd.showName = (rcd.isDir ? directoryLabel_ : fileLabel_) + std::string(" ") + p.path().filename().u8string();
+        rcd.showName = (rcd.isDir ? directoryLabel_ : fileLabel_) + std::string(" ") + p.path().filename().string();
         fileRecords_.push_back(rcd);
     }
 

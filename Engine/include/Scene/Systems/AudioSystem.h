@@ -1,17 +1,17 @@
 #ifndef AUDIO_SYSTEM_H
 #define AUDIO_SYSTEM_H
 
-#include "Scene/Scene.h"
-#include "Audio/Audio.h"
-
+#include "Scene/ECS.h"
 
 namespace Cober {
+
+	class Scene;
 
 	class CB_API AudioSystem : public System 
     {
 	public:
 		AudioSystem();
-		~AudioSystem();
+		~AudioSystem() override;
 
 		void Start(Scene* scene);
 		void Update(Scene* scene);

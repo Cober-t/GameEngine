@@ -38,6 +38,7 @@ namespace Cober {
 		void OnUpdateRuntime(const Timestep& ts, Ref<Camera>& camera);
 		void OnUpdateSimulation(const Timestep& ts, Ref<Camera>& camera);
 
+		// TODO: Use groups insted of view
 		template<typename... Components>
 		inline auto GetAllEntitiesWith() { return m_Registry.view<Components...>(); }
 		inline entt::registry* GetRegistry() { return &m_Registry; }

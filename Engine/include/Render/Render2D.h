@@ -12,7 +12,7 @@
 
 #include "Physics/Debug2DPhysics.h"
 
-#include "Scene/ECS.h"
+
 #include "Core/EngineSettings.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -21,6 +21,8 @@
 
 namespace Cober {
 
+	class Entity;
+	
 	class CB_API Render2D 
 	{
 	public:

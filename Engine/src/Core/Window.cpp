@@ -56,6 +56,7 @@ namespace Cober {
 			return;
 		}
         
+		m_initialized = true;
 		++s_SDL3WindowCount;
 
 		m_Context = GraphicsContext::Create(m_Window);
@@ -74,7 +75,7 @@ namespace Cober {
 		LOG_CORE_INFO("Removed GPU Device from the Window");
 		m_Window = nullptr;
 
-		if (--s_SDL3WindowCount == 0) {
+		if (m_initialized && --s_SDL3WindowCount == 0) {
 			SDL_Quit();
 			LOG_CORE_INFO("SDL Quit");
 		}

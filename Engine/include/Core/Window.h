@@ -72,6 +72,7 @@ namespace Cober {
 			EventCallbackFn EventCallback;
 		};
 
+		bool m_initialized = false;
 		WindowData m_Data;
 	};
 }

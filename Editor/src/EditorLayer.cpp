@@ -277,19 +277,19 @@ namespace Cober {
 	}
 
 
-	void Editor::SetActiveScene(Ref<Scene>& scene)
+	void Editor::SetActiveScene(const Ref<Scene>& scene)
 	{
 		m_ActiveScene = scene;
 	}
 
 
-	void Editor::SetEditorScene(Ref<Scene>& scene)
+	void Editor::SetEditorScene(const Ref<Scene>& scene)
 	{
 		m_EditorScene = scene;
 	}
 
 
-	void Editor::SetSelectedEntity(Entity& entity)
+	void Editor::SetSelectedEntity(const Entity& entity)
 	{
 		m_SelectedEntity = entity;
 	}

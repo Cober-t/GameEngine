@@ -21,7 +21,7 @@ namespace Cober {
     {
 	public:
 		PhysicsSystem2D();
-		~PhysicsSystem2D();
+		~PhysicsSystem2D() override;
 
 		void Start(Scene* scene);
 		void Update(Scene* scene);

@@ -16,6 +16,7 @@
 // #include <sol/sol.hpp>
 
 #include "Core/Core.h"
+#include "Core/UUID.h"
 #include "Render/Texture.h"
 #include "Render/Camera/GameCamera.h"
 // #include "Render/Text/Font.h"
@@ -30,6 +31,7 @@ namespace Cober {
 
 		IDComponent() = default;
 		IDComponent(const IDComponent&) = default;
+		IDComponent(UUID id) : ID(id) {}
 	};
 
 

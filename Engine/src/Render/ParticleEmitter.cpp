@@ -4,6 +4,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/compatibility.hpp>
 
+#include "Scene/ECS.h"
 #include "Render/ParticleEmitter.h"
 
 namespace Cober {
@@ -129,10 +130,10 @@ namespace Cober {
         {
             if (m_ParticlePool[i].lifeRemaining < 0.0f)
             {   
-                // TODO: Better approach
                 // std::erase_if(m_ParticlePool, [](const Particle& p) {
                 //     return p.lifeRemaining < 0.0f;
                 // });
+                // Old approach
                 m_ParticlePool.erase(m_ParticlePool.begin() + i--);
                 continue;
             }

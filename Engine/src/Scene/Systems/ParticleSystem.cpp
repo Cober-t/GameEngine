@@ -1,8 +1,9 @@
 #include <pch.h>
 
 #include "Render/ParticleEmitter.h"
+#include "Scene/ECS.h"
+#include "Scene/Scene.h"
 #include "Scene/Systems/ParticleSystem.h"
-
 
 namespace Cober {
 

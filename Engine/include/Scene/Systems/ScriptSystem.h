@@ -17,7 +17,7 @@ namespace Cober {
     {
 	public:
 		ScriptSystem();
-		~ScriptSystem();
+		~ScriptSystem() override;
 
         void Start(Scene* scene);
 		void Update(Scene* scene, float dt);

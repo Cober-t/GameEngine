@@ -17,7 +17,7 @@ namespace Cober {
 	{
 	public:
 		RenderSystem();
-		~RenderSystem();
+		~RenderSystem() override;
 
 		void Start();
 

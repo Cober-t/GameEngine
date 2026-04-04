@@ -27,6 +27,12 @@ namespace Cober {
 	{
 		auto view = scene->GetAllEntitiesWith<TransformComponent, TagComponent, Render2DComponent>();
 
+		// FIX: Better this way
+		// for (auto e : view) {
+		// 	auto& transform = view.get<TransformComponent>(e);
+		// 	auto& render = view.get<Render2DComponent>(e);
+		// }
+
 		for (auto& entt : view)
         {
 			Entity entity = Entity((entt::entity)entt, scene );

@@ -16,7 +16,7 @@ namespace Cober {
 	{
 	public:
 		CameraSystem();
-		~CameraSystem();
+		~CameraSystem() override;
 
 		void Start(Scene* scene);
 

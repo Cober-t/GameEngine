@@ -2,8 +2,8 @@
 #define ENTITY_H
 
 #include "Core/UUID.h"
-#include "Components.h"
-#include "Scene.h"
+#include "Scene/Scene.h"
+#include "Scene/Components.h"
 
 #include <entt/entt.hpp>
 
@@ -85,7 +85,7 @@ namespace Cober {
 	{
 	public:
 		System() = default;
-		~System() = default;
+		virtual ~System() = default;
 	};
 }
 

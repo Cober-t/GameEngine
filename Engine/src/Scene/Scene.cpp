@@ -9,6 +9,7 @@
 #include "Scene/Systems/ParticleSystem.h"
 #include "Scene/Systems/PhysicsSystem2D.h"
 #include "Scene/Systems/ScriptSystem.h"
+#include "Audio/Audio.h"
 #include "Scene/Systems/AudioSystem.h"
 
 #include "Render/Camera/GlobalCamera.h"

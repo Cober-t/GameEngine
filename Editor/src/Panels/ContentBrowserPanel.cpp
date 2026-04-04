@@ -43,7 +43,7 @@ namespace Cober {
 			{
 				uint64_t uuid;
 				memcpy((uint64_t*)&uuid, payload->Data, sizeof(uint64_t));
-				auto& entity = Editor::GetActiveScene()->GetEntityByUUID(uuid);
+				auto entity = Editor::GetActiveScene()->GetEntityByUUID(uuid);
 				EntitySerializer::Serialize(entity, entity.GetName() + ".lua");
 				ImGui::EndDragDropTarget();
 			}

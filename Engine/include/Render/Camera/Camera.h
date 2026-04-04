@@ -52,7 +52,7 @@ namespace Cober {
 		CameraSettings& GetSettings() { return m_CameraSettings; }
 		CameraSettings GetSettings() const { return m_CameraSettings; }
 		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
-		void SetViewMatrix(glm::mat4& viewMatrix) { m_ViewMatrix = viewMatrix; }
+		void SetViewMatrix(const glm::mat4& viewMatrix) { m_ViewMatrix = viewMatrix; }
 		const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
 		const glm::mat4 GetViewProjectionMatrix() const { return m_ProjectionMatrix * m_ViewMatrix; }
 

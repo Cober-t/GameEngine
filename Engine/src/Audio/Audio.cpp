@@ -152,8 +152,8 @@ namespace Cober {
     {
         if (!&m_Engine)
             return false;
-    
-        std::filesystem::path soundPath = PathService::ResolveAsset("audio/soundName");
+            
+        std::filesystem::path soundPath = PathService::ResolveAsset("audio/" + soundName);
         // m_Result = ma_engine_play_sound(&m_Engine, soundPath.string().c_str(), &sound);
 
         if (sounds.find(soundName) != sounds.end())

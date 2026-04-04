@@ -1,6 +1,9 @@
 #include <pch.h>
 #include "Scene/Systems/AudioSystem.h"
+#include "Audio/Audio.h"
 
+#include "Scene/ECS.h"
+#include "Scene/Scene.h"
 
 namespace Cober {
 
@@ -35,17 +38,17 @@ namespace Cober {
 
 	void AudioSystem::Update(Scene* scene)
 	{
-		auto view = scene->GetAllEntitiesWith<AudioComponent>();
+		// CB_PROFILE_FUNCTION();
 
-        for (auto& entt : view)
+        auto& registry = *scene->GetRegistry();
+        auto group = registry.group<>(entt::get<AudioComponent>);
+
+        for (auto entityHandle : group)
         {
-            Entity entity = Entity((entt::entity)entt, scene );
+            auto& audio = group.get<AudioComponent>(entityHandle);
 
-			if (std::filesystem::exists(entity.GetComponent<AudioComponent>().audioPath))
-			{
-				// Only TEST
-				// Audio::PlaySound(entity.GetComponent<AudioComponent>().audioName);
-			}
-		}
+            // runtime logic only
+            // if (audio.playOnStart && !audio.started) { ... }
+        }
 	}
 }

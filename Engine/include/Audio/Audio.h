@@ -2,7 +2,6 @@
 #define AUDIO_H
 
 
-
 namespace Cober {
 
     class CB_API Audio

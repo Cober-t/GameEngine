@@ -55,7 +55,7 @@ namespace Cober  {
 			Attributes* attributes;
 
 		private:
-			static void Circle::SetAttributes(const glm::mat4& transform, const glm::vec4& color, float thickness, float fade, int entityID);
+			static void SetAttributes(const glm::mat4& transform, const glm::vec4& color, float thickness, float fade, int entityID);
 		};
 	}
 }

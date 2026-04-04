@@ -35,9 +35,9 @@ namespace Cober {
 		static Ref<Scene>& GetEditorScene();
 		static Ref<EditorCamera>& GetEditorCamera();
 		static Entity& SelectedEntity();
-		static void SetActiveScene(Ref<Scene>& scene);
-		static void SetEditorScene(Ref<Scene>& scene);
-		static void SetSelectedEntity(Entity& entity = Entity());
+		static void SetActiveScene(const Ref<Scene>& scene);
+		static void SetEditorScene(const Ref<Scene>& scene);
+		static void SetSelectedEntity(const Entity& entity = Entity());
 
 		static Ref<Camera>& GetActiveCamera();
 		static void SetMainCamera(Ref<Camera>& entity);
