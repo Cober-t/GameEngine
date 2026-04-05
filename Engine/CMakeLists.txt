@@ -3,7 +3,7 @@ project(Engine)
 # Collect all source files
 file(GLOB_RECURSE ENGINE_SOURCES 
     "src/*.cpp"
-    "include/*.h"
+    # "include/*.h"
 )
 
 # Add stb_image sources

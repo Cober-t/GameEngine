@@ -34,8 +34,7 @@ void Game::OnUpdate(const Timestep& ts)
 {
 	// Bind Framebuffer...
 	
-	RenderGlobals::SetClearColor(50, 70, 150);
-	RenderGlobals::Clear();
+	RenderGlobals::SetClearColor(0.85, 0.35, 0.2);
 	
 #if 0
 	m_Fbo->Bind();

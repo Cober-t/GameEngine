@@ -9,20 +9,20 @@ set "BUILD_DIR=%ROOT%\build"
 if "%MODE%"=="" goto :usage
 
 cmake -S "%ROOT%" -B "%BUILD_DIR%"
-if %ERRORLEVEL% neq 0 (
+if errorlevel 1 (
     echo CMake configuration failed!
-    exit /b %ERRORLEVEL%
+    exit /b 1
 )
 
 if /I "%MODE%"=="Editor" (
     cmake --build "%BUILD_DIR%" --target Editor --config Debug
-    if %ERRORLEVEL% neq 0 (
+    if errorlevel 1 (
         echo CMake build failed!
-        exit /b %ERRORLEVEL%
+        exit /b 1
     )
 
-    call LaunchEditor.bat
-    exit /b %ERRORLEVEL%
+    "%~dp0\..\build\bin\Debug\Editor.exe"
+    exit /b %errorlevel%
 )
 
 if /I "%MODE%"=="Game" (
@@ -33,13 +33,13 @@ if /I "%MODE%"=="Game" (
     )
 
     cmake --build "%BUILD_DIR%" --target Game --config Debug
-    if %ERRORLEVEL% neq 0 (
+    if errorlevel 1 (
         echo CMake build failed!
-        exit /b %ERRORLEVEL%
+        exit /b 1
     )
 
-    call LaunchGame.bat "%PROJECT_PATH%"
-    exit /b %ERRORLEVEL%
+    "%~dp0\..\build\bin\Debug\Game.exe" --project "%PROJECT_PATH%"
+    exit /b %errorlevel%
 )
 
 echo Invalid mode: %MODE%

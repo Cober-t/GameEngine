@@ -21,7 +21,7 @@ namespace Cober {
     public:
         void Init(void* window, void* context) override;
 
-        void Clear() override;
+        void Clear() override {};
 
         bool BeginFrame() override;
         void BeginMainRenderPass() override;
@@ -36,7 +36,7 @@ namespace Cober {
 
         void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) override;
         void SetClearColor(glm::vec4 color) override;
-        void SetClearColor(float red, float green, float blue, float black) override;
+        void SetClearColor(float red, float green, float blue, float alpha) override;
 
         void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) override;
         void DrawTriangles(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) override;

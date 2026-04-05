@@ -13,10 +13,13 @@
 #include <imgui/imgui.h>
 #include <backends/imgui_impl_sdlgpu3.h>
 
-namespace Cober {
+namespace Cober 
+{
 
     SDLGPURenderAPI* SDLGPURenderAPI::s_Instance = nullptr;
 
+    // --------------------------------------------------------------------------------------
+    
     void SDLGPURenderAPI::Init(void* window, void* context)
     {
         m_WindowHandle = static_cast<SDL_Window*>(window);
@@ -29,10 +32,7 @@ namespace Cober {
         LOG_CORE_TRACE("Render API init (SDL_GPU)");
     }
 
-    void SDLGPURenderAPI::Clear()
-    {
-        // Explicit clears are pass-scoped in SDL_GPU.
-    }
+    // --------------------------------------------------------------------------------------
 
     bool SDLGPURenderAPI::BeginFrame()
     {
@@ -53,10 +53,14 @@ namespace Cober {
         return true;
     }
 
+    // --------------------------------------------------------------------------------------
+
     void SDLGPURenderAPI::BeginMainRenderPass()
     {
         EnsureMainRenderPass();
     }
+
+    // --------------------------------------------------------------------------------------
 
     void SDLGPURenderAPI::EndFrame()
     {
@@ -71,6 +75,8 @@ namespace Cober {
         m_IsRenderingToSwapchain = false;
     }
 
+    // --------------------------------------------------------------------------------------
+    
     void SDLGPURenderAPI::ImGuiInit()
     {
         LOG_CORE_ASSERT(m_WindowHandle, "ImGuiInit called before window creation");
@@ -87,6 +93,8 @@ namespace Cober {
         m_ImGuiInitialized = true;
     }
 
+    // --------------------------------------------------------------------------------------
+
     void SDLGPURenderAPI::ImGuiShutdown()
     {
         if (!m_ImGuiInitialized)
@@ -98,11 +106,15 @@ namespace Cober {
         m_ImGuiInitialized = false;
     }
 
+    // --------------------------------------------------------------------------------------
+
     void SDLGPURenderAPI::ImGuiNewFrame()
     {
         LOG_CORE_ASSERT(m_ImGuiInitialized, "ImGuiNewFrame called before ImGuiInit");
         ImGui_ImplSDLGPU3_NewFrame();
     }
+
+    // --------------------------------------------------------------------------------------
 
     void SDLGPURenderAPI::ImGuiPrepareDrawData(ImDrawData* drawData)
     {
@@ -114,21 +126,23 @@ namespace Cober {
         ImGui_ImplSDLGPU3_PrepareDrawData(drawData, m_Frame.CommandBuffer);
     }
 
+    // --------------------------------------------------------------------------------------
+
     void SDLGPURenderAPI::ImGuiRenderDrawData(ImDrawData* drawData)
     {
-        if (!drawData)
-        {
+        if (!drawData) {
             return;
         }
 
         EnsureMainRenderPass();
-        if (!m_Frame.RenderPass)
-        {
+        if (!m_Frame.RenderPass) {
             return;
         }
 
         ImGui_ImplSDLGPU3_RenderDrawData(drawData, m_Frame.CommandBuffer, m_Frame.RenderPass);
     }
+
+    // --------------------------------------------------------------------------------------
 
     void SDLGPURenderAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
     {
@@ -136,15 +150,28 @@ namespace Cober {
         ApplyViewport();
     }
 
+    // --------------------------------------------------------------------------------------
+
     void SDLGPURenderAPI::SetClearColor(glm::vec4 color)
     {
+        if (color.r > 1.0 && color.g > 1.0 && color.b > 1.0 && color.a > 1.0) {
+            color /= glm::vec4(255.0f);
+        }
         m_ClearColor = color;
     }
 
-    void SDLGPURenderAPI::SetClearColor(float red, float green, float blue, float black)
+    // --------------------------------------------------------------------------------------
+
+    void SDLGPURenderAPI::SetClearColor(float red, float green, float blue, float alpha)
     {
-        m_ClearColor = { red, green, blue, black };
+        glm::vec4 color { red, green, blue, alpha };
+        if (red > 1.0 && green > 1.0 && blue > 1.0 && alpha > 1.0) {
+            color /= glm::vec4(255.0f);
+        }
+        m_ClearColor = color;
     }
+
+    // --------------------------------------------------------------------------------------
 
     void SDLGPURenderAPI::DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount)
     {
@@ -159,21 +186,29 @@ namespace Cober {
         DrawInternal(vertexArray, drawCount, SDL_GPU_PRIMITIVETYPE_TRIANGLELIST, true);
     }
 
+    // --------------------------------------------------------------------------------------
+
     void SDLGPURenderAPI::DrawTriangles(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
     {
         DrawInternal(vertexArray, vertexCount, SDL_GPU_PRIMITIVETYPE_TRIANGLELIST, false);
     }
+
+    // --------------------------------------------------------------------------------------
 
     void SDLGPURenderAPI::DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
     {
         DrawInternal(vertexArray, vertexCount, SDL_GPU_PRIMITIVETYPE_LINELIST, false);
     }
 
+    // --------------------------------------------------------------------------------------
+
     void SDLGPURenderAPI::SetLineWidth(float width)
     {
         m_LineWidth = width;
         (void)m_LineWidth;
     }
+
+    // --------------------------------------------------------------------------------------
 
     void SDLGPURenderAPI::BeginFramebufferRenderPass(SDLGPUFramebuffer* framebuffer)
     {
@@ -227,6 +262,8 @@ namespace Cober {
         ApplyViewport();
     }
 
+    // --------------------------------------------------------------------------------------
+
     void SDLGPURenderAPI::EndActiveRenderPass()
     {
         if (m_Frame.RenderPass)
@@ -236,10 +273,14 @@ namespace Cober {
         }
     }
 
+    // --------------------------------------------------------------------------------------
+
     SDLGPURenderAPI* SDLGPURenderAPI::Get()
     {
         return s_Instance;
     }
+    
+    // --------------------------------------------------------------------------------------
 
     void SDLGPURenderAPI::EnsureMainRenderPass()
     {
@@ -248,19 +289,21 @@ namespace Cober {
             return;
         }
 
-        SDL_GPUColorTargetInfo targetInfo = {};
-        targetInfo.texture = m_Frame.SwapchainTexture;
-        targetInfo.clear_color = SDL_FColor{ m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a };
-        targetInfo.load_op = SDL_GPU_LOADOP_CLEAR;
-        targetInfo.store_op = SDL_GPU_STOREOP_STORE;
+        SDL_GPUColorTargetInfo colorTargetInfo = { 0 };
+        colorTargetInfo.texture = m_Frame.SwapchainTexture;
+        colorTargetInfo.clear_color = SDL_FColor{ m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a };
+        colorTargetInfo.load_op = SDL_GPU_LOADOP_CLEAR;
+        colorTargetInfo.store_op = SDL_GPU_STOREOP_STORE;
 
-        m_Frame.RenderPass = SDL_BeginGPURenderPass(m_Frame.CommandBuffer, &targetInfo, 1, nullptr);
+        m_Frame.RenderPass = SDL_BeginGPURenderPass(m_Frame.CommandBuffer, &colorTargetInfo, 1, nullptr);
         LOG_CORE_ASSERT(m_Frame.RenderPass, "SDL_BeginGPURenderPass(swapchain) failed: {0}", SDL_GetError());
 
         UpdatePassSignatureForSwapchain();
         m_IsRenderingToSwapchain = true;
         ApplyViewport();
     }
+
+    // --------------------------------------------------------------------------------------
 
     void SDLGPURenderAPI::ApplyViewport()
     {
@@ -280,6 +323,8 @@ namespace Cober {
         SDL_SetGPUViewport(m_Frame.RenderPass, &viewport);
     }
 
+    // --------------------------------------------------------------------------------------
+    
     void SDLGPURenderAPI::UpdatePassSignatureForSwapchain()
     {
         m_ActivePassSignature = {};
@@ -289,6 +334,8 @@ namespace Cober {
         m_ActivePassSignature.HasDepth = false;
         m_ActivePassSignature.Samples = 1;
     }
+
+    // --------------------------------------------------------------------------------------
 
     void SDLGPURenderAPI::DrawInternal(const Ref<VertexArray>& vertexArray, uint32_t count, uint32_t primitiveType, bool indexed)
     {
@@ -314,10 +361,11 @@ namespace Cober {
             auto sdlvb = std::dynamic_pointer_cast<SDLGPUVertexBuffer>(vb);
             LOG_CORE_ASSERT(sdlvb, "Expected SDLGPUVertexBuffer");
             sdlvb->EnsureUploaded(m_Frame.CommandBuffer, true);
-            vbBindings.push_back(SDL_GPUBufferBinding{
-                .buffer = sdlvb->GetGPUBuffer(),
-                .offset = 0
-            });
+
+            SDL_GPUBufferBinding buffBinding{};
+            buffBinding.buffer = sdlvb->GetGPUBuffer();
+            buffBinding.offset = 0;
+            vbBindings.push_back(buffBinding);
         }
 
         if (!vbBindings.empty())
@@ -335,11 +383,7 @@ namespace Cober {
             buffBinding.buffer = sdlIndex->GetGPUBuffer();
             buffBinding.offset = 0;
             
-            SDL_BindGPUIndexBuffer(
-                m_Frame.RenderPass,
-                &buffBinding,
-                SDL_GPU_INDEXELEMENTSIZE_32BIT
-            );
+            SDL_BindGPUIndexBuffer( m_Frame.RenderPass, &buffBinding, SDL_GPU_INDEXELEMENTSIZE_32BIT );
         }
 
         for (uint32_t slot = 0; slot < shader->GetVertexUniformBufferCount(); ++slot)
@@ -381,10 +425,10 @@ namespace Cober {
                     const_cast<SDLGPUTexture*>(texture)->EnsureUploaded(m_Frame.CommandBuffer, true);
                 }
 
-                samplerBindings[slot] = SDL_GPUTextureSamplerBinding{
-                    .texture = SDLGPUTexture::GetRawBound(slot),
-                    .sampler = SDLGPUTexture::GetRawSampler(slot)
-                };
+                SDL_GPUTextureSamplerBinding textureBinding{};
+                textureBinding.texture = SDLGPUTexture::GetRawBound(slot);
+                textureBinding.sampler = SDLGPUTexture::GetRawSampler(slot);
+                samplerBindings[slot] = textureBinding;
             }
 
             SDL_BindGPUFragmentSamplers(
@@ -395,13 +439,13 @@ namespace Cober {
             );
         }
 
-        if (indexed)
-        {
-            SDL_DrawGPUIndexedPrimitives(m_Frame.RenderPass, count, 1, 0, 0, 0);
+        if (indexed) { 
+            SDL_DrawGPUIndexedPrimitives(m_Frame.RenderPass, count, 1, 0, 0, 0); 
         }
-        else
-        {
-            SDL_DrawGPUPrimitives(m_Frame.RenderPass, count, 1, 0, 0);
+        else {          
+            SDL_DrawGPUPrimitives(m_Frame.RenderPass, count, 1, 0, 0); 
         }
     }
+
+    // --------------------------------------------------------------------------------------
 }

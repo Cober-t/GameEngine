@@ -44,8 +44,8 @@ namespace Cober {
         virtual void ImGuiRenderDrawData(ImDrawData* drawData) = 0;
 
 		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t heigth) = 0;
-		virtual void SetClearColor(glm::vec4 color) = 0;
-		virtual void SetClearColor(float red, float green, float blue, float black = 255.0f) = 0;
+		virtual void SetClearColor(glm::vec4 color = glm::vec4(255.0f)) = 0;
+		virtual void SetClearColor(float red = 255.0f, float green = 255.0f, float blue = 255.0f, float alpha = 255.0f) = 0;
 
 		virtual void DrawTriangles(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) = 0;
 		virtual void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) = 0;
