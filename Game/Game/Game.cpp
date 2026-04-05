@@ -4,8 +4,8 @@
 Game::Game() : Layer("Game application") 
 {
 	m_MousePosition = glm::vec2(0.0f);
-	float screenWidth = EngineApp::Get().GetWindow().GetWidth();
-	float screenHeight = EngineApp::Get().GetWindow().GetHeight();
+	float screenWidth = EngineApp::GetWindow().GetWidth();
+	float screenHeight = EngineApp::GetWindow().GetHeight();
 	m_DefaultCamera = CreateRef<GameCamera>(45.0f, screenWidth, screenHeight, 0.01f, 1000.0f, GlobalCamera::perspective);
 
 #if 0
@@ -45,7 +45,7 @@ void Game::OnUpdate(const Timestep& ts)
 	m_ActiveScene->OnUpdateSimulation(ts, m_DefaultCamera);
 
 	// Get Selected Entity using inverted coordinates...
-	int pixelData = m_Fbo->ReadPixel(1, m_MousePosition.x, EngineApp::Get().GetWindow().GetHeight() - m_MousePosition.y);
+	int pixelData = m_Fbo->ReadPixel(1, m_MousePosition.x, EngineApp::GetWindow().GetHeight() - m_MousePosition.y);
 	LOG_WARNING("{0} {1} {2}", pixelData, m_MousePosition.x, m_MousePosition.y);
 
 	// Unbind Framebuffer...

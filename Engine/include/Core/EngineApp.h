@@ -117,8 +117,7 @@ namespace Cober
 		ImGuiLayer* GetImGuiLayer() { return m_GuiLayer.get(); }
 		const ImGuiLayer* GetImGuiLayer() const { return m_GuiLayer.get(); }
 
-		Window& GetWindow() { return *m_Window; }
-		const Window& GetWindow() const { return *m_Window; }
+		static Window& GetWindow() { return *s_window; }
 
 		void  SetDebugMode(bool debugMode)  { m_DebugMode = debugMode; }
 		bool& IsDebugMode() { return m_DebugMode; }
@@ -140,7 +139,7 @@ namespace Cober
 		AppSpecification m_Specification {};
 		Profiler m_profiler {};
 		
-		Unique<Window> m_Window {};
+		static Unique<Window> s_window;
 		Unique<ImGuiLayer> m_GuiLayer {};
 		LayerStack m_LayerStack {};
 		Unique<Timestep> m_TimeStep {};

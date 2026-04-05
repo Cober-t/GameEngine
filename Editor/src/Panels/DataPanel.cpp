@@ -42,7 +42,7 @@ namespace Cober {
 		// ImGui::Text("Fonts Loaded: %i", Font::GetFontLoadedCount());
 		ImGui::Text("Textures Loaded: %i", Render2D::GetStats().TexturesLoadedOnScene);
 		ImGui::Spacing();
-		ImGui::Text("Screen size:\nX: %i Y: %i", EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight());
+		ImGui::Text("Screen size:\nX: %i Y: %i", EngineApp::GetWindow().GetWidth(), EngineApp::GetWindow().GetHeight());
 		ImGui::Text("Mouse Coords:\nX: %i Y: %i", mouseX, mouseY);
 
 		 std::string name = "None";

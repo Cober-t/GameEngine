@@ -6,6 +6,7 @@
 namespace Cober 
 {
     EngineApp* EngineApp::s_Instance = nullptr;
+    Unique<Window> EngineApp::s_window = nullptr;
 	EngineApp::EngineState EngineApp::m_EngineState = EngineApp::EngineState::RUNNING;
     EngineApp::SceneMode   EngineApp::m_SceneMode   = EngineApp::SceneMode::PLAYING;
 
@@ -27,11 +28,11 @@ namespace Cober
 
         m_TimeStep = CreateUnique<Timestep>();
 
-        m_Window = CreateUnique<Window>(
+        s_window = CreateUnique<Window>(
             WindowProps(m_Specification.Name, m_Specification.Width, m_Specification.Height)
         );
 
-        RenderGlobals::Init(m_Window->GetRawWindow(), m_Window->GetContext().get()->GetDevice());
+        RenderGlobals::Init(s_window->GetRawWindow(), s_window->GetContext().get()->GetDevice());
 		//Render2D::Start();
     }
 
@@ -154,7 +155,7 @@ namespace Cober
 
         RunRender(ts);
 
-        m_Window->OnUpdate();
+        s_window->OnUpdate();
     }
 
     // --------------------------------------------------------------------------------------
@@ -261,6 +262,7 @@ namespace Cober
         SetMinimized(false);
 
         if (!IsPlayMode()) {
+            s_window->SetSize(event.GetWidth(), event.GetHeight());
             RenderGlobals::SetViewport(event.GetWidth(), event.GetHeight());
         }
 

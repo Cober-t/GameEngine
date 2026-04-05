@@ -43,7 +43,13 @@ namespace Cober {
 		std::string& GetTitle() { return m_Data.Title; }	
 		uint32_t GetWidth() const { return m_Data.Width; }
 		uint32_t GetHeight() const { return m_Data.Height; }
+		void SetWidth(int width) { m_Data.Width = width; }
+		void SetHeight(int height) { m_Data.Height = height; }
+		void SetSize(int w, int h) { m_Data.Width = w; m_Data.Height = h; }
+
 		bool GetVsync() const { return m_Data.VSync; }
+		 // Move this to Render API
+		void SetVsync(bool vsync) { m_Data.VSync = vsync; }
 		SDL_Window* GetRawWindow() const { return m_Window; }
 		Unique<GraphicsContext>& GetContext() { return m_Context; }
 

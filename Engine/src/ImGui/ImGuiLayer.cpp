@@ -2,7 +2,6 @@
 #include "ImGui/ImGuiLayer.h"
 
 #include "Core/EngineApp.h"
-#include "Core/Window.h"
 #include "Render/GraphicsContext.h"
 #include "Events/KeyEvents.h"
 #include "Events/MouseEvents.h"
@@ -47,10 +46,7 @@ namespace Cober
 
 		ImGui::StyleColorsDark();
 
-		Window& window = EngineApp::Get().GetWindow();
-		SDL_Window* sdlWindow = window.GetRawWindow();
-
-		ImGui_ImplSDL3_InitForSDLGPU(sdlWindow);
+		ImGui_ImplSDL3_InitForSDLGPU(EngineApp::GetWindow().GetRawWindow());
 		RenderGlobals::ImGuiInit();
 
 		m_Initialized = true;
@@ -122,12 +118,10 @@ namespace Cober
 			return;
 		}
 
-		Window& window = EngineApp::Get().GetWindow();
-
 		ImGuiIO& io = ImGui::GetIO();
 		io.DisplaySize = ImVec2(
-			static_cast<float>(window.GetWidth()),
-			static_cast<float>(window.GetHeight())
+			static_cast<float>(EngineApp::GetWindow().GetWidth()),
+			static_cast<float>(EngineApp::GetWindow().GetHeight())
 		);
 
 		ImGui::Render();

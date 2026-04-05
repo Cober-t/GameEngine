@@ -18,7 +18,7 @@ namespace Cober
             case SDL_EVENT_QUIT:
                 return CreateUnique<WindowCloseEvent>();
             case SDL_EVENT_WINDOW_CLOSE_REQUESTED: {
-                if (raw.window.windowID == SDL_GetWindowID(EngineApp::Get().GetWindow().GetRawWindow())) {
+                if (raw.window.windowID == SDL_GetWindowID(EngineApp::GetWindow().GetRawWindow())) {
                     return CreateUnique<WindowCloseEvent>();
                 }
             }

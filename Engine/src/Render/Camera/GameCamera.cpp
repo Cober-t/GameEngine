@@ -167,7 +167,7 @@ namespace Cober {
 
 		if (Input::IsKeyDown(KeyCode::LeftControl) && Input::IsKeyPressed(KeyCode::F))
 		{
-			EngineApp::Get().GetWindow().ChangeFullScreen();
+			EngineApp::GetWindow().ChangeFullScreen();
 		}
 
 
@@ -177,8 +177,8 @@ namespace Cober {
 
 		if (Input::IsKeyDown(KeyCode::LeftControl) && Input::IsKeyPressed(KeyCode::P))
 		{
-			float screenWidth = EngineApp::Get().GetWindow().GetWidth();
-			float screenHeight = EngineApp::Get().GetWindow().GetHeight();
+			float screenWidth = EngineApp::GetWindow().GetWidth();
+			float screenHeight = EngineApp::GetWindow().GetHeight();
 			float aspectRatio = screenWidth / screenHeight;
 			LOG_WARNING("SWidth {0} - SHeight {1} - Ratio {2} - Persp {3}", screenWidth, screenHeight, aspectRatio, IsPerspective());
 			// LOG_WARNING("CamWidth {0} - CamHeight {1} - Ratio {2} - Persp {3}", GetSettings().width, GetSettings().height, 

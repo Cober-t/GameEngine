@@ -12,7 +12,7 @@ namespace Cober {
 
 	Editor::Editor() : Layer("Editor")
 	{
-		// m_EditorCamera = CreateUnique<EditorCamera>(45.0f, EngineApp::Get().GetWindow().GetWidth(), EngineApp::Get().GetWindow().GetHeight(), 0.01f, 1000.0f, GlobalCamera::perspective);
+		// m_EditorCamera = CreateUnique<EditorCamera>(45.0f, EngineApp::GetWindow().GetWidth(), EngineApp::GetWindow().GetHeight(), 0.01f, 1000.0f, GlobalCamera::perspective);
 		// m_CameraActive = m_EditorCamera;
 
 		// TODO: Needs to load textures, fix render api first

@@ -23,7 +23,7 @@
 // 		m_Reload = false;
 // 		m_ShowDemoWindow = false;
 
-// 		m_Settings.Vsync = EngineApp::Get().GetWindow().GetVsync();
+// 		m_Settings.Vsync = EngineApp::GetWindow().GetVsync();
 
 // 		std::filesystem::path solutionDirPath = PathService::ProjectRoot();
 // 		m_BuildFileCommand = solutionDirPath / "setup" / "Compile.bat";
@@ -128,10 +128,10 @@
 			
 
 // 			if (ImGui::Checkbox("Fullscreen", &m_Settings.Fullscreen))
-// 				EngineApp::Get().GetWindow().ChangeFullScreen();
+// 				EngineApp::.GetWindow().ChangeFullScreen();
 			
 // 			if (ImGui::Checkbox("VSYNC", &m_Settings.Vsync))
-// 				EngineApp::Get().GetWindow().SetVSync(m_Settings.Vsync);
+// 				EngineApp::GetWindow().SetVSync(m_Settings.Vsync);
 
 // 			if (ImGui::MenuItem("Build Game"))
 // 			{
