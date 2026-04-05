@@ -43,6 +43,7 @@
 #define CB_PROFILE_SCOPE(name) ::Cober::ScopeTimer timer##__LINE__(name)
 #define CB_PROFILE_FUNCTION()  CB_PROFILE_SCOPE(__FUNCTION__)
 
+
 namespace Cober {
 
 	template<typename T>

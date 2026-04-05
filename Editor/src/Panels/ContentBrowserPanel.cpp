@@ -53,7 +53,7 @@ namespace Cober {
 		{
 			ImTextureRef* texRef = new ImTextureRef(m_AssetIconMap["backwards"]->GetRendererID());
 			const char* strID = "backwards";
-			if (ImGui::ImageButton(strID, texRef, ImVec2(18.0f, 18.0f), { 0, 1 }, { 1, 0 }))
+			if (ImGui::ImageButton(strID, texRef, ImVec2(18.0f, 18.0f), { 0, 0 }, { 1, 1 }))
 			{
 				m_CurrentDirectory = m_CurrentDirectory.parent_path().string() + "\\";
 				m_TextureFolderContentHolder.clear();
@@ -62,7 +62,7 @@ namespace Cober {
 		else
 		{
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f)); // Export global colors
-			ImGui::Image((ImTextureID)m_AssetIconMap["backwards"]->GetRendererID(), ImVec2(18.0f, 18.0f), { 0, 1 }, { 1, 0 });
+			ImGui::Image((ImTextureID)m_AssetIconMap["backwards"]->GetRendererID(), ImVec2(18.0f, 18.0f), { 0, 0 }, { 1, 1 });
 			ImGui::PopStyleColor();
 		}
 
@@ -101,7 +101,7 @@ namespace Cober {
 			{
 				ImTextureRef* texRef = new ImTextureRef(m_AssetIconMap["folder"]->GetRendererID());
 				const char* strID = "folder";
-				ImGui::ImageButton(strID, texRef, { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+				ImGui::ImageButton(strID, texRef, { thumbnailSize, thumbnailSize }, { 0, 0 }, { 1, 1 });
 			}
 			else
 			{
@@ -116,13 +116,13 @@ namespace Cober {
 					
 					ImTextureRef* texRef = new ImTextureRef(m_TextureFolderContentHolder[texturePath.string()]->GetRendererID());
 					const char* strID = "imageFile";
-					ImGui::ImageButton(strID, texRef, { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+					ImGui::ImageButton(strID, texRef, { thumbnailSize, thumbnailSize }, { 0, 0 }, { 1, 1 });
 				}
 				else {
 
 					ImTextureRef* texRef = new ImTextureRef(m_AssetIconMap["file"]->GetRendererID());
 					const char* strID = "file";
-					ImGui::ImageButton(strID, texRef, { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+					ImGui::ImageButton(strID, texRef, { thumbnailSize, thumbnailSize }, { 0, 0 }, { 1, 1 });
 				}
 			}
 

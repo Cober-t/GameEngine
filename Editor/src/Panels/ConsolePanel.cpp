@@ -68,8 +68,9 @@ namespace Cober {
 
 		ImTextureRef* texRef = new ImTextureRef(m_AssetIconMap[iconKey]->GetRendererID());
 		const char* strID = "iconKey";
-		if (ImGui::ImageButton(strID, texRef, ImVec2(18.0f, 18.0f), { 0, 1 }, { 1, 0 }))
+		if (ImGui::ImageButton(strID, texRef, ImVec2(18.0f, 18.0f), { 0, 0 }, { 1, 1 })) {
 			isActive = isActive == true ? false : true;
+		}
 
 		ImGui::PopStyleColor();
 	}
@@ -81,7 +82,7 @@ namespace Cober {
 
 		ImTextureRef* texRef = new ImTextureRef(m_AssetIconMap["clear"]->GetRendererID());
 		const char* strID = "clear";
-		if (ImGui::ImageButton(strID, texRef, ImVec2(18.0f, 18.0f), { 0, 1 }, { 1, 0 })) {
+		if (ImGui::ImageButton(strID, texRef, ImVec2(18.0f, 18.0f), { 0, 0 }, { 1, 1 })) {
 			Log::ClearLogMessages();
 		}
 

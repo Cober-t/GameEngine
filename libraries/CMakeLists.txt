@@ -203,17 +203,37 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/nlohmann/include OR EXISTS ${CMAKE_CURRENT
 endif()
 
 # STB libraries - Header-only imaging libraries
+# STB libraries - Header-only imaging libraries
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/stb_image)
     message(STATUS "Adding STB Image library (header-only)")
     add_library(stb_image INTERFACE)
-    target_include_directories(stb_image INTERFACE)
-     if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/stb_image/include)
-        target_include_directories(ImGui PUBLIC stb_image/include)
+
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/stb_image/include/stb_image.h)
+        target_include_directories(stb_image INTERFACE
+            ${CMAKE_CURRENT_SOURCE_DIR}/stb_image/include
+        )
+    elseif(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/stb_image/stb_image.h)
+        target_include_directories(stb_image INTERFACE
+            ${CMAKE_CURRENT_SOURCE_DIR}/stb_image
+        )
+    else()
+        message(FATAL_ERROR "stb_image.h not found in stb_image/include or stb_image/")
     endif()
-    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/stb_image)
-        target_include_directories(ImGui PUBLIC stb_image)
-    endif()
+
+    set_target_properties(stb_image PROPERTIES FOLDER "Dependencies")
 endif()
+
+# if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/stb_image)
+#     message(STATUS "Adding STB Image library (header-only)")
+#     add_library(stb_image INTERFACE)
+#     target_include_directories(stb_image INTERFACE)
+#      if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/stb_image/include)
+#         target_include_directories(ImGui PUBLIC stb_image/include)
+#     endif()
+#     if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/stb_image)
+#         target_include_directories(ImGui PUBLIC stb_image)
+#     endif()
+# endif()
 
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/stb_truetype)
     message(STATUS "Adding STB TrueType library (header-only)")

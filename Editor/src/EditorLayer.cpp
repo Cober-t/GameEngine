@@ -20,10 +20,10 @@ namespace Cober {
 
 		// TODO: Needs to load textures, fix render api first
 		// new ViewportPanel();
-		new DataPanel();
-		new ConsolePanel();
+		// new DataPanel();
+		// new ConsolePanel();
 		// new SceneHierarchyPanel();
-		new ContentBrowserPanel();
+		// new ContentBrowserPanel();
 		// new MenuPanel();
 
 		// new Debug2DPhysics();
@@ -35,7 +35,7 @@ namespace Cober {
 		// m_ActiveScene = Scene::Load(EngineApp::Get().GetSpecification().StartupScene.string());
 
 		// m_ActiveScene->OnRuntimeStart();
-		m_EditorScene = m_ActiveScene;
+		// m_EditorScene = m_ActiveScene;
 
 		// Primitive::Grid::Init();
 		// ViewportPanel::Get().CreateFramebuffer(m_EditorCamera->m_ViewportWidth, m_EditorCamera->m_ViewportHeight);
@@ -45,13 +45,13 @@ namespace Cober {
 
 	void Editor::OnDetach() 
 	{
-		m_ActiveScene->OnRuntimeStop();
+		// m_ActiveScene->OnRuntimeStop();
 		// ViewportPanel::Get().UnbindFramebuffer();
 
-		m_ActiveScene  = nullptr;
-		m_EditorScene  = nullptr;
-		m_EditorCamera = nullptr;
-		m_CameraActive = nullptr;
+		// m_ActiveScene  = nullptr;
+		// m_EditorScene  = nullptr;
+		// m_EditorCamera = nullptr;
+		// m_CameraActive = nullptr;
 
 		// EditorResources::Shutdown();
 

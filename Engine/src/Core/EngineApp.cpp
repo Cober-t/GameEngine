@@ -9,7 +9,6 @@ namespace Cober
     Unique<Window> EngineApp::s_window = nullptr;
 	EngineApp::EngineState EngineApp::m_EngineState = EngineApp::EngineState::RUNNING;
     EngineApp::SceneMode   EngineApp::m_SceneMode   = EngineApp::SceneMode::PLAYING;
-
     
     // --------------------------------------------------------------------------------------
 
@@ -33,7 +32,7 @@ namespace Cober
         );
 
         RenderGlobals::Init(s_window->GetRawWindow(), s_window->GetContext().get()->GetDevice());
-		//Render2D::Start();
+		// Render2D::Start();
     }
 
     // --------------------------------------------------------------------------------------

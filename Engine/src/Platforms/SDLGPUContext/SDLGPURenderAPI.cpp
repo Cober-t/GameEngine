@@ -1,5 +1,11 @@
+
 #include <pch.h>
 #include "Platforms/SDLGPU/SDLGPURenderAPI.h"
+#include "Platforms/SDLGPU/SDLGPUBuffer.h"
+#include "Platforms/SDLGPU/SDLGPUVertexArray.h"
+#include "Platforms/SDLGPU/SDLGPUTexture.h"
+#include "Platforms/SDLGPU/SDLGPUShader.h"
+#include "Platforms/SDLGPU/SDLGPUFramebuffer.h"
 #include "Core/EngineApp.h"
 
 #include <SDL3/SDL_gpu.h>
@@ -7,136 +13,71 @@
 #include <imgui/imgui.h>
 #include <backends/imgui_impl_sdlgpu3.h>
 
-namespace Cober 
-{
-	// void OpenGLMessageCallback(
-	// 	unsigned source,
-	// 	unsigned type,
-	// 	unsigned id,
-	// 	unsigned severity,
-	// 	int length,
-	// 	const char* message,
-	// 	const void* userParam)
-	// {
-	// 	switch (severity)
-	// 	{
-	// 		case GL_DEBUG_SEVERITY_HIGH:         LOG_CORE_CRITICAL(message); return;
-	// 		case GL_DEBUG_SEVERITY_MEDIUM:       LOG_CORE_ERROR(message); return;
-	// 		case GL_DEBUG_SEVERITY_LOW:          LOG_CORE_WARNING(message); return;
-	// 		case GL_DEBUG_SEVERITY_NOTIFICATION: LOG_CORE_TRACE(message); return;
-	// 	}
-		
-	// 	LOG_CORE_ASSERT(false, "Unknown severity level!");
-	// }
-    
-    // --------------------------------------------------------------------------------------
+namespace Cober {
 
-	void SDLGPURenderAPI::Init(void* window, void* context) 
-	{
-        m_windowHandle = static_cast<SDL_Window*>(window);
-        LOG_CORE_ASSERT(m_windowHandle, "Main Window does not exists");
+    SDLGPURenderAPI* SDLGPURenderAPI::s_Instance = nullptr;
+
+    void SDLGPURenderAPI::Init(void* window, void* context)
+    {
+        m_WindowHandle = static_cast<SDL_Window*>(window);
+        LOG_CORE_ASSERT(m_WindowHandle, "Main window is null");
 
         m_GPUDevice = static_cast<SDL_GPUDevice*>(context);
-        // LOG_CORE_ASSERT(m_GPUDevice, "Window GPU Device does not exists");
+        LOG_CORE_ASSERT(m_GPUDevice, "GPU device is null");
 
-        m_frame = new SDLGPUFrame();
+        s_Instance = this;
+        LOG_CORE_TRACE("Render API init (SDL_GPU)");
+    }
 
-		LOG_CORE_TRACE("Render API init (Graphics Pipeline Render API)");
-	}
-
-    // --------------------------------------------------------------------------------------
-
-	void SDLGPURenderAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) 
-	{
-		// glViewport(0, 0, width, height);
-	}
-
-    // --------------------------------------------------------------------------------------
-
-	void SDLGPURenderAPI::SetClearColor(glm::vec4 color) 
-	{
-		m_clearColor = { color.x, color.y, color.z, color.a };
-	}
-
-    // --------------------------------------------------------------------------------------
-
-	void SDLGPURenderAPI::SetClearColor(float red, float green, float blue, float black) 
-	{
-		m_clearColor = { red, green , blue, black };
-	}
-
-    // --------------------------------------------------------------------------------------
-
-	void SDLGPURenderAPI::Clear() 
-	{
-
-	}
-
-    // --------------------------------------------------------------------------------------
+    void SDLGPURenderAPI::Clear()
+    {
+        // Explicit clears are pass-scoped in SDL_GPU.
+    }
 
     bool SDLGPURenderAPI::BeginFrame()
     {
-        // m_frame->RenderPass = nullptr;
-        m_frame->CommandBuffer = SDL_AcquireGPUCommandBuffer(m_GPUDevice);
-        LOG_CORE_ASSERT(m_frame->CommandBuffer, "Command Buffer couldn't be acquired");
+        m_Frame = {};
+        m_Frame.CommandBuffer = SDL_AcquireGPUCommandBuffer(m_GPUDevice);
+        LOG_CORE_ASSERT(m_Frame.CommandBuffer, "SDL_AcquireGPUCommandBuffer failed: {0}", SDL_GetError());
 
         const bool ok = SDL_WaitAndAcquireGPUSwapchainTexture(
-            m_frame->CommandBuffer,
-            m_windowHandle,
-            &m_frame->SwapchainTexture,
+            m_Frame.CommandBuffer,
+            m_WindowHandle,
+            &m_Frame.SwapchainTexture,
             nullptr,
             nullptr
         );
-        LOG_CORE_ASSERT(ok, "Swapchain acquire failed");
+        LOG_CORE_ASSERT(ok, "SDL_WaitAndAcquireGPUSwapchainTexture failed: {0}", SDL_GetError());
 
+        m_IsRenderingToSwapchain = false;
         return true;
     }
 
-    // --------------------------------------------------------------------------------------
-
-    void SDLGPURenderAPI::BeginMainRenderPass() 
+    void SDLGPURenderAPI::BeginMainRenderPass()
     {
-        if (EngineApp::Get().IsMinimized()) {
-            return;
-        }
-        // LOG_CORE_ASSERT(m_frame->CommandBuffer, "No command buffer");
-
-        SDL_GPUColorTargetInfo targetInfo = {};
-        targetInfo.texture = m_frame->SwapchainTexture;
-        targetInfo.clear_color = SDL_FColor{ m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a };
-        targetInfo.load_op = SDL_GPU_LOADOP_CLEAR;
-        targetInfo.store_op = SDL_GPU_STOREOP_STORE;
-
-        m_frame->RenderPass = SDL_BeginGPURenderPass(m_frame->CommandBuffer, &targetInfo, 1, nullptr);
-        LOG_CORE_ASSERT(m_frame->RenderPass, "RenderPass couldn't be acquired");
+        EnsureMainRenderPass();
     }
 
-    // --------------------------------------------------------------------------------------
-
-    void SDLGPURenderAPI::EndFrame() 
+    void SDLGPURenderAPI::EndFrame()
     {
-        if (m_frame->RenderPass && !EngineApp::Get().IsMinimized()) {
-            SDL_EndGPURenderPass(m_frame->RenderPass);
+        EndActiveRenderPass();
+
+        if (m_Frame.CommandBuffer)
+        {
+            SDL_SubmitGPUCommandBuffer(m_Frame.CommandBuffer);
         }
 
-        if (m_frame->CommandBuffer) {
-            SDL_SubmitGPUCommandBuffer(m_frame->CommandBuffer);
-        }
-
-        // m_frame->RenderPass = nullptr;
-        // m_frame->SwapchainTexture = nullptr;
-        // m_frame->CommandBuffer = nullptr;
+        m_Frame = {};
+        m_IsRenderingToSwapchain = false;
     }
-
-    // --------------------------------------------------------------------------------------
 
     void SDLGPURenderAPI::ImGuiInit()
     {
-        LOG_CORE_ASSERT(m_windowHandle, "ImGuiInit called before Window creation");
+        LOG_CORE_ASSERT(m_WindowHandle, "ImGuiInit called before window creation");
         LOG_CORE_ASSERT(m_GPUDevice, "ImGuiInit called before GPU device creation");
 
         ImGui_ImplSDLGPU3_InitInfo initInfo = {};
-        initInfo.ColorTargetFormat = SDL_GetGPUSwapchainTextureFormat(m_GPUDevice, m_windowHandle);
+        initInfo.ColorTargetFormat = SDL_GetGPUSwapchainTextureFormat(m_GPUDevice, m_WindowHandle);
         initInfo.Device = m_GPUDevice;
         initInfo.MSAASamples = SDL_GPU_SAMPLECOUNT_1;
 
@@ -146,11 +87,10 @@ namespace Cober
         m_ImGuiInitialized = true;
     }
 
-    // --------------------------------------------------------------------------------------
-
     void SDLGPURenderAPI::ImGuiShutdown()
     {
-        if (!m_ImGuiInitialized) {
+        if (!m_ImGuiInitialized)
+        {
             return;
         }
 
@@ -158,94 +98,310 @@ namespace Cober
         m_ImGuiInitialized = false;
     }
 
-    // --------------------------------------------------------------------------------------
-
     void SDLGPURenderAPI::ImGuiNewFrame()
     {
         LOG_CORE_ASSERT(m_ImGuiInitialized, "ImGuiNewFrame called before ImGuiInit");
         ImGui_ImplSDLGPU3_NewFrame();
     }
 
-    // --------------------------------------------------------------------------------------
-
     void SDLGPURenderAPI::ImGuiPrepareDrawData(ImDrawData* drawData)
     {
-        if (EngineApp::Get().IsMinimized()) {
+        if (EngineApp::Get().IsMinimized() || !drawData || !m_Frame.CommandBuffer)
+        {
             return;
         }
 
-        LOG_CORE_ASSERT(drawData, "ImGUI no draw data available!");
-        if (!m_frame->SwapchainTexture && EngineApp::Get().IsMinimized()) {
-            return;
-        }
-
-        ImGui_ImplSDLGPU3_PrepareDrawData(drawData, m_frame->CommandBuffer);
+        ImGui_ImplSDLGPU3_PrepareDrawData(drawData, m_Frame.CommandBuffer);
     }
-
-    // --------------------------------------------------------------------------------------
 
     void SDLGPURenderAPI::ImGuiRenderDrawData(ImDrawData* drawData)
     {
-        if (!drawData || !m_frame->CommandBuffer || !m_frame->RenderPass)
-        return;
+        if (!drawData)
+        {
+            return;
+        }
 
-        ImGui_ImplSDLGPU3_RenderDrawData(drawData, m_frame->CommandBuffer, m_frame->RenderPass);
+        EnsureMainRenderPass();
+        if (!m_Frame.RenderPass)
+        {
+            return;
+        }
+
+        ImGui_ImplSDLGPU3_RenderDrawData(drawData, m_Frame.CommandBuffer, m_Frame.RenderPass);
     }
 
-    // --------------------------------------------------------------------------------------
-    
-	void SDLGPURenderAPI::DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount)
-	{
-	// 	vertexArray->Bind();
-	// 	uint32_t count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
-	// 	glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
-	}
-	
-    // --------------------------------------------------------------------------------------
+    void SDLGPURenderAPI::SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
+    {
+        m_Viewport = { x, y, width, height };
+        ApplyViewport();
+    }
 
-	void SDLGPURenderAPI::DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
-	{
-		// vertexArray->Bind();
-		// glDrawArrays(GL_LINES, 0, vertexCount);
-	}
+    void SDLGPURenderAPI::SetClearColor(glm::vec4 color)
+    {
+        m_ClearColor = color;
+    }
 
-    // --------------------------------------------------------------------------------------
+    void SDLGPURenderAPI::SetClearColor(float red, float green, float blue, float black)
+    {
+        m_ClearColor = { red, green, blue, black };
+    }
 
-	void SDLGPURenderAPI::DrawTriangles(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
-	{
-		// vertexArray->Bind();
-		// glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-	}
+    void SDLGPURenderAPI::DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount)
+    {
+        uint32_t drawCount = indexCount;
+        if (drawCount == 0)
+        {
+            auto sdlva = std::dynamic_pointer_cast<SDLGPUVertexArray>(vertexArray);
+            LOG_CORE_ASSERT(sdlva && sdlva->GetIndexBuffer(), "DrawIndexed requires an index buffer");
+            drawCount = sdlva->GetIndexBuffer()->GetCount();
+        }
 
-    // --------------------------------------------------------------------------------------
+        DrawInternal(vertexArray, drawCount, SDL_GPU_PRIMITIVETYPE_TRIANGLELIST, true);
+    }
 
-	void SDLGPURenderAPI::SetLineWidth(float width)
-	{
-		// glLineWidth(width);
-	}
+    void SDLGPURenderAPI::DrawTriangles(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
+    {
+        DrawInternal(vertexArray, vertexCount, SDL_GPU_PRIMITIVETYPE_TRIANGLELIST, false);
+    }
 
-    // --------------------------------------------------------------------------------------
+    void SDLGPURenderAPI::DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
+    {
+        DrawInternal(vertexArray, vertexCount, SDL_GPU_PRIMITIVETYPE_LINELIST, false);
+    }
 
-	void SDLGPURenderAPI::ClearErrors() 
-	{
-		// while (glGetError());
-	}
+    void SDLGPURenderAPI::SetLineWidth(float width)
+    {
+        m_LineWidth = width;
+        (void)m_LineWidth;
+    }
 
-    // --------------------------------------------------------------------------------------
+    void SDLGPURenderAPI::BeginFramebufferRenderPass(SDLGPUFramebuffer* framebuffer)
+    {
+        LOG_CORE_ASSERT(framebuffer, "Framebuffer render pass requested with null framebuffer");
+        EndActiveRenderPass();
 
-	void SDLGPURenderAPI::CheckErrors(const char* function) 
-	{
-		// while (GLenum error = glGetError()) {
-		// 	std::string fileName = (std::string)__FILE__;
-		// 	//std::string solutionDir = SOLUTION_DIR;
-		// 	//fileName = fileName.substr(solutionDir.length());
+        std::vector<SDL_GPUColorTargetInfo> colorInfos;
+        colorInfos.reserve(framebuffer->GetColorAttachmentCount());
 
-		// 	fileName = fileName.substr(fileName.find_last_of("\\") + 1);
-		// 	std::string errMessage = (const char*)glGetString(error);
-		// 	printf("%s", errMessage.c_str());
-		// 	LOG_CORE_ASSERT(false, "[OpenGL Error] (" + errMessage + ") " + function + " " + fileName);
-		// }
-	}
+        for (uint32_t i = 0; i < framebuffer->GetColorAttachmentCount(); ++i)
+        {
+            SDL_GPUColorTargetInfo target = {};
+            target.texture = framebuffer->GetColorAttachmentTexture(i);
+            target.clear_color = (i == 0)
+                ? SDL_FColor{ m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a }
+                : SDL_FColor{ -1.0f, 0.0f, 0.0f, 0.0f };
+            target.load_op = SDL_GPU_LOADOP_CLEAR;
+            target.store_op = SDL_GPU_STOREOP_STORE;
+            colorInfos.push_back(target);
+        }
 
-    // --------------------------------------------------------------------------------------
+        SDL_GPUDepthStencilTargetInfo depthTarget = {};
+        depthTarget.texture = framebuffer->GetDepthAttachmentTexture();
+        depthTarget.clear_depth = 1.0f;
+        depthTarget.load_op = SDL_GPU_LOADOP_CLEAR;
+        depthTarget.store_op = SDL_GPU_STOREOP_STORE;
+        depthTarget.stencil_load_op = SDL_GPU_LOADOP_CLEAR;
+        depthTarget.stencil_store_op = SDL_GPU_STOREOP_DONT_CARE;
+        depthTarget.clear_stencil = 0;
+        depthTarget.cycle = false;
+
+        m_Frame.RenderPass = SDL_BeginGPURenderPass(
+            m_Frame.CommandBuffer,
+            colorInfos.data(),
+            (uint32_t)colorInfos.size(),
+            depthTarget.texture ? &depthTarget : nullptr
+        );
+        LOG_CORE_ASSERT(m_Frame.RenderPass, "SDL_BeginGPURenderPass(framebuffer) failed: {0}", SDL_GetError());
+
+        m_ActivePassSignature = {};
+        m_ActivePassSignature.NumColorTargets = (uint32_t)framebuffer->GetColorAttachmentCount();
+        for (uint32_t i = 0; i < m_ActivePassSignature.NumColorTargets; ++i)
+        {
+            m_ActivePassSignature.ColorFormats[i] = (i == 0) ? SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM : SDL_GPU_TEXTUREFORMAT_R32_INT;
+        }
+        m_ActivePassSignature.HasDepth = framebuffer->GetDepthAttachmentTexture() != nullptr;
+        m_ActivePassSignature.DepthFormat = SDL_GPU_TEXTUREFORMAT_D24_UNORM_S8_UINT;
+        m_ActivePassSignature.Samples = 1;
+        m_IsRenderingToSwapchain = false;
+
+        ApplyViewport();
+    }
+
+    void SDLGPURenderAPI::EndActiveRenderPass()
+    {
+        if (m_Frame.RenderPass)
+        {
+            SDL_EndGPURenderPass(m_Frame.RenderPass);
+            m_Frame.RenderPass = nullptr;
+        }
+    }
+
+    SDLGPURenderAPI* SDLGPURenderAPI::Get()
+    {
+        return s_Instance;
+    }
+
+    void SDLGPURenderAPI::EnsureMainRenderPass()
+    {
+        if (EngineApp::Get().IsMinimized() || m_Frame.RenderPass || !m_Frame.SwapchainTexture)
+        {
+            return;
+        }
+
+        SDL_GPUColorTargetInfo targetInfo = {};
+        targetInfo.texture = m_Frame.SwapchainTexture;
+        targetInfo.clear_color = SDL_FColor{ m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a };
+        targetInfo.load_op = SDL_GPU_LOADOP_CLEAR;
+        targetInfo.store_op = SDL_GPU_STOREOP_STORE;
+
+        m_Frame.RenderPass = SDL_BeginGPURenderPass(m_Frame.CommandBuffer, &targetInfo, 1, nullptr);
+        LOG_CORE_ASSERT(m_Frame.RenderPass, "SDL_BeginGPURenderPass(swapchain) failed: {0}", SDL_GetError());
+
+        UpdatePassSignatureForSwapchain();
+        m_IsRenderingToSwapchain = true;
+        ApplyViewport();
+    }
+
+    void SDLGPURenderAPI::ApplyViewport()
+    {
+        if (!m_Frame.RenderPass || m_Viewport.z == 0 || m_Viewport.w == 0)
+        {
+            return;
+        }
+
+        SDL_GPUViewport viewport{};
+        viewport.x = (float)m_Viewport.x;
+        viewport.y = (float)m_Viewport.y;
+        viewport.w = (float)m_Viewport.z;
+        viewport.h = (float)m_Viewport.w;
+        viewport.min_depth = 0.0f;
+        viewport.max_depth = 1.0f;
+
+        SDL_SetGPUViewport(m_Frame.RenderPass, &viewport);
+    }
+
+    void SDLGPURenderAPI::UpdatePassSignatureForSwapchain()
+    {
+        m_ActivePassSignature = {};
+        m_ActivePassSignature.NumColorTargets = 1;
+        m_ActivePassSignature.ColorFormats[0] = SDL_GetGPUSwapchainTextureFormat(m_GPUDevice, m_WindowHandle);
+        m_ActivePassSignature.DepthFormat = SDL_GPU_TEXTUREFORMAT_INVALID;
+        m_ActivePassSignature.HasDepth = false;
+        m_ActivePassSignature.Samples = 1;
+    }
+
+    void SDLGPURenderAPI::DrawInternal(const Ref<VertexArray>& vertexArray, uint32_t count, uint32_t primitiveType, bool indexed)
+    {
+        EnsureMainRenderPass();
+
+        auto shader = SDLGPUShader::GetBoundShader();
+        auto sdlva = std::dynamic_pointer_cast<SDLGPUVertexArray>(vertexArray);
+        LOG_CORE_ASSERT(shader, "No shader is currently bound");
+        LOG_CORE_ASSERT(sdlva, "Expected SDLGPUVertexArray");
+
+        m_ActivePassSignature.PrimitiveType = primitiveType;
+        // Blend the first target for regular sprite-like rendering, but keep the integer picking target untouched.
+        m_ActivePassSignature.AlphaBlend = true;
+
+        SDL_GPUGraphicsPipeline* pipeline = const_cast<SDLGPUShader*>(shader)->GetOrCreatePipeline(*sdlva, m_ActivePassSignature);
+        SDL_BindGPUGraphicsPipeline(m_Frame.RenderPass, pipeline);
+
+        std::vector<SDL_GPUBufferBinding> vbBindings;
+        vbBindings.reserve(sdlva->GetVertexBuffers().size());
+
+        for (const auto& vb : sdlva->GetVertexBuffers())
+        {
+            auto sdlvb = std::dynamic_pointer_cast<SDLGPUVertexBuffer>(vb);
+            LOG_CORE_ASSERT(sdlvb, "Expected SDLGPUVertexBuffer");
+            sdlvb->EnsureUploaded(m_Frame.CommandBuffer, true);
+            vbBindings.push_back(SDL_GPUBufferBinding{
+                .buffer = sdlvb->GetGPUBuffer(),
+                .offset = 0
+            });
+        }
+
+        if (!vbBindings.empty())
+        {
+            SDL_BindGPUVertexBuffers(m_Frame.RenderPass, 0, vbBindings.data(), (uint32_t)vbBindings.size());
+        }
+
+        if (indexed)
+        {
+            auto sdlIndex = std::dynamic_pointer_cast<SDLGPUIndexBuffer>(sdlva->GetIndexBuffer());
+            LOG_CORE_ASSERT(sdlIndex, "Expected SDLGPUIndexBuffer");
+            sdlIndex->EnsureUploaded(m_Frame.CommandBuffer, false);
+
+            SDL_GPUBufferBinding buffBinding {};
+            buffBinding.buffer = sdlIndex->GetGPUBuffer();
+            buffBinding.offset = 0;
+            
+            SDL_BindGPUIndexBuffer(
+                m_Frame.RenderPass,
+                &buffBinding,
+                SDL_GPU_INDEXELEMENTSIZE_32BIT
+            );
+        }
+
+        for (uint32_t slot = 0; slot < shader->GetVertexUniformBufferCount(); ++slot)
+        {
+            const SDLGPUUniformBuffer* uniform = SDLGPUUniformBuffer::GetBound(slot);
+            if (uniform && !uniform->GetBytes().empty())
+            {
+                SDL_PushGPUVertexUniformData(
+                    m_Frame.CommandBuffer,
+                    slot,
+                    uniform->GetBytes().data(),
+                    (uint32_t)uniform->GetBytes().size()
+                );
+            }
+        }
+
+        for (uint32_t slot = 0; slot < shader->GetFragmentUniformBufferCount(); ++slot)
+        {
+            const SDLGPUUniformBuffer* uniform = SDLGPUUniformBuffer::GetBound(slot);
+            if (uniform && !uniform->GetBytes().empty())
+            {
+                SDL_PushGPUFragmentUniformData(
+                    m_Frame.CommandBuffer,
+                    slot,
+                    uniform->GetBytes().data(),
+                    (uint32_t)uniform->GetBytes().size()
+                );
+            }
+        }
+
+        if (shader->GetFragmentSamplerCount() > 0)
+        {
+            std::vector<SDL_GPUTextureSamplerBinding> samplerBindings(shader->GetFragmentSamplerCount());
+            for (uint32_t slot = 0; slot < shader->GetFragmentSamplerCount(); ++slot)
+            {
+                const auto* texture = SDLGPUTexture::GetBound(slot);
+                if (texture)
+                {
+                    const_cast<SDLGPUTexture*>(texture)->EnsureUploaded(m_Frame.CommandBuffer, true);
+                }
+
+                samplerBindings[slot] = SDL_GPUTextureSamplerBinding{
+                    .texture = SDLGPUTexture::GetRawBound(slot),
+                    .sampler = SDLGPUTexture::GetRawSampler(slot)
+                };
+            }
+
+            SDL_BindGPUFragmentSamplers(
+                m_Frame.RenderPass,
+                0,
+                samplerBindings.data(),
+                (uint32_t)samplerBindings.size()
+            );
+        }
+
+        if (indexed)
+        {
+            SDL_DrawGPUIndexedPrimitives(m_Frame.RenderPass, count, 1, 0, 0, 0);
+        }
+        else
+        {
+            SDL_DrawGPUPrimitives(m_Frame.RenderPass, count, 1, 0, 0);
+        }
+    }
 }

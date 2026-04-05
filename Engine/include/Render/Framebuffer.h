@@ -1,75 +1,77 @@
+
 #ifndef FRAMEBUFFER_H
 #define FRAMEBUFFER_H
 
+#include "Core/Core.h"
 
 namespace Cober {
 
-	enum class FramebufferTextureFormat
-	{
-		None = 0,
-
-		// Color
-		RGBA8,
-		RED_INTEGER,
-
-		// Depth/stencil
-		DEPTH24STENCIL8,
-
-		// Defaults
-		Depth = DEPTH24STENCIL8
-	};
-    
-
-	struct FramebufferTextureSpecification
-	{
-		FramebufferTextureSpecification() = default;
-		FramebufferTextureSpecification(FramebufferTextureFormat format)
-			: TextureFormat(format) {}
-
-		FramebufferTextureFormat TextureFormat = FramebufferTextureFormat::None;
-	};
-
-
-	struct FramebufferAttachmentSpecification
-	{
-		FramebufferAttachmentSpecification() = default;
-		FramebufferAttachmentSpecification(std::initializer_list<FramebufferTextureSpecification> attachments)
-			: Attachments(attachments) {}
-
-		std::vector<FramebufferTextureSpecification> Attachments;
-	};
-
-
-	struct FramebufferSpecification
-	{
-		uint32_t Width = 0, Height = 0;
-		FramebufferAttachmentSpecification Attachments;
-		uint32_t Samples = 1;
-
-		bool SwapChainTarget = false;
-	};
-
-
-	class CB_API Framebuffer 
+    enum class FramebufferTextureFormat
     {
-	public:
-		virtual ~Framebuffer() = default;
+        None = 0,
 
-		static Ref<Framebuffer> Create(uint32_t width, uint32_t height);
+        // Color
+        RGBA8,
+        RED_INTEGER,
 
-		virtual void Bind() = 0;
-		virtual void Unbind() = 0;
+        // Depth/stencil
+        DEPTH24STENCIL8,
 
-		virtual void Invalidate() = 0;
+        // Defaults
+        Depth = DEPTH24STENCIL8
+    };
 
-		virtual void Resize(uint32_t width, uint32_t height) = 0;
-		virtual int ReadPixel(uint32_t attachmentIndex, int x, int y) = 0;
 
-		virtual void ClearAttachment(uint32_t attachmentIndex, int value) = 0;
+    struct FramebufferTextureSpecification
+    {
+        FramebufferTextureSpecification() = default;
+        FramebufferTextureSpecification(FramebufferTextureFormat format)
+            : TextureFormat(format) {}
 
-		virtual uint32_t GetColorAttachmentRenderID(uint32_t index = 0) const = 0;
-		virtual const FramebufferSpecification& GetSpecification() = 0;
-	};
+        FramebufferTextureFormat TextureFormat = FramebufferTextureFormat::None;
+    };
+
+
+    struct FramebufferAttachmentSpecification
+    {
+        FramebufferAttachmentSpecification() = default;
+        FramebufferAttachmentSpecification(std::initializer_list<FramebufferTextureSpecification> attachments)
+            : Attachments(attachments) {}
+
+        std::vector<FramebufferTextureSpecification> Attachments;
+    };
+
+
+    struct FramebufferSpecification
+    {
+        uint32_t Width = 0, Height = 0;
+        FramebufferAttachmentSpecification Attachments {};
+        uint32_t Samples = 1;
+
+        bool SwapChainTarget = false;
+    };
+
+
+    class CB_API Framebuffer
+    {
+    public:
+        virtual ~Framebuffer() = default;
+
+        static Ref<Framebuffer> Create(uint32_t width, uint32_t height);
+
+        virtual void Bind() = 0;
+        virtual void Unbind() = 0;
+
+        virtual void Invalidate() = 0;
+
+        virtual void Resize(uint32_t width, uint32_t height) = 0;
+        virtual int ReadPixel(uint32_t attachmentIndex, int x, int y) = 0;
+
+        virtual void ClearAttachment(uint32_t attachmentIndex, int value) = 0;
+
+        virtual uintptr_t GetColorAttachmentRenderID(uint32_t index = 0) const = 0;
+        virtual const FramebufferSpecification& GetSpecification() = 0;
+    };
 }
 
 #endif

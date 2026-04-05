@@ -1,72 +1,89 @@
+
 #ifndef SDLGPU_RENDER_API_H
 #define SDLGPU_RENDER_API_H
 
 #include "Render/RenderAPI.h"
+#include "Platforms/SDLGPU/SDLGPUShader.h"
 
 struct SDL_Window;
 struct SDL_GPUDevice;
+struct SDL_GPUCommandBuffer;
+struct SDL_GPUTexture;
+struct SDL_GPURenderPass;
 struct ImDrawData;
 
-/**
- * @class SDLGRPURenderApi
- * @brief A class that performs specific calculations.
- * 
- * This class provides ....
- */
 namespace Cober {
-    
-    class VertexArray;
 
- 	class SDLGPURenderAPI : public RenderAPI 
- 	{
- 	public:
-		/**
-		 * @brief Init the render framework
-		 * @param ..
-		 * @return ..
-		 */
-		virtual void Init(void* window, void* context) override;
+    class SDLGPUFramebuffer;
 
-		virtual void Clear() override;
-	
-		virtual bool BeginFrame() override;
-		virtual void BeginMainRenderPass() override;
-		virtual void EndFrame() override;
-		
+    class SDLGPURenderAPI : public RenderAPI
+    {
+    public:
+        void Init(void* window, void* context) override;
+
+        void Clear() override;
+
+        bool BeginFrame() override;
+        void BeginMainRenderPass() override;
+        void EndFrame() override;
+
         // Dear ImGui renderer-backend hooks
-        virtual void ImGuiInit() override;
-        virtual void ImGuiShutdown() override;
-        virtual void ImGuiNewFrame() override;
-        virtual void ImGuiPrepareDrawData(ImDrawData* drawData) override;
-        virtual void ImGuiRenderDrawData(ImDrawData* drawData) override;
+        void ImGuiInit() override;
+        void ImGuiShutdown() override;
+        void ImGuiNewFrame() override;
+        void ImGuiPrepareDrawData(ImDrawData* drawData) override;
+        void ImGuiRenderDrawData(ImDrawData* drawData) override;
 
-		virtual void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) override;
-		virtual void SetClearColor(glm::vec4 color) override;
-		virtual void SetClearColor(float red, float green, float blue, float black) override;
+        void SetViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) override;
+        void SetClearColor(glm::vec4 color) override;
+        void SetClearColor(float red, float green, float blue, float black) override;
 
-		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) override;
-		virtual void DrawTriangles(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) override;
-		virtual void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) override;
-		
-		virtual void SetLineWidth(float width) override;
+        void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) override;
+        void DrawTriangles(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) override;
+        void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) override;
 
-		virtual void ClearErrors() override;
-		virtual void CheckErrors(const char* function) override;
+        void SetLineWidth(float width) override;
 
-	private:
-		struct SDLGPUFrame
+        void ClearErrors() override {}
+        void CheckErrors(const char* function) override {}
+
+        void BeginFramebufferRenderPass(SDLGPUFramebuffer* framebuffer);
+        void EndActiveRenderPass();
+
+        SDL_GPUDevice* GetDevice() const { return m_GPUDevice; }
+        SDL_GPUCommandBuffer* GetCommandBuffer() const { return m_Frame.CommandBuffer; }
+        SDL_GPUTexture* GetSwapchainTexture() const { return m_Frame.SwapchainTexture; }
+
+        static SDLGPURenderAPI* Get();
+
+    private:
+        struct FrameState
         {
             SDL_GPUCommandBuffer* CommandBuffer = nullptr;
             SDL_GPUTexture* SwapchainTexture = nullptr;
             SDL_GPURenderPass* RenderPass = nullptr;
         };
-        SDLGPUFrame* m_frame = {};
-		SDL_Window* m_windowHandle = nullptr;
-		SDL_GPUDevice* m_GPUDevice = nullptr;
-		
+
+        void EnsureMainRenderPass();
+        void ApplyViewport();
+        void UpdatePassSignatureForSwapchain();
+        void DrawInternal(const Ref<VertexArray>& vertexArray, uint32_t count, uint32_t primitiveType, bool indexed);
+
+    private:
+        FrameState m_Frame;
+        SDL_Window* m_WindowHandle = nullptr;
+        SDL_GPUDevice* m_GPUDevice = nullptr;
+
         bool m_ImGuiInitialized = false;
-		glm::vec4 m_clearColor = {1.0f, 0.0f, 0.0f, 1.0f};
- 	};
+        glm::vec4 m_ClearColor = { 0.10f, 0.10f, 0.10f, 1.0f };
+        glm::uvec4 m_Viewport = { 0, 0, 0, 0 };
+        float m_LineWidth = 1.0f;
+
+        SDLGPUShaderPassSignature m_ActivePassSignature;
+        bool m_IsRenderingToSwapchain = false;
+
+        static SDLGPURenderAPI* s_Instance;
+    };
 }
 
 #endif

@@ -188,8 +188,8 @@ namespace Cober {
 								  (viewportPanelSize.y - m_ViewportSize.y) * 0.5f };
 		ImGui::SetCursorPos(contentRegionSize);
 
-		uint32_t textureID = m_Fbo->GetColorAttachmentRenderID();
-		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		uintptr_t textureID = m_Fbo->GetColorAttachmentRenderID();
+		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 0 }, ImVec2{ 1, 1 });
 
 		/////////////////////////
 		// Enable Camera Controls

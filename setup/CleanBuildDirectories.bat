@@ -1,3 +1,1 @@
-RMDIR /Q/S "../out"
-RMDIR /Q/S "../bin-int"
-RMDIR /Q/S "../bin"
+RMDIR /Q/S "../build"

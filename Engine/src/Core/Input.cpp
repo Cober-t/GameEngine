@@ -194,7 +194,7 @@ namespace Cober {
 
         // Controllers
         for (auto& [id, controller] : s_Controllers) {
-            for (auto& [button, data] : controller.ButtonStates){
+            for (auto& [button, data] : controller.ButtonStates) {
                 if (data.State == KeyState::Pressed)  { data.State = KeyState::Held; } else 
 				if (data.State == KeyState::Released) { data.State = KeyState::None; }
             }

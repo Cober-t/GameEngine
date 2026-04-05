@@ -3,10 +3,10 @@
 
 Game::Game() : Layer("Game application") 
 {
-	m_MousePosition = glm::vec2(0.0f);
-	float screenWidth = EngineApp::GetWindow().GetWidth();
-	float screenHeight = EngineApp::GetWindow().GetHeight();
-	m_DefaultCamera = CreateRef<GameCamera>(45.0f, screenWidth, screenHeight, 0.01f, 1000.0f, GlobalCamera::perspective);
+	// m_MousePosition = glm::vec2(0.0f);
+	// float screenWidth = EngineApp::GetWindow().GetWidth();
+	// float screenHeight = EngineApp::GetWindow().GetHeight();
+	// m_DefaultCamera = CreateRef<GameCamera>(45.0f, screenWidth, screenHeight, 0.01f, 1000.0f, GlobalCamera::perspective);
 
 #if 0
 	// Create Framebuffer...
@@ -17,15 +17,15 @@ Game::Game() : Layer("Game application")
 
 void Game::OnAttach() 
 {
-	m_ActiveScene = Scene::Load("SceneDefault.lua");
+	// m_ActiveScene = Scene::Load("SceneDefault.lua");
 }
 
 
 void Game::OnDetach()
 {
-	m_ActiveScene->OnSimulationStop();
-	m_ActiveScene = nullptr;
-	m_DefaultCamera = nullptr;
+	// m_ActiveScene->OnSimulationStop();
+	// m_ActiveScene = nullptr;
+	// m_DefaultCamera = nullptr;
 	LOG_INFO("Detached Game application Layer!");
 }
 
@@ -73,6 +73,6 @@ void Game::OnEvent(Event& event)
 		m_Fbo->Resize(screenWidth, screenHeight);
 	}
 
-	m_ActiveScene->OnEvent(event, m_DefaultCamera);
-	NativeScriptFn::OnEvent(m_ActiveScene.get(), event);
+	// m_ActiveScene->OnEvent(event, m_DefaultCamera);
+	// NativeScriptFn::OnEvent(m_ActiveScene.get(), event);
 }
