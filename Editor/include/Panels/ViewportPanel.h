@@ -32,7 +32,7 @@ namespace Cober {
 
 		void SetCursorEntity();
 		void MustResize(bool resize = true) { m_MustResize = resize; }; 
-		void PlayButtonBar(EngineApp::GameState gameState);
+		void PlayButtonBar();
 		inline bool AllowViewportCameraEvents() { return m_AllowViewportCameraEvents; }
 
 	private:

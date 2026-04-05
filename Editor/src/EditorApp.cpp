@@ -5,13 +5,12 @@
 
 namespace Cober {
 
-
 	class EditorApp : public EngineApp 
 	{
 	public:
 		EditorApp(const AppSpecification& specification) : EngineApp(specification)
 		{
-			EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
+			EngineApp::SetSceneMode(EngineApp::SceneMode::EDITOR);
 
 			PushLayer(CreateUnique<Editor>());
 		}

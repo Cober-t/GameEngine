@@ -7,11 +7,11 @@
 
 // #include "Core.h"
 #include "Core/Input.h"
+#include "Core/Profiler.h"
 
 #include "Core/Window.h"
 #include "Core/Timestep.h"
 #include "Core/LayerStack.h"
-#include <Core/Profiler.h>
 #include "ImGui/ImGuiLayer.h"
 
 #include "Events/ApplicationEvents.h"
@@ -22,7 +22,9 @@
 
 int main(int argc, char** argv);
 
-namespace Cober {
+namespace Cober 
+{
+	// --------------------------------------------------------------------------------------
 
 	struct AppCommandLineArgs
 	{
@@ -36,6 +38,8 @@ namespace Cober {
 		}
 	};
 
+	// --------------------------------------------------------------------------------------
+
 	struct AppSpecification
 	{
 		std::string Name = "Cober";
@@ -48,6 +52,7 @@ namespace Cober {
 		AppCommandLineArgs CommandLineArgs;
 	};
 
+	// --------------------------------------------------------------------------------------
 
 	static std::filesystem::path ParseProjectArg(const AppCommandLineArgs& args)
 	{
@@ -58,11 +63,18 @@ namespace Cober {
 		}
 		return {};
 	}
-
+	
+	/**
+	 * @class SDLGRPURenderApi
+	 * @brief A class that performs specific calculations.
+	 * 
+	 * This class provides ....
+	 */
 	class CB_API EngineApp
 	{
 	public:
-		enum class GameState { PLAY, EDITOR, RUNTIME_EDITOR, EXIT };
+		enum class EngineState { RUNNING, EXIT };
+		enum class SceneMode { EDITOR, SIMULATING, PLAYING, EXIT };
 
 	public:
 		EngineApp(const AppSpecification& specification);
@@ -79,10 +91,23 @@ namespace Cober {
 		void PushOverlay(Unique<Layer> layer);
 
 		void ProcessEvents();
-		void SetMinimized(bool minimized) { m_Minimized = minimized; }
-    	bool IsMinimized() const { return m_Minimized; }
+		inline void SetMinimized(bool minimized) { m_Minimized = minimized; }
+    	inline bool IsMinimized() const { return m_Minimized; }
 
-		void Close();
+		inline void Close() { m_EngineState = EngineState::EXIT; }
+
+		// Engine State and Editor Modes
+		EngineState GetEngineState() const { return m_EngineState; }
+
+		void SetSceneMode(SceneMode mode) { m_SceneMode = mode; }
+		SceneMode GetSceneMode() const { return m_SceneMode; }
+
+		static bool IsEditorMode()     { return m_SceneMode == SceneMode::EDITOR; }
+		static bool IsSimulationMode() { return m_SceneMode == SceneMode::SIMULATING; }
+		static bool IsPlayMode()       { return m_SceneMode == SceneMode::PLAYING; }
+		static bool IsEditor()         { return m_SceneMode == SceneMode::EDITOR || m_SceneMode == SceneMode::SIMULATING; }
+		static bool IsRunning() 	   { return m_SceneMode == SceneMode::SIMULATING || m_SceneMode == SceneMode::PLAYING; }
+		static bool IsSceneExit()	   { return m_SceneMode == SceneMode::EXIT; }
 
 		inline int GetFrames() { return m_TimeStep->GetFrames(); }
 
@@ -98,10 +123,9 @@ namespace Cober {
 		void  SetDebugMode(bool debugMode)  { m_DebugMode = debugMode; }
 		bool& IsDebugMode() { return m_DebugMode; }
 
-		inline void SetGameState(GameState state) { m_GameState = state; }
-		GameState GetGameState();
-
 	private:
+		bool IsAppRunning() { return m_EngineState == EngineState::RUNNING; }
+
 		// Functions
 		void Run(const Timestep& ts);
 		void RunEditor(const Timestep& ts);
@@ -115,17 +139,20 @@ namespace Cober {
 		// Properties
 		AppSpecification m_Specification {};
 		Profiler m_profiler {};
-		GameState m_GameState = GameState::EDITOR;
+		
 		Unique<Window> m_Window {};
 		Unique<ImGuiLayer> m_GuiLayer {};
 		LayerStack m_LayerStack {};
 		Unique<Timestep> m_TimeStep {};
-
+		
 		float m_LastFrameTime = 0.0f;
 		bool m_Minimized = false;
 		bool m_DebugMode = false;
-
+		
 	private:
+		static EngineState m_EngineState;
+		static SceneMode m_SceneMode;
+		
 		static EngineApp* s_Instance;
 		friend int ::main(int argc, char** argv);
 	};

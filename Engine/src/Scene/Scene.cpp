@@ -49,34 +49,20 @@ namespace Cober {
 		Ref<Scene> scene = SceneSerializer::Deserialize(sceneName);
 		scene->m_SceneName = sceneName;
 
-		if (scene)
-		{
-			switch(EngineApp::Get().GetGameState())
-			{
-				case EngineApp::GameState::EDITOR:
-					scene->OnRuntimeStart(); 
-					break;
-				case EngineApp::GameState::RUNTIME_EDITOR:
-					scene->OnSimulationStart();
-					break;
-				case EngineApp::GameState::PLAY:
-					scene->OnSimulationStart();
-					break;
-			}
-		}
+		if (EngineApp::IsEditorMode())         { scene->OnRuntimeStart();    } else
+		if (EngineApp::IsSimulationMode()) { scene->OnSimulationStart(); } else
+		if (EngineApp::IsPlayMode())       { scene->OnSimulationStart(); }
 			
 		return scene;
 	}
 
 	void Scene::Exit(Scene* scene)
 	{
-		if (EngineApp::Get().GetGameState() == EngineApp::GameState::PLAY)
-		{
-			EngineApp::Get().SetGameState(EngineApp::GameState::EXIT);
+		if (EngineApp::IsPlayMode()) {
+			EngineApp::Get().SetSceneMode(EngineApp::SceneMode::EXIT);
 			NativeScriptFn::FreeScriptLibrary();
-		}
-		else if (EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR)
-		{
+		} else 
+		if (EngineApp::IsSimulationMode()) {
 			scene->m_ExitFromRuntimeEditor = true;
 		}
 	}
@@ -392,8 +378,7 @@ namespace Cober {
 		/// TODO: FIX ALL COMPONENT BUGS FIRST TO AVOID VOID COPIES ERROR
 		// CopyComponentIfExists(AllComponents{}, newEntity, entity);
 
-		if (EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR || 
-		EngineApp::Get().GetGameState() == EngineApp::GameState::PLAY)
+		if (EngineApp::IsRunning())
 		{
 			// Necessary for the Physics World body count
 			Physics2D::InitEntity(newEntity);

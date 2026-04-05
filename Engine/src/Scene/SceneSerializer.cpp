@@ -573,9 +573,7 @@ namespace Cober {
 
 				EntitySerializer::DeserializeAllComponents(newEntity, loader);
 
-				if (newEntity.HasComponent<Rigidbody2D>() &&
-				   (EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR
-					|| EngineApp::Get().GetGameState() == EngineApp::GameState::PLAY))
+				if (newEntity.HasComponent<Rigidbody2D>() && EngineApp::Get().IsRunning())
 				{
 					Physics2D::InitEntity(newEntity);
 				}

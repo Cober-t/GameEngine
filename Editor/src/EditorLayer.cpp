@@ -74,9 +74,9 @@ namespace Cober {
 		// ImGui::SetCurrentContext(ImGuiLayer::GetContext());
 		// auto& colors = ImGui::GetStyle().Colors;
 
-		// switch (EngineApp::Get().GetGameState()) 
+		// switch (EngineApp::Get().GetSceneMode()) 
 		// {
-		// 	case EngineApp::GameState::EDITOR:
+		// 	case EngineApp::SceneMode::EDITOR:
 		// 	{
 		// 		colors[ImGuiCol_WindowBg] = ImGui::ColorConvertU32ToFloat4(Colors::Theme::titlebar);
 		// 		// m_EditorCamera->SetActive(ViewportPanel::Get().AllowViewportCameraEvents());
@@ -86,7 +86,7 @@ namespace Cober {
 		// 		// Primitive::Grid::Draw(m_EditorCamera);
 		// 		break;
 		// 	}
-		// 	case EngineApp::GameState::RUNTIME_EDITOR: 
+		// 	case EngineApp::SceneMode::SIMULATING: 
 		// 	{
 		// 		colors[ImGuiCol_WindowBg] = ImVec4(0, 0.0, 0.0, 0.268f);
 		// 		// m_ActiveScene->OnUpdateSimulation(ts, m_CameraActive);
@@ -114,7 +114,7 @@ namespace Cober {
 		
 		// MenuPanel::Get().OnGuiRender(m_EditorCamera);
 
-		// ViewportPanel::Get().PlayButtonBar(EngineApp::Get().GetGameState());
+		// ViewportPanel::Get().PlayButtonBar();
 
 		EndDockspace();
 	}
@@ -187,9 +187,7 @@ namespace Cober {
 
 	void Editor::OnEvent(Event& event)
 	{
-		// auto gameState = EngineApp::Get().GetGameState();
-
-		// if (gameState == EngineApp::GameState::EDITOR || gameState == EngineApp::GameState::RUNTIME_EDITOR)
+		// if (EngineApp::IsEditor())
 		// {
 		// 	if (m_AllowViewportCameraEvents)
 		// 		m_CameraActive->OnEvent(event);
@@ -197,7 +195,7 @@ namespace Cober {
 		
 		// ViewportPanel::Get().OnEvent(event);
 		
-		// if (gameState == EngineApp::GameState::RUNTIME_EDITOR)
+		// if (EngineApp::IsSimulating())
 		// 	NativeScriptFn::OnEvent(Editor::GetActiveScene().get(), event);
 
 		// EventDispatcher dispatcher(event);
@@ -224,7 +222,7 @@ namespace Cober {
 		// 		}
 		// 		case Key::S: 
 		// 		{
-		// 			if (EngineApp::Get().GetGameState() == EngineApp::GameState::EDITOR)
+		// 			if (EngineApp::IsEditor())
 		// 				Scene::Save(m_ActiveScene, m_ActiveScene->GetName());
 		// 			break;
 		// 		}

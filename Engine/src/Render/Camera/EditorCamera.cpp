@@ -86,7 +86,7 @@ namespace Cober {
 		UpdateCameraView();
 		m_EditorCamera.aspectRatio = width / height;
 
-		if (EngineApp::Get().GetGameState() != EngineApp::GameState::PLAY)
+		if (EngineApp::IsPlayMode())
         {
 			RenderGlobals::SetViewport(m_ViewportWidth, m_ViewportHeight);
         }

@@ -37,14 +37,17 @@ namespace Cober
         const bool claimed = SDL_ClaimWindowForGPUDevice(m_GPUDevice, m_WindowHandle);
         LOG_CORE_ASSERT(claimed, "SDL_ClaimWindowForGPUDevice failed: {0}", SDL_GetError());
 
-        const bool swapchainOk = SDL_SetGPUSwapchainParameters(
-            m_GPUDevice,
-            m_WindowHandle,
-            SDL_GPU_SWAPCHAINCOMPOSITION_SDR,
-            SDL_GPU_PRESENTMODE_VSYNC
-        );
-
-        LOG_CORE_ASSERT(swapchainOk, "SDL_SetGPUSwapchainParameters failed: {0}", SDL_GetError());
+        {
+            CB_PROFILE_SCOPE("SWAPCHAIN");
+            const bool swapchainOk = SDL_SetGPUSwapchainParameters(
+                m_GPUDevice,
+                m_WindowHandle,
+                SDL_GPU_SWAPCHAINCOMPOSITION_SDR,
+                SDL_GPU_PRESENTMODE_VSYNC
+            );
+    
+            LOG_CORE_ASSERT(swapchainOk, "SDL_SetGPUSwapchainParameters failed: {0}", SDL_GetError());
+        }
 
         const char* actualDriver = SDL_GetGPUDeviceDriver(m_GPUDevice);
         LOG_CORE_INFO("SDL_GPU backend selected: {0}", actualDriver ? actualDriver : "unknown");

@@ -12,7 +12,7 @@ public:
 	GameApp(const AppSpecification& specification) : EngineApp(specification) 
 	{
 		PushLayer(CreateUnique<Game>());
-		EngineApp::Get().SetGameState(EngineApp::GameState::PLAY);
+		EngineApp::SetSceneMode(EngineApp::SceneMode::PLAYING);
 	}
 
 	~GameApp() 

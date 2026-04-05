@@ -309,7 +309,7 @@ namespace Cober {
 	}
 
 
-	void ViewportPanel::PlayButtonBar(EngineApp::GameState gameState) 
+	void ViewportPanel::PlayButtonBar() 
     {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0));
@@ -322,7 +322,7 @@ namespace Cober {
 
 		ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
-		auto icon = gameState == EngineApp::GameState::EDITOR ? ICON_FA_PLAY : ICON_FA_STOP;
+		auto icon = EngineApp::IsEditorMode() ? ICON_FA_PLAY : ICON_FA_STOP;
 		float size = ImGui::GetWindowHeight() - 4.0f;
 		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 
@@ -330,12 +330,12 @@ namespace Cober {
         {
 			ImGuiIO& io = ImGui::GetIO(); (void)io;
 			m_GizmoType = -1;
-			if (gameState == EngineApp::GameState::EDITOR) 
+			if (EngineApp::IsEditorMode()) 
             {
 				Log::ClearLogMessages();	
 				io.ConfigFlags ^= ImGuiConfigFlags_NavEnableKeyboard; 
 				
-				EngineApp::Get().SetGameState(EngineApp::GameState::RUNTIME_EDITOR);
+				EngineApp::Get().SetSceneMode(EngineApp::SceneMode::SIMULATING);
 
 				// Reset for physics
 				EngineApp::Get().GetTimer().GetAccumulatedTime() = 0.0f;
@@ -345,12 +345,12 @@ namespace Cober {
 				// TODO: Fix SceneHierarchyPanel
 				// SceneHierarchyPanel::Get().SetContext(Editor::GetActiveScene());
 			}
-			else if (gameState == EngineApp::GameState::RUNTIME_EDITOR) 
+			else if (EngineApp::IsSimulationMode()) 
             {
 				io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; 
 				Editor::GetActiveScene()->OnSimulationStop();
 
-				EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
+				EngineApp::Get().SetSceneMode(EngineApp::SceneMode::EDITOR);
 
 				Editor::SetActiveScene(Editor::GetEditorScene());
 				// TODO: Fix SceneHierarchyPanel
@@ -362,12 +362,12 @@ namespace Cober {
 			}
 		}
 
-		// If inside the game we want to quit, the state of the editor will exit from Runtime
-		if (gameState == EngineApp::GameState::EXIT) 
+		// If inside the game we want to quit, the state of the editor will exit from Simulation
+		if (EngineApp::IsSceneExit()) 
 		{
 			Editor::GetActiveScene()->OnSimulationStop();
 
-			EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
+			EngineApp::Get().SetSceneMode(EngineApp::SceneMode::EDITOR);
 
 			Editor::SetActiveScene(Editor::GetEditorScene());
 			// TODO: Fix SceneHierarchyPanel
@@ -377,7 +377,7 @@ namespace Cober {
 			NativeScriptFn::FreeScriptLibrary();
 			Editor::SetSelectedEntity();
 		}
-		else if (gameState == EngineApp::GameState::RUNTIME_EDITOR)
+		else if (EngineApp::IsSimulationMode())
 		{
 			ImGui::SameLine();
 

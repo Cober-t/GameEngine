@@ -6,11 +6,14 @@
 namespace Cober 
 {
     EngineApp* EngineApp::s_Instance = nullptr;
+	EngineApp::EngineState EngineApp::m_EngineState = EngineApp::EngineState::RUNNING;
+    EngineApp::SceneMode   EngineApp::m_SceneMode   = EngineApp::SceneMode::PLAYING;
+
     
     // --------------------------------------------------------------------------------------
 
     EngineApp::EngineApp(const AppSpecification& specification)
-        : m_Specification(specification), m_GameState(GameState::EDITOR), m_GuiLayer(nullptr)
+        : m_Specification(specification), m_GuiLayer(nullptr)
     {
         LOG_CORE_INFO("EngineApp Constructor!");
 
@@ -36,8 +39,7 @@ namespace Cober
 
     EngineApp::~EngineApp() 
     {
-        if (m_GuiLayer &&
-            (m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR))
+        if (m_GuiLayer && EngineApp::IsEditor())
         {
             m_GuiLayer->OnDetach();
             m_GuiLayer.reset();
@@ -60,8 +62,6 @@ namespace Cober
 
     void EngineApp::PushLayer(Unique<Layer> layer)
     {
-        CB_PROFILE_FUNCTION();
-
         m_LayerStack.PushLayer(std::move(layer)); // Transfer ownership
     }
 
@@ -69,8 +69,6 @@ namespace Cober
 
     void EngineApp::PushOverlay(Unique<Layer> layer)
     {
-        CB_PROFILE_FUNCTION();
-
         m_LayerStack.PushOverlay(std::move(layer));  // Transfer ownership
     }
 
@@ -80,7 +78,7 @@ namespace Cober
     {
         CB_PROFILE_FUNCTION();
 
-        if (m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR)
+        if (EngineApp::IsEditor())
         {
             m_GuiLayer = CreateUnique<ImGuiLayer>();
             m_GuiLayer->OnAttach();
@@ -91,15 +89,11 @@ namespace Cober
 
     void EngineApp::Update() 
     {
-        CB_PROFILE_FUNCTION();
-
-        while ( m_GameState == GameState::PLAY || 
-                m_GameState == GameState::EDITOR || 
-                m_GameState == GameState::RUNTIME_EDITOR)
+        while ( IsAppRunning() )
         {
             m_TimeStep->Start();
             
-            if (m_GameState == GameState::EXIT) {
+            if (!IsAppRunning()) {
                 return;
             }
             
@@ -127,20 +121,21 @@ namespace Cober
         dispatcher.Dispatch<WindowMinimizedEvent>(BIND_EVENT_FN(EngineApp::OnWindowMinimized));
         dispatcher.Dispatch<WindowRestoredEvent>(BIND_EVENT_FN(EngineApp::OnWindowRestored));
 
-        // Editor Events
-        if (m_GuiLayer && !event.Handled) {
+        if (event.Handled) {
+            return;
+        }
+
+        // Editor GUI Events
+        if (m_GuiLayer) {
             m_GuiLayer->OnEvent(event);
         }
 
         // Layers Events
-        if (!event.Handled)
+        for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
         {
-            for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
-            {
-                (*it)->OnEvent(event);
-                if (event.Handled) {
-                    break;
-                }
+            (*it)->OnEvent(event);
+            if (event.Handled) {
+                break;
             }
         }
     }
@@ -149,8 +144,6 @@ namespace Cober
 
     void EngineApp::Run(const Timestep& ts)
     {
-        CB_PROFILE_FUNCTION();
-
         // Process Events
         // Input::TransitionPressedKeys();
 		// Input::TransitionPressedButtons();
@@ -202,7 +195,7 @@ namespace Cober
     {
         CB_PROFILE_FUNCTION();
 
-        if (m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR)
+        if (EngineApp::IsEditor())
         {
             LOG_CORE_ASSERT(m_GuiLayer, "ImGui Layer is not created yed");
             m_GuiLayer->Begin();
@@ -224,7 +217,7 @@ namespace Cober
         RenderGlobals::BeginFrame();
 
         // Upload ImGui buffers before render pass begins
-        if (m_GameState == GameState::EDITOR || m_GameState == GameState::RUNTIME_EDITOR) 
+        if (EngineApp::IsEditor()) 
         {
             RenderGlobals::ImGuiPrepareDrawData(ImGui::GetDrawData());
         }
@@ -238,20 +231,12 @@ namespace Cober
             }
         }
         // Render ImGui into the active render pass
-        if (m_GameState == EngineApp::GameState::EDITOR || 
-            m_GameState == EngineApp::GameState::RUNTIME_EDITOR) 
+        if (EngineApp::IsEditor()) 
         {
             RenderGlobals::ImGuiRenderDrawData(ImGui::GetDrawData());
         }
 
         RenderGlobals::EndFrame();
-    }
-
-    // --------------------------------------------------------------------------------------
-
-    void EngineApp::Close()
-    {
-        m_GameState = EngineApp::GameState::EXIT;
     }
 
     // --------------------------------------------------------------------------------------
@@ -275,7 +260,7 @@ namespace Cober
 
         SetMinimized(false);
 
-        if (GetGameState() != EngineApp::GameState::PLAY) {
+        if (!IsPlayMode()) {
             RenderGlobals::SetViewport(event.GetWidth(), event.GetHeight());
         }
 
@@ -296,13 +281,6 @@ namespace Cober
     {
         SetMinimized(false);
         return true;
-    }
-
-    // --------------------------------------------------------------------------------------
-
-    EngineApp::GameState EngineApp::GetGameState()
-    { 
-        return m_GameState; 
     }
 
     // --------------------------------------------------------------------------------------

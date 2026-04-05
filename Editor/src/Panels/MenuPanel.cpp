@@ -118,7 +118,7 @@
 // 					{
 // 						m_Reload = true;
 // 						m_SceneToReload = scenes[i].filename().string();
-// 						EngineApp::Get().SetGameState(EngineApp::GameState::EDITOR);
+// 						EngineApp::SetSceneMode(EngineApp::SceneMode::EDITOR);
 // 					}
 // 				}
 

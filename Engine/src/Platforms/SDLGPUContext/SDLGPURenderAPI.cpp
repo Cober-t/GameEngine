@@ -33,8 +33,6 @@ namespace Cober
 
 	void SDLGPURenderAPI::Init(void* window, void* context) 
 	{
-        CB_PROFILE_FUNCTION();
-        
         m_windowHandle = static_cast<SDL_Window*>(window);
         LOG_CORE_ASSERT(m_windowHandle, "Main Window does not exists");
 
@@ -78,8 +76,6 @@ namespace Cober
 
     bool SDLGPURenderAPI::BeginFrame()
     {
-        CB_PROFILE_FUNCTION();
-
         // m_frame->RenderPass = nullptr;
         m_frame->CommandBuffer = SDL_AcquireGPUCommandBuffer(m_GPUDevice);
         LOG_CORE_ASSERT(m_frame->CommandBuffer, "Command Buffer couldn't be acquired");
@@ -100,8 +96,6 @@ namespace Cober
 
     void SDLGPURenderAPI::BeginMainRenderPass() 
     {
-        CB_PROFILE_FUNCTION();
-
         if (EngineApp::Get().IsMinimized()) {
             return;
         }
@@ -121,8 +115,6 @@ namespace Cober
 
     void SDLGPURenderAPI::EndFrame() 
     {
-        CB_PROFILE_FUNCTION();
-
         if (m_frame->RenderPass && !EngineApp::Get().IsMinimized()) {
             SDL_EndGPURenderPass(m_frame->RenderPass);
         }
@@ -140,8 +132,6 @@ namespace Cober
 
     void SDLGPURenderAPI::ImGuiInit()
     {
-        CB_PROFILE_FUNCTION();
-
         LOG_CORE_ASSERT(m_windowHandle, "ImGuiInit called before Window creation");
         LOG_CORE_ASSERT(m_GPUDevice, "ImGuiInit called before GPU device creation");
 
@@ -160,8 +150,6 @@ namespace Cober
 
     void SDLGPURenderAPI::ImGuiShutdown()
     {
-        CB_PROFILE_FUNCTION();
-
         if (!m_ImGuiInitialized) {
             return;
         }
@@ -174,8 +162,6 @@ namespace Cober
 
     void SDLGPURenderAPI::ImGuiNewFrame()
     {
-        CB_PROFILE_FUNCTION();
-
         LOG_CORE_ASSERT(m_ImGuiInitialized, "ImGuiNewFrame called before ImGuiInit");
         ImGui_ImplSDLGPU3_NewFrame();
     }
@@ -184,8 +170,6 @@ namespace Cober
 
     void SDLGPURenderAPI::ImGuiPrepareDrawData(ImDrawData* drawData)
     {
-        CB_PROFILE_FUNCTION();
-
         if (EngineApp::Get().IsMinimized()) {
             return;
         }
@@ -202,8 +186,6 @@ namespace Cober
 
     void SDLGPURenderAPI::ImGuiRenderDrawData(ImDrawData* drawData)
     {
-        CB_PROFILE_FUNCTION();
-
         if (!drawData || !m_frame->CommandBuffer || !m_frame->RenderPass)
         return;
 
@@ -214,7 +196,6 @@ namespace Cober
     
 	void SDLGPURenderAPI::DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount)
 	{
-        CB_PROFILE_FUNCTION();
 	// 	vertexArray->Bind();
 	// 	uint32_t count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
 	// 	glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);

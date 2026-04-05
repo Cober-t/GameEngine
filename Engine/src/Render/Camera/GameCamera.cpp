@@ -99,7 +99,7 @@ namespace Cober {
 
 		// In the Editor mode the game camera is managed by the viewporIn Play mode the viewport is manage by the camera
         // In the rest, the viewport is managed by the Editor Viewport
-        if (EngineApp::Get().GetGameState() == EngineApp::GameState::PLAY)
+        if (EngineApp::IsPlayMode())
         {
 			RenderGlobals::SetViewport(m_ViewportWidth, m_ViewportHeight);
         }

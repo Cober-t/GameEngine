@@ -24,7 +24,7 @@ namespace Cober {
             m_DebugActive = true;
 		}
 
-        for (auto entt : scene->GetAllEntitiesWith<TransformComponent, Rigidbody2D>())
+        for (auto& entt : scene->GetAllEntitiesWith<TransformComponent, Rigidbody2D>())
 		{
 			Entity entity = Entity((entt::entity)entt, scene );
 			Physics2D::InitEntity(entity);
@@ -132,8 +132,7 @@ namespace Cober {
 
             entityBodyType = type;
 
-            if (EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR
-                || EngineApp::Get().GetGameState() == EngineApp::GameState::PLAY)
+            if (EngineApp::IsRunning())
             {
                 Physics2D::InitEntity(entity);
             }
@@ -239,9 +238,7 @@ namespace Cober {
 		// if (EngineApp::Get().IsDebugMode())
         // {
         //     // Simulation / Runtime State
-        //     if ((EngineApp::Get().GetGameState() == EngineApp::GameState::RUNTIME_EDITOR || 
-        //         EngineApp::Get().GetGameState() == EngineApp::GameState::PLAY) &&
-        //         m_PhysicsWorld) 
+        //     if (m_PhysicsWorld && EngineApp::IsRunning()) 
         //     {
         //         if (!m_DebugActive)
         //         {
@@ -252,7 +249,7 @@ namespace Cober {
         //         m_PhysicsWorld->DebugDraw();
         //     }
         //     // Editor State
-        //     else if (EngineApp::Get().GetGameState() == EngineApp::GameState::EDITOR)
+        //     else if (EngineApp::IsEditorMode())
         //     {
         //         glm::vec4 color{ 0.0f, 0.0f, 0.0f, 0.45f };
 
