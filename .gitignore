@@ -17,3 +17,4 @@ build/
 *.vcxproj.filters
 *.vcxproj.user
 *.vs
+*.ini

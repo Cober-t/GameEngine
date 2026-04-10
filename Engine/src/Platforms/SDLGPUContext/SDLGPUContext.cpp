@@ -25,7 +25,7 @@ namespace Cober
                                         SDL_GPU_SHADERFORMAT_DXIL | 
                                         SDL_GPU_SHADERFORMAT_MSL  |
                                         SDL_GPU_SHADERFORMAT_METALLIB;
-                    
+                  
         m_GPUDevice = SDL_CreateGPUDevice(
             shaderFormatFlags, // Shader Format flags
             true, // Debug mode
@@ -37,17 +37,14 @@ namespace Cober
         const bool claimed = SDL_ClaimWindowForGPUDevice(m_GPUDevice, m_WindowHandle);
         LOG_CORE_ASSERT(claimed, "SDL_ClaimWindowForGPUDevice failed: {0}", SDL_GetError());
 
-        {
-            CB_PROFILE_SCOPE("SWAPCHAIN");
-            const bool swapchainOk = SDL_SetGPUSwapchainParameters(
-                m_GPUDevice,
-                m_WindowHandle,
-                SDL_GPU_SWAPCHAINCOMPOSITION_SDR,
-                SDL_GPU_PRESENTMODE_VSYNC
-            );
+        const bool swapchainOk = SDL_SetGPUSwapchainParameters(
+            m_GPUDevice,
+            m_WindowHandle,
+            SDL_GPU_SWAPCHAINCOMPOSITION_SDR,
+            SDL_GPU_PRESENTMODE_VSYNC
+        );
     
-            LOG_CORE_ASSERT(swapchainOk, "SDL_SetGPUSwapchainParameters failed: {0}", SDL_GetError());
-        }
+        LOG_CORE_ASSERT(swapchainOk, "SDL_SetGPUSwapchainParameters failed: {0}", SDL_GetError());
 
         const char* actualDriver = SDL_GetGPUDeviceDriver(m_GPUDevice);
         LOG_CORE_INFO("SDL_GPU backend selected: {0}", actualDriver ? actualDriver : "unknown");
@@ -72,9 +69,7 @@ namespace Cober
     // --------------------------------------------------------------------------------------
 
     void SDLGPUContext::Destroy()
-    {
-        CB_PROFILE_FUNCTION();
-        
+    {        
         if (!m_GPUDevice) {
             return;
         }

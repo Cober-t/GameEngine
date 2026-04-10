@@ -78,8 +78,6 @@ namespace Cober
 
 	void Window::Shutdown()
 	{
-		CB_PROFILE_FUNCTION();
-
 		if (m_Context) {
 			m_Context->Destroy();
 		}
