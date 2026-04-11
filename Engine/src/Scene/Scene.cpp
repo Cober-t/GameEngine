@@ -17,19 +17,23 @@
 
 #include <glm/glm.hpp>
 
-namespace Cober {
+namespace Cober 
+{
+	// --------------------------------------------------------------------------------------
 
 	Scene::Scene()
 	{
 		LOG_INFO("Scene Created!!");
 	}
 
+    // --------------------------------------------------------------------------------------
 
 	Scene::~Scene()
 	{
        	LOG_INFO("Scene Destroyed!!");
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	bool Scene::Save(const Ref<Scene>& scene, std::string sceneName) 
 	{
@@ -42,6 +46,7 @@ namespace Cober {
 		return true;
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	Ref<Scene> Scene::Load(std::string sceneName) 
 	{
@@ -49,12 +54,14 @@ namespace Cober {
 		Ref<Scene> scene = SceneSerializer::Deserialize(sceneName);
 		scene->m_SceneName = sceneName;
 
-		if (EngineApp::IsEditorMode())         { scene->OnRuntimeStart();    } else
+		if (EngineApp::IsEditorMode())     { scene->OnRuntimeStart();    } else
 		if (EngineApp::IsSimulationMode()) { scene->OnSimulationStart(); } else
 		if (EngineApp::IsPlayMode())       { scene->OnSimulationStart(); }
 			
 		return scene;
 	}
+
+	// --------------------------------------------------------------------------------------
 
 	void Scene::Exit(Scene* scene)
 	{
@@ -67,12 +74,14 @@ namespace Cober {
 		}
 	}
 
-	
+	// --------------------------------------------------------------------------------------
+
 	Entity Scene::LoadPrefab(Scene* currentScene, std::string prefabName) 
 	{
 		return EntitySerializer::Deserialize(currentScene, prefabName);
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	template<typename... Component>
 	static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, Entity>& enttMap)
@@ -90,6 +99,7 @@ namespace Cober {
 		}(), ...);
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	template<typename... Component>
 	static void CopyComponent(ComponentGroup<Component...>, entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, Entity>& enttMap)
@@ -97,6 +107,7 @@ namespace Cober {
 		CopyComponent<Component...>(dst, src, enttMap);
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	template<typename... Component>
 	static void CopyComponentIfExists(Entity dst, Entity src)
@@ -108,6 +119,7 @@ namespace Cober {
 		}(), ...);
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	template<typename... Component>
 	static void CopyComponentIfExists(ComponentGroup<Component...>, Entity dst, Entity src)
@@ -115,6 +127,7 @@ namespace Cober {
 		CopyComponentIfExists<Component...>(dst, src);
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	Ref<Scene> Scene::Copy(Ref<Scene> baseScene) 
 	{
@@ -145,6 +158,7 @@ namespace Cober {
 		return newScene;
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	void Scene::Reload(Scene* sceneToBeReloaded, std::string name)
 	{
@@ -182,12 +196,14 @@ namespace Cober {
 		sceneToBeReloaded->m_ReloadScripts = true;
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	Entity Scene::CreateEntity(const std::string& name)
 	{
 		return CreateEntityWithUUID(UUID(), name);
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name)
 	{
@@ -200,12 +216,12 @@ namespace Cober {
 
 		m_EntityMap[uuid] = entity;
 
-		/// TODO: FIX ERROR
-        // LOG_INFO("Created entity with ID {0} and name {1}", uuid, tagComponent.tag);
+        LOG_INFO("Created entity with ID " + std::to_string(uuid) + " and name " + tagComponent.tag);
 
 		return entity;
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	void Scene::DestroyEntity(Entity entity)
 	{
@@ -213,6 +229,8 @@ namespace Cober {
 
 		m_EntitiesToBeDestroyed.push_back(entity);
 	}
+
+	// --------------------------------------------------------------------------------------
 
 	void Scene::CleanUp()
 	{
@@ -229,23 +247,26 @@ namespace Cober {
 		m_ExitFromRuntimeEditor = false;
 	}
 
+	// --------------------------------------------------------------------------------------
+
 	void Scene::OnSimulationStart()
 	{
 		AddSystem<CameraSystem>();
 		AddSystem<RenderSystem>();
 		AddSystem<ParticleSystem>();
-		AddSystem<PhysicsSystem2D>();
-		AddSystem<AudioSystem>();
-		AddSystem<ScriptSystem>();
+		//AddSystem<PhysicsSystem2D>();
+		//AddSystem<AudioSystem>();
+		//AddSystem<ScriptSystem>();
 
 		GetSystem<CameraSystem>().Start(this);
         GetSystem<RenderSystem>().Start();
 		GetSystem<ParticleSystem>().Start(this);
-		GetSystem<PhysicsSystem2D>().Start(this);
-		GetSystem<AudioSystem>().Start(this);
-		GetSystem<ScriptSystem>().Start(this);
+		//GetSystem<PhysicsSystem2D>().Start(this);
+		//GetSystem<AudioSystem>().Start(this);
+		//GetSystem<ScriptSystem>().Start(this);
 	}
 
+	// --------------------------------------------------------------------------------------
 
     void Scene::OnSimulationStop()
 	{
@@ -259,6 +280,7 @@ namespace Cober {
 		RemoveSystem<ScriptSystem>();
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	void Scene::OnRuntimeStart()
 	{
@@ -271,6 +293,7 @@ namespace Cober {
 		//GetSystem<ParticleSystem>().Start(this);
 	}
 
+	// --------------------------------------------------------------------------------------
  
     void Scene::OnRuntimeStop()
 	{
@@ -279,6 +302,7 @@ namespace Cober {
 		//RemoveSystem<ParticleSystem>();
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	void Scene::OnUpdateSimulation(const Timestep& ts, Ref<Camera>& camera)
 	{
@@ -311,6 +335,7 @@ namespace Cober {
 		GetSystem<ScriptSystem>().Update(this, ts.GetDeltaTime());
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	void Scene::OnUpdateRuntime(const Timestep& ts, Ref<Camera>& camera)
 	{	
@@ -325,12 +350,14 @@ namespace Cober {
 		Render2D::EndScene();
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	void Scene::OnEvent(Event& event, const Ref<Camera>& camera)
 	{
 		GetSystem<CameraSystem>().OnEvent(event, camera);
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	std::vector<Entity> Scene::GetSceneEntities()
 	{ 
@@ -342,12 +369,14 @@ namespace Cober {
 		return entities;
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	std::string Scene::GetName()
 	{ 
 		return m_SceneName;
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	Entity Scene::FindEntityByName(std::string_view name)
 	{
@@ -361,6 +390,7 @@ namespace Cober {
 		return {};
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	Entity Scene::GetEntityByUUID(UUID uuid)
 	{
@@ -370,6 +400,7 @@ namespace Cober {
 		return {};
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	Entity Scene::DuplicateEntity(Entity entity)
 	{
@@ -390,6 +421,7 @@ namespace Cober {
 		return newEntity;
 	}
 
+	// --------------------------------------------------------------------------------------
 
     template<typename TSystem, typename ... TArgs>
 	void Scene::AddSystem(TArgs&& ...args)
@@ -398,6 +430,7 @@ namespace Cober {
 		m_Systems.insert(std::make_pair(std::type_index(typeid(TSystem)), newSystem));
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	template<typename TSystem>
 	void Scene::RemoveSystem()
@@ -406,6 +439,7 @@ namespace Cober {
 		m_Systems.erase(system);
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	template<typename TSystem>
 	bool Scene::HasSystem() const
@@ -413,6 +447,7 @@ namespace Cober {
 		return m_Systems.find(std::type_index(typeid(TSystem))) != m_Systems.end();
 	}
 
+	// --------------------------------------------------------------------------------------
 
 	template<typename TSystem>
 	TSystem& Scene::GetSystem() const
@@ -421,4 +456,6 @@ namespace Cober {
 		auto system = m_Systems.find(std::type_index(typeid(TSystem)));
 		return *(std::static_pointer_cast<TSystem>(system->second));
 	}
+
+	// --------------------------------------------------------------------------------------
 }

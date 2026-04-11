@@ -12,19 +12,19 @@ namespace Cober {
 
 	Editor::Editor() : Layer("Editor")
 	{
-		// m_EditorCamera = CreateUnique<EditorCamera>(45.0f, EngineApp::GetWindow().GetWidth(), EngineApp::GetWindow().GetHeight(), 0.01f, 1000.0f, GlobalCamera::perspective);
-		// m_CameraActive = m_EditorCamera;
+		m_EditorCamera = CreateUnique<EditorCamera>(45.0f, EngineApp::GetWindow().GetWidth(), EngineApp::GetWindow().GetHeight(), 0.01f, 1000.0f, GlobalCamera::perspective);
+		m_CameraActive = m_EditorCamera;
 
 		// TODO: Needs to load textures, fix render api first
-		// EditorResources::Init();
+		EditorResources::Init();
 
 		// TODO: Needs to load textures, fix render api first
-		// new ViewportPanel();
-		// new DataPanel();
-		// new ConsolePanel();
-		// new SceneHierarchyPanel();
-		// new ContentBrowserPanel();
-		// new MenuPanel();
+		new ViewportPanel();
+		new DataPanel();
+		new ConsolePanel();
+		new SceneHierarchyPanel();
+		new ContentBrowserPanel();
+		new MenuPanel();
 
 		// new Debug2DPhysics();
 	}
@@ -32,28 +32,28 @@ namespace Cober {
 
 	void Editor::OnAttach() 
 	{
-		// m_ActiveScene = Scene::Load(EngineApp::Get().GetSpecification().StartupScene.string());
+		m_ActiveScene = Scene::Load(EngineApp::Get().GetSpecification().StartupScene.string());
 
-		// m_ActiveScene->OnRuntimeStart();
-		// m_EditorScene = m_ActiveScene;
+		m_ActiveScene->OnRuntimeStart();
+		m_EditorScene = m_ActiveScene;
 
-		// Primitive::Grid::Init();
-		// ViewportPanel::Get().CreateFramebuffer(m_EditorCamera->m_ViewportWidth, m_EditorCamera->m_ViewportHeight);
-		// SceneHierarchyPanel::Get().SetContext(m_ActiveScene);
+		Primitive::Grid::Init();
+		ViewportPanel::Get().CreateFramebuffer(m_EditorCamera->m_ViewportWidth, m_EditorCamera->m_ViewportHeight);
+		SceneHierarchyPanel::Get().SetContext(m_ActiveScene);
 	}
 
 
 	void Editor::OnDetach() 
 	{
-		// m_ActiveScene->OnRuntimeStop();
-		// ViewportPanel::Get().UnbindFramebuffer();
+		m_ActiveScene->OnRuntimeStop();
+		ViewportPanel::Get().UnbindFramebuffer();
 
-		// m_ActiveScene  = nullptr;
-		// m_EditorScene  = nullptr;
-		// m_EditorCamera = nullptr;
-		// m_CameraActive = nullptr;
+		m_ActiveScene  = nullptr;
+		m_EditorScene  = nullptr;
+		m_EditorCamera = nullptr;
+		m_CameraActive = nullptr;
 
-		// EditorResources::Shutdown();
+		EditorResources::Shutdown();
 
  		LOG_INFO("Detached Editor Layer!");
 	}
@@ -61,42 +61,42 @@ namespace Cober {
 
 	void Editor::OnUpdate(const Timestep& ts) 
 	{
-		// ViewportPanel::Get().ResizeViewport(m_CameraActive);
-		// ViewportPanel::Get().BindFramebuffer();
+		ViewportPanel::Get().ResizeViewport(m_CameraActive);
+		ViewportPanel::Get().BindFramebuffer();
 		// ViewportPanel::Get().RenderSkybox();
 
-		// RenderGlobals::SetClearColor(46, 47, 52);
-		// // RenderGlobals::SetClearColor(32, 167, 219);
-		// RenderGlobals::Clear();
+		RenderGlobals::SetClearColor(46, 47, 52);
+		// RenderGlobals::SetClearColor(32, 167, 219);
+		RenderGlobals::Clear();
 		
-		// ViewportPanel::Get().FBOClearAttachments(1, -1);
+		ViewportPanel::Get().FBOClearAttachments(1, -1);
 
-		// ImGui::SetCurrentContext(ImGuiLayer::GetContext());
-		// auto& colors = ImGui::GetStyle().Colors;
+		ImGui::SetCurrentContext(ImGuiLayer::GetContext());
+		auto& colors = ImGui::GetStyle().Colors;
 
-		// switch (EngineApp::Get().GetSceneMode()) 
-		// {
-		// 	case EngineApp::SceneMode::EDITOR:
-		// 	{
-		// 		colors[ImGuiCol_WindowBg] = ImGui::ColorConvertU32ToFloat4(Colors::Theme::titlebar);
-		// 		// m_EditorCamera->SetActive(ViewportPanel::Get().AllowViewportCameraEvents());
-		// 		// m_ActiveScene->OnUpdateRuntime(ts, m_CameraActive);
+		switch (EngineApp::Get().GetSceneMode()) 
+		{
+			case EngineApp::SceneMode::EDITOR:
+			{
+				colors[ImGuiCol_WindowBg] = ImGui::ColorConvertU32ToFloat4(Colors::Theme::titlebar);
+				m_EditorCamera->SetActive(ViewportPanel::Get().AllowViewportCameraEvents());
+				m_ActiveScene->OnUpdateRuntime(ts, m_CameraActive);
 				
-		// 		// Commented because of a problem with the framebuffer and camera depth
-		// 		// Primitive::Grid::Draw(m_EditorCamera);
-		// 		break;
-		// 	}
-		// 	case EngineApp::SceneMode::SIMULATING: 
-		// 	{
-		// 		colors[ImGuiCol_WindowBg] = ImVec4(0, 0.0, 0.0, 0.268f);
-		// 		// m_ActiveScene->OnUpdateSimulation(ts, m_CameraActive);
-		// 		break;
-		// 	}
-		// }
+				// Commented because of a problem with the framebuffer and camera depth
+				// Primitive::Grid::Draw(m_EditorCamera);
+				break;
+			}
+			case EngineApp::SceneMode::SIMULATING: 
+			{
+				colors[ImGuiCol_WindowBg] = ImVec4(0, 0.0, 0.0, 0.268f);
+				m_ActiveScene->OnUpdateSimulation(ts, m_CameraActive);
+				break;
+			}
+		}
 
-		// ViewportPanel::Get().SetCursorEntity();
+		ViewportPanel::Get().SetCursorEntity();
 
-		// ViewportPanel::Get().UnbindFramebuffer();
+		ViewportPanel::Get().UnbindFramebuffer();
 	}
 
 
@@ -104,17 +104,17 @@ namespace Cober {
 	{
 		InitDockspace();
 
-		ImGui::ShowDemoWindow();
+		// ImGui::ShowDemoWindow();
 
-		// ViewportPanel::Get().OnGuiRender(m_EditorCamera, m_CameraActive);
-		// DataPanel::Get().OnGuiRender(m_ActiveScene);
-		// ConsolePanel::Get().OnImGuiRender();
-		// SceneHierarchyPanel::Get().OnGuiRender();
-		// ContentBrowserPanel::Get().OnGuiRender();
+		ViewportPanel::Get().OnGuiRender(m_EditorCamera, m_CameraActive);
+		DataPanel::Get().OnGuiRender(m_ActiveScene);
+		ConsolePanel::Get().OnImGuiRender();
+		SceneHierarchyPanel::Get().OnGuiRender();
+		ContentBrowserPanel::Get().OnGuiRender();
 		
-		// MenuPanel::Get().OnGuiRender(m_EditorCamera);
+		MenuPanel::Get().OnGuiRender(m_EditorCamera);
 
-		// ViewportPanel::Get().PlayButtonBar();
+		ViewportPanel::Get().PlayButtonBar();
 
 		EndDockspace();
 	}

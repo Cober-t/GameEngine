@@ -43,7 +43,6 @@ namespace Cober
             SDL_GPU_SWAPCHAINCOMPOSITION_SDR,
             SDL_GPU_PRESENTMODE_VSYNC
         );
-    
         LOG_CORE_ASSERT(swapchainOk, "SDL_SetGPUSwapchainParameters failed: {0}", SDL_GetError());
 
         const char* actualDriver = SDL_GetGPUDeviceDriver(m_GPUDevice);

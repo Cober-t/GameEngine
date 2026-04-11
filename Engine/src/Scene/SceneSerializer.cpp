@@ -41,9 +41,10 @@ namespace Cober {
 		Utils::DataFile sceneLoader;
 		std::string name;
 
-		std::filesystem::path scenesPath = PathService::AssetsRoot() / "scenes" / sceneName;
+		std::filesystem::path scenePath = PathService::ResolveAsset("scenes\\" +  sceneName);
 
-		if (!std::filesystem::exists(scenesPath))
+		LOG_CORE_ERROR(scenePath.string());
+		if (!std::filesystem::exists(scenePath))
 			sceneName = "SceneDefault.lua";
 
 		if (sceneName.find_last_of('.') != std::string::npos)
@@ -51,8 +52,6 @@ namespace Cober {
 		else
 			name = sceneName;
 
-
-		std::filesystem::path scenePath = "assets/scenes/" + sceneName;
 		if (Utils::DataFile::Read(sceneLoader, scenePath)) 
 		{
 			Ref<Scene> newScene = CreateRef<Scene>();

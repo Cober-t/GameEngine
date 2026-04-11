@@ -99,7 +99,7 @@ namespace Cober
 		// Engine State and Editor Modes
 		EngineState GetEngineState() const { return m_EngineState; }
 
-		void SetSceneMode(SceneMode mode) { m_SceneMode = mode; }
+		static void SetSceneMode(SceneMode mode) { m_SceneMode = mode; }
 		SceneMode GetSceneMode() const { return m_SceneMode; }
 
 		static bool IsEditorMode()     { return m_SceneMode == SceneMode::EDITOR; }

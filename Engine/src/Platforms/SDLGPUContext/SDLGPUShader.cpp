@@ -46,7 +46,8 @@ namespace Cober {
 
     SDLGPUShader::SDLGPUShader(const std::string& filepath)
     {
-        const std::filesystem::path glslPath = PathService::ResolveAsset(std::filesystem::path("shaders") / filepath);
+        const std::filesystem::path glslPath = PathService::ResolveAsset("shaders\\" + filepath);
+        LOG_CORE_ERROR(glslPath.string());
         m_Name = glslPath.stem().string();
         LoadFromCombinedShader(glslPath);
     }
@@ -110,25 +111,21 @@ namespace Cober {
             auto sdlvb = std::dynamic_pointer_cast<SDLGPUVertexBuffer>(vb);
             LOG_CORE_ASSERT(sdlvb, "Expected SDLGPUVertexBuffer");
 
-            vbDescriptions.push_back(
-                SDL_GPUVertexBufferDescription{
-                    .slot = bufferSlot,
-                    .pitch = sdlvb->GetLayout().GetStride(),
-                    .input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX,
-                    .instance_step_rate = 0
-                }
-            );
+            SDL_GPUVertexBufferDescription buffDescription {};
+            buffDescription.slot = bufferSlot;
+            buffDescription.pitch = sdlvb->GetLayout().GetStride();
+            buffDescription.input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX;
+            buffDescription.instance_step_rate = 0;
+            vbDescriptions.push_back(buffDescription);
 
             for (const auto& element : sdlvb->GetLayout())
             {
-                attributes.push_back(
-                    SDL_GPUVertexAttribute{
-                        .location = location++,
-                        .buffer_slot = bufferSlot,
-                        .format = ToVertexFormat(element.type),
-                        .offset = (uint32_t)element.offset
-                    }
-                );
+                SDL_GPUVertexAttribute vertexAtt {};
+                vertexAtt.location = location++;
+                vertexAtt.buffer_slot = bufferSlot;
+                vertexAtt.format = ToVertexFormat(element.type);
+                vertexAtt.offset = (uint32_t)element.offset;
+                attributes.push_back(vertexAtt);
             }
 
             ++bufferSlot;
@@ -151,44 +148,49 @@ namespace Cober {
         SDL_GPUGraphicsPipelineCreateInfo createInfo = {};
         createInfo.vertex_shader = m_VertexShader;
         createInfo.fragment_shader = m_FragmentShader;
-        createInfo.vertex_input_state = SDL_GPUVertexInputState{
-            .vertex_buffer_descriptions = vbDescriptions.data(),
-            .num_vertex_buffers = (uint32_t)vbDescriptions.size(),
-            .vertex_attributes = attributes.data(),
-            .num_vertex_attributes = (uint32_t)attributes.size()
-        };
+        SDL_GPUVertexInputState vertexInputState {};
+        vertexInputState.vertex_buffer_descriptions = vbDescriptions.data();
+        vertexInputState.num_vertex_buffers = (uint32_t)vbDescriptions.size();
+        vertexInputState.vertex_attributes = attributes.data();
+        vertexInputState.num_vertex_attributes = (uint32_t)attributes.size();
+        createInfo.vertex_input_state = vertexInputState;
+
         createInfo.primitive_type = static_cast<SDL_GPUPrimitiveType>(signature.PrimitiveType);
-        createInfo.rasterizer_state = SDL_GPURasterizerState{
-            .fill_mode = SDL_GPU_FILLMODE_FILL,
-            .cull_mode = SDL_GPU_CULLMODE_NONE,
-            .front_face = SDL_GPU_FRONTFACE_COUNTER_CLOCKWISE,
-            .depth_bias_constant_factor = 0.0f,
-            .depth_bias_clamp = 0.0f,
-            .depth_bias_slope_factor = 0.0f,
-            .enable_depth_bias = false,
-            .enable_depth_clip = true
-        };
-        createInfo.multisample_state = SDL_GPUMultisampleState{
-            .sample_count = (SDL_GPUSampleCount)signature.Samples,
-            .sample_mask = 0xFFFFFFFFu,
-            .enable_mask = false
-        };
-        createInfo.depth_stencil_state = SDL_GPUDepthStencilState{
-            .compare_op = SDL_GPU_COMPAREOP_LESS_OR_EQUAL,
-            .back_stencil_state = {},
-            .front_stencil_state = {},
-            .compare_mask = 0xFF,
-            .write_mask = 0xFF,
-            .enable_depth_test = signature.HasDepth,
-            .enable_depth_write = signature.HasDepth,
-            .enable_stencil_test = false
-        };
-        createInfo.target_info = SDL_GPUGraphicsPipelineTargetInfo{
-            .color_target_descriptions = colorDescs.data(),
-            .num_color_targets = signature.NumColorTargets,
-            .depth_stencil_format = static_cast<SDL_GPUTextureFormat>(signature.DepthFormat),
-            .has_depth_stencil_target = signature.HasDepth
-        };
+
+        SDL_GPURasterizerState rasterizerState {};
+        rasterizerState.fill_mode = SDL_GPU_FILLMODE_FILL;
+        rasterizerState.cull_mode = SDL_GPU_CULLMODE_NONE;
+        rasterizerState.front_face = SDL_GPU_FRONTFACE_COUNTER_CLOCKWISE;
+        rasterizerState.depth_bias_constant_factor = 0.0f;
+        rasterizerState.depth_bias_clamp = 0.0f;
+        rasterizerState.depth_bias_slope_factor = 0.0f;
+        rasterizerState.enable_depth_bias = false;
+        rasterizerState.enable_depth_clip = true;
+        createInfo.rasterizer_state = rasterizerState;
+
+        SDL_GPUMultisampleState multisampleState {};
+        multisampleState.sample_count = (SDL_GPUSampleCount)signature.Samples;
+        multisampleState.sample_mask = 0xFFFFFFFFu;
+        multisampleState.enable_mask = false;
+        createInfo.multisample_state = multisampleState;
+        
+        SDL_GPUDepthStencilState deptStencilState {};
+        deptStencilState.compare_op = SDL_GPU_COMPAREOP_LESS_OR_EQUAL;
+        deptStencilState.back_stencil_state = {};
+        deptStencilState.front_stencil_state = {};
+        deptStencilState.compare_mask = 0xFF;
+        deptStencilState.write_mask = 0xFF;
+        deptStencilState.enable_depth_test = signature.HasDepth;
+        deptStencilState.enable_depth_write = signature.HasDepth;
+        deptStencilState.enable_stencil_test = false;
+        createInfo.depth_stencil_state = deptStencilState;
+
+        SDL_GPUGraphicsPipelineTargetInfo pipelinteTargetInfo {};
+        pipelinteTargetInfo.color_target_descriptions = colorDescs.data();
+        pipelinteTargetInfo.num_color_targets = signature.NumColorTargets;
+        pipelinteTargetInfo.depth_stencil_format = static_cast<SDL_GPUTextureFormat>(signature.DepthFormat);
+        pipelinteTargetInfo.has_depth_stencil_target = signature.HasDepth;
+        createInfo.target_info = pipelinteTargetInfo;
 
         SDL_GPUGraphicsPipeline* pipeline = SDL_CreateGPUGraphicsPipeline(GetDevice(), &createInfo);
         LOG_CORE_ASSERT(pipeline, "SDL_CreateGPUGraphicsPipeline failed for shader {0}: {1}", m_Name, SDL_GetError());
@@ -297,7 +299,7 @@ namespace Cober {
 
     void SDLGPUShader::LoadFromCombinedShader(const std::filesystem::path& glslPath)
     {
-        auto shaderPath = PathService::ResolveAsset(glslPath.string());
+        auto shaderPath = glslPath;
         LOG_CORE_ASSERT(std::filesystem::exists(shaderPath.string()), "Shader source file not found: " + shaderPath.string());
 
         std::ifstream in(shaderPath, std::ios::in | std::ios::binary);
@@ -367,26 +369,21 @@ namespace Cober {
 
         std::filesystem::path compiledDir = glslPath.parent_path() / "Compiled";
         std::filesystem::path compiledPath;
-        if (backendFormats & SDL_GPU_SHADERFORMAT_SPIRV)
-        {
+        if (backendFormats & SDL_GPU_SHADERFORMAT_SPIRV) {
             compiledPath = compiledDir / "SPIRV" / (stem + "." + stageName + ".spv");
             outInfo.EntryPoint = "main";
             outInfo.Format = SDL_GPU_SHADERFORMAT_SPIRV;
-        }
-        else if (backendFormats & SDL_GPU_SHADERFORMAT_MSL)
-        {
+        } else 
+        if (backendFormats & SDL_GPU_SHADERFORMAT_MSL) {
             compiledPath = compiledDir / "MSL" / (stem + "." + stageName + ".msl");
             outInfo.EntryPoint = "main0";
             outInfo.Format = SDL_GPU_SHADERFORMAT_MSL;
-        }
-        else if (backendFormats & SDL_GPU_SHADERFORMAT_DXIL)
-        {
+        } else 
+        if (backendFormats & SDL_GPU_SHADERFORMAT_DXIL) {
             compiledPath = compiledDir / "DXIL" / (stem + "." + stageName + ".dxil");
             outInfo.EntryPoint = "main";
             outInfo.Format = SDL_GPU_SHADERFORMAT_DXIL;
-        }
-        else
-        {
+        } else {
             LOG_CORE_ASSERT(false, "No supported SDL_GPU shader format available for shader {0}", m_Name);
         }
 

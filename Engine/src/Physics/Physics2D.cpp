@@ -24,9 +24,10 @@ namespace Cober {
             m_DebugActive = true;
 		}
 
-        for (auto& entt : scene->GetAllEntitiesWith<TransformComponent, Rigidbody2D>())
-		{
-			Entity entity = Entity((entt::entity)entt, scene );
+        auto physicsGroup = scene->GetAllEntitiesWith<TransformComponent, Rigidbody2D>();
+		for (auto& entityHandle : physicsGroup)
+        {
+			Entity entity(entityHandle, scene);
 			Physics2D::InitEntity(entity);
 		}
     }

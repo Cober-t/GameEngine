@@ -32,7 +32,7 @@ namespace Cober
         );
 
         RenderGlobals::Init(s_window->GetRawWindow(), s_window->GetContext().get()->GetDevice());
-		// Render2D::Start();
+		Render2D::Start();
     }
 
     // --------------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ namespace Cober
             m_GuiLayer.reset();
         }
         
-        // Render2D::Shutdown();   // Abstract in a global Render api class in the future
+        Render2D::Shutdown();   // Abstract in a global Render api class in the future
         LOG_CORE_INFO("EngineApp Destructor!");
 
         m_profiler.DumpProfileStatsToLog(0.02);
@@ -144,10 +144,6 @@ namespace Cober
 
     void EngineApp::Run(const Timestep& ts)
     {
-        // Process Events
-        // Input::TransitionPressedKeys();
-		// Input::TransitionPressedButtons();
-
         ProcessEvents();
 
         RunEditor(ts);

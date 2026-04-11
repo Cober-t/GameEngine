@@ -1,5 +1,6 @@
 #include "Game.h"
 
+// --------------------------------------------------------------------------------------
 
 Game::Game() : Layer("Game application") 
 {
@@ -14,12 +15,14 @@ Game::Game() : Layer("Game application")
 #endif
 }
 
+// --------------------------------------------------------------------------------------
 
 void Game::OnAttach() 
 {
-	// m_ActiveScene = Scene::Load("SceneDefault.lua");
+	m_ActiveScene = Scene::Load("SceneDefault.lua");
 }
 
+// --------------------------------------------------------------------------------------
 
 void Game::OnDetach()
 {
@@ -29,6 +32,7 @@ void Game::OnDetach()
 	LOG_INFO("Detached Game application Layer!");
 }
 
+// --------------------------------------------------------------------------------------
 
 void Game::OnUpdate(const Timestep& ts) 
 {
@@ -36,7 +40,7 @@ void Game::OnUpdate(const Timestep& ts)
 	
 	RenderGlobals::SetClearColor(0.85, 0.35, 0.2);
 	
-#if 0
+#if 1
 	m_Fbo->Bind();
 	// Clear Framebuffer Attachments...
 	m_Fbo->ClearAttachment(1, -1);
@@ -55,6 +59,7 @@ void Game::OnUpdate(const Timestep& ts)
 #endif
 }
 
+// --------------------------------------------------------------------------------------
 
 void Game::OnEvent(Event& event) 
 {
@@ -75,3 +80,5 @@ void Game::OnEvent(Event& event)
 	// m_ActiveScene->OnEvent(event, m_DefaultCamera);
 	// NativeScriptFn::OnEvent(m_ActiveScene.get(), event);
 }
+
+// --------------------------------------------------------------------------------------

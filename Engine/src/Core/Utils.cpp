@@ -287,7 +287,7 @@ namespace Cober::Utils {
 
 	bool DataFile::Read(DataFile& dataFile, std::filesystem::path& path, const char listStep) 
     {
-		std::ifstream file(PathService::ResolveProject(path));
+		std::ifstream file(path);
 
 		//Open the file!
 		if (file.is_open())

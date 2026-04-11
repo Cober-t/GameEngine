@@ -1,68 +1,68 @@
-// #ifndef SCENE_HIERARCHY_PANEL_H
-// #define SCENE_HIERARCHY_PANEL_H
+#ifndef SCENE_HIERARCHY_PANEL_H
+#define SCENE_HIERARCHY_PANEL_H
 
-// #include "Scene/ECS.h"
+#include "Scene/ECS.h"
 
-// #include "Theme/IconsFontAwesome.h"
-// #include <filesystem>
-// #include <ImGui/imgui_internal.h>
+#include "Theme/IconsFontAwesome.h"
+#include <filesystem>
+#include <ImGui/imgui_internal.h>
 
-// #include <string_view>
+#include <string_view>
 
-// namespace Cober {
+namespace Cober {
 
-// 	namespace ComponentNames {
+	namespace ComponentNames {
 
-// 		constexpr std::string_view Transform = "Transform";
-// 		constexpr std::string_view Camera = "Camera";
-// 		constexpr std::string_view Rigidbody2D = "Rigidbody2D";
-// 		constexpr std::string_view Box2DCollider = "Box 2D Collider";
-// 		constexpr std::string_view Circle2DCollider = "Circle 2D Collider";
-// 		constexpr std::string_view Render2DShape = "Render 2D Shape";
-// 		constexpr std::string_view NativeScript = "Native Script Component";
-// 		constexpr std::string_view Audio = "Audio Component";
-// 		constexpr std::string_view Text = "Text Component";
-// 		constexpr std::string_view Particle = "Particle Component";
-// 	}
+		constexpr std::string_view Transform = "Transform";
+		constexpr std::string_view Camera = "Camera";
+		constexpr std::string_view Rigidbody2D = "Rigidbody2D";
+		constexpr std::string_view Box2DCollider = "Box 2D Collider";
+		constexpr std::string_view Circle2DCollider = "Circle 2D Collider";
+		constexpr std::string_view Render2DShape = "Render 2D Shape";
+		constexpr std::string_view NativeScript = "Native Script Component";
+		constexpr std::string_view Audio = "Audio Component";
+		constexpr std::string_view Text = "Text Component";
+		constexpr std::string_view Particle = "Particle Component";
+	}
 
-// 	class SceneHierarchyPanel
-// 	{
-// 	public:
-// 		SceneHierarchyPanel();
-// 		~SceneHierarchyPanel();
+	class SceneHierarchyPanel
+	{
+	public:
+		SceneHierarchyPanel();
+		~SceneHierarchyPanel();
 
-// 		static SceneHierarchyPanel& Get() { return *s_Instance; }
+		static SceneHierarchyPanel& Get() { return *s_Instance; }
 
-// 		void OnGuiRender();
+		void OnGuiRender();
 
-// 		void SetContext(const Ref<Scene>& selectionContext);
+		void SetContext(const Ref<Scene>& selectionContext);
 
-// 		Entity GetSelectedEntity() const { return m_SelectionContext; }
-// 		Entity GetNullEntity() const { return m_NullEntityContext; }
-// 		void SetSelectedEntity(Entity entity);
-// 		void SetNullEntityContext();
+		Entity GetSelectedEntity() const { return m_SelectionContext; }
+		Entity GetNullEntity() const { return m_NullEntityContext; }
+		void SetSelectedEntity(Entity entity);
+		void SetNullEntityContext();
 
-// 		template<typename T, typename UIFunction>
-// 		void DrawComponent(const std::string& name, Entity& entity, UIFunction uiFunction);
+		template<typename T, typename UIFunction>
+		void DrawComponent(const std::string& name, Entity& entity, UIFunction uiFunction);
 
-// 		template<typename T>
-// 		void AddIfHasComponent(std::string name);
+		template<typename T>
+		void AddIfHasComponent(std::string name);
 
-// 	private:
-// 		void DrawEntityNode(Entity entity);
-// 		void DrawComponents(Entity& entity);
+	private:
+		void DrawEntityNode(Entity entity);
+		void DrawComponents(Entity& entity);
 
-// 	private:
-// 		Ref<Scene> m_SceneContext;
-// 		Entity m_SelectionContext;
-// 		Entity m_NullEntityContext;
-// 		std::string m_NewEntityGroup;
-// 		std::string m_NewEntityTag;
-// 		std::map<std::string, Ref<Texture>> m_AssetIconMap;
+	private:
+		Ref<Scene> m_SceneContext;
+		Entity m_SelectionContext;
+		Entity m_NullEntityContext;
+		std::string m_NewEntityGroup;
+		std::string m_NewEntityTag;
+		std::map<std::string, Ref<Texture>> m_AssetIconMap;
 
-// 	private:
-// 		static SceneHierarchyPanel* s_Instance;
-// 	};
-// }
+	private:
+		static SceneHierarchyPanel* s_Instance;
+	};
+}
 
-// #endif
+#endif
