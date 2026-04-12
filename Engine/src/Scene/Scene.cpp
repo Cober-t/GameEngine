@@ -253,14 +253,14 @@ namespace Cober
 	{
 		AddSystem<CameraSystem>();
 		AddSystem<RenderSystem>();
-		AddSystem<ParticleSystem>();
+		// AddSystem<ParticleSystem>();
 		//AddSystem<PhysicsSystem2D>();
 		//AddSystem<AudioSystem>();
 		//AddSystem<ScriptSystem>();
 
 		GetSystem<CameraSystem>().Start(this);
         GetSystem<RenderSystem>().Start();
-		GetSystem<ParticleSystem>().Start(this);
+		// GetSystem<ParticleSystem>().Start(this);
 		//GetSystem<PhysicsSystem2D>().Start(this);
 		//GetSystem<AudioSystem>().Start(this);
 		//GetSystem<ScriptSystem>().Start(this);
@@ -270,14 +270,14 @@ namespace Cober
 
     void Scene::OnSimulationStop()
 	{
-		RemoveSystem<PhysicsSystem2D>();
+		//RemoveSystem<PhysicsSystem2D>();
 		RemoveSystem<RenderSystem>();
-		RemoveSystem<ParticleSystem>();
-		RemoveSystem<CameraSystem>();
-		RemoveSystem<AudioSystem>();
+		// RemoveSystem<ParticleSystem>();
+		// RemoveSystem<CameraSystem>();
+		// RemoveSystem<AudioSystem>();
 
-		GetSystem<ScriptSystem>().FreeScripts(this);
-		RemoveSystem<ScriptSystem>();
+		// GetSystem<ScriptSystem>().FreeScripts(this);
+		// RemoveSystem<ScriptSystem>();
 	}
 
 	// --------------------------------------------------------------------------------------
@@ -285,7 +285,7 @@ namespace Cober
 	void Scene::OnRuntimeStart()
 	{
 		//AddSystem<CameraSystem>();
-		//AddSystem<RenderSystem>();
+		AddSystem<RenderSystem>();
 		//AddSystem<ParticleSystem>();
 
 		//GetSystem<CameraSystem>().Start(this);
@@ -298,7 +298,7 @@ namespace Cober
     void Scene::OnRuntimeStop()
 	{
 		//RemoveSystem<CameraSystem>();
-		//RemoveSystem<RenderSystem>();
+		RemoveSystem<RenderSystem>();
 		//RemoveSystem<ParticleSystem>();
 	}
 
@@ -311,9 +311,9 @@ namespace Cober
 
 		Render2D::ResetStats();
 		Render2D::BeginScene(camera);
-		GetSystem<CameraSystem>().Update(ts, camera, this);
+		//GetSystem<CameraSystem>().Update(ts, camera, this);
 		GetSystem<RenderSystem>().Update(this);
-		GetSystem<ParticleSystem>().Update(ts, this);
+		//GetSystem<ParticleSystem>().Update(ts, this);
 		Render2D::EndScene();
 
 		if (!m_IsPaused || m_StepFrames-- > 0.0f)
@@ -325,14 +325,14 @@ namespace Cober
 			// }
 		}
 
-		GetSystem<AudioSystem>().Update(this);
+		//GetSystem<AudioSystem>().Update(this);
 
-		if (m_ReloadScripts)
-		{
-			GetSystem<ScriptSystem>().Start(this);
-			m_ReloadScripts = false;
-		}
-		GetSystem<ScriptSystem>().Update(this, ts.GetDeltaTime());
+		//if (m_ReloadScripts)
+		//{
+		//	GetSystem<ScriptSystem>().Start(this);
+		//	m_ReloadScripts = false;
+		//}
+		//GetSystem<ScriptSystem>().Update(this, ts.GetDeltaTime());
 	}
 
 	// --------------------------------------------------------------------------------------
@@ -346,7 +346,7 @@ namespace Cober
 		Render2D::BeginScene(camera);
 		GetSystem<CameraSystem>().Update(ts, camera, this);
 		GetSystem<RenderSystem>().Update(this);
-		GetSystem<ParticleSystem>().Update(ts, this);
+		//GetSystem<ParticleSystem>().Update(ts, this);
 		Render2D::EndScene();
 	}
 

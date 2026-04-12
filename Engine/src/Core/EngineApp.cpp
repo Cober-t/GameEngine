@@ -218,14 +218,15 @@ namespace Cober
             RenderGlobals::ImGuiPrepareDrawData(ImGui::GetDrawData());
         }
 
-        // Start the render pass
-        RenderGlobals::BeginMainRenderPass();
-        
         if (!IsMinimized()) {
             for (const auto& layer : m_LayerStack) {
                 layer->OnUpdate(ts);   
             }
         }
+        
+        // Start the render pass
+        RenderGlobals::BeginMainRenderPass();
+        
         // Render ImGui into the active render pass
         if (EngineApp::IsEditor()) 
         {

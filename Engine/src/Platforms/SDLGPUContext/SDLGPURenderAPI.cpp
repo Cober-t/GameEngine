@@ -339,7 +339,7 @@ namespace Cober
 
     void SDLGPURenderAPI::DrawInternal(const Ref<VertexArray>& vertexArray, uint32_t count, uint32_t primitiveType, bool indexed)
     {
-        EnsureMainRenderPass();
+        //EnsureMainRenderPass();
 
         auto shader = SDLGPUShader::GetBoundShader();
         auto sdlva = std::dynamic_pointer_cast<SDLGPUVertexArray>(vertexArray);

@@ -27,10 +27,10 @@ namespace Cober {
 	{
 		m_RenderSettings = new RenderSettings();
 		Primitive::Quad::Init();
-		Primitive::Line::Init();
-		Primitive::Circle::Init();
-		Primitive::Text::Init();
-		// Primitive::Cube::Init()
+		//Primitive::Line::Init();
+		//Primitive::Circle::Init();
+		//Primitive::Text::Init();
+		//Primitive::Cube::Init()
 
 		CameraUniformBuffer = UniformBuffer::Create(sizeof(CameraData), 0);
 	}
@@ -49,9 +49,9 @@ namespace Cober {
 	void Render2D::Flush()
 	{
 		Primitive::Quad::Flush();
-		Primitive::Line::Flush();
-		Primitive::Circle::Flush();
-		Primitive::Text::Flush();
+		//Primitive::Line::Flush();
+		//Primitive::Circle::Flush();
+		//Primitive::Text::Flush();
 		// 	Cube::Flush();
 	}
 
@@ -59,9 +59,9 @@ namespace Cober {
 	void Render2D::StartBatch() 
 	{
 		Primitive::Quad::StartBatch();
-		Primitive::Line::StartBatch();
-		Primitive::Circle::StartBatch();
-		Primitive::Text::StartBatch();
+		//Primitive::Line::StartBatch();
+		//Primitive::Circle::StartBatch();
+		//Primitive::Text::StartBatch();
 		// Primitive::Cube::StartBatch();
 	}
 
@@ -69,9 +69,9 @@ namespace Cober {
 	void Render2D::NextBatch() 
 	{
 		Primitive::Quad::NextBatch();
-		Primitive::Line::NextBatch();
-		Primitive::Circle::NextBatch();
-		Primitive::Text::NextBatch();
+		//Primitive::Line::NextBatch();
+		//Primitive::Circle::NextBatch();
+		//Primitive::Text::NextBatch();
 		// Primitive::Cube::NextBatch();
 	}
 
@@ -97,23 +97,23 @@ namespace Cober {
 	void Render2D::Shutdown() 
 	{
 		Primitive::Quad::CleanVertexBuffer();
-		Primitive::Line::CleanVertexBuffer();
-		Primitive::Circle::CleanVertexBuffer();
-		Primitive::Text::CleanVertexBuffer();
+		//Primitive::Line::CleanVertexBuffer();
+		//Primitive::Circle::CleanVertexBuffer();
+		//Primitive::Text::CleanVertexBuffer();
 		// Primitive::Cube::CleanVertexBuffer();
 	}
 
 
 	void Render2D::DrawQuad(Entity& entity) 
 	{
-		if (entity.GetComponent<Render2DComponent>().fill)
-		{
+		//if (entity.GetComponent<Render2DComponent>().fill)
+		//{
 			Primitive::Quad::Draw(entity);
-		}
-		else
-		{
-			Primitive::Quad::DrawRect(entity);
-		}
+		//}
+		//else
+		//{
+			//Primitive::Quad::DrawRect(entity);
+		//}
 	}
 
 	

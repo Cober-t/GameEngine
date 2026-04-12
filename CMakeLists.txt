@@ -56,6 +56,7 @@ endfunction()
 
 # Include directories for libraries
 set(SDL3_INCLUDE_DIR         ${CMAKE_SOURCE_DIR}/libraries/SDL/include)
+set(SDL3SHADERCROSS_INCLUDE_DIR         ${CMAKE_SOURCE_DIR}/libraries/SDL_shadercross/include)
 set(IMGUI_INCLUDE_DIR        ${CMAKE_SOURCE_DIR}/libraries/imgui)
 set(IMGUIZMO_INCLUDE_DIR     ${CMAKE_SOURCE_DIR}/libraries/ImGuizmo)
 set(GLM_INCLUDE_DIR          ${CMAKE_SOURCE_DIR}/libraries/glm)

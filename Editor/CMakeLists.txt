@@ -22,6 +22,7 @@ target_include_directories(${PROJECT_NAME}
         ${IMGUIZMO_INCLUDE_DIR}
         ${BOX2D_INCLUDE_DIR}
         ${SDL3_INCLUDE_DIR}
+        ${SDL3SHADERCROSS_INCLUDE_DIR}
         ${STB_IMAGE_INCLUDE_DIR}
         ${STB_TRUETYPE_INCLUDE_DIR}
         ${LUA_INCLUDE_DIR}

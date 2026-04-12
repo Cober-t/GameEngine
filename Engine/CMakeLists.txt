@@ -40,6 +40,7 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC
         include
         ${SDL3_INCLUDE_DIR}
+        ${SDL3SHADERCROSS_INCLUDE_DIR}
         ${IMGUI_INCLUDE_DIR}
         ${BOX2D_INCLUDE_DIR}
         ${GLM_INCLUDE_DIR}

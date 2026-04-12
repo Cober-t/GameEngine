@@ -7,28 +7,39 @@
 
 namespace Cober {
 
-    Ref<Shader> Shader::Create(const std::string& filepath)
+    Ref<Shader> Shader::Create(const char* fileName)
     {
         switch (RenderAPI::GetAPI()) {
             case RenderAPI::API::None:          LOG_CORE_ERROR("RenderAPI::None means there is not render defined!!");       return nullptr;
-            case RenderAPI::API::SDLGPU:        return CreateRef<SDLGPUShader>(filepath);
+            case RenderAPI::API::SDLGPU:        return CreateRef<SDLGPUShader>(fileName);
             default: LOG_CORE_ASSERT(false, "Unknown RendererAPI!"); break;
         }
 
         return nullptr;
     }
 
-    Ref<Shader> Shader::Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+    Ref<Shader> Shader::Create(const std::filesystem::path& filePath)
     {
-        switch (RenderAPI::GetAPI())
-        {
+        switch (RenderAPI::GetAPI()) {
             case RenderAPI::API::None:          LOG_CORE_ERROR("RenderAPI::None means there is not render defined!!");       return nullptr;
-            case RenderAPI::API::SDLGPU:        return CreateRef<SDLGPUShader>(name, vertexSrc, fragmentSrc);
+            case RenderAPI::API::SDLGPU:        return CreateRef<SDLGPUShader>(filePath);
             default: LOG_CORE_ASSERT(false, "Unknown RendererAPI!"); break;
         }
 
         return nullptr;
     }
+
+    // Ref<Shader> Shader::Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+    // {
+    //     switch (RenderAPI::GetAPI())
+    //     {
+    //         case RenderAPI::API::None:          LOG_CORE_ERROR("RenderAPI::None means there is not render defined!!");       return nullptr;
+    //         case RenderAPI::API::SDLGPU:        return CreateRef<SDLGPUShader>(name, vertexSrc, fragmentSrc);
+    //         default: LOG_CORE_ASSERT(false, "Unknown RendererAPI!"); break;
+    //     }
+
+    //     return nullptr;
+    // }
 
     void Shader::SetInt(const std::string& name, int value) { (void)name; (void)value; }
     void Shader::SetIntArray(const std::string& name, int* values, uint32_t count) { (void)name; (void)values; (void)count; }

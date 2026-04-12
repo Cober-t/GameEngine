@@ -43,14 +43,16 @@ namespace Cober {
 
 		std::filesystem::path scenePath = PathService::ResolveAsset("scenes\\" +  sceneName);
 
-		LOG_CORE_ERROR(scenePath.string());
-		if (!std::filesystem::exists(scenePath))
+		if (!std::filesystem::exists(scenePath)) {
 			sceneName = "SceneDefault.lua";
+		}
 
-		if (sceneName.find_last_of('.') != std::string::npos)
+		if (sceneName.find_last_of('.') != std::string::npos) {
 			name = sceneName.substr(0, sceneName.find_last_of('.'));
-		else
+		}
+		else {
 			name = sceneName;
+		}
 
 		if (Utils::DataFile::Read(sceneLoader, scenePath)) 
 		{
@@ -64,9 +66,9 @@ namespace Cober {
 				if (sceneLoader[name].HasProperty("Entity" + std::to_string(i))) 
 				{
 					loader = sceneLoader[name]["Entity" + std::to_string(i)];
-					Entity newEntity = newScene->CreateEntityWithUUID(
-							UUID(loader["UUID"]["id"].GetReal()),
-							loader["TagComponent"]["tag"].GetString());
+					UUID uuid = UUID(loader["UUID"]["id"].GetReal());
+					std::string sceneName = loader["TagComponent"]["tag"].GetString();
+					Entity newEntity = newScene->CreateEntityWithUUID(uuid, sceneName);
 
 					DeserializeAllComponents(newEntity, loader);
 				}

@@ -36,10 +36,10 @@ SceneDefault
 			fixedRotation = 0
 		}
 
-		CircleCollider2D
+		BoxCollider2D
 		{
 			offset = 0.000000, 0.000000
-			radius = 0.500000
+			size = 1.000000, 1.000000
 			density = 1.000000
 			friction = 0.500000
 			restitution = 0.999000
@@ -49,7 +49,7 @@ SceneDefault
 		Render2DComponent
 		{
 			color = 0.934363, 0.281391, 0.000000, 1.000000
-			shape2D = Circle
+			shape2D = Quad
 			thickness = 1.000000
 			fade = 0.000000
 		}

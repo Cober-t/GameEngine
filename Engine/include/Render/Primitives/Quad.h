@@ -39,12 +39,12 @@ namespace Cober  {
 			{
 				glm::vec3 Position;
 				glm::vec4 Color;
-				glm::vec2 TexCoord;
-				float TexIndex;
-				float TilingFactor;
+				// glm::vec2 TexCoord;
+				// float TexIndex;
+				// float TilingFactor;
 
 				// Editor-only
-				int EntityID;
+				// int EntityID;
 			};
 
 			struct Data

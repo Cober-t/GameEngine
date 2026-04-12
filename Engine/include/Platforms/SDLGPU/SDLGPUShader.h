@@ -25,8 +25,8 @@ namespace Cober {
     class SDLGPUShader : public Shader
     {
     public:
-        explicit SDLGPUShader(const std::string& filepath);
-        SDLGPUShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
+        explicit SDLGPUShader(const char* fileName);
+        explicit SDLGPUShader(const std::filesystem::path& filePath);
         ~SDLGPUShader() override;
 
         void Bind() const override;
@@ -34,6 +34,9 @@ namespace Cober {
 
         const std::string& GetName() const override { return m_Name; }
 
+        void ReadAndLoadShader(const char* shaderFilename);
+        void ReadAndLoadShader(const std::filesystem::path& shaderFilePath);
+        
         SDL_GPUGraphicsPipeline* GetOrCreatePipeline(const SDLGPUVertexArray& vertexArray, const SDLGPUShaderPassSignature& signature);
 
         uint32_t GetVertexUniformBufferCount() const { return m_VertexUniformBufferCount; }
@@ -43,10 +46,15 @@ namespace Cober {
         static const SDLGPUShader* GetBoundShader();
 
     private:
+        enum ShaderStage
+        {
+            VERTEX, FRAGMENT
+        };
         struct ShaderStageInfo
         {
+            void* Code;
+            size_t CodeSize;
             std::string Source;
-            std::vector<uint8_t> Code;
             std::string EntryPoint;
             int Format = 0;
             uint32_t SamplerCount = 0;
@@ -54,17 +62,20 @@ namespace Cober {
             bool Present = false;
         };
 
-        static std::unordered_map<std::string, std::string> PreProcess(const std::string& source);
         static uint32_t CountSamplers(const std::string& source);
         static uint32_t CountUniformBlocks(const std::string& source);
         static std::string BuildVertexLayoutSignature(const SDLGPUVertexArray& vertexArray);
         static std::string MakePipelineKey(const SDLGPUVertexArray& vertexArray, const SDLGPUShaderPassSignature& signature);
 
-        void LoadFromCombinedShader(const std::filesystem::path& glslPath);
-        void LoadCompiledStage(const std::filesystem::path& glslPath, const std::string& stem, const std::string& stageName, ShaderStageInfo& outInfo);
+        const std::string& ReadSourceShader(const std::filesystem::path& shaderFilePath);
+        void* ReadCompiledShader(const std::filesystem::path& shaderFilePath);
+        SDL_GPUShader* LoadShader(const std::filesystem::path& shaderPath, const ShaderStage& stageName, ShaderStageInfo& stageInfo);
+
+        void LoadCompiledStage(const std::filesystem::path& compiledDir, const ShaderStage& stageName, ShaderStageInfo& outInfo);
+        const char* ShaderStageToStr(const ShaderStage& shaderStage);
 
     private:
-        std::string m_Name;
+        const char* m_Name;
         ShaderStageInfo m_VertexStage;
         ShaderStageInfo m_FragmentStage;
         SDL_GPUShader* m_VertexShader = nullptr;
@@ -72,6 +83,9 @@ namespace Cober {
         uint32_t m_VertexUniformBufferCount = 0;
         uint32_t m_FragmentUniformBufferCount = 0;
         uint32_t m_FragmentSamplerCount = 0;
+
+        std::filesystem::path m_vertexShaderPath;
+        std::filesystem::path m_fragmentShaderPath;
         std::unordered_map<std::string, SDL_GPUGraphicsPipeline*> m_PipelineCache;
 
         static const SDLGPUShader* s_BoundShader;

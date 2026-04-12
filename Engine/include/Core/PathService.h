@@ -18,8 +18,8 @@ namespace Cober {
 		static std::filesystem::path ResolveAsset(const std::filesystem::path& relativePath);
 
 	private:
-		inline static std::filesystem::path s_ProjectRoot;
-		inline static std::filesystem::path s_AssetsRoot;
+		inline static std::filesystem::path s_ProjectRoot = "C:\\Users\\Jorge\\Documents\\GameEngine\\Editor\\";
+		inline static std::filesystem::path s_AssetsRoot = "C:\\Users\\Jorge\\Documents\\GameEngine\\Editor\\assets\\";
 	};
 }
 

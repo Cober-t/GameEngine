@@ -29,22 +29,6 @@ SceneDefault
 			scale = 1.000000, 1.000000, 1.000000
 		}
 
-		Rigidbody2D
-		{
-			bodyType = 0
-			fixedRotation = 0
-		}
-
-		BoxCollider2D
-		{
-			offset = 0.000000, 0.000000
-			size = 1.000000, 1.000000
-			density = 1.000000
-			friction = 0.500000
-			restitution = 0.999000
-			isSensor = 0
-		}
-
 		Render2DComponent
 		{
 			color = 0.141679, 0.569354, 0.833977, 1.000000
@@ -73,26 +57,10 @@ SceneDefault
 			scale = 1.000000, 1.000000, 1.000000
 		}
 
-		Rigidbody2D
-		{
-			bodyType = 2
-			fixedRotation = 0
-		}
-
-		CircleCollider2D
-		{
-			offset = 0.000000, 0.000000
-			radius = 0.500000
-			density = 1.000000
-			friction = 0.500000
-			restitution = 0.999000
-			isSensor = 0
-		}
-
 		Render2DComponent
 		{
 			color = 0.934363, 0.281391, 0.000000, 1.000000
-			shape2D = Circle
+			shape2D = Quad
 			thickness = 1.000000
 			fade = 0.000000
 		}

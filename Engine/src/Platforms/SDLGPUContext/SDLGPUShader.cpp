@@ -7,58 +7,63 @@
 #include "Core/PathService.h"
 
 #include <SDL3/SDL_gpu.h>
+#include <SDL3_shadercross/SDL_shadercross.h>
 
 #include <fstream>
 #include <regex>
 
-namespace Cober {
+namespace Cober 
+{
+
+    // --------------------------------------------------------------------------------------
 
     const SDLGPUShader* SDLGPUShader::s_BoundShader = nullptr;
 
-    namespace {
+    // --------------------------------------------------------------------------------------
+    
+    static SDL_GPUDevice* GetDevice()
+    {
+        auto* api = SDLGPURenderAPI::Get();
+        LOG_CORE_ASSERT(api, "SDLGPURenderAPI has not been initialized yet");
+        return api->GetDevice();
+    }
 
-        static SDL_GPUDevice* GetDevice()
+    // --------------------------------------------------------------------------------------
+
+    static SDL_GPUVertexElementFormat ToVertexFormat(ShaderDataType type)
+    {
+        switch (type)
         {
-            auto* api = SDLGPURenderAPI::Get();
-            LOG_CORE_ASSERT(api, "SDLGPURenderAPI has not been initialized yet");
-            return api->GetDevice();
+            case ShaderDataType::Float:  return SDL_GPU_VERTEXELEMENTFORMAT_FLOAT;
+            case ShaderDataType::Float2: return SDL_GPU_VERTEXELEMENTFORMAT_FLOAT2;
+            case ShaderDataType::Float3: return SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3;
+            case ShaderDataType::Float4: return SDL_GPU_VERTEXELEMENTFORMAT_FLOAT4;
+            case ShaderDataType::Int:    return SDL_GPU_VERTEXELEMENTFORMAT_INT;
+            case ShaderDataType::Int2:   return SDL_GPU_VERTEXELEMENTFORMAT_INT2;
+            case ShaderDataType::Int3:   return SDL_GPU_VERTEXELEMENTFORMAT_INT3;
+            case ShaderDataType::Int4:   return SDL_GPU_VERTEXELEMENTFORMAT_INT4;
+            default: break;
         }
 
-        static SDL_GPUVertexElementFormat ToVertexFormat(ShaderDataType type)
-        {
-            switch (type)
-            {
-                case ShaderDataType::Float:  return SDL_GPU_VERTEXELEMENTFORMAT_FLOAT;
-                case ShaderDataType::Float2: return SDL_GPU_VERTEXELEMENTFORMAT_FLOAT2;
-                case ShaderDataType::Float3: return SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3;
-                case ShaderDataType::Float4: return SDL_GPU_VERTEXELEMENTFORMAT_FLOAT4;
-                case ShaderDataType::Int:    return SDL_GPU_VERTEXELEMENTFORMAT_INT;
-                case ShaderDataType::Int2:   return SDL_GPU_VERTEXELEMENTFORMAT_INT2;
-                case ShaderDataType::Int3:   return SDL_GPU_VERTEXELEMENTFORMAT_INT3;
-                case ShaderDataType::Int4:   return SDL_GPU_VERTEXELEMENTFORMAT_INT4;
-                default: break;
-            }
-
-            LOG_CORE_ASSERT(false, "Unsupported vertex attribute type in SDL_GPU pipeline");
-            return SDL_GPU_VERTEXELEMENTFORMAT_INVALID;
-        }
+        LOG_CORE_ASSERT(false, "Unsupported vertex attribute type in SDL_GPU pipeline");
+        return SDL_GPU_VERTEXELEMENTFORMAT_INVALID;
     }
 
-    SDLGPUShader::SDLGPUShader(const std::string& filepath)
+    // --------------------------------------------------------------------------------------
+
+    SDLGPUShader::SDLGPUShader(const char* fileName)
     {
-        const std::filesystem::path glslPath = PathService::ResolveAsset("shaders\\" + filepath);
-        LOG_CORE_ERROR(glslPath.string());
-        m_Name = glslPath.stem().string();
-        LoadFromCombinedShader(glslPath);
+        ReadAndLoadShader(fileName);
     }
 
-    SDLGPUShader::SDLGPUShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
-        : m_Name(name)
+    // --------------------------------------------------------------------------------------
+
+    SDLGPUShader::SDLGPUShader(const std::filesystem::path& filePath)
     {
-        (void)vertexSrc;
-        (void)fragmentSrc;
-        LOG_CORE_ASSERT(false, "Runtime source-based SDL_GPU shader creation is not implemented. Use compiled stage binaries.");
+        ReadAndLoadShader(filePath);
     }
+
+    // --------------------------------------------------------------------------------------
 
     SDLGPUShader::~SDLGPUShader()
     {
@@ -87,10 +92,196 @@ namespace Cober {
         }
     }
 
+    // --------------------------------------------------------------------------------------
+
     void SDLGPUShader::Bind() const
     {
         s_BoundShader = this;
     }
+    
+    // --------------------------------------------------------------------------------------
+
+    const std::string& SDLGPUShader::ReadSourceShader(const std::filesystem::path& filePath)  
+    {
+        std::ifstream in(m_vertexShaderPath, std::ios::in | std::ios::binary);
+        std::stringstream ss;
+        LOG_CORE_ASSERT(in, "Failed to open shader source: {0}", m_vertexShaderPath.string());
+
+        ss << in.rdbuf();
+
+        return ss.str();
+    }
+    
+    // --------------------------------------------------------------------------------------
+
+    void* SDLGPUShader::ReadCompiledShader(const std::filesystem::path& filePath)  
+    {
+        size_t codeSize;
+        void* code = SDL_LoadFile((const char*)filePath.string().c_str(), &codeSize);
+        if (code == NULL)
+        {
+            SDL_Log("Failed to load shader from disk! %s", filePath.string());
+            return NULL;
+        }
+     
+        return code;
+    }
+    
+    // --------------------------------------------------------------------------------------
+    
+    void SDLGPUShader::ReadAndLoadShader(const char* fileName) 
+    {
+        m_Name = fileName;
+        // Source
+        m_vertexShaderPath = PathService::ResolveAsset("shaders\\source\\" + std::string(fileName) + ShaderStageToStr(ShaderStage::VERTEX) + ".hlsl");
+        LOG_CORE_ASSERT(std::filesystem::exists(m_vertexShaderPath.string()), "Shader source file not found: " + m_vertexShaderPath.string());
+        
+        m_fragmentShaderPath = PathService::ResolveAsset("shaders\\source\\" + std::string(fileName) + ShaderStageToStr(ShaderStage::FRAGMENT) + ".hlsl");
+        LOG_CORE_ASSERT(std::filesystem::exists(m_fragmentShaderPath.string()), "Shader source file not found: " + m_fragmentShaderPath.string());       
+
+        // Compiled
+        const std::filesystem::path vertexCompiled = PathService::ResolveAsset("shaders\\compiled\\" + std::string(fileName) + ShaderStageToStr(ShaderStage::VERTEX) + ".spv");
+        LOG_CORE_ASSERT(std::filesystem::exists(m_vertexShaderPath.string()), "Shader source file not found: " + m_vertexShaderPath.string());
+        
+        const std::filesystem::path fragmentCompiled  = PathService::ResolveAsset("shaders\\compiled\\" + std::string(fileName) + ShaderStageToStr(ShaderStage::FRAGMENT) + ".spv");
+        LOG_CORE_ASSERT(std::filesystem::exists(m_fragmentShaderPath.string()), "Shader source file not found: " + m_fragmentShaderPath.string());       
+        
+
+        // Read Vertex shader          
+        size_t codeSize;
+        void* code = SDL_LoadFile((const char*)vertexCompiled.string().c_str(), &codeSize);
+        if (code == NULL) {
+            SDL_Log("Failed to load shader from disk! %s", vertexCompiled.string());
+        }
+
+        m_VertexStage.Source = ReadSourceShader(m_vertexShaderPath);
+        m_VertexStage.Code = code;//ReadCompiledShader(vertexCompiled);
+        m_VertexStage.CodeSize = codeSize;
+        m_VertexStage.Present = true;
+        m_VertexStage.SamplerCount = CountSamplers(m_VertexStage.Source);
+        m_VertexStage.UniformBufferCount = CountUniformBlocks(m_VertexStage.Source);
+
+        m_VertexUniformBufferCount = m_VertexStage.UniformBufferCount;
+
+        // Read Fragment shader
+        codeSize;
+        code = SDL_LoadFile((const char*)fragmentCompiled.string().c_str(), &codeSize);
+        if (code == NULL) {
+            SDL_Log("Failed to load shader from disk! %s", fragmentCompiled.string());
+        }
+
+        m_FragmentStage.Source = ReadSourceShader(m_fragmentShaderPath);
+        m_FragmentStage.Code = code;//ReadCompiledShader(fragmentCompiled);
+        m_FragmentStage.CodeSize = codeSize;
+        m_FragmentStage.Present = true;
+        m_FragmentStage.SamplerCount = CountSamplers(m_FragmentStage.Source);
+        m_FragmentStage.UniformBufferCount = CountUniformBlocks(m_FragmentStage.Source);
+
+        m_FragmentUniformBufferCount = m_FragmentStage.UniformBufferCount;
+        m_FragmentSamplerCount = m_FragmentStage.SamplerCount;
+        
+        m_VertexShader   = LoadShader(PathService::ResolveAsset("shaders\\compiled"), ShaderStage::VERTEX, m_VertexStage);
+        m_FragmentShader = LoadShader(PathService::ResolveAsset("shaders\\compiled"), ShaderStage::FRAGMENT, m_FragmentStage);
+    }
+
+    // --------------------------------------------------------------------------------------
+
+    void SDLGPUShader::ReadAndLoadShader(const std::filesystem::path& filePath) 
+    {
+        #if 0
+        m_Name = (const char*)filePath.stem().c_str();
+
+        const char* shaderExtension = (const char*)filePath.stem().c_str();
+        if (SDL_strstr(shaderExtension, ".vert"))
+        {
+            // Read Vertex shader          
+            m_VertexStage.Source = ReadSourceShader(filePath);
+            m_VertexStage.Code = ReadCompiledShader(filePath);
+            m_VertexStage.CodeSize = size_t(m_VertexStage.Code);
+            m_VertexStage.Present = true;
+            m_VertexStage.SamplerCount = CountSamplers(m_VertexStage.Source);
+            m_VertexStage.UniformBufferCount = CountUniformBlocks(m_VertexStage.Source);
+    
+            m_VertexUniformBufferCount = m_VertexStage.UniformBufferCount;
+            m_VertexShader   = LoadShader(filePath.parent_path(), ShaderStage::VERTEX, m_VertexStage  );
+        }
+        else if (SDL_strstr(shaderExtension, ".frag"))
+        {
+            // Read Fragment shader
+            m_FragmentStage.Source = ReadSourceShader(filePath);
+            m_FragmentStage.Code = ReadCompiledShader(filePath);
+            m_FragmentStage.CodeSize = size_t(m_FragmentStage.Code);
+            m_FragmentStage.Present = true;
+            m_FragmentStage.SamplerCount = CountSamplers(m_FragmentStage.Source);
+            m_FragmentStage.UniformBufferCount = CountUniformBlocks(m_FragmentStage.Source);
+    
+            m_FragmentUniformBufferCount = m_FragmentStage.UniformBufferCount;
+            m_FragmentSamplerCount = m_FragmentStage.SamplerCount;
+            m_FragmentShader = LoadShader(filePath.parent_path(), ShaderStage::FRAGMENT, m_FragmentStage);
+        }
+        #endif
+    }
+
+    // --------------------------------------------------------------------------------------
+
+    SDL_GPUShader* SDLGPUShader::LoadShader(const std::filesystem::path& shaderPath, const ShaderStage& stageName, ShaderStageInfo& stageInfo)
+    {
+        LoadCompiledStage(shaderPath, stageName, stageInfo);
+
+        SDL_GPUShaderCreateInfo shaderCreateInfo {};
+        shaderCreateInfo.code_size = stageInfo.CodeSize;
+        shaderCreateInfo.code = (const Uint8*)stageInfo.Code;
+        shaderCreateInfo.entrypoint = stageInfo.EntryPoint.c_str();
+        shaderCreateInfo.format = (SDL_GPUShaderFormat)stageInfo.Format;
+        // TODO: FIX THIS
+        shaderCreateInfo.stage = stageName == ShaderStage::VERTEX ? SDL_GPU_SHADERSTAGE_VERTEX : SDL_GPU_SHADERSTAGE_FRAGMENT; 
+        shaderCreateInfo.num_samplers = stageInfo.SamplerCount;
+        shaderCreateInfo.num_storage_textures = 0;
+        shaderCreateInfo.num_storage_buffers = 0;
+        shaderCreateInfo.num_uniform_buffers = stageInfo.UniformBufferCount;
+        
+        auto shader = SDL_CreateGPUShader( GetDevice(), &shaderCreateInfo );
+        if (shader == nullptr) {
+            LOG_CORE_ERROR("Failed to create shader! {0} - {1}", shaderPath.string(), ShaderStageToStr(stageName));
+		    SDL_free(stageInfo.Code);
+            return NULL;
+        }
+
+        SDL_free(stageInfo.Code);
+
+        LOG_CORE_ASSERT(shader, "SDL_CreateGPUShader(fragment) failed for {0}: {1}", m_Name, SDL_GetError());
+
+        return shader;
+    }
+
+    // --------------------------------------------------------------------------------------
+
+    void SDLGPUShader::LoadCompiledStage(const std::filesystem::path& compiledDir, const ShaderStage& stageName, ShaderStageInfo& outInfo)
+    {
+        SDL_GPUShaderFormat backendFormats = SDL_GetGPUShaderFormats(GetDevice());
+
+        std::filesystem::path compiledPath;
+        if (backendFormats & SDL_GPU_SHADERFORMAT_SPIRV) {
+            compiledPath = compiledDir / (m_Name + std::string(ShaderStageToStr(stageName)) + ".spv");
+            outInfo.EntryPoint = "main";
+            outInfo.Format = SDL_GPU_SHADERFORMAT_SPIRV;
+        } else 
+        if (backendFormats & SDL_GPU_SHADERFORMAT_MSL) {
+            compiledPath = compiledDir / (m_Name + std::string(ShaderStageToStr(stageName)) + ".msl");
+            outInfo.EntryPoint = "main0";
+            outInfo.Format = SDL_GPU_SHADERFORMAT_MSL;
+        } else 
+        if (backendFormats & SDL_GPU_SHADERFORMAT_DXIL) {
+            compiledPath = compiledDir / (m_Name + std::string(ShaderStageToStr(stageName)) + ".dxil");
+            outInfo.EntryPoint = "main";
+            outInfo.Format = SDL_GPU_SHADERFORMAT_DXIL;
+        } else {
+            LOG_CORE_WARNING("%s", "Unrecognized backend shader format!");
+            return;
+        }
+    }
+
+    // --------------------------------------------------------------------------------------
 
     SDL_GPUGraphicsPipeline* SDLGPUShader::GetOrCreatePipeline(const SDLGPUVertexArray& vertexArray, const SDLGPUShaderPassSignature& signature)
     {
@@ -157,34 +348,6 @@ namespace Cober {
 
         createInfo.primitive_type = static_cast<SDL_GPUPrimitiveType>(signature.PrimitiveType);
 
-        SDL_GPURasterizerState rasterizerState {};
-        rasterizerState.fill_mode = SDL_GPU_FILLMODE_FILL;
-        rasterizerState.cull_mode = SDL_GPU_CULLMODE_NONE;
-        rasterizerState.front_face = SDL_GPU_FRONTFACE_COUNTER_CLOCKWISE;
-        rasterizerState.depth_bias_constant_factor = 0.0f;
-        rasterizerState.depth_bias_clamp = 0.0f;
-        rasterizerState.depth_bias_slope_factor = 0.0f;
-        rasterizerState.enable_depth_bias = false;
-        rasterizerState.enable_depth_clip = true;
-        createInfo.rasterizer_state = rasterizerState;
-
-        SDL_GPUMultisampleState multisampleState {};
-        multisampleState.sample_count = (SDL_GPUSampleCount)signature.Samples;
-        multisampleState.sample_mask = 0xFFFFFFFFu;
-        multisampleState.enable_mask = false;
-        createInfo.multisample_state = multisampleState;
-        
-        SDL_GPUDepthStencilState deptStencilState {};
-        deptStencilState.compare_op = SDL_GPU_COMPAREOP_LESS_OR_EQUAL;
-        deptStencilState.back_stencil_state = {};
-        deptStencilState.front_stencil_state = {};
-        deptStencilState.compare_mask = 0xFF;
-        deptStencilState.write_mask = 0xFF;
-        deptStencilState.enable_depth_test = signature.HasDepth;
-        deptStencilState.enable_depth_write = signature.HasDepth;
-        deptStencilState.enable_stencil_test = false;
-        createInfo.depth_stencil_state = deptStencilState;
-
         SDL_GPUGraphicsPipelineTargetInfo pipelinteTargetInfo {};
         pipelinteTargetInfo.color_target_descriptions = colorDescs.data();
         pipelinteTargetInfo.num_color_targets = signature.NumColorTargets;
@@ -199,32 +362,14 @@ namespace Cober {
         return pipeline;
     }
 
+    // --------------------------------------------------------------------------------------
+
     const SDLGPUShader* SDLGPUShader::GetBoundShader()
     {
         return s_BoundShader;
     }
 
-    std::unordered_map<std::string, std::string> SDLGPUShader::PreProcess(const std::string& source)
-    {
-        std::unordered_map<std::string, std::string> shaderSources;
-
-        const char* typeToken = "#type";
-        size_t typeTokenLength = strlen(typeToken);
-        size_t pos = source.find(typeToken, 0);
-        while (pos != std::string::npos)
-        {
-            size_t eol = source.find_first_of("\r\n", pos);
-            LOG_CORE_ASSERT(eol != std::string::npos, "Shader syntax error");
-
-            size_t begin = pos + typeTokenLength + 1;
-            std::string type = source.substr(begin, eol - begin);
-            size_t nextLinePos = source.find_first_not_of("\r\n", eol);
-            pos = source.find(typeToken, nextLinePos);
-            shaderSources[type] = source.substr(nextLinePos, pos - nextLinePos);
-        }
-
-        return shaderSources;
-    }
+    // --------------------------------------------------------------------------------------
 
     uint32_t SDLGPUShader::CountSamplers(const std::string& source)
     {
@@ -246,6 +391,8 @@ namespace Cober {
         return count;
     }
 
+    // --------------------------------------------------------------------------------------
+
     uint32_t SDLGPUShader::CountUniformBlocks(const std::string& source)
     {
         uint32_t count = 0;
@@ -256,6 +403,8 @@ namespace Cober {
         }
         return count;
     }
+
+    // --------------------------------------------------------------------------------------
 
     std::string SDLGPUShader::BuildVertexLayoutSignature(const SDLGPUVertexArray& vertexArray)
     {
@@ -279,6 +428,8 @@ namespace Cober {
         return ss.str();
     }
 
+    // --------------------------------------------------------------------------------------
+
     std::string SDLGPUShader::MakePipelineKey(const SDLGPUVertexArray& vertexArray, const SDLGPUShaderPassSignature& signature)
     {
         std::stringstream ss;
@@ -297,109 +448,18 @@ namespace Cober {
         return ss.str();
     }
 
-    void SDLGPUShader::LoadFromCombinedShader(const std::filesystem::path& glslPath)
+    // --------------------------------------------------------------------------------------
+
+    const char* SDLGPUShader::ShaderStageToStr(const ShaderStage& shaderStage) 
     {
-        auto shaderPath = glslPath;
-        LOG_CORE_ASSERT(std::filesystem::exists(shaderPath.string()), "Shader source file not found: " + shaderPath.string());
-
-        std::ifstream in(shaderPath, std::ios::in | std::ios::binary);
-        LOG_CORE_ASSERT(in, "Failed to open shader source: {0}", shaderPath.string());
-
-        std::stringstream ss;
-        ss << in.rdbuf();
-        const auto split = PreProcess(ss.str());
-
-        auto vsIt = split.find("vertex");
-        auto fsIt = split.find("fragment");
-        LOG_CORE_ASSERT(vsIt != split.end(), "Vertex stage missing in shader: " + shaderPath.string());
-        LOG_CORE_ASSERT(fsIt != split.end(), "Fragment stage missing in shader: " + shaderPath.string());
-
-        m_VertexStage.Source = vsIt->second;
-        m_VertexStage.Present = true;
-        m_VertexStage.SamplerCount = CountSamplers(m_VertexStage.Source);
-        m_VertexStage.UniformBufferCount = CountUniformBlocks(m_VertexStage.Source);
-
-        m_FragmentStage.Source = fsIt->second;
-        m_FragmentStage.Present = true;
-        m_FragmentStage.SamplerCount = CountSamplers(m_FragmentStage.Source);
-        m_FragmentStage.UniformBufferCount = CountUniformBlocks(m_FragmentStage.Source);
-
-        LoadCompiledStage(shaderPath, shaderPath.stem().string(), "vert", m_VertexStage);
-        LoadCompiledStage(shaderPath, shaderPath.stem().string(), "frag", m_FragmentStage);
-
-        m_VertexUniformBufferCount = m_VertexStage.UniformBufferCount;
-        m_FragmentUniformBufferCount = m_FragmentStage.UniformBufferCount;
-        m_FragmentSamplerCount = m_FragmentStage.SamplerCount;
-
-        // Vertex
-        SDL_GPUShaderCreateInfo shaderCreateInfo {};
-        shaderCreateInfo.code_size = m_VertexStage.Code.size();
-        shaderCreateInfo.code = m_VertexStage.Code.data();
-        shaderCreateInfo.entrypoint = m_VertexStage.EntryPoint.c_str();
-        shaderCreateInfo.format = (SDL_GPUShaderFormat)m_VertexStage.Format;
-        shaderCreateInfo.stage = SDL_GPU_SHADERSTAGE_VERTEX;
-        shaderCreateInfo.num_samplers = m_VertexStage.SamplerCount;
-        shaderCreateInfo.num_storage_textures = 0;
-        shaderCreateInfo.num_storage_buffers = 0;
-        shaderCreateInfo.num_uniform_buffers = m_VertexStage.UniformBufferCount;
-
-        m_VertexShader = SDL_CreateGPUShader( GetDevice(), &shaderCreateInfo );
-
-        LOG_CORE_ASSERT(m_VertexShader, "SDL_CreateGPUShader(vertex) failed for {0}: {1}", m_Name, SDL_GetError());
-
-        // Frament
-        shaderCreateInfo.code_size = m_FragmentStage.Code.size();
-        shaderCreateInfo.code = m_FragmentStage.Code.data();
-        shaderCreateInfo.entrypoint = m_FragmentStage.EntryPoint.c_str();
-        shaderCreateInfo.format = (SDL_GPUShaderFormat)m_FragmentStage.Format;
-        shaderCreateInfo.stage = SDL_GPU_SHADERSTAGE_FRAGMENT;
-        shaderCreateInfo.num_samplers = m_FragmentStage.SamplerCount;
-        shaderCreateInfo.num_storage_textures = 0;
-        shaderCreateInfo.num_storage_buffers = 0;
-        shaderCreateInfo.num_uniform_buffers = m_FragmentStage.UniformBufferCount;
-        
-        m_FragmentShader = SDL_CreateGPUShader( GetDevice(), &shaderCreateInfo );
-
-        LOG_CORE_ASSERT(m_FragmentShader, "SDL_CreateGPUShader(fragment) failed for {0}: {1}", m_Name, SDL_GetError());
-    }
-
-    void SDLGPUShader::LoadCompiledStage(const std::filesystem::path& glslPath, const std::string& stem, const std::string& stageName, ShaderStageInfo& outInfo)
-    {
-        SDL_GPUShaderFormat backendFormats = SDL_GetGPUShaderFormats(GetDevice());
-
-        std::filesystem::path compiledDir = glslPath.parent_path() / "Compiled";
-        std::filesystem::path compiledPath;
-        if (backendFormats & SDL_GPU_SHADERFORMAT_SPIRV) {
-            compiledPath = compiledDir / "SPIRV" / (stem + "." + stageName + ".spv");
-            outInfo.EntryPoint = "main";
-            outInfo.Format = SDL_GPU_SHADERFORMAT_SPIRV;
-        } else 
-        if (backendFormats & SDL_GPU_SHADERFORMAT_MSL) {
-            compiledPath = compiledDir / "MSL" / (stem + "." + stageName + ".msl");
-            outInfo.EntryPoint = "main0";
-            outInfo.Format = SDL_GPU_SHADERFORMAT_MSL;
-        } else 
-        if (backendFormats & SDL_GPU_SHADERFORMAT_DXIL) {
-            compiledPath = compiledDir / "DXIL" / (stem + "." + stageName + ".dxil");
-            outInfo.EntryPoint = "main";
-            outInfo.Format = SDL_GPU_SHADERFORMAT_DXIL;
-        } else {
-            LOG_CORE_ASSERT(false, "No supported SDL_GPU shader format available for shader {0}", m_Name);
-        }
-
-        LOG_CORE_ASSERT(std::filesystem::exists(compiledPath),
-                        "Compiled shader stage not found. Expected: {0}. Compile your GLSL/HLSL into backend binaries first.",
-                        compiledPath.string());
-
-        std::ifstream file(compiledPath, std::ios::binary | std::ios::ate);
-        LOG_CORE_ASSERT(file, "Failed to open compiled shader stage: {0}", compiledPath.string());
-        std::streamsize size = file.tellg();
-        file.seekg(0, std::ios::beg);
-
-        outInfo.Code.resize((size_t)size);
-        if (size > 0)
-        {
-            file.read(reinterpret_cast<char*>(outInfo.Code.data()), size);
+        switch(shaderStage) {
+            case ShaderStage::VERTEX:   return ".vert";
+            case ShaderStage::FRAGMENT: return ".frag";
+            default:
+                LOG_CORE_WARNING("Shader stage dont detected, format is wrong");
+                return NULL;
         }
     }
+
+    // --------------------------------------------------------------------------------------
 }

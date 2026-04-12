@@ -24,15 +24,17 @@ namespace Cober {
 
     std::filesystem::path PathService::ResolveProject(const std::filesystem::path &relativePath)
     {
-		if (relativePath.is_absolute())
+		if (relativePath.is_absolute()) {
 			return relativePath;
+		}
 		return s_ProjectRoot / relativePath;
 	}
 
 	std::filesystem::path PathService::ResolveAsset(const std::filesystem::path& relativePath)
 	{
-		if (relativePath.is_absolute())
+		if (relativePath.is_absolute()) {
 			return relativePath;
+		}
 		return s_AssetsRoot / relativePath;
 	}
 }

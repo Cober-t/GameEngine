@@ -32,7 +32,7 @@ namespace Cober
 	void RenderSystem::Update(Scene* scene)
 	{	
 		// Render primitives
-		auto renderGroup = scene->GetAllEntitiesWith<TransformComponent, TagComponent, Render2DComponent>();
+		auto renderGroup = scene->GetAllEntitiesWith<Render2DComponent>();
 		for (auto& entityHandle : renderGroup)
         {
 			Entity entity(entityHandle, scene);
@@ -46,6 +46,7 @@ namespace Cober
 			}
 		}
 
+#if 0
 		// Render Text
 		auto textGroup = scene->GetAllEntitiesWith<TransformComponent, TagComponent, TextComponent>();
 		for (auto& entityHandle : textGroup)
@@ -55,6 +56,7 @@ namespace Cober
 		}
 
 		Physics2D::DebugDraw(scene);
+#endif
 	}
 
 	// --------------------------------------------------------------------------------------

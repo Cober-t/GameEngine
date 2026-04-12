@@ -4,10 +4,10 @@
 
 Game::Game() : Layer("Game application") 
 {
-	// m_MousePosition = glm::vec2(0.0f);
-	// float screenWidth = EngineApp::GetWindow().GetWidth();
-	// float screenHeight = EngineApp::GetWindow().GetHeight();
-	// m_DefaultCamera = CreateRef<GameCamera>(45.0f, screenWidth, screenHeight, 0.01f, 1000.0f, GlobalCamera::perspective);
+	m_MousePosition = glm::vec2(0.0f);
+	float screenWidth = EngineApp::GetWindow().GetWidth();
+	float screenHeight = EngineApp::GetWindow().GetHeight();
+	m_DefaultCamera = CreateRef<GameCamera>(45.0f, screenWidth, screenHeight, 0.01f, 1000.0f, GlobalCamera::perspective);
 
 #if 0
 	// Create Framebuffer...
@@ -40,22 +40,25 @@ void Game::OnUpdate(const Timestep& ts)
 	
 	RenderGlobals::SetClearColor(0.85, 0.35, 0.2);
 	
+	//shaderTest->
+
 #if 1
-	m_Fbo->Bind();
+	//m_Fbo->Bind();
 	// Clear Framebuffer Attachments...
-	m_Fbo->ClearAttachment(1, -1);
+	//m_Fbo->ClearAttachment(1, -1);
 
 	m_ActiveScene->OnUpdateSimulation(ts, m_DefaultCamera);
+	
 
 	// Get Selected Entity using inverted coordinates...
-	int pixelData = m_Fbo->ReadPixel(1, m_MousePosition.x, EngineApp::GetWindow().GetHeight() - m_MousePosition.y);
-	LOG_WARNING("{0} {1} {2}", pixelData, m_MousePosition.x, m_MousePosition.y);
+	//int pixelData = m_Fbo->ReadPixel(1, m_MousePosition.x, EngineApp::GetWindow().GetHeight() - m_MousePosition.y);
+	//LOG_WARNING("{0} {1} {2}", pixelData, m_MousePosition.x, m_MousePosition.y);
 
 	// Unbind Framebuffer...
-	m_Fbo->Unbind();
+	//m_Fbo->Unbind();
 
 	// Render Framebuffer Attachment (scene generated texture)...
-	Cober::Render2D::DrawFramebuffer(m_Fbo);
+	//Cober::Render2D::DrawFramebuffer(m_Fbo);
 #endif
 }
 
@@ -74,7 +77,7 @@ void Game::OnEvent(Event& event)
 		// Resize Framebuffer...
 		float screenWidth = static_cast<WindowResizeEvent&>(event).GetWidth();
 		float screenHeight = static_cast<WindowResizeEvent&>(event).GetHeight();
-		m_Fbo->Resize(screenWidth, screenHeight);
+		//m_Fbo->Resize(screenWidth, screenHeight);
 	}
 
 	// m_ActiveScene->OnEvent(event, m_DefaultCamera);
