@@ -321,6 +321,11 @@ namespace Cober
         viewport.max_depth = 1.0f;
 
         SDL_SetGPUViewport(m_Frame.RenderPass, &viewport);
+
+        // auto window = EngineApp::GetWindow().GetRawWindow();
+        // SDL_SetWindowSize(window, viewport.x, viewport.y);
+        // SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+        // SDL_SyncWindow(window);
     }
 
     // --------------------------------------------------------------------------------------
@@ -339,20 +344,12 @@ namespace Cober
 
     void SDLGPURenderAPI::DrawInternal(const Ref<VertexArray>& vertexArray, uint32_t count, uint32_t primitiveType, bool indexed)
     {
-        //EnsureMainRenderPass();
-
         auto shader = SDLGPUShader::GetBoundShader();
         auto sdlva = std::dynamic_pointer_cast<SDLGPUVertexArray>(vertexArray);
         LOG_CORE_ASSERT(shader, "No shader is currently bound");
         LOG_CORE_ASSERT(sdlva, "Expected SDLGPUVertexArray");
 
-        m_ActivePassSignature.PrimitiveType = primitiveType;
-        // Blend the first target for regular sprite-like rendering, but keep the integer picking target untouched.
-        m_ActivePassSignature.AlphaBlend = true;
-
-        SDL_GPUGraphicsPipeline* pipeline = const_cast<SDLGPUShader*>(shader)->GetOrCreatePipeline(*sdlva, m_ActivePassSignature);
-        SDL_BindGPUGraphicsPipeline(m_Frame.RenderPass, pipeline);
-
+        // 1) Upload dirty resources FIRST, while no render pass is active
         std::vector<SDL_GPUBufferBinding> vbBindings;
         vbBindings.reserve(sdlva->GetVertexBuffers().size());
 
@@ -360,13 +357,51 @@ namespace Cober
         {
             auto sdlvb = std::dynamic_pointer_cast<SDLGPUVertexBuffer>(vb);
             LOG_CORE_ASSERT(sdlvb, "Expected SDLGPUVertexBuffer");
+
             sdlvb->EnsureUploaded(m_Frame.CommandBuffer, true);
 
-            SDL_GPUBufferBinding buffBinding{};
-            buffBinding.buffer = sdlvb->GetGPUBuffer();
-            buffBinding.offset = 0;
-            vbBindings.push_back(buffBinding);
+            SDL_GPUBufferBinding binding{};
+            binding.buffer = sdlvb->GetGPUBuffer();
+            binding.offset = 0;
+            vbBindings.push_back(binding);
         }
+
+        SDL_GPUBufferBinding ibBinding{};
+        if (indexed)
+        {
+            auto sdlIndex = std::dynamic_pointer_cast<SDLGPUIndexBuffer>(sdlva->GetIndexBuffer());
+            LOG_CORE_ASSERT(sdlIndex, "Expected SDLGPUIndexBuffer");
+
+            sdlIndex->EnsureUploaded(m_Frame.CommandBuffer, false);
+
+            ibBinding.buffer = sdlIndex->GetGPUBuffer();
+            ibBinding.offset = 0;
+        }
+
+        if (shader->GetFragmentSamplerCount() > 0)
+        {
+            for (uint32_t slot = 0; slot < shader->GetFragmentSamplerCount(); ++slot)
+            {
+                const auto* texture = SDLGPUTexture::GetBound(slot);
+                if (texture)
+                {
+                    const_cast<SDLGPUTexture*>(texture)->EnsureUploaded(m_Frame.CommandBuffer, true);
+                }
+            }
+        }
+
+        // 2) NOW begin the render pass
+        //EnsureMainRenderPass();
+        //if (!m_Frame.RenderPass)
+        //    return;
+
+        m_ActivePassSignature.PrimitiveType = primitiveType;
+        m_ActivePassSignature.AlphaBlend = true;
+
+        SDL_GPUGraphicsPipeline* pipeline =
+            const_cast<SDLGPUShader*>(shader)->GetOrCreatePipeline(*sdlva, m_ActivePassSignature);
+
+        SDL_BindGPUGraphicsPipeline(m_Frame.RenderPass, pipeline);
 
         if (!vbBindings.empty())
         {
@@ -375,15 +410,7 @@ namespace Cober
 
         if (indexed)
         {
-            auto sdlIndex = std::dynamic_pointer_cast<SDLGPUIndexBuffer>(sdlva->GetIndexBuffer());
-            LOG_CORE_ASSERT(sdlIndex, "Expected SDLGPUIndexBuffer");
-            sdlIndex->EnsureUploaded(m_Frame.CommandBuffer, false);
-
-            SDL_GPUBufferBinding buffBinding {};
-            buffBinding.buffer = sdlIndex->GetGPUBuffer();
-            buffBinding.offset = 0;
-            
-            SDL_BindGPUIndexBuffer( m_Frame.RenderPass, &buffBinding, SDL_GPU_INDEXELEMENTSIZE_32BIT );
+            SDL_BindGPUIndexBuffer(m_Frame.RenderPass, &ibBinding, SDL_GPU_INDEXELEMENTSIZE_32BIT);
         }
 
         for (uint32_t slot = 0; slot < shader->GetVertexUniformBufferCount(); ++slot)
@@ -417,14 +444,9 @@ namespace Cober
         if (shader->GetFragmentSamplerCount() > 0)
         {
             std::vector<SDL_GPUTextureSamplerBinding> samplerBindings(shader->GetFragmentSamplerCount());
+
             for (uint32_t slot = 0; slot < shader->GetFragmentSamplerCount(); ++slot)
             {
-                const auto* texture = SDLGPUTexture::GetBound(slot);
-                if (texture)
-                {
-                    const_cast<SDLGPUTexture*>(texture)->EnsureUploaded(m_Frame.CommandBuffer, true);
-                }
-
                 SDL_GPUTextureSamplerBinding textureBinding{};
                 textureBinding.texture = SDLGPUTexture::GetRawBound(slot);
                 textureBinding.sampler = SDLGPUTexture::GetRawSampler(slot);
@@ -439,12 +461,10 @@ namespace Cober
             );
         }
 
-        if (indexed) { 
-            SDL_DrawGPUIndexedPrimitives(m_Frame.RenderPass, count, 1, 0, 0, 0); 
-        }
-        else {          
-            SDL_DrawGPUPrimitives(m_Frame.RenderPass, count, 1, 0, 0); 
-        }
+        if (indexed)
+            SDL_DrawGPUIndexedPrimitives(m_Frame.RenderPass, count, 1, 0, 0, 0);
+        else
+            SDL_DrawGPUPrimitives(m_Frame.RenderPass, count, 1, 0, 0);
     }
 
     // --------------------------------------------------------------------------------------

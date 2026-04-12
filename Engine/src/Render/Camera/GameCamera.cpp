@@ -172,7 +172,9 @@ namespace Cober {
 
 
 		// Test
-		if (Input::IsKeyDown(KeyCode::Up))   { GetSettings().distance -= 0.2; }
+		if (Input::IsKeyDown(KeyCode::Up))   { 
+			GetSettings().distance -= 0.2;
+		}
 		if (Input::IsKeyDown(KeyCode::Down)) { GetSettings().distance += 0.2; }
 
 		if (Input::IsKeyDown(KeyCode::LeftControl) && Input::IsKeyPressed(KeyCode::P))

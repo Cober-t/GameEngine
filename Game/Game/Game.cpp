@@ -80,7 +80,7 @@ void Game::OnEvent(Event& event)
 		//m_Fbo->Resize(screenWidth, screenHeight);
 	}
 
-	// m_ActiveScene->OnEvent(event, m_DefaultCamera);
+	m_ActiveScene->OnEvent(event, m_DefaultCamera);
 	// NativeScriptFn::OnEvent(m_ActiveScene.get(), event);
 }
 

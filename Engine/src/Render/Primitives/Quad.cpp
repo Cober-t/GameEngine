@@ -69,8 +69,8 @@ namespace Cober {
             data.FramebufferVBO = VertexBuffer::Create(screenQuadVertices, sizeof(screenQuadVertices));
             data.FramebufferVBO->SetLayout(
             {
-                { ShaderDataType::Float4, "Color"    },
-                { ShaderDataType::Float4, "Position" }
+                { ShaderDataType::Float3, "Position" },
+                { ShaderDataType::Float4, "Color" }
             });
             data.FramebufferVAO->AddVertexBuffer(data.FramebufferVBO);
 
@@ -160,7 +160,7 @@ namespace Cober {
             {
                 glm::vec4 p = transform * vertices[i];
                 data.VertexBufferPtr->Position = glm::vec3(p);
-                data.VertexBufferPtr->Color = color;
+                data.VertexBufferPtr->Color = glm::vec4(0.0, 1.0, 0.0, 1.0);
                 data.VertexBufferPtr++;
             }
 
@@ -211,8 +211,7 @@ namespace Cober {
 
             for (size_t i = 0; i < 4; i++)
             {
-                glm::vec4 p = transform * vertices[i];
-                data.VertexBufferPtr->Position = glm::vec3(p);
+                data.VertexBufferPtr->Position = transform * vertices[i];
                 data.VertexBufferPtr->Color = color;
                 data.VertexBufferPtr++;
             }

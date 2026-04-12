@@ -217,13 +217,13 @@ namespace Cober
         {
             RenderGlobals::ImGuiPrepareDrawData(ImGui::GetDrawData());
         }
+        
 
         if (!IsMinimized()) {
             for (const auto& layer : m_LayerStack) {
                 layer->OnUpdate(ts);   
             }
         }
-        
         // Start the render pass
         RenderGlobals::BeginMainRenderPass();
         
@@ -257,10 +257,10 @@ namespace Cober
 
         SetMinimized(false);
 
-        if (!IsPlayMode()) {
+        // if (!IsPlayMode()) {
             s_window->SetSize(event.GetWidth(), event.GetHeight());
             RenderGlobals::SetViewport(event.GetWidth(), event.GetHeight());
-        }
+        // }
 
         return false;
     }
