@@ -1,5 +1,6 @@
 
 #include <pch.h>
+#include "Core/EngineApp.h"
 #include "Platforms/SDLGPU/SDLGPUShader.h"
 #include "Platforms/SDLGPU/SDLGPUVertexArray.h"
 #include "Platforms/SDLGPU/SDLGPUBuffer.h"
@@ -325,15 +326,8 @@ namespace Cober
         std::array<SDL_GPUColorTargetDescription, 4> colorDescs{};
         for (uint32_t i = 0; i < signature.NumColorTargets; ++i)
         {
-            colorDescs[i].format = static_cast<SDL_GPUTextureFormat>(signature.ColorFormats[i]);
-            colorDescs[i].blend_state.enable_blend = signature.AlphaBlend && i == 0;
-            colorDescs[i].blend_state.src_color_blendfactor = SDL_GPU_BLENDFACTOR_SRC_ALPHA;
-            colorDescs[i].blend_state.dst_color_blendfactor = SDL_GPU_BLENDFACTOR_ONE_MINUS_SRC_ALPHA;
-            colorDescs[i].blend_state.color_blend_op = SDL_GPU_BLENDOP_ADD;
-            colorDescs[i].blend_state.src_alpha_blendfactor = SDL_GPU_BLENDFACTOR_ONE;
-            colorDescs[i].blend_state.dst_alpha_blendfactor = SDL_GPU_BLENDFACTOR_ONE_MINUS_SRC_ALPHA;
-            colorDescs[i].blend_state.alpha_blend_op = SDL_GPU_BLENDOP_ADD;
-            colorDescs[i].blend_state.enable_color_write_mask = false;
+            //colorDescs[i].format = static_cast<SDL_GPUTextureFormat>(signature.ColorFormats[i]);
+            colorDescs[i].format = SDL_GetGPUSwapchainTextureFormat(GetDevice(), EngineApp::GetWindow().GetRawWindow());
         }
 
         SDL_GPUGraphicsPipelineCreateInfo createInfo = {};

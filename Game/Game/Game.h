@@ -24,6 +24,16 @@ private:
 
 	Ref<Framebuffer> m_Fbo;
 	glm::vec2 m_MousePosition;
+
+	SDL_GPUGraphicsPipeline* Pipeline = nullptr;
+	SDL_GPUBuffer* VertexBuffer = nullptr;
+
+	typedef struct PositionColorVertex
+	{
+		float x, y, z;
+		Uint8 r, g, b, a;
+	} PositionColorVertex;
+
 };
 
 #endif

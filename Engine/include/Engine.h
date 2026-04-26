@@ -104,6 +104,14 @@
 //[++++++++++++++++++++++++++++]
 //[+++++++++ Platform +++++++++]
 //[++++++++++++++++++++++++++++]
+#include "Platforms/SDLGPU/SDLGPUBuffer.h"
+#include "Platforms/SDLGPU/SDLGPUContext.h"
+#include "Platforms/SDLGPU/SDLGPUFramebuffer.h"
+#include "Platforms/SDLGPU/SDLGPURenderAPI.h"
+#include "Platforms/SDLGPU/SDLGPUShader.h"
+#include "Platforms/SDLGPU/SDLGPUTexture.h"
+#include "Platforms/SDLGPU/SDLGPUVertexArray.h"
+
 #include <Platforms/Vulkan/VulkanContext.h>
 // #include <Platforms/OpenGL/OpenGLContext.h>
 // #include <Platforms/OpenGL/OpenGLRenderAPI.h>

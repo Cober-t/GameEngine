@@ -298,6 +298,15 @@ namespace Cober
         m_Frame.RenderPass = SDL_BeginGPURenderPass(m_Frame.CommandBuffer, &colorTargetInfo, 1, nullptr);
         LOG_CORE_ASSERT(m_Frame.RenderPass, "SDL_BeginGPURenderPass(swapchain) failed: {0}", SDL_GetError());
 
+        // Draw internal
+        // SDL_GPUBufferBinding bufferBinding {};
+        // bufferBinding.buffer = VertexBuffer;
+        // bufferBinding.offset = 0;
+
+        // SDL_BindGPUGraphicsPipeline(renderPass, Pipeline);
+        // SDL_BindGPUVertexBuffers(renderPass, 0, &bufferBinding, 1);
+        // SDL_DrawGPUPrimitives(renderPass, 3, 1, 0, 0);
+
         UpdatePassSignatureForSwapchain();
         m_IsRenderingToSwapchain = true;
         ApplyViewport();
