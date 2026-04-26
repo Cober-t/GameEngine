@@ -44,6 +44,10 @@ namespace Cober {
         uint32_t GetFragmentSamplerCount() const { return m_FragmentSamplerCount; }
 
         static const SDLGPUShader* GetBoundShader();
+        // Only to thes shader
+        inline SDL_GPUShader* GetVertexShader() override { return m_VertexShader; }
+        inline SDL_GPUShader* GetFragmentShader() override { return m_FragmentShader; }
+        const void ReleaseShaders() override;
 
     private:
         enum ShaderStage

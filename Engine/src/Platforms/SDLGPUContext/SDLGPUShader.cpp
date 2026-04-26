@@ -184,6 +184,14 @@ namespace Cober
         m_VertexShader   = LoadShader(PathService::ResolveAsset("shaders\\compiled"), ShaderStage::VERTEX, m_VertexStage);
         m_FragmentShader = LoadShader(PathService::ResolveAsset("shaders\\compiled"), ShaderStage::FRAGMENT, m_FragmentStage);
     }
+    
+    // --------------------------------------------------------------------------------------
+    
+    const void SDLGPUShader::ReleaseShaders() 
+    {    
+        SDL_ReleaseGPUShader(GetDevice(), m_VertexShader);
+        SDL_ReleaseGPUShader(GetDevice(), m_FragmentShader);
+    }
 
     // --------------------------------------------------------------------------------------
 

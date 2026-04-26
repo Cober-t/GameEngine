@@ -43,7 +43,7 @@ namespace Cober {
 
             // SHADER
             data.Shader = Shader::Create("PositionColor");
-            data.Shader->Bind();
+            //data.Shader->Bind(); /// TODO: Implement framebuffer render pass in the future
         }
 
         void Quad::InitFramebuffer()

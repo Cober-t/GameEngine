@@ -34,6 +34,10 @@ namespace Cober {
 
 		static Ref<Shader> Create(const char* fileName);
 		static Ref<Shader> Create(const std::filesystem::path& filepath);
+
+		virtual SDL_GPUShader* GetVertexShader() = 0;
+        virtual SDL_GPUShader* GetFragmentShader()  = 0;
+        virtual const void ReleaseShaders() = 0;
 		// For compiled runtime shaders
 		// static Ref<Shader> Create(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
 	};

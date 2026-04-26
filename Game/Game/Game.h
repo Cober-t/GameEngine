@@ -28,12 +28,13 @@ private:
 	SDL_GPUGraphicsPipeline* Pipeline = nullptr;
 	SDL_GPUBuffer* VertexBuffer = nullptr;
 
-	typedef struct PositionColorVertex
+	struct PositionColorVertex
 	{
-		float x, y, z;
-		Uint8 r, g, b, a;
-	} PositionColorVertex;
-
+		glm::vec3 Position;
+		glm::vec4 Color;
+	};
+	
+	Ref<Shader> m_shader; // TEST
 };
 
 #endif
