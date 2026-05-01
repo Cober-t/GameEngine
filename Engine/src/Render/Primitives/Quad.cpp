@@ -24,7 +24,7 @@ namespace Cober {
 
         void Quad::Init()
         {
-            data.VertexArray = VertexArray::Create();
+            //data.VertexArray = VertexArray::Create();
 
             data.VertexBuffer = VertexBuffer::Create(Render2D::GetStats().MaxVertices * sizeof(Attributes));
             data.VertexBuffer->SetLayout({
@@ -32,13 +32,13 @@ namespace Cober {
                 { ShaderDataType::Float4, "Color"    },
             });
 
-            data.VertexArray->AddVertexBuffer(data.VertexBuffer);
+            //data.VertexArray->AddVertexBuffer(data.VertexBuffer);
             data.VertexBufferBase = new Attributes[Render2D::GetStats().MaxVertices];
 
             uint32_t* quadIndices = Render2D::GetStats().GetIndices();
 
-            Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, Render2D::GetStats().MaxIndices);
-            data.VertexArray->SetIndexBuffer(quadIB);
+            //Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, Render2D::GetStats().MaxIndices);
+            //data.VertexArray->SetIndexBuffer(quadIB);
             delete[] quadIndices;
 
             // SHADER

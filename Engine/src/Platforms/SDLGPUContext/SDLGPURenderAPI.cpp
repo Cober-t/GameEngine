@@ -32,11 +32,11 @@ namespace Cober
         LOG_CORE_TRACE("Render API init (SDL_GPU)");
     }
 
-    // --------------------------------------------------------------------------------------
+    // -------------------------------------------------------------------------SDL_WaitAndAcquireGPUSwapchainTexture-------------
 
     bool SDLGPURenderAPI::BeginFrame()
     {
-        m_Frame = {};
+        //m_Frame = {};
         m_Frame.CommandBuffer = SDL_AcquireGPUCommandBuffer(m_GPUDevice);
         LOG_CORE_ASSERT(m_Frame.CommandBuffer, "SDL_AcquireGPUCommandBuffer failed: {0}", SDL_GetError());
 
@@ -71,7 +71,7 @@ namespace Cober
             SDL_SubmitGPUCommandBuffer(m_Frame.CommandBuffer);
         }
 
-        m_Frame = {};
+        //m_Frame = {};
         m_IsRenderingToSwapchain = false;
     }
 
@@ -269,7 +269,7 @@ namespace Cober
         if (m_Frame.RenderPass)
         {
             SDL_EndGPURenderPass(m_Frame.RenderPass);
-            m_Frame.RenderPass = nullptr;
+            //m_Frame.RenderPass = nullptr;
         }
     }
 
@@ -349,10 +349,40 @@ namespace Cober
         m_ActivePassSignature.Samples = 1;
     }
 
+    ///// PROVISIONAL TEST FUNCTION, IN THE FUTURE HANDLE VERTEX BUFFER WITH VERTEX ARRAYS    
+    void SDLGPURenderAPI::DrawInternal(const Ref<VertexBuffer>& vertexBuffer)
+    {
+        if (m_Frame.SwapchainTexture != NULL)
+        {
+            SDL_GPUColorTargetInfo colorTargetInfo = { 0 };
+            colorTargetInfo.texture = m_Frame.SwapchainTexture;
+            colorTargetInfo.clear_color = { 0.9f, 0.4f, 0.2f, 1.0f };
+            colorTargetInfo.load_op = SDL_GPU_LOADOP_CLEAR;
+            colorTargetInfo.store_op = SDL_GPU_STOREOP_STORE;
+
+            m_Frame.RenderPass = SDL_BeginGPURenderPass( m_Frame.CommandBuffer, &colorTargetInfo, 1, NULL );
+
+            // Draw internal
+            // for (const auto& vertexBuff : sdlVertexArray->GetVertexBuffers())
+            auto sdlvb = std::dynamic_pointer_cast<SDLGPUVertexBuffer>(vertexBuffer);
+            SDL_GPUBufferBinding bufferBinding {};
+            bufferBinding.buffer = sdlvb->GetGPUBuffer();
+            bufferBinding.offset = 0;
+
+            auto shader = SDLGPUShader::GetBoundShader();
+
+            // THIS NEEDS THE PIPELINE!!
+            //SDL_BindGPUGraphicsPipeline(m_Frame.RenderPass, pipeline);
+            SDL_BindGPUVertexBuffers(m_Frame.RenderPass, 0, &bufferBinding, 1);
+            SDL_DrawGPUPrimitives(m_Frame.RenderPass, 3, 1, 0, 0);
+        }
+    }
+
     // --------------------------------------------------------------------------------------
 
     void SDLGPURenderAPI::DrawInternal(const Ref<VertexArray>& vertexArray, uint32_t count, uint32_t primitiveType, bool indexed)
     {
+    #if 0
         auto shader = SDLGPUShader::GetBoundShader();
         auto sdlva = std::dynamic_pointer_cast<SDLGPUVertexArray>(vertexArray);
         LOG_CORE_ASSERT(shader, "No shader is currently bound");
@@ -474,6 +504,7 @@ namespace Cober
             SDL_DrawGPUIndexedPrimitives(m_Frame.RenderPass, count, 1, 0, 0, 0);
         else
             SDL_DrawGPUPrimitives(m_Frame.RenderPass, count, 1, 0, 0);
+    #endif
     }
 
     // --------------------------------------------------------------------------------------

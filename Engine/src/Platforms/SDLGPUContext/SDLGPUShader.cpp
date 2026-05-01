@@ -183,6 +183,10 @@ namespace Cober
         
         m_VertexShader   = LoadShader(PathService::ResolveAsset("shaders\\compiled"), ShaderStage::VERTEX, m_VertexStage);
         m_FragmentShader = LoadShader(PathService::ResolveAsset("shaders\\compiled"), ShaderStage::FRAGMENT, m_FragmentStage);
+
+        //GetOrCreatePipeline();
+
+        ReleaseShaders();
     }
     
     // --------------------------------------------------------------------------------------
@@ -292,75 +296,28 @@ namespace Cober
 
     // --------------------------------------------------------------------------------------
 
-    SDL_GPUGraphicsPipeline* SDLGPUShader::GetOrCreatePipeline(const SDLGPUVertexArray& vertexArray, const SDLGPUShaderPassSignature& signature)
+    SDL_GPUGraphicsPipeline* SDLGPUShader::GetOrCreatePipeline(
+                                    //    const SDLGPUVertexArray& vertexArray, 
+                                    //    const SDLGPUShaderPassSignature& signature
+                                    )
     {
-        const std::string key = MakePipelineKey(vertexArray, signature);
-        auto it = m_PipelineCache.find(key);
-        if (it != m_PipelineCache.end())
-        {
-            return it->second;
-        }
+        // const std::string key = MakePipelineKey(vertexArray, signature);
+        // auto it = m_PipelineCache.find(key);
+        // if (it != m_PipelineCache.end())
+        // {
+        //     return it->second;
+        // }
 
-        std::vector<SDL_GPUVertexBufferDescription> vbDescriptions;
-        std::vector<SDL_GPUVertexAttribute> attributes;
+        // Create the pipeline
+        SDL_GPUGraphicsPipelineCreateInfo pipelineCreateInfo = {};
+        pipelineCreateInfo.vertex_shader = m_VertexShader;
+        pipelineCreateInfo.fragment_shader = m_FragmentShader;
+        pipelineCreateInfo.primitive_type = SDL_GPU_PRIMITIVETYPE_TRIANGLELIST;
 
-        uint32_t location = 0;
-        uint32_t bufferSlot = 0;
-        for (const auto& vb : vertexArray.GetVertexBuffers())
-        {
-            auto sdlvb = std::dynamic_pointer_cast<SDLGPUVertexBuffer>(vb);
-            LOG_CORE_ASSERT(sdlvb, "Expected SDLGPUVertexBuffer");
-
-            SDL_GPUVertexBufferDescription buffDescription {};
-            buffDescription.slot = bufferSlot;
-            buffDescription.pitch = sdlvb->GetLayout().GetStride();
-            buffDescription.input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX;
-            buffDescription.instance_step_rate = 0;
-            vbDescriptions.push_back(buffDescription);
-
-            for (const auto& element : sdlvb->GetLayout())
-            {
-                SDL_GPUVertexAttribute vertexAtt {};
-                vertexAtt.location = location++;
-                vertexAtt.buffer_slot = bufferSlot;
-                vertexAtt.format = ToVertexFormat(element.type);
-                vertexAtt.offset = (uint32_t)element.offset;
-                attributes.push_back(vertexAtt);
-            }
-
-            ++bufferSlot;
-        }
-
-        std::array<SDL_GPUColorTargetDescription, 4> colorDescs{};
-        for (uint32_t i = 0; i < signature.NumColorTargets; ++i)
-        {
-            //colorDescs[i].format = static_cast<SDL_GPUTextureFormat>(signature.ColorFormats[i]);
-            colorDescs[i].format = SDL_GetGPUSwapchainTextureFormat(GetDevice(), EngineApp::GetWindow().GetRawWindow());
-        }
-
-        SDL_GPUGraphicsPipelineCreateInfo createInfo = {};
-        createInfo.vertex_shader = m_VertexShader;
-        createInfo.fragment_shader = m_FragmentShader;
-        SDL_GPUVertexInputState vertexInputState {};
-        vertexInputState.vertex_buffer_descriptions = vbDescriptions.data();
-        vertexInputState.num_vertex_buffers = (uint32_t)vbDescriptions.size();
-        vertexInputState.vertex_attributes = attributes.data();
-        vertexInputState.num_vertex_attributes = (uint32_t)attributes.size();
-        createInfo.vertex_input_state = vertexInputState;
-
-        createInfo.primitive_type = static_cast<SDL_GPUPrimitiveType>(signature.PrimitiveType);
-
-        SDL_GPUGraphicsPipelineTargetInfo pipelinteTargetInfo {};
-        pipelinteTargetInfo.color_target_descriptions = colorDescs.data();
-        pipelinteTargetInfo.num_color_targets = signature.NumColorTargets;
-        pipelinteTargetInfo.depth_stencil_format = static_cast<SDL_GPUTextureFormat>(signature.DepthFormat);
-        pipelinteTargetInfo.has_depth_stencil_target = signature.HasDepth;
-        createInfo.target_info = pipelinteTargetInfo;
-
-        SDL_GPUGraphicsPipeline* pipeline = SDL_CreateGPUGraphicsPipeline(GetDevice(), &createInfo);
+        SDL_GPUGraphicsPipeline* pipeline = SDL_CreateGPUGraphicsPipeline(GetDevice(), &pipelineCreateInfo);
         LOG_CORE_ASSERT(pipeline, "SDL_CreateGPUGraphicsPipeline failed for shader {0}: {1}", m_Name, SDL_GetError());
 
-        m_PipelineCache[key] = pipeline;
+        // m_PipelineCache[key] = pipeline;
         return pipeline;
     }
 

@@ -30,6 +30,9 @@ namespace Cober {
 
 		virtual void Clear() = 0;
 
+		// Provisinal test to test vertexbuffers
+		virtual void DrawInternal(const Ref<VertexBuffer>& vertexBuffer) = 0;
+
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) = 0;
 
 		virtual bool BeginFrame() = 0;

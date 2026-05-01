@@ -13,6 +13,7 @@ namespace Cober {
 		static void Init(void* window, void* context);
 		static void Clear();
 
+		static void DrawInternal(const Ref<VertexBuffer>& vertexBuffer);
 		static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t count = 0);
 
 		static bool BeginFrame();

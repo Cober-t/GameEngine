@@ -24,6 +24,12 @@ namespace Cober {
 		RenderGlobals::m_Api->DrawIndexed(vertexArray, count);
 	}
 
+	// Provisional test, in the future this relies on vertexArray and drawIndexed
+	void RenderGlobals::DrawInternal(const Ref<VertexBuffer>& vertexBuffer)
+	{
+		RenderGlobals::m_Api->DrawInternal(vertexBuffer);
+	}
+
 	bool RenderGlobals::BeginFrame() 
 	{
 		return RenderGlobals::m_Api->BeginFrame();

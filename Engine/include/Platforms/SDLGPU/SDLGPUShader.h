@@ -37,7 +37,10 @@ namespace Cober {
         void ReadAndLoadShader(const char* shaderFilename);
         void ReadAndLoadShader(const std::filesystem::path& shaderFilePath);
         
-        SDL_GPUGraphicsPipeline* GetOrCreatePipeline(const SDLGPUVertexArray& vertexArray, const SDLGPUShaderPassSignature& signature);
+        SDL_GPUGraphicsPipeline* GetOrCreatePipeline(
+                            //const SDLGPUVertexArray& vertexArray, 
+                            //const SDLGPUShaderPassSignature& signature
+                        );
 
         uint32_t GetVertexUniformBufferCount() const { return m_VertexUniformBufferCount; }
         uint32_t GetFragmentUniformBufferCount() const { return m_FragmentUniformBufferCount; }

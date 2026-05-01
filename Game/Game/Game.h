@@ -26,7 +26,7 @@ private:
 	glm::vec2 m_MousePosition;
 
 	SDL_GPUGraphicsPipeline* Pipeline = nullptr;
-	SDL_GPUBuffer* VertexBuffer = nullptr;
+	Ref<VertexBuffer> VertexBuffer = nullptr;
 
 	struct PositionColorVertex
 	{

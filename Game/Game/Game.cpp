@@ -20,17 +20,20 @@ Game::Game() : Layer("Game application")
 void Game::OnAttach() 
 {
 	m_shader = Shader::Create("PositionColor");
+	m_shader->Bind();
 	//m_ActiveScene = Scene::Load("SceneDefault.lua");
-	
-	auto SDLGPUDevice = SDLGPURenderAPI::Get()->GetDevice();
+	//return;
+	// Only to test
+	//m_shader->ReleaseShaders();
 	
 	// Create the pipeline
 	SDL_GPUGraphicsPipelineCreateInfo pipelineCreateInfo = {};
 	pipelineCreateInfo.vertex_shader = m_shader->GetVertexShader();
 	pipelineCreateInfo.fragment_shader = m_shader->GetFragmentShader();
 	pipelineCreateInfo.primitive_type = SDL_GPU_PRIMITIVETYPE_TRIANGLELIST;
-	// Only to test
-	m_shader->ReleaseShaders();
+
+	
+	auto SDLGPUDevice = SDLGPURenderAPI::Get()->GetDevice();
 	
 	SDL_GPUVertexBufferDescription vertexBufferDesc {};
 	vertexBufferDesc.slot = 0;
@@ -72,10 +75,12 @@ void Game::OnAttach()
 
 
 	// Create the vertex buffer
-	SDL_GPUBufferCreateInfo bufferInfo;
-	bufferInfo.usage = SDL_GPU_BUFFERUSAGE_VERTEX;
-	bufferInfo.size = sizeof(PositionColorVertex) * 3;
-	VertexBuffer = SDL_CreateGPUBuffer( SDLGPUDevice, &bufferInfo);
+	VertexBuffer = VertexBuffer::Create( sizeof(PositionColorVertex) * 3);
+	// SDL_GPUBufferCreateInfo bufferInfo;
+	// bufferInfo.usage = SDL_GPU_BUFFERUSAGE_VERTEX;
+	// bufferInfo.size = sizeof(PositionColorVertex) * 3;
+	// VertexBuffer = SDL_CreateGPUBuffer( SDLGPUDevice, &bufferInfo);
+
 
 	// To get data into the vertex buffer, we have to use a transfer buffer
 	SDL_GPUTransferBufferCreateInfo transferBufferInfo;
@@ -110,7 +115,8 @@ void Game::OnAttach()
 	bufferLocation.offset = 0;
 
 	SDL_GPUBufferRegion bufferRegion;
-	bufferRegion.buffer = VertexBuffer;
+	auto vb = std::dynamic_pointer_cast<SDLGPUVertexBuffer>(VertexBuffer);
+	bufferRegion.buffer = vb->GetGPUBuffer();
 	bufferRegion.offset = 0;
 	bufferRegion.size = sizeof(PositionColorVertex) * 3;
 	SDL_UploadToGPUBuffer( copyPass, &bufferLocation, &bufferRegion, false );
@@ -138,44 +144,14 @@ void Game::OnUpdate(const Timestep& ts)
 
 
 	// Begin Frame
-	SDL_GPUCommandBuffer* cmdbuf = SDL_AcquireGPUCommandBuffer(SDLGPUDevice);
-    if (cmdbuf == NULL)
-    {
-        SDL_Log("AcquireGPUCommandBuffer failed: %s", SDL_GetError());
-        return;
-    }
+	RenderGlobals::BeginFrame();
 
-    SDL_GPUTexture* swapchainTexture;
-    if (!SDL_WaitAndAcquireGPUSwapchainTexture(cmdbuf, EngineApp::GetWindow().GetRawWindow(), &swapchainTexture, NULL, NULL)) {
-        SDL_Log("WaitAndAcquireGPUSwapchainTexture failed: %s", SDL_GetError());
-        return;
-    }
-
+	// Inside Draw indexed, drawTriangles....
 	// Main Render pass
-	if (swapchainTexture != NULL)
-	{
-		SDL_GPUColorTargetInfo colorTargetInfo = { 0 };
-		colorTargetInfo.texture = swapchainTexture;
-		colorTargetInfo.clear_color = { 0.9f, 0.4f, 0.2f, 1.0f };
-		colorTargetInfo.load_op = SDL_GPU_LOADOP_CLEAR;
-		colorTargetInfo.store_op = SDL_GPU_STOREOP_STORE;
+	// THIS NEEDS THE PIPELINE TO WORK!
+	RenderGlobals::DrawInternal(VertexBuffer);
 
-		SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass( cmdbuf, &colorTargetInfo, 1, NULL );
-
-		// Draw internal
-		SDL_GPUBufferBinding bufferBinding {};
-		bufferBinding.buffer = VertexBuffer;
-		bufferBinding.offset = 0;
-
-		SDL_BindGPUGraphicsPipeline(renderPass, Pipeline);
-		SDL_BindGPUVertexBuffers(renderPass, 0, &bufferBinding, 1);
-		SDL_DrawGPUPrimitives(renderPass, 3, 1, 0, 0);
-
-		// End Render pass
-		SDL_EndGPURenderPass(renderPass);
-	}
-
-	SDL_SubmitGPUCommandBuffer(cmdbuf);
+	RenderGlobals::EndFrame();
 	
 #if 0
 	RenderGlobals::SetClearColor(0.85, 0.35, 0.2);

@@ -67,6 +67,8 @@ namespace Cober {
         void EnsureMainRenderPass();
         void ApplyViewport();
         void UpdatePassSignatureForSwapchain();
+        ///// PROVISIONAL TEST FUNCTION, IN THE FUTURE HANDLE VERTEX BUFFER WITH VERTEX ARRAYS    
+        void DrawInternal(const Ref<VertexBuffer>& vertexBuffer);
         void DrawInternal(const Ref<VertexArray>& vertexArray, uint32_t count, uint32_t primitiveType, bool indexed);
 
     private:
