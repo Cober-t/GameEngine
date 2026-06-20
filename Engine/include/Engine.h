@@ -57,9 +57,8 @@
 //[++++++++++++++++++++++++++]
 //[+++++++++ RENDER +++++++++]
 //[++++++++++++++++++++++++++]
-// #include "Render/GraphicsContext.h"
-// #include "Render/RenderAPI.h"
-// #include "Render/RenderGlobals.h"
+#include "Render/GraphicsDevice.h"
+#include "Render/RenderGlobals.h"
 #include "Render/Render2D.h"
 #include "Render/ParticleEmitter.h"
 #include "Render/Buffer.h"
@@ -99,27 +98,6 @@
 //[++++++++++++++++++++++++++]
 #include "Scripting/NativeScripting.h"
 #include "Scripting/Script.h"
-
-
-//[++++++++++++++++++++++++++++]
-//[+++++++++ Platform +++++++++]
-//[++++++++++++++++++++++++++++]
-#include "Platforms/SDLGPU/SDLGPUBuffer.h"
-#include "Platforms/SDLGPU/SDLGPUContext.h"
-#include "Platforms/SDLGPU/SDLGPUFramebuffer.h"
-#include "Platforms/SDLGPU/SDLGPURenderAPI.h"
-#include "Platforms/SDLGPU/SDLGPUShader.h"
-#include "Platforms/SDLGPU/SDLGPUTexture.h"
-#include "Platforms/SDLGPU/SDLGPUVertexArray.h"
-
-#include <Platforms/Vulkan/VulkanContext.h>
-// #include <Platforms/OpenGL/OpenGLContext.h>
-// #include <Platforms/OpenGL/OpenGLRenderAPI.h>
-// #include <Platforms/OpenGL/OpenGLBuffer.h>
-// #include <Platforms/OpenGL/OpenGLVertexArray.h>
-// #include <Platforms/OpenGL/OpenGLTexture.h>
-// #include <Platforms/OpenGL/OpenGLShader.h>
-// #include <Platforms/OpenGL/OpenGLFramebuffer.h>
 
 
 #endif

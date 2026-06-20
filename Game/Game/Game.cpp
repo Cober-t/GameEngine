@@ -1,199 +1,104 @@
 #include "Game.h"
 
 // --------------------------------------------------------------------------------------
+// Game Layer
+//
+// This is the main game application layer. It demonstrates the engine's rendering API
+// by drawing a colored triangle using SDL3 GPU through the engine's abstractions.
+//
+// SDL3 GPU rendering flow (simplified):
+//   1. Create shaders (compiled SPIR-V/DXIL/MSL bytecode)
+//   2. Create vertex buffers with position/color data
+//   3. On each frame:
+//      a. AcquireGPUCommandBuffer + WaitAndAcquireSwapchainTexture
+//      b. BeginRenderPass (clears the screen)
+//      c. BindGraphicsPipeline + BindVertexBuffers + DrawPrimitives
+//      d. EndRenderPass + SubmitGPUCommandBuffer
+// --------------------------------------------------------------------------------------
 
-Game::Game() : Layer("Game application") 
+Game::Game() : Layer("Game application")
 {
-	m_MousePosition = glm::vec2(0.0f);
-	float screenWidth = EngineApp::GetWindow().GetWidth();
-	float screenHeight = EngineApp::GetWindow().GetHeight();
-	//m_DefaultCamera = CreateRef<GameCamera>(45.0f, screenWidth, screenHeight, 0.01f, 1000.0f, GlobalCamera::perspective);
-
-#if 0
-	// Create Framebuffer...
-	m_Fbo = Framebuffer::Create(m_DefaultCamera->GetSettings().width, m_DefaultCamera->GetSettings().height);
-#endif
 }
 
 // --------------------------------------------------------------------------------------
 
-void Game::OnAttach() 
+void Game::OnAttach()
 {
-	m_shader = Shader::Create("PositionColor");
-	m_shader->Bind();
-	//m_ActiveScene = Scene::Load("SceneDefault.lua");
-	//return;
-	// Only to test
-	//m_shader->ReleaseShaders();
-	
-	// Create the pipeline
-	SDL_GPUGraphicsPipelineCreateInfo pipelineCreateInfo = {};
-	pipelineCreateInfo.vertex_shader = m_shader->GetVertexShader();
-	pipelineCreateInfo.fragment_shader = m_shader->GetFragmentShader();
-	pipelineCreateInfo.primitive_type = SDL_GPU_PRIMITIVETYPE_TRIANGLELIST;
+    // Step 1: Create a shader.
+    // This loads pre-compiled SPIR-V shaders from assets/shaders/compiled/.
+    // The shader system also caches SDL_GPUGraphicsPipeline objects that bundle
+    // the shaders with vertex layout descriptions and render target formats.
+    m_Shader = Shader::Create("PositionColor");
+    m_Shader->Bind();
 
-	
-	auto SDLGPUDevice = SDLGPURenderAPI::Get()->GetDevice();
-	
-	SDL_GPUVertexBufferDescription vertexBufferDesc {};
-	vertexBufferDesc.slot = 0;
-	vertexBufferDesc.input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX;
-	vertexBufferDesc.instance_step_rate = 0;
-	vertexBufferDesc.pitch = sizeof(PositionColorVertex);
-	
-	SDL_GPUVertexAttribute vertexAttributes [2];
-	vertexAttributes[0].buffer_slot = 0;
-	vertexAttributes[0].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3;
-	vertexAttributes[0].location = 0;
-	vertexAttributes[0].offset = 0;
-	vertexAttributes[1].buffer_slot = 0;
-	vertexAttributes[1].format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT4;
-	vertexAttributes[1].location = 1;
-	vertexAttributes[1].offset = sizeof(float) * 3;
-	
-	SDL_GPUVertexInputState vertexInputState {};
-	vertexInputState.num_vertex_buffers = 1;
-	vertexInputState.vertex_buffer_descriptions = &vertexBufferDesc;
-	vertexInputState.num_vertex_attributes = 2;
-	vertexInputState.vertex_attributes = vertexAttributes;
-	pipelineCreateInfo.vertex_input_state = vertexInputState;
+    // Step 2: Create a vertex buffer and fill it with triangle data.
+    // The VertexBuffer uses SDL3 GPU's SDL_CreateGPUBuffer with VERTEX usage.
+    // Data is stored in a shadow copy and uploaded to the GPU automatically
+    // when EnsureUploaded() is called (done inside DrawInternal).
+    const uint32_t vertexCount = 3;
+    const uint32_t bufferSize = vertexCount * sizeof(PositionColorVertex);
 
-	SDL_GPUGraphicsPipelineTargetInfo pipelinteTargetInfo {};
-	pipelinteTargetInfo.num_color_targets = 1;
-	SDL_GPUColorTargetDescription colorTargetDes {};
-	colorTargetDes.format = SDL_GetGPUSwapchainTextureFormat(SDLGPUDevice, EngineApp::GetWindow().GetRawWindow());
-	pipelinteTargetInfo.color_target_descriptions = &colorTargetDes;
+    m_VertexBuffer = VertexBuffer::Create(bufferSize);
 
-	pipelineCreateInfo.target_info = pipelinteTargetInfo;
+    // Define a red-green-blue triangle
+    PositionColorVertex vertices[3];
+    vertices[0].Position = { -0.5f, -0.5f, 0.0f };
+    vertices[1].Position = {  0.5f, -0.5f, 0.0f };
+    vertices[2].Position = {  0.0f,  0.5f, 0.0f };
+    vertices[0].Color = { 1.0f, 0.0f, 0.0f, 1.0f };  // Red
+    vertices[1].Color = { 0.0f, 1.0f, 0.0f, 1.0f };  // Green
+    vertices[2].Color = { 0.0f, 0.0f, 1.0f, 1.0f };  // Blue
 
-	Pipeline = SDL_CreateGPUGraphicsPipeline(SDLGPUDevice, &pipelineCreateInfo);
-	if (Pipeline == NULL)
-	{
-		SDL_Log("Failed to create pipeline!");
-		return ;
-	}
+    m_VertexBuffer->SetData(vertices, bufferSize);
 
-
-	// Create the vertex buffer
-	VertexBuffer = VertexBuffer::Create( sizeof(PositionColorVertex) * 3);
-	// SDL_GPUBufferCreateInfo bufferInfo;
-	// bufferInfo.usage = SDL_GPU_BUFFERUSAGE_VERTEX;
-	// bufferInfo.size = sizeof(PositionColorVertex) * 3;
-	// VertexBuffer = SDL_CreateGPUBuffer( SDLGPUDevice, &bufferInfo);
-
-
-	// To get data into the vertex buffer, we have to use a transfer buffer
-	SDL_GPUTransferBufferCreateInfo transferBufferInfo;
-	transferBufferInfo.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD;
-	transferBufferInfo.size = sizeof(PositionColorVertex) * 3;
-
-	SDL_GPUTransferBuffer* transferBuffer = SDL_CreateGPUTransferBuffer(
-		SDLGPUDevice, &transferBufferInfo);
-
-	PositionColorVertex* transferData = (PositionColorVertex*)SDL_MapGPUTransferBuffer(
-		SDLGPUDevice,
-		transferBuffer,
-		false
-	);
-
-	transferData[0].Position = { -1.0f, -1.0f, 0.0f };
-	transferData[1].Position = {  1.0f, -1.0f, 0.0f };
-	transferData[2].Position = {  0.0f,  1.0f, 0.0f };
-	transferData[0].Color = { 1.0f, 0.0f, 0.0f, 1.0f };
-	transferData[1].Color = { 0.0f, 1.0f, 0.0f, 1.0f };
-	transferData[2].Color = { 0.0f, 0.0f, 1.0f, 1.0f };
-
-	SDL_UnmapGPUTransferBuffer(SDLGPUDevice, transferBuffer);
-
-	// Upload the transfer data to the vertex buffer
-	SDL_GPUCommandBuffer* uploadCmdBuf = SDL_AcquireGPUCommandBuffer(SDLGPUDevice);
-	SDL_GPUCopyPass* copyPass = SDL_BeginGPUCopyPass(uploadCmdBuf);
-
-	
-	SDL_GPUTransferBufferLocation bufferLocation;
-	bufferLocation.transfer_buffer = transferBuffer;
-	bufferLocation.offset = 0;
-
-	SDL_GPUBufferRegion bufferRegion;
-	auto vb = std::dynamic_pointer_cast<SDLGPUVertexBuffer>(VertexBuffer);
-	bufferRegion.buffer = vb->GetGPUBuffer();
-	bufferRegion.offset = 0;
-	bufferRegion.size = sizeof(PositionColorVertex) * 3;
-	SDL_UploadToGPUBuffer( copyPass, &bufferLocation, &bufferRegion, false );
-
-	SDL_EndGPUCopyPass(copyPass);
-	SDL_SubmitGPUCommandBuffer(uploadCmdBuf);
-	SDL_ReleaseGPUTransferBuffer(SDLGPUDevice, transferBuffer);
+    // Set the vertex buffer layout so the shader knows how to interpret the data.
+    // This layout is used when creating the SDL_GPUGraphicsPipeline.
+    m_VertexBuffer->SetLayout({
+        { ShaderDataType::Float3, "Position" },
+        { ShaderDataType::Float4, "Color"    },
+    });
 }
 
 // --------------------------------------------------------------------------------------
 
 void Game::OnDetach()
 {
-	// m_ActiveScene->OnSimulationStop();
-	// m_ActiveScene = nullptr;
-	// m_DefaultCamera = nullptr;
-	LOG_INFO("Detached Game application Layer!");
+    // Resources (VertexBuffer, Shader) are ref-counted and cleaned up automatically.
+    LOG_INFO("Detached Game application Layer!");
 }
 
 // --------------------------------------------------------------------------------------
 
-void Game::OnUpdate(const Timestep& ts) 
+void Game::OnUpdate(const Timestep& ts)
 {
-	auto SDLGPUDevice = SDLGPURenderAPI::Get()->GetDevice();
+    (void)ts;
 
+    // Step 3: Render the triangle each frame.
+    //
+    // The engine handles the SDL3 GPU frame lifecycle internally:
+    //   BeginFrame -> AcquireGPUCommandBuffer + WaitAndAcquireSwapchainTexture
+    //   DrawInternal -> BeginRenderPass + BindPipeline + BindBuffers + Draw
+    //   EndFrame -> EndRenderPass + SubmitGPUCommandBuffer
 
-	// Begin Frame
-	RenderGlobals::BeginFrame();
+    RenderGlobals::BeginFrame();
 
-	// Inside Draw indexed, drawTriangles....
-	// Main Render pass
-	// THIS NEEDS THE PIPELINE TO WORK!
-	RenderGlobals::DrawInternal(VertexBuffer);
+    // The bound shader determines which pipeline (vertex layout + render target) to use.
+    // DrawInternal starts a render pass (clears the screen), binds the pipeline,
+    // uploads vertex data if dirty, and issues the draw call.
+    RenderGlobals::DrawInternal(m_VertexBuffer);
 
-	RenderGlobals::EndFrame();
-	
-#if 0
-	RenderGlobals::SetClearColor(0.85, 0.35, 0.2);
-	//m_Fbo->Bind();
-	// Clear Framebuffer Attachments...
-	//m_Fbo->ClearAttachment(1, -1);
-
-	m_ActiveScene->OnUpdateSimulation(ts, m_DefaultCamera);
-	
-
-	// Get Selected Entity using inverted coordinates...
-	//int pixelData = m_Fbo->ReadPixel(1, m_MousePosition.x, EngineApp::GetWindow().GetHeight() - m_MousePosition.y);
-	//LOG_WARNING("{0} {1} {2}", pixelData, m_MousePosition.x, m_MousePosition.y);
-
-	// Unbind Framebuffer...
-	//m_Fbo->Unbind();
-
-	// Render Framebuffer Attachment (scene generated texture)...
-	//Cober::Render2D::DrawFramebuffer(m_Fbo);
-#endif
+    RenderGlobals::EndFrame();
 }
 
 // --------------------------------------------------------------------------------------
 
-void Game::OnEvent(Event& event) 
+void Game::OnEvent(Event& event)
 {
-	if (event.GetEventType() == EventType::MouseMoved)
-	{
-		m_MousePosition.x = static_cast<MouseMovedEvent&>(event).GetX();
-		m_MousePosition.y = static_cast<MouseMovedEvent&>(event).GetY();
-	}
-
-	if (event.GetEventType() == EventType::WindowResize)
-	{
-		// Resize Framebuffer...
-		float screenWidth = static_cast<WindowResizeEvent&>(event).GetWidth();
-		float screenHeight = static_cast<WindowResizeEvent&>(event).GetHeight();
-		//m_Fbo->Resize(screenWidth, screenHeight);
-	}
-
-	//m_ActiveScene->OnEvent(event, m_DefaultCamera);
-	// NativeScriptFn::OnEvent(m_ActiveScene.get(), event);
+    if (event.GetEventType() == EventType::WindowResize)
+    {
+        auto& resizeEvent = static_cast<WindowResizeEvent&>(event);
+        LOG_CORE_INFO("Window resized: {0} x {1}", resizeEvent.GetWidth(), resizeEvent.GetHeight());
+    }
 }
 
 // --------------------------------------------------------------------------------------

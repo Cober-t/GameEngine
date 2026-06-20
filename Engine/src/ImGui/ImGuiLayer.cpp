@@ -2,7 +2,6 @@
 #include "ImGui/ImGuiLayer.h"
 
 #include "Core/EngineApp.h"
-#include "Render/GraphicsContext.h"
 #include "Events/KeyEvents.h"
 #include "Events/MouseEvents.h"
 #include "ImGui/Colors.h"

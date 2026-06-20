@@ -1,3 +1,9 @@
+cbuffer Camera : register(b0)
+{
+    float4x4 u_Projection;
+    float4x4 u_View;
+};
+
 struct Input
 {
     float3 Position : TEXCOORD0;
@@ -14,6 +20,9 @@ Output main(Input input)
 {
     Output output;
     output.Color = input.Color;
-    output.Position = float4(input.Position, 1.0f);
+
+    float4 worldPos = float4(input.Position, 1.0f);
+    output.Position = mul(u_Projection, mul(u_View, worldPos));
+
     return output;
 }

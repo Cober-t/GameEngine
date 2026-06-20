@@ -20,9 +20,23 @@ namespace Cober
         LOG_CORE_ASSERT(!s_Instance, "Application already exists!");
         s_Instance = this;
 
-        // Set working directory here
+		// Set working directory here
 		if (!m_Specification.ProjectRoot.empty() && !m_Specification.AssetsRoot.empty()) {
 			PathService::Init(m_Specification.ProjectRoot, m_Specification.AssetsRoot);
+        } else {
+			// Fallback when no project file is loaded (e.g. Editor without --project arg).
+			// Walk up from the working directory looking for an assets/ folder
+			auto cwd = std::filesystem::current_path();
+			auto projectRoot = cwd;
+			auto assetsRoot = cwd / "assets";
+			if (!std::filesystem::exists(assetsRoot)) {
+				auto parent = cwd.parent_path();
+				if (std::filesystem::exists(parent / "assets")) {
+					projectRoot = parent;
+					assetsRoot = parent / "assets";
+				}
+			}
+			PathService::Init(projectRoot, assetsRoot);
         }
 
         m_TimeStep = CreateUnique<Timestep>();
@@ -31,7 +45,8 @@ namespace Cober
             WindowProps(m_Specification.Name, m_Specification.Width, m_Specification.Height)
         );
 
-        RenderGlobals::Init(s_window->GetRawWindow(), s_window->GetContext().get()->GetDevice());
+        // GraphicsDevice is initialized in Window::Init via GraphicsDevice::Init()
+        RenderGlobals::Init(s_window->GetRawWindow(), nullptr);
 		Render2D::Start();
     }
 

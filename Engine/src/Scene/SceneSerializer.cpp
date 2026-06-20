@@ -45,6 +45,7 @@ namespace Cober {
 
 		if (!std::filesystem::exists(scenePath)) {
 			sceneName = "SceneDefault.lua";
+			scenePath = PathService::ResolveAsset("scenes\\" + sceneName);
 		}
 
 		if (sceneName.find_last_of('.') != std::string::npos) {
@@ -77,8 +78,8 @@ namespace Cober {
 			return newScene;
 		}
 		
-		LOG_ERROR(("Cannot read scene with path: {0}", PathService::AssetsRoot().string() + "\\scenes\\" + sceneName));
-		return nullptr;
+		LOG_WARNING("Scene file not found: {0}, creating empty scene", scenePath.string());
+		return CreateRef<Scene>();
     }
 
 	void SceneSerializer::SerializeSceneSettings(Utils::DataFile& serializer)

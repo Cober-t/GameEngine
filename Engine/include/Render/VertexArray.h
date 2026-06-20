@@ -4,26 +4,41 @@
 #include <memory>
 #include "Render/Buffer.h"
 
-#include <vector>
+// --------------------------------------------------------------------------------------
+// VertexArray
+//
+// A VertexArray combines one or more vertex buffers and an optional index buffer into
+// a single drawable unit. It describes the vertex input state needed by the graphics
+// pipeline.
+//
+// In SDL3 GPU, vertex input is defined by:
+//   - SDL_GPUVertexBufferDescription: describes each vertex buffer's layout
+//   - SDL_GPUVertexAttribute: describes each attribute's format and location
+//   These are stored in an SDL_GPUVertexInputState struct used when creating pipelines.
+// --------------------------------------------------------------------------------------
 
 namespace Cober {
 
-	class VertexArray
-	{
-	public:
-		virtual ~VertexArray() = default;
+class CB_API VertexArray
+{
+public:
+    VertexArray() = default;
+    ~VertexArray() = default;
 
-		virtual void Bind() const = 0;
-		virtual void Unbind() const = 0;
+    void AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer);
+    void SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer);
+    void Unbind() const {} // No-op: SDL3 GPU doesn't use bind/unbind for VAOs
 
-		virtual void AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer) = 0;
-		virtual void SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer) = 0;
+    const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const { return m_VertexBuffers; }
+    const Ref<IndexBuffer>& GetIndexBuffer() const { return m_IndexBuffer; }
 
-		virtual const std::vector<Ref<VertexBuffer>>& GetVertexBuffers() const = 0;
-		virtual const Ref<IndexBuffer>& GetIndexBuffer() const = 0;
+    static Ref<VertexArray> Create();
 
-		static Ref<VertexArray> Create();
-	};
+private:
+    std::vector<Ref<VertexBuffer>> m_VertexBuffers;
+    Ref<IndexBuffer> m_IndexBuffer;
+};
+
 }
 
 #endif
