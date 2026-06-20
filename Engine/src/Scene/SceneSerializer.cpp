@@ -43,7 +43,7 @@ namespace Cober {
 
 		std::filesystem::path scenePath = PathService::ResolveAsset("scenes\\" +  sceneName);
 
-		if (!std::filesystem::exists(scenePath)) {
+		if (sceneName.empty() || !std::filesystem::exists(scenePath) || std::filesystem::is_directory(scenePath)) {
 			sceneName = "SceneDefault.lua";
 			scenePath = PathService::ResolveAsset("scenes\\" + sceneName);
 		}

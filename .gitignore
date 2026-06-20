@@ -12,6 +12,7 @@ Projects/
 build/
 
 *.log
+*.bak
 *.sln
 *.vcxproj
 *.vcxproj.filters

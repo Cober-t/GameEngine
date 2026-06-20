@@ -73,21 +73,15 @@ void Game::OnUpdate(const Timestep& ts)
 {
     (void)ts;
 
-    // Step 3: Render the triangle each frame.
+    // Draw the triangle each frame.
+    // The frame lifecycle (BeginFrame / EndFrame) is managed by EngineApp::RunRender,
+    // which acquires the command buffer + swapchain texture before calling OnUpdate
+    // and submits the command buffer after.
     //
-    // The engine handles the SDL3 GPU frame lifecycle internally:
-    //   BeginFrame -> AcquireGPUCommandBuffer + WaitAndAcquireSwapchainTexture
-    //   DrawInternal -> BeginRenderPass + BindPipeline + BindBuffers + Draw
-    //   EndFrame -> EndRenderPass + SubmitGPUCommandBuffer
+    // DrawInternal starts the swapchain render pass, binds the pipeline and buffers,
+    // and issues the draw call. The render pass is ended by RunRender's EndFrame().
 
-    RenderGlobals::BeginFrame();
-
-    // The bound shader determines which pipeline (vertex layout + render target) to use.
-    // DrawInternal starts a render pass (clears the screen), binds the pipeline,
-    // uploads vertex data if dirty, and issues the draw call.
     RenderGlobals::DrawInternal(m_VertexBuffer);
-
-    RenderGlobals::EndFrame();
 }
 
 // --------------------------------------------------------------------------------------

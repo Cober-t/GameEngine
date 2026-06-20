@@ -225,7 +225,7 @@ namespace Cober
     {          
         CB_PROFILE_FUNCTION();
         
-        // RenderGlobals::BeginFrame();
+        RenderGlobals::BeginFrame();
 
         // Upload ImGui buffers before render pass begins
         if (EngineApp::IsEditor()) 
@@ -248,7 +248,7 @@ namespace Cober
             RenderGlobals::ImGuiRenderDrawData(ImGui::GetDrawData());
         }
 
-        // RenderGlobals::EndFrame();
+        RenderGlobals::EndFrame();
     }
 
     // --------------------------------------------------------------------------------------

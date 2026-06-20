@@ -34,8 +34,8 @@
     #define CB_SCRIPT
 #endif
 
-#define LOG_ASSERT(x, ...) { if(!(x)) { LOG_ERROR("Assertion Failed: {0}", __VA_ARGS__); LOG_DEBUGBREAK(); } }
-#define LOG_CORE_ASSERT(x, ...) { if(!(x)) { LOG_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); LOG_DEBUGBREAK(); } }
+#define LOG_ASSERT(x, ...) { if(!(x)) { LOG_ERROR(__VA_ARGS__); LOG_DEBUGBREAK(); } }
+#define LOG_CORE_ASSERT(x, ...) { if(!(x)) { LOG_CORE_ERROR(__VA_ARGS__); LOG_DEBUGBREAK(); } }
 
 #define BIT(x) (1 << x)
 #define BIND_EVENT_FN(fn) [this](auto&&... args) -> decltype(auto) { return this->fn(std::forward<decltype(args)>(args)...); }
