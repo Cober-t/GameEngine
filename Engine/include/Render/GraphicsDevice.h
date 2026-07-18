@@ -34,6 +34,7 @@ public:
     static void Init(SDL_Window* window);
     static void Shutdown();
     static GraphicsDevice& Get();
+    static bool IsAlive() { return s_Instance != nullptr; }
 
     // === Frame Lifecycle ===
     // Begins a new frame: acquires a command buffer + swapchain texture.
@@ -74,6 +75,14 @@ public:
     SDL_GPURenderPass* GetRenderPass() const { return m_Frame.RenderPass; }
     SDL_GPUTextureFormat GetSwapchainFormat() const { return m_SwapchainFormat; }
 
+    struct RenderTargetInfo {
+        uint32_t NumColorTargets = 0;
+        int ColorFormats[4] = {};
+        bool HasDepth = false;
+        int DepthFormat = 0;
+    };
+    const RenderTargetInfo& GetRenderTargetInfo() const { return m_ActiveRenderTarget; }
+
 private:
     GraphicsDevice() = default;
 
@@ -95,6 +104,10 @@ private:
     glm::uvec4 m_Viewport = { 0, 0, 0, 0 };
     bool m_ImGuiInitialized = false;
     bool m_RenderingToSwapchain = false;
+    RenderTargetInfo m_ActiveRenderTarget;
+
+    // Transfer buffers whose release is deferred until after command buffer submission
+    std::vector<SDL_GPUTransferBuffer*> m_PendingTransferBuffers;
 
     static GraphicsDevice* s_Instance;
 };

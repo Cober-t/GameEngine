@@ -9,6 +9,8 @@ namespace {
 
 static SDL_GPUDevice* GetDevice()
 {
+    if (!GraphicsDevice::IsAlive())
+        return nullptr;
     return GraphicsDevice::Get().GetDevice();
 }
 
@@ -92,10 +94,12 @@ void Framebuffer::Invalidate()
         SDL_GPUTexture* texture = SDL_CreateGPUTexture(device, &texInfo);
         LOG_CORE_ASSERT(texture, "SDL_CreateGPUTexture(color attachment) failed: {0}", SDL_GetError());
         m_ColorAttachments.push_back(texture);
+        m_ColorAttachmentFormats.push_back((int)texInfo.format);
 
         SDL_GPUSamplerCreateInfo samplerInfo{};
-        samplerInfo.min_filter = SDL_GPU_FILTER_LINEAR;
-        samplerInfo.mag_filter = SDL_GPU_FILTER_LINEAR;
+        bool isIntegerFormat = (spec.TextureFormat == FramebufferTextureFormat::RED_INTEGER);
+        samplerInfo.min_filter = isIntegerFormat ? SDL_GPU_FILTER_NEAREST : SDL_GPU_FILTER_LINEAR;
+        samplerInfo.mag_filter = isIntegerFormat ? SDL_GPU_FILTER_NEAREST : SDL_GPU_FILTER_LINEAR;
         samplerInfo.mipmap_mode = SDL_GPU_SAMPLERMIPMAPMODE_NEAREST;
         samplerInfo.address_mode_u = SDL_GPU_SAMPLERADDRESSMODE_CLAMP_TO_EDGE;
         samplerInfo.address_mode_v = SDL_GPU_SAMPLERADDRESSMODE_CLAMP_TO_EDGE;
@@ -245,8 +249,14 @@ SDL_GPUTexture* Framebuffer::GetColorAttachmentTexture(uint32_t index) const
 
 void Framebuffer::Release()
 {
+    if (!GraphicsDevice::IsAlive())
+        return;
     auto* device = GraphicsDevice::Get().GetDevice();
     if (!device) return;
+
+    // Wait for GPU idle before releasing textures to avoid
+    // Vulkan validation errors when textures are still in use.
+    SDL_WaitForGPUIdle(device);
 
     for (auto* sampler : m_ColorAttachmentSamplers)
     {
@@ -259,6 +269,7 @@ void Framebuffer::Release()
         if (texture) SDL_ReleaseGPUTexture(device, texture);
     }
     m_ColorAttachments.clear();
+    m_ColorAttachmentFormats.clear();
 
     if (m_DepthAttachment)
     {
@@ -276,6 +287,13 @@ void Framebuffer::Release()
 Ref<Framebuffer> Framebuffer::Create(uint32_t width, uint32_t height)
 {
     return CreateRef<Framebuffer>(width, height);
+}
+
+int Framebuffer::GetDepthFormat() const
+{
+    if (m_DepthAttachmentSpecification.TextureFormat == FramebufferTextureFormat::None)
+        return 0;
+    return (int)ToSDLFramebufferFormat(m_DepthAttachmentSpecification.TextureFormat);
 }
 
 } // namespace Cober

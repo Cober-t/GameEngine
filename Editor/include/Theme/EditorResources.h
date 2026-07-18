@@ -202,8 +202,10 @@ namespace Cober {
 				return nullptr;
 			}
 
-            // Provisional until Create Textures from a path
-			return Texture::Create(path.string());
+			auto tex = Texture::Create(path.string());
+			if (tex)
+				tex->EnsureUploaded(nullptr, false);
+			return tex;
 		}
     };
 }

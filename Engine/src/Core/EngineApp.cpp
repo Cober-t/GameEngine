@@ -2,6 +2,8 @@
 #include "Core/EngineApp.h"
 #include "Events/SDLEventTranslator.h"
 #include "Events/ApplicationEvents.h"
+#include "Render/Texture.h"
+#include "Render/GraphicsDevice.h"
 
 namespace Cober 
 {
@@ -25,16 +27,30 @@ namespace Cober
 			PathService::Init(m_Specification.ProjectRoot, m_Specification.AssetsRoot);
         } else {
 			// Fallback when no project file is loaded (e.g. Editor without --project arg).
-			// Walk up from the working directory looking for an assets/ folder
+			// Resolve assets relative to cwd first, then fall back to the compile-time source root.
 			auto cwd = std::filesystem::current_path();
 			auto projectRoot = cwd;
 			auto assetsRoot = cwd / "assets";
+
 			if (!std::filesystem::exists(assetsRoot)) {
-				auto parent = cwd.parent_path();
-				if (std::filesystem::exists(parent / "assets")) {
-					projectRoot = parent;
-					assetsRoot = parent / "assets";
+			#ifdef CB_PROJECT_ROOT
+				auto sourceRoot = std::filesystem::path(CB_PROJECT_ROOT);
+				for (const auto& proj : {"Editor", "Game"}) {
+					auto projAssets = sourceRoot / proj / "assets";
+					if (std::filesystem::exists(projAssets)) {
+						projectRoot = sourceRoot / proj;
+						assetsRoot = projAssets;
+						break;
+					}
 				}
+				if (!std::filesystem::exists(assetsRoot)) {
+					auto rootAssets = sourceRoot / "assets";
+					if (std::filesystem::exists(rootAssets)) {
+						projectRoot = sourceRoot;
+						assetsRoot = rootAssets;
+					}
+				}
+			#endif
 			}
 			PathService::Init(projectRoot, assetsRoot);
         }
@@ -59,9 +75,20 @@ namespace Cober
             m_GuiLayer->OnDetach();
             m_GuiLayer.reset();
         }
-        
-        Render2D::Shutdown();   // Abstract in a global Render api class in the future
-        LOG_CORE_INFO("EngineApp Destructor!");
+
+		// Detach all layers (Editor, etc.) BEFORE GPU shutdown.
+		// This runs Editor::OnDetach() which releases scenes, framebuffers,
+		// EditorResources textures, and panel icon maps while GraphicsDevice
+		// is still alive. LayerStack::~LayerStack() calls Clear() again later,
+		// but after Clear() the vector is empty so it's a no-op.
+		m_LayerStack.Clear();
+
+		Render2D::Shutdown();
+		Texture::Shutdown();
+
+		GraphicsDevice::Shutdown();
+
+		LOG_CORE_INFO("EngineApp Destructor!");
 
         m_profiler.DumpProfileStatsToLog(0.02);
     }

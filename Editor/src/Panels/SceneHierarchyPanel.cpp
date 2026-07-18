@@ -38,6 +38,10 @@ namespace Cober {
 		s_Instance = nullptr;
 	}
 
+	void SceneHierarchyPanel::ReleaseResources()
+	{
+		m_AssetIconMap.clear();
+	}
 
 	void SceneHierarchyPanel::SetContext(const Ref<Scene>& sceneContext)
 	{
@@ -155,9 +159,8 @@ namespace Cober {
 		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0,0 });
 
-		/// TODO: FIX FONT FIST (msgen library)
-		// float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
-		ImVec2 buttonSize = { /*lineHeight*/ 5.0f + 3.0f, 5.0f/*lineHeight*/ };
+		float lineHeight = GImGui->Font->LegacySize + GImGui->Style.FramePadding.y * 2.0f;
+		ImVec2 buttonSize = { lineHeight * 1.5f, lineHeight };
 
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f });
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f });
@@ -252,18 +255,16 @@ namespace Cober {
 
 			if (name != ComponentNames::Transform)
 			{
-				ImTextureRef* texRef = new ImTextureRef(m_AssetIconMap["remove"]->GetRendererID());
 				const char* strID = "remove";
-				if (ImGui::ImageButton(strID, texRef, ImVec2{ lineHeight*0.9f, lineHeight*0.9f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 }))
+				if (ImGui::ImageButton(strID, (void*)m_AssetIconMap["remove"]->GetRendererID(), ImVec2{ lineHeight*0.9f, lineHeight*0.9f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 }))
 					entity.RemoveComponent<T>();
 			}
 				
 			ImGui::SameLine(2.0f, 0.0f);
 			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
 			// This usless button cover the node tree's ugly arrow
-			ImTextureRef* texRef = new ImTextureRef(iconComponent->GetRendererID());
 			const char* strID = "coverUglyArror";
-			ImGui::ImageButton(strID, texRef, ImVec2{ lineHeight*0.9f, lineHeight*0.9f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+			ImGui::ImageButton(strID, (void*)iconComponent->GetRendererID(), ImVec2{ lineHeight*0.9f, lineHeight*0.9f }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 	        ImGui::PopItemFlag();
 
 			if (open) 

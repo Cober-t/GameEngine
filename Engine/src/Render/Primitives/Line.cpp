@@ -15,6 +15,12 @@ namespace Cober {
         {
             delete[] data.VertexBufferBase;
         }
+
+        void Line::Shutdown()
+        {
+            CleanVertexBuffer();
+            data = Data{};
+        }
         
 
         void Line::Init() 
@@ -30,7 +36,7 @@ namespace Cober {
             data.VertexArray->AddVertexBuffer(data.VertexBuffer);
             data.VertexBufferBase = new Attributes[Render2D::GetStats().MaxVertices];
 
-            data.Shader = Shader::Create("Line.glsl");
+            data.Shader = Shader::Create("Line");
         }
 
 

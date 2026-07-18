@@ -112,8 +112,8 @@ namespace Cober
 
     void Window::ChangeFullScreen()
     {
-        SDL_SetWindowFullscreen(m_Window, m_Data.FullScreen);
         m_Data.FullScreen = !m_Data.FullScreen;
+        SDL_SetWindowFullscreen(m_Window, m_Data.FullScreen);
     }
 
     // --------------------------------------------------------------------------------------

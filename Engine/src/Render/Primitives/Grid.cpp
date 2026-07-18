@@ -60,7 +60,7 @@ namespace Cober {
             data.VertexArray->SetIndexBuffer(gridIB); // The shame as Quads Index Buffer
             delete[] gridIndices;
 
-            data.Shader = Shader::Create("Grid.glsl");
+            data.Shader = Shader::Create("Grid");
 
             data.VertexPositions[0] = { -1.0f, -1.0f, 0.0f, 1.0f };
             data.VertexPositions[1] = {  1.0f, -1.0f, 0.0f, 1.0f };

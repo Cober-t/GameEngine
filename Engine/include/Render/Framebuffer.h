@@ -82,7 +82,9 @@ public:
     // SDL3 GPU accessors
     uint32_t GetColorAttachmentCount() const { return (uint32_t)m_ColorAttachments.size(); }
     SDL_GPUTexture* GetColorAttachmentTexture(uint32_t index) const;
+    int GetColorAttachmentFormat(uint32_t index) const { return (index < m_ColorAttachmentFormats.size()) ? m_ColorAttachmentFormats[index] : 0; }
     SDL_GPUTexture* GetDepthAttachmentTexture() const { return m_DepthAttachment; }
+    int GetDepthFormat() const;
 
     static Ref<Framebuffer> Create(uint32_t width, uint32_t height);
 
@@ -94,6 +96,7 @@ private:
     FramebufferTextureSpecification m_DepthAttachmentSpecification = FramebufferTextureFormat::None;
 
     std::vector<SDL_GPUTexture*> m_ColorAttachments;
+    std::vector<int> m_ColorAttachmentFormats;
     std::vector<SDL_GPUSampler*> m_ColorAttachmentSamplers;
     SDL_GPUTexture* m_DepthAttachment = nullptr;
     SDL_GPUTransferBuffer* m_ReadbackBuffer = nullptr;

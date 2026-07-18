@@ -3,7 +3,7 @@ setlocal
 
 set "MODE=%~1"
 set "PROJECT_PATH=%~2"
-set "ROOT=C:\Users\Jorge\Documents\GameEngine"
+set "ROOT=C:\Users\JorgePC\Documents\GameEngine"
 set "BUILD_DIR=%ROOT%\build"
 
 if "%MODE%"=="" goto :usage
@@ -21,7 +21,9 @@ if /I "%MODE%"=="Editor" (
         exit /b 1
     )
 
+    pushd "%~dp0\..\Editor"
     "%~dp0\..\build\bin\Debug\Editor.exe"
+    popd
     exit /b %errorlevel%
 )
 

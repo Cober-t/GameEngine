@@ -1,4 +1,4 @@
-cbuffer Camera : register(b0)
+cbuffer Camera : register(b0, space1)
 {
     float4x4 u_Projection;
     float4x4 u_View;

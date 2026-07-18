@@ -34,6 +34,7 @@ namespace Cober {
 		static SceneHierarchyPanel& Get() { return *s_Instance; }
 
 		void OnGuiRender();
+		void ReleaseResources();
 
 		void SetContext(const Ref<Scene>& selectionContext);
 

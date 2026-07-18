@@ -128,7 +128,10 @@ namespace Cober {
 			
 
 			if (ImGui::Checkbox("Fullscreen", &m_Settings.Fullscreen))
+			{
 				EngineApp::GetWindow().ChangeFullScreen();
+				m_Settings.Fullscreen = EngineApp::GetWindow().IsFullScreen();
+			}
 			
 			if (ImGui::Checkbox("VSYNC", &m_Settings.Vsync))
 				EngineApp::GetWindow().SetVSync(m_Settings.Vsync);

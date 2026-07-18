@@ -60,6 +60,20 @@ if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/msdf/CMakeLists.txt)
     endif()
 endif()
 
+# SDL_shadercross - Shader cross-compilation
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/SDL_shadercross/CMakeLists.txt)
+    message(STATUS "Adding SDL_shadercross library")
+    set(SDL_SHADERCROSS_SHARED OFF CACHE BOOL "" FORCE)
+    set(SDL_SHADERCROSS_TESTS OFF CACHE BOOL "" FORCE)
+    set(SDLSHADERCROSS_VENDORED ON CACHE BOOL "" FORCE)
+    set(SDLSHADERCROSS_DXC OFF CACHE BOOL "" FORCE)
+    set(SDLSHADERCROSS_CLI OFF CACHE BOOL "" FORCE)
+    add_subdirectory(SDL_shadercross)
+    if(TARGET SDL3_shadercross-static)
+        set_target_properties(SDL3_shadercross-static PROPERTIES FOLDER "Dependencies")
+    endif()
+endif()
+
 # Libraries without CMakeLists.txt or requiring custom build logic
 # These will be built with custom configurations
 

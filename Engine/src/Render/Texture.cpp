@@ -58,7 +58,8 @@ SDL_GPUSamplerAddressMode ToSDLAddressMode(RepeatPattern pattern)
 // Upload texture pixel data to GPU via a transfer buffer
 void UploadTextureBytes(SDL_GPUTexture* texture, const void* data,
                         uint32_t width, uint32_t height, uint32_t bytesPerPixel,
-                        SDL_GPUCommandBuffer* existingCommandBuffer, bool cycle)
+                        SDL_GPUCommandBuffer* existingCommandBuffer, bool cycle,
+                        uint32_t layer = 0)
 {
     SDL_GPUDevice* device = GetDevice();
     uint32_t totalSize = width * height * bytesPerPixel;
@@ -91,7 +92,7 @@ void UploadTextureBytes(SDL_GPUTexture* texture, const void* data,
     SDL_GPUTextureRegion texRegion{};
     texRegion.texture = texture;
     texRegion.mip_level = 0;
-    texRegion.layer = 0;
+    texRegion.layer = layer;
     texRegion.x = 0;
     texRegion.y = 0;
     texRegion.z = 0;
@@ -138,6 +139,8 @@ Texture::Texture(const std::filesystem::path& path)
 
 Texture::~Texture()
 {
+    if (!GraphicsDevice::IsAlive())
+        return;
     auto* device = GraphicsDevice::Get().GetDevice();
     if (!device) return;
 
@@ -200,6 +203,13 @@ void Texture::EnsureUploaded(SDL_GPUCommandBuffer* commandBuffer, bool cycle)
     m_Dirty = false;
 }
 
+void Texture::UploadLayer(SDL_GPUTexture* arrayTexture, uint32_t layer,
+                           const void* data, uint32_t width, uint32_t height,
+                           uint32_t bytesPerPixel, SDL_GPUCommandBuffer* cmdBuf)
+{
+    UploadTextureBytes(arrayTexture, data, width, height, bytesPerPixel, cmdBuf, true, layer);
+}
+
 const Texture* Texture::GetBound(uint32_t slot)
 {
     return s_BoundTextures[slot];
@@ -213,6 +223,14 @@ SDL_GPUTexture* Texture::GetRawBound(uint32_t slot)
 SDL_GPUSampler* Texture::GetRawSampler(uint32_t slot)
 {
     return s_RawSamplers[slot];
+}
+
+void Texture::BindRaw(uint32_t slot, SDL_GPUTexture* texture, SDL_GPUSampler* sampler)
+{
+    LOG_CORE_ASSERT(slot < s_BoundTextures.size(), "Texture slot out of bounds");
+    s_BoundTextures[slot] = nullptr;
+    s_RawBoundTextures[slot] = texture;
+    s_RawSamplers[slot] = sampler;
 }
 
 void Texture::CreateGPUObjects()
@@ -274,7 +292,12 @@ void Texture::LoadFromFile()
     stbi_image_free(data);
 }
 
-Ref<Texture> Texture::Create(const TextureSpecification& specification)
+	void Texture::Shutdown()
+	{
+		m_TexturesDataHolder.clear();
+	}
+
+	Ref<Texture> Texture::Create(const TextureSpecification& specification)
 {
     return CreateRef<Texture>(specification);
 }

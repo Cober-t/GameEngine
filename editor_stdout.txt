@@ -1,0 +1,185 @@
+[Cober::CreateApplication EditorApp.cpp - 47] APP: Editor Constructor!
+[Cober::EngineApp::EngineApp EngineApp.cpp - 18] ENGINE: EngineApp Constructor!
+[Cober::PathService::Init PathService.cpp - 11] ENGINE: Project Root: C:\Users\JorgePC\Documents\GameEngine\Editor
+[Cober::PathService::Init PathService.cpp - 12] ENGINE: Assets Root: C:\Users\JorgePC\Documents\GameEngine\Editor\assets
+[Cober::Timestep::Timestep Timestep.h - 18] ENGINE: Created Timer
+[Cober::Window::Init Window.cpp - 45] ENGINE: Creating window Cober (1280, 720)
+[Cober::GraphicsDevice::Init GraphicsDevice.cpp - 57] ENGINE: SDL_GPU backend selected: vulkan
+[Cober::GraphicsDevice::Init GraphicsDevice.cpp - 65] ENGINE:   GPU: NVIDIA GeForce RTX 4060 Laptop GPU | Driver: NVIDIA v595.79.0.0
+[Cober::Window::Window Window.cpp - 22] ENGINE: Window Created
+[Cober::Shader::LoadShader Shader.cpp - 383] ENGINE: Loaded pre-compiled shader Quad .vert
+[Cober::Shader::LoadShader Shader.cpp - 383] ENGINE: Loaded pre-compiled shader Quad .frag
+[Cober::Shader::LoadShader Shader.cpp - 383] ENGINE: Loaded pre-compiled shader Line .vert
+[Cober::Shader::LoadShader Shader.cpp - 383] ENGINE: Loaded pre-compiled shader Line .frag
+[Cober::Shader::LoadShader Shader.cpp - 383] ENGINE: Loaded pre-compiled shader Circle .vert
+[Cober::Shader::LoadShader Shader.cpp - 383] ENGINE: Loaded pre-compiled shader Circle .frag
+[Cober::EditorCamera::EditorCamera EditorCamera.cpp - 44] APP: Editor Camera Created!!
+[Cober::Scene::Scene Scene.cpp - 26] APP: Scene Created!!
+[Cober::Scene::CreateEntityWithUUID Scene.cpp - 219] APP: Created entity with ID 15790550996833163264 and name Entity0
+[Cober::Scene::CreateEntityWithUUID Scene.cpp - 219] APP: Created entity with ID 17731108172934002688 and name Entity1
+[Cober::CameraSystem::CameraSystem CameraSystem.cpp - 9] APP: Camera System Added to Registry!!
+[Cober::RenderSystem::RenderSystem RenderSystem.cpp - 13] APP: Render System Added to Registry!!
+[Cober::ParticleSystem::ParticleSystem ParticleSystem.cpp - 15] APP: Particle System Added to Registry!!
+[Cober::EditorCamera::EditorCamera EditorCamera.cpp - 44] APP: Editor Camera Created!!
+[Cober::CameraSystem::Start CameraSystem.cpp - 45] APP: Camera System Started!!
+[Cober::RenderSystem::Start RenderSystem.cpp - 27] APP: Render System Started!!
+[Cober::ParticleSystem::Start ParticleSystem.cpp - 38] APP: Particle System Started!!
+[Cober::DrawWithVertexArray RenderGlobals.cpp - 257] ENGINE: [DIAG] DrawWithVertexArray fragBind slot=0 tex=0x21946c78b10 sampler=0x21946bf9160
+[Cober::GraphicsDevice::ImGuiRenderDrawData GraphicsDevice.cpp - 346] ENGINE: [DIAG] ImGui Texture[0]: UniqueID=1 TexID=0x21946c78600 Status=0 RefCount=1
+[Cober::GraphicsDevice::ImGuiRenderDrawData GraphicsDevice.cpp - 354] ENGINE: [DIAG] ImGuiRenderDrawData: entering render pass, drawLists=2
+[Cober::GraphicsDevice::ImGuiRenderDrawData GraphicsDevice.cpp - 356] ENGINE: [DIAG] ImGuiRenderDrawData: done
+[Cober::DrawWithVertexArray RenderGlobals.cpp - 257] ENGINE: [DIAG] DrawWithVertexArray fragBind slot=0 tex=0x21946c78b10 sampler=0x21946bf9160
+[Cober::GraphicsDevice::ImGuiRenderDrawData GraphicsDevice.cpp - 346] ENGINE: [DIAG] ImGui Texture[0]: UniqueID=1 TexID=0x21946c78600 Status=0 RefCount=1
+[Cober::GraphicsDevice::ImGuiRenderDrawData GraphicsDevice.cpp - 354] ENGINE: [DIAG] ImGuiRenderDrawData: entering render pass, drawLists=9
+Validation Error: [ VUID-VkWriteDescriptorSet-descriptorType-02996 ] | MessageID = 0x1cc3d039
+vkUpdateDescriptorSets(): pDescriptorWrites[0].pImageInfo[0].imageView Invalid VkImageView Object 0xa80.
+The Vulkan spec states: If descriptorType is VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, or VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, the imageView member of each element of pImageInfo must be either a valid VkImageView handle or VK_NULL_HANDLE (https://docs.vulkan.org/spec/latest/chapters/descriptorsets.html#VUID-VkWriteDescriptorSet-descriptorType-02996)
+
+Validation Error: [ VUID-VkWriteDescriptorSet-descriptorType-02996 ] | MessageID = 0x1cc3d039
+vkUpdateDescriptorSets(): pDescriptorWrites[0].pImageInfo[0].imageView found in the template update has an invalid VkImageView 0xa80 (while trying to update a descriptorType of VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER).
+The Vulkan spec states: If descriptorType is VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, or VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, the imageView member of each element of pImageInfo must be either a valid VkImageView handle or VK_NULL_HANDLE (https://docs.vulkan.org/spec/latest/chapters/descriptorsets.html#VUID-VkWriteDescriptorSet-descriptorType-02996)
+
+Validation Error: [ VUID-vkCmdDrawIndexed-None-08114 ] | MessageID = 0x3f6fd836
+vkCmdDrawIndexed(): the combined image sampler descriptor [VkDescriptorSet 0x4500000000450, Set 2, Binding 0, Index 0, variable "sTexture"] is using imageView VkImageView 0x0 that is invalid or has been destroyed.
+The Vulkan spec states: Descriptors in each bound descriptor set, specified via vkCmdBindDescriptorSets, must be valid if they are accessed as described by descriptor validity by the VkPipeline bound to the pipeline bind point used by this command and the bound VkPipeline was not created with VK_PIPELINE_CREATE_DESCRIPTOR_BUFFER_BIT_EXT (https://docs.vulkan.org/spec/latest/chapters/drawing.html#VUID-vkCmdDrawIndexed-None-08114)
+Objects: 2
+    [0] VkPipeline 0x1070000000107
+    [1] VkDescriptorSet 0x4500000000450
+
+Validation Error: [ VUID-VkWriteDescriptorSet-descriptorType-02996 ] | MessageID = 0x1cc3d039
+vkUpdateDescriptorSets(): pDescriptorWrites[0].pImageInfo[0].imageView Invalid VkImageView Object 0x8.
+The Vulkan spec states: If descriptorType is VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, or VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, the imageView member of each element of pImageInfo must be either a valid VkImageView handle or VK_NULL_HANDLE (https://docs.vulkan.org/spec/latest/chapters/descriptorsets.html#VUID-VkWriteDescriptorSet-descriptorType-02996)
+
+Validation Error: [ VUID-VkWriteDescriptorSet-descriptorType-02996 ] | MessageID = 0x1cc3d039
+vkUpdateDescriptorSets(): pDescriptorWrites[0].pImageInfo[0].imageView found in the template update has an invalid VkImageView 0x8 (while trying to update a descriptorType of VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER).
+The Vulkan spec states: If descriptorType is VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, or VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, the imageView member of each element of pImageInfo must be either a valid VkImageView handle or VK_NULL_HANDLE (https://docs.vulkan.org/spec/latest/chapters/descriptorsets.html#VUID-VkWriteDescriptorSet-descriptorType-02996)
+
+Validation Error: [ VUID-vkCmdDrawIndexed-None-08114 ] | MessageID = 0x3f6fd836
+vkCmdDrawIndexed(): the combined image sampler descriptor [VkDescriptorSet 0x4520000000452, Set 2, Binding 0, Index 0, variable "sTexture"] is using imageView VkImageView 0x0 that is invalid or has been destroyed.
+The Vulkan spec states: Descriptors in each bound descriptor set, specified via vkCmdBindDescriptorSets, must be valid if they are accessed as described by descriptor validity by the VkPipeline bound to the pipeline bind point used by this command and the bound VkPipeline was not created with VK_PIPELINE_CREATE_DESCRIPTOR_BUFFER_BIT_EXT (https://docs.vulkan.org/spec/latest/chapters/drawing.html#VUID-vkCmdDrawIndexed-None-08114)
+Objects: 2
+    [0] VkPipeline 0x1070000000107
+    [1] VkDescriptorSet 0x4520000000452
+
+Validation Error: [ VUID-VkWriteDescriptorSet-descriptorType-02996 ] | MessageID = 0x1cc3d039
+vkUpdateDescriptorSets(): pDescriptorWrites[0].pImageInfo[0].imageView Invalid VkImageView Object 0xa80.
+The Vulkan spec states: If descriptorType is VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, or VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, the imageView member of each element of pImageInfo must be either a valid VkImageView handle or VK_NULL_HANDLE (https://docs.vulkan.org/spec/latest/chapters/descriptorsets.html#VUID-VkWriteDescriptorSet-descriptorType-02996)
+
+Validation Error: [ VUID-VkWriteDescriptorSet-descriptorType-02996 ] | MessageID = 0x1cc3d039
+vkUpdateDescriptorSets(): pDescriptorWrites[0].pImageInfo[0].imageView found in the template update has an invalid VkImageView 0xa80 (while trying to update a descriptorType of VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER).
+The Vulkan spec states: If descriptorType is VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, or VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, the imageView member of each element of pImageInfo must be either a valid VkImageView handle or VK_NULL_HANDLE (https://docs.vulkan.org/spec/latest/chapters/descriptorsets.html#VUID-VkWriteDescriptorSet-descriptorType-02996)
+
+Validation Error: [ VUID-vkCmdDrawIndexed-None-08114 ] | MessageID = 0x3f6fd836
+vkCmdDrawIndexed(): the combined image sampler descriptor [VkDescriptorSet 0x4540000000454, Set 2, Binding 0, Index 0, variable "sTexture"] is using imageView VkImageView 0x0 that is invalid or has been destroyed.
+The Vulkan spec states: Descriptors in each bound descriptor set, specified via vkCmdBindDescriptorSets, must be valid if they are accessed as described by descriptor validity by the VkPipeline bound to the pipeline bind point used by this command and the bound VkPipeline was not created with VK_PIPELINE_CREATE_DESCRIPTOR_BUFFER_BIT_EXT (https://docs.vulkan.org/spec/latest/chapters/drawing.html#VUID-vkCmdDrawIndexed-None-08114)
+Objects: 2
+    [0] VkPipeline 0x1070000000107
+    [1] VkDescriptorSet 0x4540000000454
+
+Validation Error: [ VUID-VkWriteDescriptorSet-descriptorType-02996 ] | MessageID = 0x1cc3d039
+vkUpdateDescriptorSets(): pDescriptorWrites[0].pImageInfo[0].imageView Invalid VkImageView Object 0x8.
+The Vulkan spec states: If descriptorType is VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, or VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, the imageView member of each element of pImageInfo must be either a valid VkImageView handle or VK_NULL_HANDLE (https://docs.vulkan.org/spec/latest/chapters/descriptorsets.html#VUID-VkWriteDescriptorSet-descriptorType-02996)
+
+Validation Error: [ VUID-VkWriteDescriptorSet-descriptorType-02996 ] | MessageID = 0x1cc3d039
+vkUpdateDescriptorSets(): pDescriptorWrites[0].pImageInfo[0].imageView found in the template update has an invalid VkImageView 0x8 (while trying to update a descriptorType of VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER).
+The Vulkan spec states: If descriptorType is VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, or VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, the imageView member of each element of pImageInfo must be either a valid VkImageView handle or VK_NULL_HANDLE (https://docs.vulkan.org/spec/latest/chapters/descriptorsets.html#VUID-VkWriteDescriptorSet-descriptorType-02996)
+
+Validation Error: [ VUID-vkCmdDrawIndexed-None-08114 ] | MessageID = 0x3f6fd836
+vkCmdDrawIndexed(): the combined image sampler descriptor [VkDescriptorSet 0x4560000000456, Set 2, Binding 0, Index 0, variable "sTexture"] is using imageView VkImageView 0x0 that is invalid or has been destroyed.
+The Vulkan spec states: Descriptors in each bound descriptor set, specified via vkCmdBindDescriptorSets, must be valid if they are accessed as described by descriptor validity by the VkPipeline bound to the pipeline bind point used by this command and the bound VkPipeline was not created with VK_PIPELINE_CREATE_DESCRIPTOR_BUFFER_BIT_EXT (https://docs.vulkan.org/spec/latest/chapters/drawing.html#VUID-vkCmdDrawIndexed-None-08114)
+Objects: 2
+    [0] VkPipeline 0x1070000000107
+    [1] VkDescriptorSet 0x4560000000456
+
+Validation Error: [ VUID-VkWriteDescriptorSet-descriptorType-02996 ] | MessageID = 0x1cc3d039
+vkUpdateDescriptorSets(): pDescriptorWrites[0].pImageInfo[0].imageView Invalid VkImageView Object 0x8.
+The Vulkan spec states: If descriptorType is VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, or VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, the imageView member of each element of pImageInfo must be either a valid VkImageView handle or VK_NULL_HANDLE (https://docs.vulkan.org/spec/latest/chapters/descriptorsets.html#VUID-VkWriteDescriptorSet-descriptorType-02996)
+
+Validation Error: [ VUID-VkWriteDescriptorSet-descriptorType-02996 ] | MessageID = 0x1cc3d039
+(Warning - This VUID has now been reported 10 times, which is the duplicate_message_limit value, this will be the last time reporting it).
+vkUpdateDescriptorSets(): pDescriptorWrites[0].pImageInfo[0].imageView found in the template update has an invalid VkImageView 0x8 (while trying to update a descriptorType of VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER).
+The Vulkan spec states: If descriptorType is VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, or VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, the imageView member of each element of pImageInfo must be either a valid VkImageView handle or VK_NULL_HANDLE (https://docs.vulkan.org/spec/latest/chapters/descriptorsets.html#VUID-VkWriteDescriptorSet-descriptorType-02996)
+
+Validation Error: [ VUID-vkCmdDrawIndexed-None-08114 ] | MessageID = 0x3f6fd836
+vkCmdDrawIndexed(): the combined image sampler descriptor [VkDescriptorSet 0x4580000000458, Set 2, Binding 0, Index 0, variable "sTexture"] is using imageView VkImageView 0x0 that is invalid or has been destroyed.
+The Vulkan spec states: Descriptors in each bound descriptor set, specified via vkCmdBindDescriptorSets, must be valid if they are accessed as described by descriptor validity by the VkPipeline bound to the pipeline bind point used by this command and the bound VkPipeline was not created with VK_PIPELINE_CREATE_DESCRIPTOR_BUFFER_BIT_EXT (https://docs.vulkan.org/spec/latest/chapters/drawing.html#VUID-vkCmdDrawIndexed-None-08114)
+Objects: 2
+    [0] VkPipeline 0x1070000000107
+    [1] VkDescriptorSet 0x4580000000458
+
+Validation Error: [ VUID-vkCmdDrawIndexed-None-08114 ] | MessageID = 0x3f6fd836
+vkCmdDrawIndexed(): the combined image sampler descriptor [VkDescriptorSet 0x45a000000045a, Set 2, Binding 0, Index 0, variable "sTexture"] is using imageView VkImageView 0x0 that is invalid or has been destroyed.
+The Vulkan spec states: Descriptors in each bound descriptor set, specified via vkCmdBindDescriptorSets, must be valid if they are accessed as described by descriptor validity by the VkPipeline bound to the pipeline bind point used by this command and the bound VkPipeline was not created with VK_PIPELINE_CREATE_DESCRIPTOR_BUFFER_BIT_EXT (https://docs.vulkan.org/spec/latest/chapters/drawing.html#VUID-vkCmdDrawIndexed-None-08114)
+Objects: 2
+    [0] VkPipeline 0x1070000000107
+    [1] VkDescriptorSet 0x45a000000045a
+
+Validation Error: [ VUID-vkCmdDrawIndexed-None-08114 ] | MessageID = 0x3f6fd836
+vkCmdDrawIndexed(): the combined image sampler descriptor [VkDescriptorSet 0x45c000000045c, Set 2, Binding 0, Index 0, variable "sTexture"] is using imageView VkImageView 0x0 that is invalid or has been destroyed.
+The Vulkan spec states: Descriptors in each bound descriptor set, specified via vkCmdBindDescriptorSets, must be valid if they are accessed as described by descriptor validity by the VkPipeline bound to the pipeline bind point used by this command and the bound VkPipeline was not created with VK_PIPELINE_CREATE_DESCRIPTOR_BUFFER_BIT_EXT (https://docs.vulkan.org/spec/latest/chapters/drawing.html#VUID-vkCmdDrawIndexed-None-08114)
+Objects: 2
+    [0] VkPipeline 0x1070000000107
+    [1] VkDescriptorSet 0x45c000000045c
+
+Validation Error: [ VUID-vkCmdDrawIndexed-None-08114 ] | MessageID = 0x3f6fd836
+vkCmdDrawIndexed(): the combined image sampler descriptor [VkDescriptorSet 0x4600000000460, Set 2, Binding 0, Index 0, variable "sTexture"] is using imageView VkImageView 0x0 that is invalid or has been destroyed.
+The Vulkan spec states: Descriptors in each bound descriptor set, specified via vkCmdBindDescriptorSets, must be valid if they are accessed as described by descriptor validity by the VkPipeline bound to the pipeline bind point used by this command and the bound VkPipeline was not created with VK_PIPELINE_CREATE_DESCRIPTOR_BUFFER_BIT_EXT (https://docs.vulkan.org/spec/latest/chapters/drawing.html#VUID-vkCmdDrawIndexed-None-08114)
+Objects: 2
+    [0] VkPipeline 0x1070000000107
+    [1] VkDescriptorSet 0x4600000000460
+
+Validation Error: [ VUID-vkCmdDrawIndexed-None-08114 ] | MessageID = 0x3f6fd836
+vkCmdDrawIndexed(): the combined image sampler descriptor [VkDescriptorSet 0x4620000000462, Set 2, Binding 0, Index 0, variable "sTexture"] is using imageView VkImageView 0x0 that is invalid or has been destroyed.
+The Vulkan spec states: Descriptors in each bound descriptor set, specified via vkCmdBindDescriptorSets, must be valid if they are accessed as described by descriptor validity by the VkPipeline bound to the pipeline bind point used by this command and the bound VkPipeline was not created with VK_PIPELINE_CREATE_DESCRIPTOR_BUFFER_BIT_EXT (https://docs.vulkan.org/spec/latest/chapters/drawing.html#VUID-vkCmdDrawIndexed-None-08114)
+Objects: 2
+    [0] VkPipeline 0x1070000000107
+    [1] VkDescriptorSet 0x4620000000462
+
+[00001] [DIAG] UpdateTexture: Created gpuTex=0000021946C78600 512x128 ID=1
+[00001] [DIAG] UpdateTexture: TexID stored=0000021946C78600 ID=1
+[00001] [DIAG] UpdateTexture: Status=OK gpuTex=0000021946C78600 ID=1
+[00001] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=12 vtxOff=0 idxOff=0 sampler=0000021946BF73B0
+[00001] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=78 vtxOff=0 idxOff=12 sampler=0000021946BF73B0
+[00001] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=6 vtxOff=0 idxOff=0 sampler=0000021946BF73B0
+[00002] [DIAG] UpdateTexture: Status=OK gpuTex=0000021946C78600 ID=1
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=12 vtxOff=0 idxOff=0 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=78 vtxOff=0 idxOff=12 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=6 vtxOff=0 idxOff=0 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=126 vtxOff=0 idxOff=0 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C791D0 elemCount=6 vtxOff=0 idxOff=126 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=246 vtxOff=0 idxOff=0 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=738 vtxOff=0 idxOff=246 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=264 vtxOff=0 idxOff=0 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=6 vtxOff=0 idxOff=264 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946BF56A0 elemCount=6 vtxOff=0 idxOff=270 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=6 vtxOff=0 idxOff=276 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946BF50B0 elemCount=6 vtxOff=0 idxOff=282 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=6 vtxOff=0 idxOff=288 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946BF98E0 elemCount=6 vtxOff=0 idxOff=294 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=6 vtxOff=0 idxOff=300 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946BF8DF0 elemCount=6 vtxOff=0 idxOff=306 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=6 vtxOff=0 idxOff=312 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946BF9AC0 elemCount=6 vtxOff=0 idxOff=318 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=6 vtxOff=0 idxOff=324 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946BFB190 elemCount=6 vtxOff=0 idxOff=330 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=6 vtxOff=0 idxOff=336 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946BFAB50 elemCount=6 vtxOff=0 idxOff=342 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=1554 vtxOff=0 idxOff=348 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=162 vtxOff=0 idxOff=0 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=126 vtxOff=0 idxOff=162 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=138 vtxOff=0 idxOff=0 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=162 vtxOff=0 idxOff=0 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946678A80 elemCount=6 vtxOff=0 idxOff=162 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=168 vtxOff=0 idxOff=168 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946BFAB00 elemCount=6 vtxOff=0 idxOff=336 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=30 vtxOff=0 idxOff=342 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946BFA150 elemCount=6 vtxOff=0 idxOff=372 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946C78600 elemCount=30 vtxOff=0 idxOff=378 sampler=0000021946BF73B0
+[00002] [DIAG] DrawCmd: texID=0000021946BFAE20 elemCount=6 vtxOff=0 iValidation Error: [ VUID-vkCmdDrawIndexed-None-08114 ] | MessageID = 0x3f6fd836
+(Warning - This VUID has now been reported 10 times, which is the duplicate_message_limit value, this will be the last time reporting it).
+vkCmdDrawIndexed(): the combined image sampler descriptor [VkDescriptorSet 0x4640000000464, Set 2, Binding 0, Index 0, variable "sTexture"] is using imageView VkImageView 0x0 that is invalid or has been destroyed.
+The Vulkan spec states: Descriptors in each bound descriptor set, specified via vkCmdBindDescriptorSets, must be valid if they are accessed as described by descriptor validity by the VkPipeline bound to the pipeline bind point used by this command and the bound VkPipeline was not created with VK_PIPELINE_CREATE_DESCRIPTOR_BUFFER_BIT_EXT (https://docs.vulkan.org/spec/latest/chapters/drawing.html#VUID-vkCmdDrawIndexed-None-08114)
+Objects: 2
+    [0] VkPipeline 0x1070000000107
+    [1] VkDescriptorSet 0x4640000000464
+

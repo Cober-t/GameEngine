@@ -21,7 +21,8 @@ if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
 endif()
 
 if(MSVC)
-    add_compile_options(/MP /wd4251 /wd4131 /wd4267)
+    add_compile_options(/MP /Z7 /wd4251 /wd4131 /wd4267)
+    add_link_options($<$<CONFIG:Debug>:/INCREMENTAL:NO>)
 endif()
 
 # Global definitions
@@ -95,6 +96,9 @@ set(GLM_TEST_ENABLE OFF CACHE BOOL "" FORCE)
 # Add subdirectories for dependencies
 add_subdirectory(libraries)
 add_subdirectory(Engine)
+
+# Bake the source root into the Engine so it can find assets at runtime
+target_compile_definitions(Engine PRIVATE CB_PROJECT_ROOT="${CMAKE_SOURCE_DIR}")
 
 # Add subdirectories for core components
 if(COBER_BUILD_EDITOR)

@@ -41,6 +41,10 @@ namespace Cober {
 		
 		SetViewportSize(width, height);
 
+		// Override to the fixed reference size so the projection is correct
+		// from the very first frame.
+		SetViewportSize(1280.0f, 720.0f);
+
 		LOG_INFO("Editor Camera Created!!");
 	}
 
@@ -62,25 +66,33 @@ namespace Cober {
 		auto& m_EditorCamera = GetSettings();
 		if (IsPerspective())
 		{
-			SetPerspectiveProjectionMatrix(glm::radians(m_EditorCamera.fov), (float)width, (float)height, m_EditorCamera.nearClip, m_EditorCamera.farClip);
+			// Scale FOV so the same world content is visible at any viewport size.
+			// Uses actual (width,height) in the projection to keep the aspect ratio
+			// correct (no stretching). FOV is scaled by refHeight/height so that
+			// when the viewport is larger the camera zooms in proportionally.
+			float refHeight = 720.0f;
+			float fovRad = glm::radians(m_EditorCamera.fov);
+			float adjustedFov = 2.0f * atan(tan(fovRad * 0.5f) * refHeight / (float)height);
+			SetPerspectiveProjectionMatrix(adjustedFov, (float)width, (float)height, m_EditorCamera.nearClip, m_EditorCamera.farClip);
 		}
 		else
 		{
-			float srcAspectRatio = m_EditorCamera.width / m_EditorCamera.height;
-			float dstAspectRatio = width / height;
-			float newWidth = m_EditorCamera.width*0.01/2.0f;
-			float newHeight = m_EditorCamera.height*0.01/2.0f;
-			// Check if the viewport is wider or taller
-			if (dstAspectRatio >= srcAspectRatio)
-			{
-				SetOrthoProjectionMatrix(dstAspectRatio/srcAspectRatio * newWidth, newHeight,
+			// Scale orthographic projection so the same world content is visible
+			// at any viewport size, while maintaining the proper aspect ratio
+			// to prevent stretching.
+			float refWidth = 1280.0f, refHeight = 720.0f;
+			float baseWidth  = m_EditorCamera.width  * 0.01f / 2.0f;
+			float baseHeight = m_EditorCamera.height * 0.01f / 2.0f;
+			float newWidth   = baseWidth  * refWidth  / (float)width;
+			float newHeight  = baseHeight * refHeight / (float)height;
+			float viewAspect = (float)width / (float)height;
+			float refAspect  = refWidth / refHeight;
+			if (viewAspect >= refAspect)
+				SetOrthoProjectionMatrix(viewAspect / refAspect * newWidth, newHeight,
 										m_EditorCamera.nearClip, m_EditorCamera.farClip);
-			} 
-			else 
-			{
-				SetOrthoProjectionMatrix(newWidth, srcAspectRatio/dstAspectRatio * newHeight,
+			else
+				SetOrthoProjectionMatrix(newWidth, refAspect / viewAspect * newHeight,
 										m_EditorCamera.nearClip, m_EditorCamera.farClip);
-			}
 		}
 	
 		UpdateCameraView();

@@ -253,14 +253,14 @@ namespace Cober
 	{
 		AddSystem<CameraSystem>();
 		AddSystem<RenderSystem>();
-		// AddSystem<ParticleSystem>();
+		AddSystem<ParticleSystem>();
 		//AddSystem<PhysicsSystem2D>();
 		//AddSystem<AudioSystem>();
 		//AddSystem<ScriptSystem>();
 
 		GetSystem<CameraSystem>().Start(this);
         GetSystem<RenderSystem>().Start();
-		// GetSystem<ParticleSystem>().Start(this);
+		GetSystem<ParticleSystem>().Start(this);
 		//GetSystem<PhysicsSystem2D>().Start(this);
 		//GetSystem<AudioSystem>().Start(this);
 		//GetSystem<ScriptSystem>().Start(this);
@@ -272,7 +272,7 @@ namespace Cober
 	{
 		//RemoveSystem<PhysicsSystem2D>();
 		RemoveSystem<RenderSystem>();
-		// RemoveSystem<ParticleSystem>();
+		RemoveSystem<ParticleSystem>();
 		// RemoveSystem<CameraSystem>();
 		// RemoveSystem<AudioSystem>();
 
@@ -286,11 +286,11 @@ namespace Cober
 	{
 		AddSystem<CameraSystem>();
 		AddSystem<RenderSystem>();
-		//AddSystem<ParticleSystem>();
+		AddSystem<ParticleSystem>();
 
 		GetSystem<CameraSystem>().Start(this);
-		//GetSystem<RenderSystem>().Start();
-		//GetSystem<ParticleSystem>().Start(this);
+		GetSystem<RenderSystem>().Start();
+		GetSystem<ParticleSystem>().Start(this);
 	}
 
 	// --------------------------------------------------------------------------------------
@@ -299,7 +299,7 @@ namespace Cober
 	{
 		//RemoveSystem<CameraSystem>();
 		RemoveSystem<RenderSystem>();
-		//RemoveSystem<ParticleSystem>();
+		RemoveSystem<ParticleSystem>();
 	}
 
 	// --------------------------------------------------------------------------------------
@@ -313,7 +313,7 @@ namespace Cober
 		Render2D::BeginScene(camera);
 		//GetSystem<CameraSystem>().Update(ts, camera, this);
 		GetSystem<RenderSystem>().Update(this);
-		//GetSystem<ParticleSystem>().Update(ts, this);
+		GetSystem<ParticleSystem>().Update(ts, this);
 		Render2D::EndScene();
 
 		if (!m_IsPaused || m_StepFrames-- > 0.0f)
@@ -346,7 +346,7 @@ namespace Cober
 		Render2D::BeginScene(camera);
 		GetSystem<CameraSystem>().Update(ts, camera, this);
 		GetSystem<RenderSystem>().Update(this);
-		//GetSystem<ParticleSystem>().Update(ts, this);
+		GetSystem<ParticleSystem>().Update(ts, this);
 		Render2D::EndScene();
 	}
 

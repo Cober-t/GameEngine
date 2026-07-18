@@ -117,6 +117,9 @@ void Shader::ReadAndLoadShader(const char* fileName)
     m_FragmentUniformBufferCount = m_FragmentStage.UniformBufferCount;
     m_FragmentSamplerCount = m_FragmentStage.SamplerCount;
 
+    LOG_CORE_INFO("Shader '{0}': fragmentSamplerCount={1}, vertexUniformCount={2}, fragUniformCount={3}",
+        fileName, m_FragmentSamplerCount, m_VertexUniformBufferCount, m_FragmentUniformBufferCount);
+
     // Load compiled bytecode and create SDL_GPUShader objects
     m_VertexShader   = LoadShader(PathService::ResolveAsset("shaders\\compiled"), VERTEX, m_VertexStage);
     m_FragmentShader = LoadShader(PathService::ResolveAsset("shaders\\compiled"), FRAGMENT, m_FragmentStage);
@@ -200,7 +203,14 @@ SDL_GPUGraphicsPipeline* Shader::GetOrCreatePipeline(
     {
         SDL_GPUColorTargetDescription& desc = colorTargetDescs[i];
         desc.format = (SDL_GPUTextureFormat)signature.ColorFormats[i];
-        if (signature.AlphaBlend)
+
+        // Integer formats (R32_SINT, R32_UINT, etc.) do not support blending
+        SDL_GPUTextureFormat fmt = desc.format;
+        bool isIntegerFormat =
+            (fmt >= SDL_GPU_TEXTUREFORMAT_R8_UINT  && fmt <= SDL_GPU_TEXTUREFORMAT_R32G32B32A32_UINT) ||
+            (fmt >= SDL_GPU_TEXTUREFORMAT_R8_INT   && fmt <= SDL_GPU_TEXTUREFORMAT_R32G32B32A32_INT);
+
+        if (signature.AlphaBlend && !isIntegerFormat)
         {
             desc.blend_state = SDL_GPUColorTargetBlendState{
                 .src_color_blendfactor = SDL_GPU_BLENDFACTOR_SRC_ALPHA,
@@ -224,6 +234,9 @@ SDL_GPUGraphicsPipeline* Shader::GetOrCreatePipeline(
     targetInfo.color_target_descriptions = colorTargetDescs.data();
     if (signature.HasDepth)
     {
+        targetInfo.has_depth_stencil_target = true;
+        targetInfo.depth_stencil_format = (SDL_GPUTextureFormat)signature.DepthFormat;
+
         SDL_GPUDepthStencilState depthState{};
         depthState.enable_depth_test = true;
         depthState.enable_depth_write = true;
@@ -273,7 +286,6 @@ void Shader::LoadCompiledStage(const std::filesystem::path& compiledDir, ShaderS
 
     outInfo.Code = ReadCompiledShader(compiledPath, outInfo.CodeSize);
     if (!outInfo.Code) {
-        LOG_CORE_ERROR("Failed to load compiled shader: {}", compiledPath.string());
         outInfo.Present = false;
         return;
     }
@@ -283,37 +295,97 @@ void Shader::LoadCompiledStage(const std::filesystem::path& compiledDir, ShaderS
 SDL_GPUShader* Shader::LoadShader(const std::filesystem::path& shaderPath, ShaderStage stageName, ShaderStageInfo& stageInfo)
 {
     LoadCompiledStage(shaderPath, stageName, stageInfo);
-    if (!stageInfo.Code) {
-        LOG_CORE_ERROR("Skipping shader creation for {0} {1}: no compiled bytecode", m_Name, ShaderStageToStr(stageName));
-        return nullptr;
+
+    // Try runtime cross-compilation from HLSL source if compiled bytecode is missing
+    if (!stageInfo.Code)
+    {
+        const std::string& hlslSource = (stageName == VERTEX) ? m_VertexStage.Source : m_FragmentStage.Source;
+
+        if (hlslSource.empty()) {
+            LOG_CORE_ERROR("Skipping shader creation for {0} {1}: no compiled bytecode and no HLSL source",
+                m_Name, ShaderStageToStr(stageName));
+            return nullptr;
+        }
+
+        LOG_CORE_INFO("Runtime cross-compiling {0} {1} from HLSL source...", m_Name, ShaderStageToStr(stageName));
+
+        SDL_ShaderCross_ShaderStage scStage = (stageName == VERTEX)
+            ? SDL_SHADERCROSS_SHADERSTAGE_VERTEX
+            : SDL_SHADERCROSS_SHADERSTAGE_FRAGMENT;
+
+        // Step 1: Compile HLSL source to SPIR-V bytecode
+        SDL_ShaderCross_HLSL_Info hlslInfo{};
+        hlslInfo.source = hlslSource.c_str();
+        hlslInfo.entrypoint = "main";
+        hlslInfo.include_dir = nullptr;
+        hlslInfo.defines = nullptr;
+        hlslInfo.shader_stage = scStage;
+        hlslInfo.props = 0;
+
+        size_t spirvSize = 0;
+        void* spirvCode = SDL_ShaderCross_CompileSPIRVFromHLSL(&hlslInfo, &spirvSize);
+        if (!spirvCode) {
+            LOG_CORE_ERROR("HLSL -> SPIRV cross-compilation failed for {0} {1}: {2}",
+                m_Name, ShaderStageToStr(stageName), SDL_GetError());
+            return nullptr;
+        }
+
+        // Step 2: Use SDL_shadercross to create the GPU shader directly (handles SPIR-V -> backend)
+        SDL_ShaderCross_SPIRV_Info spirvInfo{};
+        spirvInfo.bytecode = (const Uint8*)spirvCode;
+        spirvInfo.bytecode_size = spirvSize;
+        spirvInfo.entrypoint = "main";
+        spirvInfo.shader_stage = scStage;
+        spirvInfo.props = 0;
+
+        SDL_ShaderCross_GraphicsShaderResourceInfo resourceInfo{};
+        resourceInfo.num_samplers = stageInfo.SamplerCount;
+        resourceInfo.num_storage_textures = 0;
+        resourceInfo.num_storage_buffers = 0;
+        resourceInfo.num_uniform_buffers = stageInfo.UniformBufferCount;
+
+        auto shader = SDL_ShaderCross_CompileGraphicsShaderFromSPIRV(
+            GetDevice(), &spirvInfo, &resourceInfo, 0);
+
+        SDL_free(spirvCode);
+
+        if (!shader) {
+            LOG_CORE_ERROR("SDL_ShaderCross_CompileGraphicsShaderFromSPIRV failed for {0} {1}: {2}",
+                m_Name, ShaderStageToStr(stageName), SDL_GetError());
+            return nullptr;
+        }
+
+        stageInfo.Present = true;
+        LOG_CORE_INFO("Runtime cross-compilation succeeded for {0} {1}", m_Name, ShaderStageToStr(stageName));
+        return shader;
     }
+    else
+    {
+        SDL_GPUShaderCreateInfo createInfo{};
+        createInfo.code = (const Uint8*)stageInfo.Code;
+        createInfo.code_size = stageInfo.CodeSize;
+        createInfo.entrypoint = stageInfo.EntryPoint.c_str();
+        createInfo.format = (SDL_GPUShaderFormat)stageInfo.Format;
+        createInfo.stage = (stageName == VERTEX)
+            ? SDL_GPU_SHADERSTAGE_VERTEX
+            : SDL_GPU_SHADERSTAGE_FRAGMENT;
+        createInfo.num_samplers = stageInfo.SamplerCount;
+        createInfo.num_storage_textures = 0;
+        createInfo.num_storage_buffers = 0;
+        createInfo.num_uniform_buffers = stageInfo.UniformBufferCount;
+        createInfo.props = 0;
 
-    SDL_GPUShaderCreateInfo shaderCreateInfo{};
-    shaderCreateInfo.code_size = stageInfo.CodeSize;
-    shaderCreateInfo.code = (const Uint8*)stageInfo.Code;
-    shaderCreateInfo.entrypoint = stageInfo.EntryPoint.c_str();
-    shaderCreateInfo.format = (SDL_GPUShaderFormat)stageInfo.Format;
-    shaderCreateInfo.stage = (stageName == VERTEX)
-        ? SDL_GPU_SHADERSTAGE_VERTEX
-        : SDL_GPU_SHADERSTAGE_FRAGMENT;
-    shaderCreateInfo.num_samplers = stageInfo.SamplerCount;
-    shaderCreateInfo.num_storage_textures = 0;
-    shaderCreateInfo.num_storage_buffers = 0;
-    shaderCreateInfo.num_uniform_buffers = stageInfo.UniformBufferCount;
+        auto shader = SDL_CreateGPUShader(GetDevice(), &createInfo);
+        if (!shader)
+        {
+            LOG_CORE_ERROR("SDL_CreateGPUShader failed for {0} {1}: {2}",
+                m_Name, ShaderStageToStr(stageName), SDL_GetError());
+            return nullptr;
+        }
 
-    auto shader = SDL_CreateGPUShader(GetDevice(), &shaderCreateInfo);
-    if (!shader) {
-        LOG_CORE_ERROR("SDL_CreateGPUShader failed for {0} {1}: {2}",
-            m_Name, ShaderStageToStr(stageName), SDL_GetError());
-        SDL_free(stageInfo.Code);
-        stageInfo.Code = nullptr;
-        return nullptr;
+        LOG_CORE_INFO("Loaded pre-compiled shader {0} {1}", m_Name, ShaderStageToStr(stageName));
+        return shader;
     }
-
-    SDL_free(stageInfo.Code);
-    stageInfo.Code = nullptr;
-
-    return shader;
 }
 
 void* Shader::ReadCompiledShader(const std::filesystem::path& filePath, size_t& outCodeSize)
@@ -378,26 +450,67 @@ std::string Shader::MakePipelineKey(const VertexArray& vertexArray, const Shader
 
 uint32_t Shader::CountSamplers(const std::string& source)
 {
-    uint32_t count = 0;
-    std::regex samplerArrayRegex(R"(sampler2D\s+\w+\s*\[\s*(\d+)\s*\])");
-    std::smatch match;
-    if (std::regex_search(source, match, samplerArrayRegex))
-        return (uint32_t)std::stoi(match[1].str());
-
-    std::regex samplerRegex(R"(sampler2D\s+\w+)");
-    for (auto it = std::sregex_iterator(source.begin(), source.end(), samplerRegex); it != std::sregex_iterator(); ++it)
-        ++count;
-
-    return count;
+    // Try HLSL Texture2DArray pattern first: Texture2DArray<float4> name
+    {
+        uint32_t count = 0;
+        std::regex hlslTex2DArrayRegex(R"(Texture2DArray\s*<[^>]+>\s+\w+)");
+        for (auto it = std::sregex_iterator(source.begin(), source.end(), hlslTex2DArrayRegex); it != std::sregex_iterator(); ++it)
+            ++count;
+        if (count > 0)
+            return count;
+    }
+    // Try HLSL Texture2D array pattern: Texture2D<float4> name[N]
+    {
+        std::regex hlslTexArrayRegex(R"(Texture2D\s*<[^>]+>\s+\w+\s*\[\s*(\d+)\s*\])");
+        std::smatch match;
+        if (std::regex_search(source, match, hlslTexArrayRegex))
+            return (uint32_t)std::stoi(match[1].str());
+    }
+    // HLSL single Texture2D: Texture2D<float4> name
+    {
+        uint32_t count = 0;
+        std::regex hlslTexRegex(R"(Texture2D\s*<[^>]+>\s+\w+)");
+        for (auto it = std::sregex_iterator(source.begin(), source.end(), hlslTexRegex); it != std::sregex_iterator(); ++it)
+            ++count;
+        if (count > 0)
+            return count;
+    }
+    // Fallback: GLSL sampler2D array pattern
+    {
+        std::regex samplerArrayRegex(R"(sampler2D\s+\w+\s*\[\s*(\d+)\s*\])");
+        std::smatch match;
+        if (std::regex_search(source, match, samplerArrayRegex))
+            return (uint32_t)std::stoi(match[1].str());
+    }
+    // Fallback: GLSL single sampler2D
+    {
+        uint32_t count = 0;
+        std::regex samplerRegex(R"(sampler2D\s+\w+)");
+        for (auto it = std::sregex_iterator(source.begin(), source.end(), samplerRegex); it != std::sregex_iterator(); ++it)
+            ++count;
+        return count;
+    }
 }
 
 uint32_t Shader::CountUniformBlocks(const std::string& source)
 {
-    uint32_t count = 0;
-    std::regex blockRegex(R"(layout\s*\(\s*std140[^\)]*\)\s*uniform\s+\w+)");
-    for (auto it = std::sregex_iterator(source.begin(), source.end(), blockRegex); it != std::sregex_iterator(); ++it)
-        ++count;
-    return count;
+    // Try HLSL cbuffer pattern first: cbuffer Name : register(bN)
+    {
+        uint32_t count = 0;
+        std::regex cbufferRegex(R"(cbuffer\s+\w+\s*:\s*register\s*\(\s*b\d+(\s*,\s*space\d+)?\s*\))");
+        for (auto it = std::sregex_iterator(source.begin(), source.end(), cbufferRegex); it != std::sregex_iterator(); ++it)
+            ++count;
+        if (count > 0)
+            return count;
+    }
+    // Fallback: GLSL layout(std140) uniform block pattern
+    {
+        uint32_t count = 0;
+        std::regex blockRegex(R"(layout\s*\(\s*std140[^\)]*\)\s*uniform\s+\w+)");
+        for (auto it = std::sregex_iterator(source.begin(), source.end(), blockRegex); it != std::sregex_iterator(); ++it)
+            ++count;
+        return count;
+    }
 }
 
 const char* Shader::ShaderStageToStr(ShaderStage stage)

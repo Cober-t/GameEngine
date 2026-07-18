@@ -101,14 +101,23 @@ public:
     SDL_GPUTexture* GetGPUTexture() const { return m_Texture; }
     SDL_GPUSampler* GetSampler() const { return m_Sampler; }
     void EnsureUploaded(SDL_GPUCommandBuffer* commandBuffer, bool cycle = true);
+    static void UploadLayer(SDL_GPUTexture* arrayTexture, uint32_t layer,
+                            const void* data, uint32_t width, uint32_t height,
+                            uint32_t bytesPerPixel, SDL_GPUCommandBuffer* cmdBuf);
 
-    static Ref<Texture> Create(const TextureSpecification& specification);
-    static Ref<Texture> Create(const std::filesystem::path& path);
+	static void Shutdown();
+
+	static Ref<Texture> Create(const TextureSpecification& specification);
+	static Ref<Texture> Create(const std::filesystem::path& path);
+
+    const std::vector<uint8_t>& GetPixels() const { return m_Shadow; }
+    uint32_t GetBytesPerPixel() const { return m_Specification.Format == ImageFormat::RGBA32F ? 16u : 4u; }
 
     // Slot state tracking (used during draw calls to bind textures)
     static const Texture* GetBound(uint32_t slot);
     static SDL_GPUTexture* GetRawBound(uint32_t slot);
     static SDL_GPUSampler* GetRawSampler(uint32_t slot);
+    static void BindRaw(uint32_t slot, SDL_GPUTexture* texture, SDL_GPUSampler* sampler);
 
 private:
     void CreateGPUObjects();

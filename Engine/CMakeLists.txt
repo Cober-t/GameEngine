@@ -69,6 +69,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     # Custom built libraries
     $<$<TARGET_EXISTS:ImGui>:ImGui>
     $<$<TARGET_EXISTS:Lua>:Lua>
+    $<$<TARGET_EXISTS:SDL3_shadercross-static>:SDL3_shadercross-static>
 )
 
 # Set output directories

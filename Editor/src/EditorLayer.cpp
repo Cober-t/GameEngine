@@ -36,7 +36,7 @@ namespace Cober {
 		m_EditorScene = m_ActiveScene;
 
 		//Primitive::Grid::Init();
-		ViewportPanel::Get().CreateFramebuffer(m_EditorCamera->m_ViewportWidth, m_EditorCamera->m_ViewportHeight);
+		ViewportPanel::Get().CreateFramebuffer(1280, 720);
 		SceneHierarchyPanel::Get().SetContext(m_ActiveScene);
 	}
 
@@ -45,13 +45,20 @@ namespace Cober {
 	{
 		m_ActiveScene->OnRuntimeStop();
 		ViewportPanel::Get().UnbindFramebuffer();
+		ViewportPanel::Get().GetFramebuffer().reset();
 
 		m_ActiveScene  = nullptr;
 		m_EditorScene  = nullptr;
+		SceneHierarchyPanel::Get().SetContext(nullptr);
 		m_EditorCamera = nullptr;
 		m_CameraActive = nullptr;
 
 		EditorResources::Shutdown();
+
+		ViewportPanel::Get().ReleaseResources();
+		ContentBrowserPanel::Get().ReleaseResources();
+		SceneHierarchyPanel::Get().ReleaseResources();
+		ConsolePanel::Get().ReleaseResources();
 
  		LOG_INFO("Detached Editor Layer!");
 	}
@@ -59,7 +66,11 @@ namespace Cober {
 
 	void Editor::OnUpdate(const Timestep& ts) 
 	{
-		ViewportPanel::Get().ResizeViewport(m_CameraActive);
+		// Process deferred entity picking from the previous frame.
+		// This must run BEFORE BindFramebuffer (which clears attachments) so the
+		// ReadPixel can download from the previous frame's completed render pass.
+		ViewportPanel::Get().ProcessDeferredPicking();
+
 		ViewportPanel::Get().BindFramebuffer();
 		// ViewportPanel::Get().RenderSkybox();
 
@@ -67,7 +78,8 @@ namespace Cober {
 		// RenderGlobals::SetClearColor(32, 167, 219);
 		RenderGlobals::Clear();
 		
-		ViewportPanel::Get().FBOClearAttachments(1, -1);
+		// FBOClearAttachments is no longer needed — render pass LOADOP_CLEAR already clears
+		// the RED_INTEGER attachment (attachment 1) to -1 at the start of each frame.
 
 		ImGui::SetCurrentContext(ImGuiLayer::GetContext());
 		auto& colors = ImGui::GetStyle().Colors;
@@ -92,9 +104,11 @@ namespace Cober {
 			}
 		}
 
-		ViewportPanel::Get().SetCursorEntity();
-
+		// Unbind first — ReadPixel must not run inside an active render pass
 		ViewportPanel::Get().UnbindFramebuffer();
+
+		// Entity picking: reads from the RED_INTEGER attachment (deferred 1-frame readback)
+		ViewportPanel::Get().SetCursorEntity();
 	}
 
 

@@ -43,6 +43,21 @@ namespace Cober
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
+		// Load FontAwesome icons as merged font for ImGui
+		io.Fonts->AddFontDefault();
+		{
+			ImFontConfig config;
+			config.MergeMode = true;
+			config.GlyphMinAdvanceX = 13.0f;
+			static const ImWchar icon_ranges[] = { 0xf000, 0xf2e0, 0 };
+
+			std::filesystem::path fontPath = PathService::AssetsRoot() / "fonts" / "FontAwesome" / "fontawesome-webfont.ttf";
+			if (std::filesystem::exists(fontPath))
+				io.Fonts->AddFontFromFileTTF(fontPath.string().c_str(), 13.0f, &config, icon_ranges);
+			else
+				LOG_CORE_ERROR("FontAwesome font not found: {0}", fontPath.string());
+		}
+
 		ImGui::StyleColorsDark();
 
 		ImGui_ImplSDL3_InitForSDLGPU(EngineApp::GetWindow().GetRawWindow());

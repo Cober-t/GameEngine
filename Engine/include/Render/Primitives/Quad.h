@@ -3,6 +3,7 @@
 
 #include "Render/VertexArray.h"
 #include "Render/Texture.h"
+#include "Render/TextureArray.h"
 #include "Render/Shader.h"
 #include "Scene/ECS.h"
 
@@ -18,6 +19,7 @@ namespace Cober  {
 			static void Init();
 			static void InitFramebuffer();
 			static void CleanVertexBuffer();
+			static void Shutdown();
 
 			static void Draw(Entity& entity);
 			// static void Draw(const glm::mat4& transform, const glm::vec4& color);
@@ -35,17 +37,17 @@ namespace Cober  {
 			static void EndBatch();
 
 		public:
-			struct Attributes
-			{
-				glm::vec3 Position;
-				glm::vec4 Color;
-				// glm::vec2 TexCoord;
-				// float TexIndex;
-				// float TilingFactor;
+		struct Attributes
+		{
+			glm::vec3 Position;
+			glm::vec4 Color;
+			glm::vec2 TexCoord;
+			float TexIndex;
+			float TilingFactor;
 
-				// Editor-only
-				// int EntityID;
-			};
+			// Editor-only
+			int EntityID;
+		};
 
 			struct Data
 			{
@@ -58,6 +60,8 @@ namespace Cober  {
 				Ref<VertexBuffer> VertexBuffer;
 				Ref<Shader> Shader;
 				Ref<Texture> QuadTexture;
+
+				Ref<TextureArray> TexArray;
 
 				uint32_t IndexCount = 0;
 

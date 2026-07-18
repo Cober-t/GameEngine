@@ -1,76 +1,29 @@
-[2025-04-17 14:31:18.960] [APP] [info] [EditorApp.cpp:36] Editor Constructor!
-[2025-04-17 14:31:18.960] [ENGINE] [info] [EngineApp.cpp:12] EngineApp Constructor!
-[2025-04-17 14:31:18.961] [ENGINE] [info] [EngineApp.cpp:21] Current Working Path: ./
-[2025-04-17 14:31:18.961] [ENGINE] [info] [Window.cpp:22] Window Created
-[2025-04-17 14:31:18.961] [ENGINE] [info] [Window.cpp:41] Creating window Cober Engine Application (1280, 720)
-[2025-04-17 14:31:19.776] [ENGINE] [info] [OpenGLContext.cpp:11] Window Context Created!!
-[2025-04-17 14:31:19.787] [ENGINE] [info] [OpenGLContext.cpp:26] OpenGL Info:
-[2025-04-17 14:31:19.787] [ENGINE] [info] [OpenGLContext.cpp:27]   Vendor: ATI Technologies Inc.
-[2025-04-17 14:31:19.787] [ENGINE] [info] [OpenGLContext.cpp:28]   Renderer: AMD Radeon 780M Graphics
-[2025-04-17 14:31:19.788] [ENGINE] [info] [OpenGLContext.cpp:29]   Version: 4.6.0 Compatibility Profile Context 24.10.39.12.250217
-[2025-04-17 14:31:19.788] [ENGINE] [info] [Timestep.h:18] Created Timer
-[2025-04-17 14:31:19.789] [ENGINE] [trace] [OpenGLRenderAPI.cpp:45] Render API init
-[2025-04-17 14:31:19.790] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2025-04-17 14:31:19.791] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2025-04-17 14:31:19.793] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2025-04-17 14:31:20.015] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Quad.glsl success
-[2025-04-17 14:31:20.017] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2025-04-17 14:31:20.017] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2025-04-17 14:31:20.040] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Line.glsl success
-[2025-04-17 14:31:20.041] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2025-04-17 14:31:20.041] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2025-04-17 14:31:20.043] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2025-04-17 14:31:20.074] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Circle.glsl success
-[2025-04-17 14:31:20.075] [ENGINE] [trace] [OpenGLVertexArray.cpp:30] Render VertexArray success
-[2025-04-17 14:31:20.075] [ENGINE] [trace] [OpenGLBuffer.cpp:16] Render VertexBuffer success
-[2025-04-17 14:31:20.076] [ENGINE] [trace] [OpenGLBuffer.cpp:66] Render IndexBuffer success
-[2025-04-17 14:31:20.183] [ENGINE] [trace] [OpenGLShader.cpp:33] Render Shader Text.glsl success
-[2025-04-17 14:31:20.184] [ENGINE] [trace] [OpenGLBuffer.cpp:94] Render UniformBuffer success
-[2025-04-17 14:31:20.185] [APP] [info] [EditorCamera.cpp:44] Editor Camera Created!!
-[2025-04-17 14:31:20.360] [ENGINE] [info] [Debug2DPhysics.cpp:19] Debug 2D Physics Constructor!
-[2025-04-17 14:31:20.367] [APP] [info] [Scene.cpp:23] Scene Created!!
-[2025-04-17 14:31:20.368] [APP] [info] [Scene.cpp:214] Created entity with ID 15790550996833163264 and name Entity0
-[2025-04-17 14:31:20.369] [APP] [info] [Scene.cpp:214] Created entity with ID 17731108172934002688 and name Entity1
-[2025-04-17 14:31:20.370] [APP] [info] [CameraSystem.cpp:9] Camera System Added to Registry!!
-[2025-04-17 14:31:20.370] [APP] [info] [RenderSystem.cpp:11] Render System Added to Registry!!
-[2025-04-17 14:31:20.370] [APP] [info] [ParticleSystem.cpp:12] Particle System Added to Registry!!
-[2025-04-17 14:31:20.370] [APP] [info] [EditorCamera.cpp:44] Editor Camera Created!!
-[2025-04-17 14:31:20.370] [APP] [info] [CameraSystem.cpp:45] Camera System Started!!
-[2025-04-17 14:31:20.370] [APP] [info] [RenderSystem.cpp:22] Render System Started!!
-[2025-04-17 14:31:20.371] [APP] [info] [ParticleSystem.cpp:35] Particle System Started!!
-[2025-04-17 14:31:20.371] [APP] [info] [CameraSystem.cpp:9] Camera System Added to Registry!!
-[2025-04-17 14:31:20.371] [APP] [info] [CameraSystem.cpp:14] Camera System Removed from Registry
-[2025-04-17 14:31:20.371] [APP] [info] [RenderSystem.cpp:11] Render System Added to Registry!!
-[2025-04-17 14:31:20.371] [APP] [info] [RenderSystem.cpp:16] Render System Removed from Registry
-[2025-04-17 14:31:20.372] [APP] [info] [ParticleSystem.cpp:12] Particle System Added to Registry!!
-[2025-04-17 14:31:20.372] [APP] [info] [ParticleSystem.cpp:19] Particle System Removed from Registry
-[2025-04-17 14:31:20.372] [APP] [info] [EditorCamera.cpp:44] Editor Camera Created!!
-[2025-04-17 14:31:20.372] [APP] [info] [EditorCamera.cpp:50] Editor Camera Destroyed!!
-[2025-04-17 14:31:20.372] [APP] [info] [CameraSystem.cpp:45] Camera System Started!!
-[2025-04-17 14:31:20.372] [APP] [info] [RenderSystem.cpp:22] Render System Started!!
-[2025-04-17 14:31:20.372] [APP] [info] [ParticleSystem.cpp:35] Particle System Started!!
-[2025-04-17 14:32:25.062] [APP] [info] [Scene.cpp:23] Scene Created!!
-[2025-04-17 14:32:25.063] [APP] [info] [Scene.cpp:214] Created entity with ID 17731108172934002688 and name Entity1
-[2025-04-17 14:32:25.063] [APP] [info] [Scene.cpp:214] Created entity with ID 15790550996833163264 and name Entity0
-[2025-04-17 14:32:25.064] [APP] [info] [CameraSystem.cpp:9] Camera System Added to Registry!!
-[2025-04-17 14:32:25.064] [APP] [info] [RenderSystem.cpp:11] Render System Added to Registry!!
-[2025-04-17 14:32:25.064] [APP] [info] [ParticleSystem.cpp:12] Particle System Added to Registry!!
-[2025-04-17 14:32:25.064] [APP] [info] [PhysicsSystem2D.cpp:9] Physics System Added to Registry!!
-[2025-04-17 14:32:25.064] [APP] [info] [AudioSystem.cpp:9] Audio System Added to Registry!!
-[2025-04-17 14:32:25.065] [APP] [info] [ScriptSystem.cpp:11] Script System Added to Registry!!
-[2025-04-17 14:32:25.065] [APP] [info] [EditorCamera.cpp:44] Editor Camera Created!!
-[2025-04-17 14:32:25.065] [APP] [info] [EditorCamera.cpp:50] Editor Camera Destroyed!!
-[2025-04-17 14:32:25.065] [APP] [info] [CameraSystem.cpp:45] Camera System Started!!
-[2025-04-17 14:32:25.065] [APP] [info] [RenderSystem.cpp:22] Render System Started!!
-[2025-04-17 14:32:25.065] [APP] [info] [ParticleSystem.cpp:35] Particle System Started!!
-[2025-04-17 14:32:25.066] [APP] [info] [PhysicsSystem2D.cpp:23] Physics System Started!!
-[2025-04-17 14:32:25.105] [APP] [info] [AudioSystem.cpp:33] Audio System Started!!
-[2025-04-17 14:32:25.989] [APP] [info] [ScriptSystem.cpp:26] Script System Started!!
-[2025-04-17 14:32:27.104] [APP] [info] [PhysicsSystem2D.cpp:15] Physics System Removed from Registry
-[2025-04-17 14:32:27.105] [APP] [info] [RenderSystem.cpp:16] Render System Removed from Registry
-[2025-04-17 14:32:27.105] [APP] [info] [ParticleSystem.cpp:19] Particle System Removed from Registry
-[2025-04-17 14:32:27.105] [APP] [info] [CameraSystem.cpp:14] Camera System Removed from Registry
-[2025-04-17 14:32:27.129] [APP] [info] [AudioSystem.cpp:16] Audio System Removed from Registry
-[2025-04-17 14:32:27.130] [APP] [info] [ScriptSystem.cpp:17] Script System Removed from Registry
-[2025-04-17 14:32:27.130] [APP] [info] [Scene.cpp:29] Scene Destroyed!!
-[2025-04-17 14:32:28.283] [APP] [info] [EditorApp.cpp:20] Editor Destructor!
+[2026-07-17 11:35:05.311] [APP] [info] [EditorApp.cpp:47] Editor Constructor!
+[2026-07-17 11:35:05.312] [ENGINE] [info] [EngineApp.cpp:18] EngineApp Constructor!
+[2026-07-17 11:35:05.313] [ENGINE] [info] [PathService.cpp:11] Project Root: C:\Users\JorgePC\Documents\GameEngine\Editor
+[2026-07-17 11:35:05.313] [ENGINE] [info] [PathService.cpp:12] Assets Root: C:\Users\JorgePC\Documents\GameEngine\Editor\assets
+[2026-07-17 11:35:05.313] [ENGINE] [info] [Timestep.h:18] Created Timer
+[2026-07-17 11:35:05.313] [ENGINE] [info] [Window.cpp:45] Creating window Cober (1280, 720)
+[2026-07-17 11:35:06.160] [ENGINE] [info] [GraphicsDevice.cpp:57] SDL_GPU backend selected: vulkan
+[2026-07-17 11:35:06.160] [ENGINE] [info] [GraphicsDevice.cpp:65]   GPU: NVIDIA GeForce RTX 4060 Laptop GPU | Driver: NVIDIA v595.79.0.0
+[2026-07-17 11:35:06.162] [ENGINE] [info] [Window.cpp:22] Window Created
+[2026-07-17 11:35:06.165] [ENGINE] [info] [Shader.cpp:121] Shader 'Quad': fragmentSamplerCount=1, vertexUniformCount=1, fragUniformCount=0
+[2026-07-17 11:35:06.166] [ENGINE] [info] [Shader.cpp:386] Loaded pre-compiled shader Quad .vert
+[2026-07-17 11:35:06.166] [ENGINE] [info] [Shader.cpp:386] Loaded pre-compiled shader Quad .frag
+[2026-07-17 11:35:06.167] [ENGINE] [info] [Shader.cpp:121] Shader 'Line': fragmentSamplerCount=0, vertexUniformCount=1, fragUniformCount=0
+[2026-07-17 11:35:06.168] [ENGINE] [info] [Shader.cpp:386] Loaded pre-compiled shader Line .vert
+[2026-07-17 11:35:06.168] [ENGINE] [info] [Shader.cpp:386] Loaded pre-compiled shader Line .frag
+[2026-07-17 11:35:06.170] [ENGINE] [info] [Shader.cpp:121] Shader 'Circle': fragmentSamplerCount=0, vertexUniformCount=1, fragUniformCount=0
+[2026-07-17 11:35:06.170] [ENGINE] [info] [Shader.cpp:386] Loaded pre-compiled shader Circle .vert
+[2026-07-17 11:35:06.171] [ENGINE] [info] [Shader.cpp:386] Loaded pre-compiled shader Circle .frag
+[2026-07-17 11:35:06.171] [APP] [info] [EditorCamera.cpp:44] Editor Camera Created!!
+[2026-07-17 11:35:06.192] [APP] [info] [Scene.cpp:26] Scene Created!!
+[2026-07-17 11:35:06.193] [APP] [info] [Scene.cpp:219] Created entity with ID 15790550996833163264 and name Entity0
+[2026-07-17 11:35:06.193] [APP] [info] [Scene.cpp:219] Created entity with ID 17731108172934002688 and name Entity1
+[2026-07-17 11:35:06.194] [APP] [info] [CameraSystem.cpp:9] Camera System Added to Registry!!
+[2026-07-17 11:35:06.194] [APP] [info] [RenderSystem.cpp:13] Render System Added to Registry!!
+[2026-07-17 11:35:06.194] [APP] [info] [ParticleSystem.cpp:15] Particle System Added to Registry!!
+[2026-07-17 11:35:06.194] [APP] [info] [EditorCamera.cpp:44] Editor Camera Created!!
+[2026-07-17 11:35:06.194] [APP] [info] [CameraSystem.cpp:45] Camera System Started!!
+[2026-07-17 11:35:06.195] [APP] [info] [RenderSystem.cpp:27] Render System Started!!
+[2026-07-17 11:35:06.195] [APP] [info] [ParticleSystem.cpp:38] Particle System Started!!

@@ -16,6 +16,7 @@ namespace Cober {
 		static ContentBrowserPanel& Get() { return *s_Instance; }
 
 		void OnGuiRender();
+		void ReleaseResources();
         
 	private:
 		static ContentBrowserPanel* s_Instance;

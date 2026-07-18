@@ -52,6 +52,7 @@ public:
     void SetVSync(bool enabled);
     bool IsVSync() const;
     void ChangeFullScreen();
+    bool IsFullScreen() const { return m_Data.FullScreen; }
 
 private:
     virtual void Init(const WindowProps& props);

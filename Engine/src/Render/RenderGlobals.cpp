@@ -139,13 +139,16 @@ static void DrawWithVertexArray(const Ref<VertexArray>& vertexArray,
     // ---- UPLOAD PHASE: all GPU uploads MUST happen before any render pass begins ----
     // SDL3 GPU requires copy passes (used for uploading) to be separate from render passes.
 
-    // 1. Upload dirty vertex buffers
+    // 1. Upload dirty vertex buffers.
+    //    Pass nullptr so each upload uses its own command buffer. This avoids
+    //    "Cannot begin copy pass during another pass!" when a render pass is
+    //    already active on the main command buffer.
     std::vector<SDL_GPUBufferBinding> vbBindings;
     vbBindings.reserve(vertexArray->GetVertexBuffers().size());
 
     for (const auto& vb : vertexArray->GetVertexBuffers())
     {
-        vb->EnsureUploaded(cmdBuf, true);
+        vb->EnsureUploaded(nullptr, true);
 
         SDL_GPUBufferBinding binding{};
         binding.buffer = vb->GetGPUBuffer();
@@ -158,7 +161,7 @@ static void DrawWithVertexArray(const Ref<VertexArray>& vertexArray,
     if (indexed)
     {
         auto ib = vertexArray->GetIndexBuffer();
-        ib->EnsureUploaded(cmdBuf, false);
+        ib->EnsureUploaded(nullptr, false);
         ibBinding.buffer = ib->GetGPUBuffer();
         ibBinding.offset = 0;
     }
@@ -168,7 +171,7 @@ static void DrawWithVertexArray(const Ref<VertexArray>& vertexArray,
     {
         const Texture* texture = Texture::GetBound(slot);
         if (texture)
-            const_cast<Texture*>(texture)->EnsureUploaded(cmdBuf, true);
+            const_cast<Texture*>(texture)->EnsureUploaded(nullptr, true);
     }
 
     // ---- RENDER PHASE: begin the render pass (if not already active) and draw ----
@@ -187,12 +190,15 @@ static void DrawWithVertexArray(const Ref<VertexArray>& vertexArray,
     }
 
     // 5. Build a pass signature matching the current render pass target
+    const auto& rtInfo = gpu.GetRenderTargetInfo();
     ShaderPassSignature sig{};
     sig.PrimitiveType = primitiveType;
-    sig.NumColorTargets = 1;
-    sig.ColorFormats[0] = (int)gpu.GetSwapchainFormat();
+    sig.NumColorTargets = rtInfo.NumColorTargets;
+    for (uint32_t i = 0; i < rtInfo.NumColorTargets && i < 4; ++i)
+        sig.ColorFormats[i] = rtInfo.ColorFormats[i];
     sig.AlphaBlend = true;
-    sig.HasDepth = false;
+    sig.HasDepth = rtInfo.HasDepth;
+    sig.DepthFormat = rtInfo.DepthFormat;
 
     // 6. Get or create the pipeline
     SDL_GPUGraphicsPipeline* pipeline = const_cast<Shader*>(shader)->GetOrCreatePipeline(*vertexArray, sig);
@@ -241,15 +247,23 @@ static void DrawWithVertexArray(const Ref<VertexArray>& vertexArray,
     if (shader->GetFragmentSamplerCount() > 0)
     {
         std::vector<SDL_GPUTextureSamplerBinding> samplerBindings(shader->GetFragmentSamplerCount());
+        bool allValid = true;
         for (uint32_t slot = 0; slot < shader->GetFragmentSamplerCount(); ++slot)
         {
             SDL_GPUTextureSamplerBinding texBinding{};
             texBinding.texture = Texture::GetRawBound(slot);
             texBinding.sampler = Texture::GetRawSampler(slot);
             samplerBindings[slot] = texBinding;
+            if (!texBinding.texture || !texBinding.sampler)
+                allValid = false;
         }
 
-        SDL_BindGPUFragmentSamplers(renderPass, 0, samplerBindings.data(), (uint32_t)samplerBindings.size());
+        if (allValid)
+        {
+            SDL_BindGPUFragmentSamplers(renderPass, 0, samplerBindings.data(), (uint32_t)samplerBindings.size());
+        }
+        else
+            LOG_CORE_WARNING("DrawWithVertexArray: skipping sampler bind for {0} — null texture/sampler at binding 0", shader->GetName());
     }
 
     // 12. Draw!

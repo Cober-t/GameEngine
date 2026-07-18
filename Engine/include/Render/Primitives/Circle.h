@@ -17,6 +17,7 @@ namespace Cober  {
 		public:
 			static void Init();
 			static void CleanVertexBuffer();
+			static void Shutdown();
 
 			static void Draw(Entity& entity);
 			static void Draw(const glm::mat4& transform, const glm::vec4& color, float thickness, int entityID = -1);

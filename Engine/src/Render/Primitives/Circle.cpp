@@ -16,6 +16,12 @@ namespace Cober {
 			delete[] data.VertexBufferBase;
 		}
 
+		void Circle::Shutdown()
+		{
+			CleanVertexBuffer();
+			data = Data{};
+		}
+
 		void Circle::Init() 
 		{
 			data.VertexArray = VertexArray::Create();
@@ -39,7 +45,7 @@ namespace Cober {
 			data.VertexArray->SetIndexBuffer(circleIB); // The shame as Quads Index Buffer
 			delete[] circleIndices;
 
-			data.Shader = Shader::Create("Circle.glsl");
+			data.Shader = Shader::Create("Circle");
 		}
 
 

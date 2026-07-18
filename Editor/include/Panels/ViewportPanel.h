@@ -31,8 +31,10 @@ namespace Cober {
 		void OnGuiRender(Ref<EditorCamera>& editorCamera, Ref<Camera>& camera);
 
 		void SetCursorEntity();
+		void ProcessDeferredPicking();
 		void MustResize(bool resize = true) { m_MustResize = resize; }; 
 		void PlayButtonBar();
+		void ReleaseResources();
 		inline bool AllowViewportCameraEvents() { return m_AllowViewportCameraEvents; }
 
 	private:
@@ -49,6 +51,11 @@ namespace Cober {
 
 		bool m_MouseButtonHeld = false;
 		glm::vec2 m_Mouse{0.0f, 0.0f}, m_LastMousePos{ 0.0f, 0.0f };
+
+		// Pending picking state (deferred to next frame for correct ReadPixel timing)
+		bool m_PendingPicking = false;
+		int m_DeferredMouseX = 0;
+		int m_DeferredMouseY = 0;
 
 		std::filesystem::path m_FilePath;
 		int m_GizmoType = -1;

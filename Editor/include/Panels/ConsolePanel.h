@@ -39,6 +39,7 @@ namespace Cober {
 		~ConsolePanel();
 
 		void OnImGuiRender();
+		void ReleaseResources();
 
 		static ConsolePanel& Get() { return *s_Instance; }
 

@@ -37,7 +37,11 @@ namespace Cober {
 		s_Instance = nullptr;
 	}
 
-    
+	void ConsolePanel::ReleaseResources()
+	{
+		m_AssetIconMap.clear();
+	}
+
 	const char* ConsolePanel::GetMessageType(const ConsoleMessage& message) const
 	{
 		if (message.Flags & (int16_t)ConsoleMessageFlags::Info) return "Info";
@@ -66,9 +70,8 @@ namespace Cober {
 		auto buttonStyle = style.Colors[ImGuiCol_Button];
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(buttonStyle.x, buttonStyle.y, buttonStyle.z, buttonOpacity));
 
-		ImTextureRef* texRef = new ImTextureRef(m_AssetIconMap[iconKey]->GetRendererID());
 		const char* strID = "iconKey";
-		if (ImGui::ImageButton(strID, texRef, ImVec2(18.0f, 18.0f), { 0, 0 }, { 1, 1 })) {
+		if (ImGui::ImageButton(strID, (void*)m_AssetIconMap[iconKey]->GetRendererID(), ImVec2(18.0f, 18.0f), { 0, 0 }, { 1, 1 })) {
 			isActive = isActive == true ? false : true;
 		}
 
@@ -80,9 +83,8 @@ namespace Cober {
 	{
 		ImGui::Begin("Console");
 
-		ImTextureRef* texRef = new ImTextureRef(m_AssetIconMap["clear"]->GetRendererID());
 		const char* strID = "clear";
-		if (ImGui::ImageButton(strID, texRef, ImVec2(18.0f, 18.0f), { 0, 0 }, { 1, 1 })) {
+		if (ImGui::ImageButton(strID, (void*)m_AssetIconMap["clear"]->GetRendererID(), ImVec2(18.0f, 18.0f), { 0, 0 }, { 1, 1 })) {
 			Log::ClearLogMessages();
 		}
 

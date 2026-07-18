@@ -61,33 +61,60 @@ namespace Cober {
 		auto [mx, my] = ImGui::GetMousePos();
 		mx -= m_MinViewportBound.x;
 		my -= m_MinViewportBound.y;
-		glm::vec2 viewportSize = glm::vec2(m_MaxViewportBound.x - m_MinViewportBound.x, m_MaxViewportBound.y - m_MinViewportBound.y);
-		my = viewportSize.y - my;
 		int mouseX = (int)mx - m_ViewportMargin.x;
 		int mouseY = (int)my - m_ViewportMargin.y;
+
+		// Convert from display-image coordinates to framebuffer coordinates.
+		// The framebuffer may have a different resolution than the displayed
+		// image (e.g. fixed 1280x720 fbo vs aspect-corrected m_ViewportSize).
+		if (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f)
+		{
+			auto& spec = m_Fbo->GetSpecification();
+			mouseX = (int)(mouseX * ((float)spec.Width  / m_ViewportSize.x));
+			mouseY = (int)(mouseY * ((float)spec.Height / m_ViewportSize.y));
+		}
 
 		DataPanel::Get().SetMouseX(mouseX);
 		DataPanel::Get().SetMouseY(mouseY);
 
-		if (mouseX >= 0 && mouseY >= 0 && mouseX < ((int)m_ViewportSize.x) && mouseY < ((int)m_ViewportSize.y))
+		auto& spec = m_Fbo->GetSpecification();
+		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)spec.Width && mouseY < (int)spec.Height)
 		{
-			int pixelData = m_Fbo->ReadPixel(1, mouseX, mouseY);
+			// Record picking state; actual ReadPixel is deferred to ProcessDeferredPicking
+			// at the start of the next frame (so the GPU has finished rendering the previous
+			// frame's entity ID attachments before we download from them).
+			m_DeferredMouseX = mouseX;
+			m_DeferredMouseY = mouseY;
 
 			if (ImGui::IsMouseClicked(0) && !ImGuizmo::IsUsing())
-			{
-				if (pixelData == -1)
-					Editor::SetSelectedEntity();
-				else
-					Editor::SetSelectedEntity(Entity((entt::entity)pixelData, Editor::GetActiveScene().get()));
-
-				if (!Input::IsKeyDown(KeyCode::LeftAlt))
-				{
-					m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;	
-					// TODO: Fix SceneHierarchyPanel
-					// SceneHierarchyPanel::Get().SetSelectedEntity(Editor::SelectedEntity());
-				}
-			}
+				m_PendingPicking = true;
 		}
+	}
+
+
+	void ViewportPanel::ProcessDeferredPicking()
+	{
+		if (!m_PendingPicking || !m_Fbo || !Editor::GetActiveScene())
+			return;
+
+		m_PendingPicking = false;
+
+		int mouseX = m_DeferredMouseX;
+		int mouseY = m_DeferredMouseY;
+
+		auto& spec = m_Fbo->GetSpecification();
+		if (mouseX < 0 || mouseY < 0 || mouseX >= (int)spec.Width || mouseY >= (int)spec.Height)
+			return;
+
+		int pixelData = m_Fbo->ReadPixel(1, mouseX, mouseY);
+
+		if (pixelData == -1 || !Editor::GetActiveScene()->GetRegistry()->valid((entt::entity)pixelData))
+			Editor::SetSelectedEntity();
+		else
+			Editor::SetSelectedEntity(Entity((entt::entity)pixelData, Editor::GetActiveScene().get()));
+
+		if (!Input::IsKeyDown(KeyCode::LeftAlt))
+			m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
 	}
 
 
@@ -111,18 +138,44 @@ namespace Cober {
 	void ViewportPanel::ResizeViewport(Ref<Camera> camera) 
     {
 		FramebufferSpecification spec = m_Fbo->GetSpecification();
-		if (m_MustResize || (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
-			(spec.Width != (uint32_t)m_ViewportSize.x || spec.Height != (uint32_t)m_ViewportSize.y)))
+
+		// For EditorCamera the framebuffer is kept at the fixed reference size
+		// (1280x720).  For GameCamera we use the aspect-corrected m_ViewportSize.
+		// In either case only trigger a (re)build on explicit MustResize() or if
+		// the fbo has never been sized yet (spec.Width == 0).
+		uint32_t targetW = spec.Width, targetH = spec.Height;
+		if (dynamic_cast<EditorCamera*>(camera.get()))
+		{
+			targetW = 1280;
+			targetH = 720;
+		}
+		else
+		{
+			targetW = (uint32_t)m_ViewportSize.x;
+			targetH = (uint32_t)m_ViewportSize.y;
+		}
+
+		if (m_MustResize || (m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f &&
+			(spec.Width != targetW || spec.Height != targetH)))
 		{
 			m_MustResize = false;
-			ResizeFramebufferSpecification(camera, (uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			ResizeFramebufferSpecification(camera, targetW, targetH);
 		}
 	}
 
 	void ViewportPanel::ResizeFramebufferSpecification(Ref<Camera> camera, uint32_t width, uint32_t height)
 	{
-		m_Fbo->Resize(width, height);
-		camera->SetViewportSize(width, height);
+		// EditorCamera: Keep a fixed reference resolution so resizing the
+		// viewport panel never changes what the user sees (no stretch, no zoom).
+		// GameCamera: Use the caller-provided size (already aspect-corrected).
+		uint32_t fbWidth = width, fbHeight = height;
+		if (dynamic_cast<EditorCamera*>(camera.get()))
+		{
+			fbWidth  = 1280;
+			fbHeight = 720;
+		}
+		m_Fbo->Resize(fbWidth, fbHeight);
+		camera->SetViewportSize(fbWidth, fbHeight);
 	}
 
 
@@ -178,11 +231,27 @@ namespace Cober {
 		else
 		{
 			viewportPanelSize = ImGui::GetContentRegionAvail();
-			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-			m_ViewportMargin = { 0.0f, 0.0f };
+
+			float refAspect = 1280.0f / 720.0f;
+			float panelAspect = viewportPanelSize.x / viewportPanelSize.y;
+			if (panelAspect >= refAspect)
+			{
+				m_ViewportSize.x = viewportPanelSize.y * refAspect;
+				m_ViewportSize.y = viewportPanelSize.y;
+			}
+			else
+			{
+				m_ViewportSize.x = viewportPanelSize.x;
+				m_ViewportSize.y = viewportPanelSize.x / refAspect;
+			}
+			m_ViewportMargin = { (viewportPanelSize.x - m_ViewportSize.x) * 0.5f,
+								 (viewportPanelSize.y - m_ViewportSize.y) * 0.5f };
 		}
 
 		/////////////////////////
+		// Resize before capturing texture ID for ImGui
+		ResizeViewport(camera);
+
 		// Center Viewport Image
 		ImVec2 contentRegionSize{ (viewportPanelSize.x - m_ViewportSize.x) * 0.5f,
 								  (viewportPanelSize.y - m_ViewportSize.y) * 0.5f };
@@ -263,9 +332,8 @@ namespace Cober {
 			ImGuizmo::SetOrthographic(!editorCamera->IsPerspective());
 			ImGuizmo::SetDrawlist();
 
-			ImGuizmo::SetRect(m_MinViewportBound.x, m_MinViewportBound.y, 
-								m_MaxViewportBound.x - m_MinViewportBound.x, 
-								m_MaxViewportBound.y - m_MinViewportBound.y);
+		ImGuizmo::SetRect(m_MinViewportBound.x + contentRegionSize.x, m_MinViewportBound.y + contentRegionSize.y, 
+							m_ViewportSize.x, m_ViewportSize.y);
 
 			glm::mat4 cameraView = editorCamera->GetViewMatrix();
 			const glm::mat4& cameraProjection = editorCamera->GetProjectionMatrix();
@@ -308,6 +376,11 @@ namespace Cober {
 		ImGui::End();
 	}
 
+
+	void ViewportPanel::ReleaseResources()
+	{
+		m_AssetIconMap.clear();
+	}
 
 	void ViewportPanel::PlayButtonBar() 
     {

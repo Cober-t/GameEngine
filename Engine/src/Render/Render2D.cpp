@@ -1,6 +1,7 @@
 #include <pch.h>
 
 #include "Render/Render2D.h"
+#include "Render/TextureArray.h"
 #include "Render/Primitives/Line.h"
 #include "Render/Primitives/Quad.h"
 #include "Render/Primitives/Circle.h"
@@ -23,17 +24,17 @@ namespace Cober {
 	RenderSettings* Render2D::m_RenderSettings = nullptr;
 
 
-	void Render2D::Start()
-	{
-		m_RenderSettings = new RenderSettings();
-		Primitive::Quad::Init();
-		//Primitive::Line::Init();
-		//Primitive::Circle::Init();
-		//Primitive::Text::Init();
-		//Primitive::Cube::Init()
+void Render2D::Start()
+{
+    m_RenderSettings = new RenderSettings();
+    Primitive::Quad::Init();
+    Primitive::Line::Init();
+    Primitive::Circle::Init();
+    //Primitive::Text::Init();
+    //Primitive::Cube::Init()
 
-		CameraUniformBuffer = UniformBuffer::Create(sizeof(CameraData), 0);
-	}
+    CameraUniformBuffer = UniformBuffer::Create(sizeof(CameraData), 0);
+}
 
 
 	void Render2D::BeginScene(const Ref<Camera>& camera)
@@ -49,8 +50,8 @@ namespace Cober {
 	void Render2D::Flush()
 	{
 		Primitive::Quad::Flush();
-		//Primitive::Line::Flush();
-		//Primitive::Circle::Flush();
+		Primitive::Line::Flush();
+		Primitive::Circle::Flush();
 		//Primitive::Text::Flush();
 		// 	Cube::Flush();
 	}
@@ -59,8 +60,8 @@ namespace Cober {
 	void Render2D::StartBatch() 
 	{
 		Primitive::Quad::StartBatch();
-		//Primitive::Line::StartBatch();
-		//Primitive::Circle::StartBatch();
+		Primitive::Line::StartBatch();
+		Primitive::Circle::StartBatch();
 		//Primitive::Text::StartBatch();
 		// Primitive::Cube::StartBatch();
 	}
@@ -69,8 +70,8 @@ namespace Cober {
 	void Render2D::NextBatch() 
 	{
 		Primitive::Quad::NextBatch();
-		//Primitive::Line::NextBatch();
-		//Primitive::Circle::NextBatch();
+		Primitive::Line::NextBatch();
+		Primitive::Circle::NextBatch();
 		//Primitive::Text::NextBatch();
 		// Primitive::Cube::NextBatch();
 	}
@@ -94,14 +95,16 @@ namespace Cober {
 	}
 
 
-	void Render2D::Shutdown() 
-	{
-		Primitive::Quad::CleanVertexBuffer();
-		//Primitive::Line::CleanVertexBuffer();
-		//Primitive::Circle::CleanVertexBuffer();
-		//Primitive::Text::CleanVertexBuffer();
-		// Primitive::Cube::CleanVertexBuffer();
-	}
+void Render2D::Shutdown() 
+{
+    Primitive::Quad::Shutdown();
+    Primitive::Line::Shutdown();
+    Primitive::Circle::Shutdown();
+    //Primitive::Text::CleanVertexBuffer();
+    // Primitive::Cube::CleanVertexBuffer();
+
+    CameraUniformBuffer.reset();
+}
 
 
 	void Render2D::DrawQuad(Entity& entity) 

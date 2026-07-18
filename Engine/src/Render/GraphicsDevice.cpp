@@ -3,6 +3,7 @@
 #include "Render/Framebuffer.h" // For offscreen framebuffer render passes
 #include "Core/EngineApp.h"
 #include <SDL3/SDL_gpu.h>
+#include <SDL3_shadercross/SDL_shadercross.h>
 #include <imgui/imgui.h>
 #include <backends/imgui_impl_sdlgpu3.h>
 
@@ -65,6 +66,11 @@ void GraphicsDevice::Init(SDL_Window* window)
 
     // Cache the swapchain format for pipeline creation later
     s_Instance->m_SwapchainFormat = SDL_GetGPUSwapchainTextureFormat(s_Instance->m_Device, window);
+
+    // Initialize SDL_shadercross for runtime HLSL cross-compilation
+    if (!SDL_ShaderCross_Init()) {
+        LOG_CORE_WARNING("SDL_ShaderCross_Init failed: {0}", SDL_GetError());
+    }
 }
 
 void GraphicsDevice::Shutdown()
@@ -87,6 +93,8 @@ void GraphicsDevice::Shutdown()
         SDL_DestroyGPUDevice(s_Instance->m_Device);
         s_Instance->m_Device = nullptr;
     }
+
+    SDL_ShaderCross_Quit();
 
     delete s_Instance;
     s_Instance = nullptr;
@@ -145,6 +153,17 @@ void GraphicsDevice::EndFrame()
         SDL_SubmitGPUCommandBuffer(m_Frame.CommandBuffer);
     }
 
+    // Release transfer buffers that were used during the frame.
+    // Safe to do now because the command buffer has been submitted
+    // and SDL_ReleaseGPUTransferBuffer defers the actual GPU-free until
+    // the device is idle with respect to those resources.
+    for (auto* buf : m_PendingTransferBuffers)
+    {
+        if (buf)
+            SDL_ReleaseGPUTransferBuffer(m_Device, buf);
+    }
+    m_PendingTransferBuffers.clear();
+
     m_RenderingToSwapchain = false;
 }
 
@@ -171,6 +190,10 @@ void GraphicsDevice::BeginSwapchainRenderPass()
     LOG_CORE_ASSERT(m_Frame.RenderPass, "SDL_BeginGPURenderPass(swapchain) failed: {0}", SDL_GetError());
 
     m_RenderingToSwapchain = true;
+    m_ActiveRenderTarget = {};
+    m_ActiveRenderTarget.NumColorTargets = 1;
+    m_ActiveRenderTarget.ColorFormats[0] = (int)m_SwapchainFormat;
+    m_ActiveRenderTarget.HasDepth = false;
     ApplyViewport();
 }
 
@@ -179,6 +202,62 @@ void GraphicsDevice::BeginFramebufferRenderPass(class Framebuffer* framebuffer)
     LOG_CORE_ASSERT(framebuffer, "Framebuffer render pass requested with null framebuffer");
     EndActiveRenderPass();
 
+    // ---- Pre-pass: clear integer-format attachments via copy pass ----
+    // SDL_GPUColorTargetInfo.clear_color is SDL_FColor (float), which can't
+    // properly clear integer formats like R32_SINT. We upload -1 via a copy
+    // pass before the render pass to ensure ReadPixel() gets correct values.
+    for (uint32_t i = 0; i < framebuffer->GetColorAttachmentCount(); ++i)
+    {
+        int fmt = framebuffer->GetColorAttachmentFormat(i);
+        bool isIntegerFormat =
+            (fmt >= (int)SDL_GPU_TEXTUREFORMAT_R8_UINT  && fmt <= (int)SDL_GPU_TEXTUREFORMAT_R32G32B32A32_UINT) ||
+            (fmt >= (int)SDL_GPU_TEXTUREFORMAT_R8_INT   && fmt <= (int)SDL_GPU_TEXTUREFORMAT_R32G32B32A32_INT);
+
+        if (!isIntegerFormat)
+            continue;
+
+        SDL_GPUTexture* texture = framebuffer->GetColorAttachmentTexture(i);
+        uint32_t w = framebuffer->GetSpecification().Width;
+        uint32_t h = framebuffer->GetSpecification().Height;
+
+        std::vector<int> clearData(w * h, -1);
+        uint32_t dataSize = (uint32_t)(clearData.size() * sizeof(int));
+
+        SDL_GPUTransferBufferCreateInfo buffInfo{};
+        buffInfo.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD;
+        buffInfo.size = dataSize;
+        SDL_GPUTransferBuffer* upload = SDL_CreateGPUTransferBuffer(m_Device, &buffInfo);
+
+        void* mapped = SDL_MapGPUTransferBuffer(m_Device, upload, false);
+        SDL_memcpy(mapped, clearData.data(), dataSize);
+        SDL_UnmapGPUTransferBuffer(m_Device, upload);
+
+        SDL_GPUCopyPass* copyPass = SDL_BeginGPUCopyPass(m_Frame.CommandBuffer);
+
+        SDL_GPUTextureTransferInfo texTransferInfo{};
+        texTransferInfo.transfer_buffer = upload;
+        texTransferInfo.offset = 0;
+        texTransferInfo.pixels_per_row = w;
+        texTransferInfo.rows_per_layer = h;
+
+        SDL_GPUTextureRegion texRegion{};
+        texRegion.texture = texture;
+        texRegion.mip_level = 0;
+        texRegion.layer = 0;
+        texRegion.x = 0;
+        texRegion.y = 0;
+        texRegion.z = 0;
+        texRegion.w = w;
+        texRegion.h = h;
+        texRegion.d = 1;
+
+        SDL_UploadToGPUTexture(copyPass, &texTransferInfo, &texRegion, false);
+        SDL_EndGPUCopyPass(copyPass);
+        // Defer release until after the command buffer is submitted
+        m_PendingTransferBuffers.push_back(upload);
+    }
+
+    // ---- Render pass ----
     std::vector<SDL_GPUColorTargetInfo> colorInfos;
     colorInfos.reserve(framebuffer->GetColorAttachmentCount());
 
@@ -186,11 +265,23 @@ void GraphicsDevice::BeginFramebufferRenderPass(class Framebuffer* framebuffer)
     {
         SDL_GPUColorTargetInfo target = {};
         target.texture = framebuffer->GetColorAttachmentTexture(i);
-        // Clear the first attachment with the clear color, others with a sentinel value
-        target.clear_color = (i == 0)
-            ? SDL_FColor{ m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a }
-            : SDL_FColor{ -1.0f, 0.0f, 0.0f, 0.0f };
-        target.load_op = SDL_GPU_LOADOP_CLEAR;
+
+        int fmt = framebuffer->GetColorAttachmentFormat(i);
+        bool isIntegerFormat =
+            (fmt >= (int)SDL_GPU_TEXTUREFORMAT_R8_UINT  && fmt <= (int)SDL_GPU_TEXTUREFORMAT_R32G32B32A32_UINT) ||
+            (fmt >= (int)SDL_GPU_TEXTUREFORMAT_R8_INT   && fmt <= (int)SDL_GPU_TEXTUREFORMAT_R32G32B32A32_INT);
+
+        if (isIntegerFormat)
+        {
+            target.load_op = SDL_GPU_LOADOP_LOAD;   // Already cleared via copy pass above
+        }
+        else
+        {
+            target.clear_color = (i == 0)
+                ? SDL_FColor{ m_ClearColor.r, m_ClearColor.g, m_ClearColor.b, m_ClearColor.a }
+                : SDL_FColor{ -1.0f, 0.0f, 0.0f, 0.0f };
+            target.load_op = SDL_GPU_LOADOP_CLEAR;
+        }
         target.store_op = SDL_GPU_STOREOP_STORE;
         colorInfos.push_back(target);
     }
@@ -214,6 +305,12 @@ void GraphicsDevice::BeginFramebufferRenderPass(class Framebuffer* framebuffer)
     LOG_CORE_ASSERT(m_Frame.RenderPass, "SDL_BeginGPURenderPass(framebuffer) failed: {0}", SDL_GetError());
 
     m_RenderingToSwapchain = false;
+    m_ActiveRenderTarget = {};
+    m_ActiveRenderTarget.NumColorTargets = (uint32_t)colorInfos.size();
+    for (uint32_t i = 0; i < m_ActiveRenderTarget.NumColorTargets && i < 4; ++i)
+        m_ActiveRenderTarget.ColorFormats[i] = framebuffer->GetColorAttachmentFormat(i);
+    m_ActiveRenderTarget.HasDepth = (depthTarget.texture != nullptr);
+    m_ActiveRenderTarget.DepthFormat = framebuffer->GetDepthFormat();
     ApplyViewport();
 }
 
